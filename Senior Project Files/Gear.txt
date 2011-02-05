@@ -1,0 +1,16 @@
+Types of chips
+--------------
+
+Gear - Weapons - Magic
+----------------------
+
+Gear
+----
+
+Head - Chest - Arms - Legs
+Deffence will pend on your stats
+
+Weapons
+-------
+
+Blunt - Slash - Peire - Ranged

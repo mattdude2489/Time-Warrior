@@ -1,0 +1,39 @@
+Pitch stuff
+
+*is optional things
+
+Team Name
+Game Title
+Genre
+*Platform
+Premise(1-2 sentence)
+*Backstory
+Target Market
+Player Motivation
+Features
+Goals
+
+Team roles/duties
+
+Project Mgr
+-schedule
+-updater
+-project binder
+-watching milestones
+-motivator
+
+Lead Programer
+-Repository
+-Lead tech designer
+-TDD
+-Game Engine
+-primary coder
+-bug tracker
+
+other programers
+-other core areas... so detailed
+-collision
+-ai
+-audio
+-player
+-enemy/boss

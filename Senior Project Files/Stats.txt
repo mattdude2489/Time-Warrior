@@ -1,0 +1,10 @@
+Stats
+-----
+HP - Mp - STR - DEF - INT
+
+
+Resistances
+-----------
+Fire - Lightning - Ice
+
+

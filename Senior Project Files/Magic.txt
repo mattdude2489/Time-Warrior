@@ -1,0 +1,27 @@
+Damage Types
+------------
+Fire - Ice/water - Lightning/Energy- Nature/Holy(some sort of healing) - Raw Magic
+
+Raw Magic
+---------
+Magic Missle -> Missle Barage -> Magic Detonate
+
+
+Fire(Dot effect)
+----
+Fire ball(single target hit) -> Fire Blast(explodes after hit) -> Rain of Fire(aoe)
+
+
+Ice/Water(slows)
+---------
+Ice bolt(single target slow) -> Ice mist(aoe slow from character) -> Blizzard(aoe)
+
+
+Lightning/Energy(stun/crit/magnitism/burn)
+----------------
+Lightning bolt(single target) -> Energy wave(aoe form character) -> Chain Lightning(target to target)
+
+
+Nature/Healing
+--------------
+Heal(Single target heal) -> Heal Barier(heals and sets sheild) -> Heal All(aoe heal)
