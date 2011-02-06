@@ -1,27 +1,45 @@
 Damage Types
 ------------
-Fire - Ice/water - Lightning/Energy- Nature/Holy(some sort of healing) - Raw Magic
+	Raw Magic
+	Fire
+	Ice/Water
+	Lightning
+	Nature/Holy (some sort of healing)
+
+
+Damage Type (Effect)
+-----------
+			//general effects:
+	Basic:		(single target)
+	Advanced:	(multiple targets)
+	Expert:		(aoe)
 
 Raw Magic
 ---------
-Magic Missle -> Missle Barage -> Magic Detonate
+	Basic:		"Magic Missle"
+	Advanced:	"Magic/Missle Barrage"
+	Expert:		"Magic Detonate"
 
-
-Fire(Dot effect)
+Fire (dot)
 ----
-Fire ball(single target hit) -> Fire Blast(explodes after hit) -> Rain of Fire(aoe)
+	Basic:		"Fireball"
+	Advanced:	"Fire Blast" (explodes after hit)
+	Expert:		"Armageddon" or "Rain of Fire"
 
-
-Ice/Water(slows)
+Ice/Water (slows)
 ---------
-Ice bolt(single target slow) -> Ice mist(aoe slow from character) -> Blizzard(aoe)
+	Basic:		"Ice Shard"
+	Advanced:	"Ice Mist/Frost" (aoe slow from character)
+	Expert:		"Blizzard" or "Ice Storm"
 
-
-Lightning/Energy(stun/crit/magnitism/burn)
-----------------
-Lightning bolt(single target) -> Energy wave(aoe form character) -> Chain Lightning(target to target)
-
+Lightning (stun/crit/magnetism/burn)
+---------
+	Basic:		"Lightning Bolt"
+	Advanced:	"Chain Lightning" (target to target)
+	Expert:		"Thunderstorm" or "Lightning Shockwave/Discharge"
 
 Nature/Healing
 --------------
-Heal(Single target heal) -> Heal Barier(heals and sets sheild) -> Heal All(aoe heal)
+	Basic:		"Heal"
+	Advanced:	"Heal Barrier" (heals and sets shield)
+	Expert:		"Heal All"

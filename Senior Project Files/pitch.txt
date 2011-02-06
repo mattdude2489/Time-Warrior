@@ -3,24 +3,50 @@ Pitch stuff
 *is optional things
 ~ temp stuff
 
-Team Name: ~Team Awesome, Ban from mid term, midterm ban, team temp, team infinite, team epic face
-Game Title: ~Time warrior
-Genre: Action RPG
-*Platform :PC
+Team Name:
+	~Team Awesome
+	Banned from Midterm Project
+	Team BMP (happens to be our last name initials, & acronym to "Banned from Midterm Project")
+	Team Temp
+	Team Infinite
+	Team Epic Face
 
-Premise(1-2 sentence) :Travel through the ages to gain redemption, and "freedom". Fight, explore, loot, and level
-by your self or up to 3 friends.
+	Note: Matt & John are currently leaning towards "Team BMP"
 
-*Back story :You are a prisoner who is being punished for your crimes by being put through the Colosseum of time.
-Your freedom is offered if you can survive and defeat the champions of the era.
+Game Title:
+	~Time warrior
 
-Target Market :Teen-RPG/Adventure gamers. Not a casual game.
+Genre:
+	Action RPG
 
-Player Motivation :New areas unlocked in older areas with new powers. Loot gaining. Adventure with friends. 
-Fighting through challenging enemies and bosses.
+*Platform:
+	PC
 
-Features :Multi player/Server-client(diablo 2 style), leveling skill/magic system, dynamic weapon system, inventory system that makes since,
-expansive variety in worlds, challenging puzzles or fights to progress.
+Premise(1-2 sentence):
+	Travel through the ages to gain redemption, and "freedom".
+	Fight, explore, loot, and level by your self or up to 3 friends.
+
+*Back story:
+	You are a prisoner who is being punished for your crimes by being put through the Colosseum of time.
+	Your freedom is offered if you can survive and defeat the champions of the era.
+
+Target Market:
+	Teen-RPG/Adventure gamers
+	Not a casual game
+
+Player Motivation:
+	New areas unlocked in older areas with new powers
+	Loot gaining
+	Adventure with friends
+	Fighting through challenging enemies and bosses
+
+Features:
+	Multi player/Server-client(diablo 2 style)
+	leveling skill/magic system
+	dynamic weapon system
+	inventory system that makes since
+	expansive variety in worlds
+	challenging puzzles or fights to progress
 
 Goals : (to be filled in)
 
