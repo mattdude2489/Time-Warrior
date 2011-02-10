@@ -1,0 +1,26 @@
+Weapon Skills
+-------------
+
+All have a basic single target attack for start.
+
+
+2nd skills
+
+Slashing (High damage output single target)
+--------
+Cleave (hits infront of player multiple targets) -> Spin (spin 360 and strike all enemeys in the area)
+
+
+Blunt (Tank based, low damage, threat gen)
+-----
+knockback (Hits enemey backwards away form player) -> Ground Slam (Smaller knockback but full circle multi target)
+
+
+Peirce (medium damage, longer ranged, chance for multi hit)
+------
+Charge (rush forward higher damage and chance to hit second target) -> Stabby Stabby (hits multiple times in a line, higher chance to hit multi targets)
+
+
+Range
+-----
+Multi shot (cone damage of arrow spray) -> Barage (area of damage)
