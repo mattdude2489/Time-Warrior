@@ -1,0 +1,68 @@
+######
+Entity
+	-Player
+	-Enemy
+		--Boss
+
+#########
+BasicChip
+	-Weapons
+		--Slashing
+		--Peirceing
+		--Blunt
+		--Range
+	-Spells
+		--Fire
+			---Fireball
+			---Fire Blast
+			---Armageddon/Rain of Fire
+		--Lightning
+			---Lightning Bolt
+			---Chain Lightning
+			---Thunderstorm
+		--Ice
+			---Ice Shard
+			---Ice Mist/Frost
+			---Blizzard/Ice Storm
+		--Healing
+			---Heal
+			---Heal Barrier
+			---Heal All
+		--Raw Power
+			---Magic Missle
+			---Magic/Missle Barage
+			---Magic Detonate
+	-Gear
+		--Head
+		--Chest
+		--Arms
+		--Legs
+
+#####
+World
+	-Hub
+	-European Medevil
+		--Caslte
+		--Town/Vilage
+	-Middle Eastern Medevil
+		--Caslte
+		--Town/Vilage
+	-Asian Medevil		
+		--Caslte
+		--Town/Vilage
+	-World War Era
+		--HQ
+		--Outposts
+	-Post apoclypse
+		--Safe Zone(Fort)
+		--Small towns
+	-Dungeons
+
+#############
+Sound manager
+
+######
+Script
+
+##########
+Cinimatics
