@@ -1,0 +1,90 @@
+######
+Entity
+
+V - Position X, y, z (obvious)
+V - Model (to which to draw from)
+V - Int HP, MP, Str, Def, Int, FireResist, LightningResist, IceResist
+	-Player
+	V - Chip Inventory (The Inventory system?)
+	
+	-Enemy
+	V - Death? (for after enemy death effects or something.)
+	V - LastSpell (to determine the combination of spells.)
+		--Boss
+
+#########
+BasicChip
+V - int magic (to determine if it's a spell or a normal weapon. Or Gear.)
+V - text?
+v - isEquipped?
+
+	-Weapons
+	V - int slash, pierce, blunt, range
+	V - Damage
+		--Slashing
+		--Peirceing
+		--Blunt
+		--Range
+	-Spells
+	V - int fire, light, ice, heal, null (to determine what it is.)
+	V - Effects (such as single target or something.)
+	V - CombinationDmg.
+	V - Damage
+		--Fire
+			---Fireball
+			---Fire Blast
+			---Armageddon/Rain of Fire
+		--Lightning
+			---Lightning Bolt
+			---Chain Lightning
+			---Thunderstorm
+		--Ice
+			---Ice Shard
+			---Ice Mist/Frost
+			---Blizzard/Ice Storm
+		--Healing
+			---Heal
+			---Heal Barrier
+			---Heal All
+		--Raw Power
+			---Magic Missle
+			---Magic/Missle Barage
+			---Magic Detonate
+	-Gear
+	V - Resistances (if any)
+	V - Defense
+		--Head
+		--Chest
+		--Arms
+		--Legs
+
+#####
+World
+	-Hub
+	-European Medevil
+		--Caslte
+		--Town/Vilage
+	-Middle Eastern Medevil
+		--Caslte
+		--Town/Vilage
+	-Asian Medevil		
+		--Caslte
+		--Town/Vilage
+	-World War Era
+		--HQ
+		--Outposts
+	-Post apoclypse
+		--Safe Zone(Fort)
+		--Small towns
+	-Dungeons
+
+#############
+Sound manager
+V - 
+
+######
+Script
+V - Script?
+
+##########
+Cinimatics
