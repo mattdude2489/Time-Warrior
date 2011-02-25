@@ -26,22 +26,22 @@ v - isEquipped?
 		--Blunt
 		--Range
 	-Spells
-	V - int fire, light, ice, heal, null (to determine what it is.)
+	V - int fire, lightning, ice, heal, null (to determine what it is.)
 	V - Effects (such as single target or something.)
 	V - CombinationDmg.
 	V - Damage
 		--Fire
 			---Fireball
 			---Fire Blast
-			---Armageddon/Rain of Fire
+			---Armageddon
 		--Lightning
 			---Lightning Bolt
 			---Chain Lightning
 			---Thunderstorm
 		--Ice
 			---Ice Shard
-			---Ice Mist/Frost
-			---Blizzard/Ice Storm
+			---Ice Frost
+			---Blizzard
 		--Healing
 			---Heal
 			---Heal Barrier
