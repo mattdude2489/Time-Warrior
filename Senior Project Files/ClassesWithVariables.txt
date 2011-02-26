@@ -26,30 +26,30 @@ v - isEquipped?
 		--Blunt
 		--Range
 	-Spells
-	V - int fire, lightning, ice, heal, null (to determine what it is.)
+	V - int divine, fire, ice, lightning, metal (to determine what it is.)
 	V - Effects (such as single target or something.)
 	V - CombinationDmg.
 	V - Damage
+		--Divine
+			---Divine Heal
+			---Divine Barrier
+			---Sanctuary
 		--Fire
 			---Fireball
 			---Fire Blast
 			---Armageddon
-		--Lightning
-			---Lightning Bolt
-			---Chain Lightning
-			---Thunderstorm
 		--Ice
 			---Ice Shard
 			---Ice Frost
 			---Blizzard
-		--Healing
-			---Heal
-			---Heal Barrier
-			---Heal All
-		--Raw Power
-			---Magic Missle
-			---Magic/Missle Barage
-			---Magic Detonate
+		--Lightning
+			---Lightning Bolt
+			---Chain Lightning
+			---Thunderstorm
+		--Metal
+			---Metal Spike
+			---Metal Barrage
+			---TNT
 	-Gear
 	V - Resistances (if any)
 	V - Defense
