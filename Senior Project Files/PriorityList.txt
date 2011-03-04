@@ -1,0 +1,50 @@
+Game Priority List:
+
+Engine (Graphics/Game/Start Networking)
+User Input
+Entities
+HUD
+Basic Spells (fire)
+Basic Weapons (slash)
+Energy Regeneration
+Collision Detection
+Hub World /World Map
+Combat
+Basic Spells (Healing)
+Basic Weapons (Blunt)
+Gear in General
+Experience System
+Personal Stat Progression
+Chip Leveling
+Medieval European
+Dungeon (if completed, marks on map)
+AI
+3 levels for magic and weapon types
+Character Saves and Loads
+Inventory
+Chips sold for experience
+Pick up and drop
+Seeable drops
+Potions (instant)
+Remaining Magic and Weapons
+Magical Effects
+Threat System
+Skills and Magic Leveling
+Dynamic Monsters
+Barriers/Key System
+Summons
+Magic Combination
+Flavor Text
+Difficulty Settings
+Quest System
+Basic Starting Cutscenes
+Remaining Worlds
+
+Networking Priority List:
+
+Basic Networking
+Chat System (Console)
+Computer AI is synced
+ID Aura
+Chat System (TTF)
+Trade Windows

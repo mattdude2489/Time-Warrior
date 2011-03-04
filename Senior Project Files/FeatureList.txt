@@ -1,0 +1,63 @@
+4 worlds
+
+-Medieval (English, Asian, Piraty)
+-World War
+-Post-Apocalyptic
+-Hub
+
+4 magic
+
+-Fire
+-Ice
+-Lightning
+-Healing
+
+4 Weapons
+
+-Slashing
+-Blunt
+-Piercing
+-Ranged
+
+4 sets of Gear
+
+-Head
+-Chest
+-Arm
+-Legs
+
+Skill + magic leveling
+Chip leveling system (level requirements for gear)
+Chips or Gear can be sold for Chip experience.
+3 levels to all weapon types
+3 levels to all magic types
+Inventory System
+World Map
+Experience System
+Networking Multiplayer (Server/Client, preferably with game lobby)
+Basic ID aura (only in multiplayer)
+Character Autosaves (Skills and levels and progression and inventory, not location)
+Character loading
+Difficulty Settings (Easy, medium, and hard)
+Magic Combination (with other players to make it hurt more)
+Summons (technically a skill level, the final level, at level 4 of a magic.)
+Monsters and Bosses
+Quest System
+Basic starting story/Cutscenes
+When monsters are killed, their drops are present in the world
+Context-Sensitive Controls
+Pick-up and Drop
+Controls (left click is left-click stuff, right click is right-click stuff.)
+Trade Windows
+Collision Detection
+Personal Stat point Progression (Choose which points to spend on)
+Chat system ingame via network
+AI (minion AI and Boss AI)
+Threat System
+Static World
+Key system (to unlock stuff and dungeons)
+Dungeons (hidden somewhere in the worlds)
+Barriers to block points
+Dynamic monster system (leveling up with the character)
+Flavor Text (each chip has it's own "text" that says something about it.)
+HUD

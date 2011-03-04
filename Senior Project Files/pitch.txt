@@ -27,7 +27,7 @@ Premise(1-2 sentence):
 	Fight, explore, loot, and level by your self or up to 3 friends.
 
 *Back story:
-	You are a prisoner who is being punished for your crimes by being put through the Colosseum of time.
+	You are a prisoner of war who is being punished for your crimes by being put through the Colosseum of time.
 	Your freedom is offered if you can survive and defeat the champions of the era.
 
 Target Market:
