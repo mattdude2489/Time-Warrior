@@ -32,7 +32,18 @@ class Chip
 			m_cost += m_costLv;
 			levelUpUnique();
 		}
-		virtual void applyEffect(){}
+		virtual bool shouldApplyEffect(){return false;}//pass single entity as a parameter
+		virtual void applyEffect(){}//pass single entity as a parameter
+		void activate()//pass list of entities as a parameter
+		{
+			/*
+			for(int i = 0; i < size; ++i)
+			{
+				if(shouldApplyEffect(i))
+					applyEffect(i)
+			}
+			*/
+		}
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
 };
@@ -51,6 +62,44 @@ class MagicChip : public Chip
 		{
 			m_dmg += m_LvDmg;
 			m_dmgCombo += m_LvDmgCombo;
+		}
+		bool shouldApplyEffect()
+		{
+			switch(m_subSubType)
+			{
+			case Basic:
+				//calc if collision
+				return false;
+				break;
+			case Advanced:
+				//calc if within mini-radius
+				return false;
+				break;
+			case Expert:
+				//calc if within greater radius
+				return false;
+				break;
+			default:
+				return false;
+			}
+		}
+		void applyEffect()
+		{
+			switch(m_subType)
+			{
+			case Divine:
+				//apply elemental effect
+				break;
+			case Lightning:
+				//apply elemental effect
+				break;
+			case Fire:
+				//apply elemental effect
+				break;
+			case Ice:
+				//apply elemental effect
+				break;
+			}
 		}
 };
 class DivineMagic : public MagicChip
