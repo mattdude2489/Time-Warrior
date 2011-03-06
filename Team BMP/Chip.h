@@ -1,3 +1,6 @@
+//Chip class
+//Author: John Parks
+
 enum e_type {Armor, Magic, Weapon};
 enum e_subType {Head, Trunk, UpperLimb, LowerLimb, Divine, Lightning, Fire, Ice, Blunt, Range, Slash, Pierce};
 enum e_subSubType {Basic, Advanced, Expert, Legend};
