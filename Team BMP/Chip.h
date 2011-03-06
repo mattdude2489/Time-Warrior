@@ -60,28 +60,28 @@ class BasicDivine : public DivineMagic
 	public:
 		BasicDivine():DivineMagic(Basic){}
 		char * getName(){return "Divine Heal";}
-		char * getDescription(){return "Heal projectile.";}
+		char * getDescription(){return "Divine projectile.";}
 };
 class AdvancedDivine : public DivineMagic
 {
 	public:
 		AdvancedDivine():DivineMagic(Advanced){}
 		char * getName(){return "Divine Barrier";}
-		char * getDescription(){return "Heal explosion.";}
+		char * getDescription(){return "Divine explosion.";}
 };
 class ExpertDivine : public DivineMagic
 {
 	public:
 		ExpertDivine():DivineMagic(Expert){}
 		char * getName(){return "Sanctuary";}
-		char * getDescription(){return "Heal area-of-effect.";}
+		char * getDescription(){return "Divine area-of-effect.";}
 };
 class LegendDivine : public DivineMagic
 {
 	public:
 		LegendDivine():DivineMagic(Legend){}
 		char * getName(){return "Angel";}
-		char * getDescription(){return "Heal sidekick.";}
+		char * getDescription(){return "Divine guardian.";}
 };
 class FireMagic : public MagicChip
 {
@@ -114,7 +114,7 @@ class LegendFire : public FireMagic
 	public:
 		LegendFire():FireMagic(Legend){}
 		char * getName(){return "Phoenix";}
-		char * getDescription(){return "Fire sidekick.";}
+		char * getDescription(){return "Fire guardian.";}
 };
 class IceMagic : public MagicChip
 {
@@ -147,7 +147,7 @@ class LegendIce : public IceMagic
 	public:
 		LegendIce():IceMagic(Legend){}
 		char * getName(){return "Rain Bird";}
-		char * getDescription(){return "Ice sidekick.";}
+		char * getDescription(){return "Ice guardian.";}
 };
 class LightningMagic : public MagicChip
 {
@@ -180,5 +180,5 @@ class LegendLightning : public LightningMagic
 	public:
 		LegendLightning():LightningMagic(Legend){}
 		char * getName(){return "Thunderbird";}
-		char * getDescription(){return "Lightning sidekick.";}
+		char * getDescription(){return "Lightning guardian.";}
 };
