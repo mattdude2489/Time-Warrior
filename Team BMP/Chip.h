@@ -86,6 +86,39 @@ class LegendDivine : public DivineMagic
 		char * getName(){return "Angel";}
 		char * getDescription(){return "Divine guardian.";}
 };
+class LightningMagic : public MagicChip
+{
+	public:
+		LightningMagic(e_subSubType a_subSubType):MagicChip(Lightning, a_subSubType){}
+};
+class BasicLightning : public LightningMagic
+{
+	public:
+		BasicLightning():LightningMagic(Basic){}
+		char * getName(){return "Lightning Bolt";}
+		char * getDescription(){return "Lightning projectile.";}
+};
+class AdvancedLightning : public LightningMagic
+{
+	public:
+		AdvancedLightning():LightningMagic(Advanced){}
+		char * getName(){return "Chain Lightning";}
+		char * getDescription(){return "Lightning explosion.";}
+};
+class ExpertLightning : public LightningMagic
+{
+	public:
+		ExpertLightning():LightningMagic(Expert){}
+		char * getName(){return "Thunderstorm";}
+		char * getDescription(){return "Lightning area-of-effect.";}
+};
+class LegendLightning : public LightningMagic
+{
+	public:
+		LegendLightning():LightningMagic(Legend){}
+		char * getName(){return "Thunderbird";}
+		char * getDescription(){return "Lightning guardian.";}
+};
 class FireMagic : public MagicChip
 {
 	public:
@@ -149,39 +182,6 @@ class LegendIce : public IceMagic
 {
 	public:
 		LegendIce():IceMagic(Legend){}
-		char * getName(){return "Rain Bird";}
+		char * getName(){return "Roc";}
 		char * getDescription(){return "Ice guardian.";}
-};
-class LightningMagic : public MagicChip
-{
-	public:
-		LightningMagic(e_subSubType a_subSubType):MagicChip(Lightning, a_subSubType){}
-};
-class BasicLightning : public LightningMagic
-{
-	public:
-		BasicLightning():LightningMagic(Basic){}
-		char * getName(){return "Lightning Bolt";}
-		char * getDescription(){return "Lightning projectile.";}
-};
-class AdvancedLightning : public LightningMagic
-{
-	public:
-		AdvancedLightning():LightningMagic(Advanced){}
-		char * getName(){return "Chain Lightning";}
-		char * getDescription(){return "Lightning explosion.";}
-};
-class ExpertLightning : public LightningMagic
-{
-	public:
-		ExpertLightning():LightningMagic(Expert){}
-		char * getName(){return "Thunderstorm";}
-		char * getDescription(){return "Lightning area-of-effect.";}
-};
-class LegendLightning : public LightningMagic
-{
-	public:
-		LegendLightning():LightningMagic(Legend){}
-		char * getName(){return "Thunderbird";}
-		char * getDescription(){return "Lightning guardian.";}
 };
