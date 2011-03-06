@@ -186,11 +186,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Chip.h"
+				>
+			</File>
+			<File
 				RelativePath=".\spoint.h"
 				>
 			</File>
 			<File
 				RelativePath=".\srect.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UserInput.h"
 				>
 			</File>
 		</Filter>
