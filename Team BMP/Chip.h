@@ -1,6 +1,6 @@
 enum e_type {Armor, Magic, Weapon};
 enum e_subType {Head, Trunk, UpperLimb, LowerLimb, Divine, Lightning, Fire, Ice, Blunt, Range, Slash, Pierce};
-enum e_subSubType {Basic, Advanced, Expert};
+enum e_subSubType {Basic, Advanced, Expert, Legend};
 
 class Chip
 {
@@ -49,7 +49,6 @@ class MagicChip : public Chip
 			m_dmg += m_LvDmg;
 			m_dmgCombo += m_LvDmgCombo;
 		}
-		//Legend (Summon): Thunderbird, Phoenix, Rain Bird
 };
 class DivineMagic : public MagicChip
 {
@@ -77,6 +76,13 @@ class ExpertDivine : public DivineMagic
 		char * getName(){return "Sanctuary";}
 		char * getDescription(){return "Heal area-of-effect.";}
 };
+class LegendDivine : public DivineMagic
+{
+	public:
+		LegendDivine():DivineMagic(Legend){}
+		char * getName(){return "Angel";}
+		char * getDescription(){return "Heal sidekick.";}
+};
 class FireMagic : public MagicChip
 {
 	public:
@@ -103,7 +109,13 @@ class ExpertFire : public FireMagic
 		char * getName(){return "Armageddon";}
 		char * getDescription(){return "Fire area-of-effect.";}
 };
-
+class LegendFire : public FireMagic
+{
+	public:
+		LegendFire():FireMagic(Legend){}
+		char * getName(){return "Phoenix";}
+		char * getDescription(){return "Fire sidekick.";}
+};
 class IceMagic : public MagicChip
 {
 	public:
@@ -130,6 +142,13 @@ class ExpertIce : public IceMagic
 		char * getName(){return "Blizzard";}
 		char * getDescription(){return "Ice area-of-effect.";}
 };
+class LegendIce : public IceMagic
+{
+	public:
+		LegendIce():IceMagic(Legend){}
+		char * getName(){return "Rain Bird";}
+		char * getDescription(){return "Ice sidekick.";}
+};
 class LightningMagic : public MagicChip
 {
 	public:
@@ -155,4 +174,11 @@ class ExpertLightning : public LightningMagic
 		ExpertLightning():LightningMagic(Expert){}
 		char * getName(){return "Thunderstorm";}
 		char * getDescription(){return "Lightning area-of-effect.";}
+};
+class LegendLightning : public LightningMagic
+{
+	public:
+		LegendLightning():LightningMagic(Legend){}
+		char * getName(){return "Thunderbird";}
+		char * getDescription(){return "Lightning sidekick.";}
 };
