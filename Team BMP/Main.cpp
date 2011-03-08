@@ -43,11 +43,14 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					ui.setMouse(e.motion.x, e.motion.y);
 					change = true;
 					break;
+				case SDL_KEYDOWN: //This will work until we can get it without using a switch statement.
+					ui.setKey(e.key.keysym.sym);
+					break;
 			}
 		}
 		if(change)
 		{
-			printf("%d, %d, Button is: %d \n", ui.getMouseX(), ui.getMouseY(), ui.getClick());
+			printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 			change = false;
 		}
 	}
