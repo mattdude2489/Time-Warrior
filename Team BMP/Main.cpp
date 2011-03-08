@@ -39,12 +39,13 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					ui.setClick(e.motion.state);
 					change = true;
 					break;
-				case SDL_MOUSEMOTION:
+				case SDL_MOUSEMOTION: //If the mouse moves, then do this.
 					ui.setMouse(e.motion.x, e.motion.y);
-					change = true;
+					change = true; //Makes the console update.
 					break;
 				case SDL_KEYDOWN: //This will work until we can get it without using a switch statement.
 					ui.setKey(e.key.keysym.sym);
+					change = true; //Makes the console update.
 					break;
 			}
 		}
@@ -54,7 +55,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 			change = false;
 		}
 	}
-	SDL_Quit();//must do to free the momory that was used for init
+	SDL_Quit();//must do to free the memory that was used for init
 	
 	
 	return 0;

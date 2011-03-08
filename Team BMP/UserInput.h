@@ -1,5 +1,5 @@
 //UserInput Class.
-//Made on 3/5/11, edited on 3/5/11
+//Made on 3/5/11, edited on 3/7/11
 //Made by Matt Morrill, edited last by Matt Morrill
 
 class UserInput
@@ -10,11 +10,11 @@ class UserInput
 		char keyPress;
 
 	public:
-		UserInput():mouseX(0), mouseY(0), mouseClick(0), keyPress('n'){}
-		void setMouse(int x, int y) {mouseX = x; mouseY = y;}
+		UserInput():mouseX(0), mouseY(0), mouseClick(0), keyPress('n'){} //Basic constructor.
+		void setMouse(int x, int y) {mouseX = x; mouseY = y;} 
 		int getMouseX() {return mouseX;}
 		int getMouseY() {return mouseY;}
-		int getMouseXY(int &cX, int &cY) {cX = mouseX; cY = mouseY;}
+		int getMouseXY(int &cX, int &cY) {cX = mouseX; cY = mouseY;} //So you DON'T have to use just getMouseX and getMouseY.
 		void setClick(int click) {mouseClick = click;}
 		int getClick() {return mouseClick;}
 		void setKey(char key) {keyPress = key;}

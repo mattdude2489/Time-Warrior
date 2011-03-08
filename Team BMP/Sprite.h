@@ -7,7 +7,8 @@
 Sprite library for SDL - using bitmaps
 This library was originally put together by Kenny Cason (v1.0, Sep 20, 2009),
 designed to be easily implemented into any C++ program using SDL. It was later
-modified slightly by Michael Vaganov for a Sprite-oriented GSP280 lab.
+modified slightly by Michael Vaganov for a Sprite-oriented GSP280 lab. Even later modified slightly
+by Matthew Morrill for Team BMP's Senior Project.
 
 Feel free to do what ever you want with it. enjoy!
 
@@ -16,6 +17,8 @@ kenneth [DOT] cason [AT] gmail [DOT] com
 (www.ken-soft.com)
 or
 michael [DOT] vaganov [AT] gmail [DOT] com
+or, if you really want to take your chances
+mattdude2489 [AT] gmail [DOT] com
 */
 
 #define FLIP_HORIZONTAL 1

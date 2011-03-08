@@ -86,8 +86,8 @@ Sprite::Sprite(const SDL_Surface* a_surface, const int & a_frames, const int & a
 void Sprite::draw(SDL_Surface* a_screen, const int & x, const int & y) {
 	SDL_Rect dstrect = {x,y,0,0};
 	// this blits the current frame from the sprite sheet
-	SDL_Rect animRect = {m_width*m_index,m_height*m_hindex,m_width,m_height};
-	SDL_BlitSurface(m_surface, &animRect, a_screen,&dstrect);
+	SDL_Rect animRect = {m_width*m_index,m_height*m_hindex,m_width,m_height}; //The starting position, which I only changed the original 0 to m_height*m_hindex.
+	SDL_BlitSurface(m_surface, &animRect, a_screen,&dstrect); //That should allow us to easily have multiple rows.
 }
 
 Sprite::~Sprite() {
