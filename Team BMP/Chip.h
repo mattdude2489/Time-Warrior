@@ -11,17 +11,18 @@ class Chip
 		e_type m_type;
 		e_subType m_subType;
 		e_subSubType m_subSubType;
-		int m_level, m_cost, m_costLv;
+		int m_level, m_cost, m_costLv, m_dmg, m_dmgLv;
 		bool m_equip;
 	public:
 		Chip(e_type a_type, e_subType a_subType, e_subSubType a_subSubType)
 			:m_type(a_type),m_subType(a_subType),m_subSubType(a_subSubType),
-			m_level(0),m_cost(0),m_costLv(0),m_equip(false){}
+			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_equip(false){}
 		e_type getType(){return m_type;}
 		e_subType getSubType(){return m_subType;}
 		e_subSubType getSubSubType(){return m_subSubType;}
 		int getLevel(){return m_level;}
 		int getCost(){return m_cost;}
+		int getDamage(){return m_dmg;}
 		bool isEquipped(){return m_equip;}
 		void toggleEquip(){m_equip = !m_equip;}
 			//define for each spell
@@ -30,6 +31,7 @@ class Chip
 		{
 			m_level++;
 			m_cost += m_costLv;
+			m_dmg += m_dmgLv;
 			levelUpUnique();
 		}
 		virtual bool shouldApplyEffect(){return false;}//pass single entity as a parameter
@@ -47,22 +49,53 @@ class Chip
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
 };
+class ArmorChip : public Chip
+{
+	public:
+		ArmorChip(e_subType a_subType, e_subSubType a_subSubType)
+			:Chip(Armor, a_subType, a_subSubType){}
+		bool shouldApplyEffect()
+		{
+			switch(m_subSubType)
+			{
+			case Basic:
+				return false;
+				break;
+			case Advanced:
+				return false;
+				break;
+			case Expert:
+				return false;
+				break;
+			default:
+				return false;
+			}
+		}
+		void applyEffect()
+		{
+			switch(m_subType)
+			{
+			case Head:
+				break;
+			case Trunk:
+				break;
+			case UpperLimb:
+				break;
+			case LowerLimb:
+				break;
+			}
+		}
+};
 class MagicChip : public Chip
 {
 	protected:
-		int m_dmg, m_dmgCombo;		//base dmg done w/out combo bonus, bonus dmg to be added if in combo
-		int m_LvDmg, m_LvDmgCombo;	//amt added per level
+		int m_dmgCombo, m_dmgComboLv;
 	public:
 		MagicChip(e_subType a_subType, e_subSubType a_subSubType)
 			:Chip(Magic, a_subType, a_subSubType),
-			m_dmg(0),m_dmgCombo(0),m_LvDmg(0),m_LvDmgCombo(0){}
-		int getBaseDmg(){return m_dmg;}
+			m_dmgCombo(0),m_dmgComboLv(0){}
 		int getComboBonus(){return m_dmgCombo;}
-		void levelUpUnique()
-		{
-			m_dmg += m_LvDmg;
-			m_dmgCombo += m_LvDmgCombo;
-		}
+		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
 		bool shouldApplyEffect()
 		{
 			switch(m_subSubType)
@@ -98,6 +131,47 @@ class MagicChip : public Chip
 				break;
 			case Ice:
 				//apply elemental effect
+				break;
+			}
+		}
+};
+class WeaponChip : public Chip
+{
+	public:
+		WeaponChip(e_subType a_subType, e_subSubType a_subSubType)
+			:Chip(Weapon, a_subType, a_subSubType){}
+		bool shouldApplyEffect()
+		{
+			switch(m_subSubType)
+			{
+			case Basic:
+				return false;
+				break;
+			case Advanced:
+				return false;
+				break;
+			case Expert:
+				return false;
+				break;
+			default:
+				return false;
+			}
+		}
+		void applyEffect()
+		{
+			switch(m_subType)
+			{
+			case Blunt:
+				//apply secondary effect
+				break;
+			case Range:
+				//apply secondary effect
+				break;
+			case Slash:
+				//apply secondary effect
+				break;
+			case Pierce:
+				//apply secondary effect
 				break;
 			}
 		}
