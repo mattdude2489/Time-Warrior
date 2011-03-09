@@ -47,11 +47,11 @@ public:
 
     Sprite();
     ~Sprite();
-    Sprite(const char * a_fileName,const int & a_maxFrames, const int & a_animationSpeed);
-    Sprite(const SDL_Surface* a_surface, const int & a_maxFrames,const int & a_animationSpeed);
+    Sprite(const char * a_fileName,const int & a_maxFrames, const int & a_animationSpeed, const int & a_rows);
+    Sprite(const SDL_Surface* a_surface, const int & a_maxFrames,const int & a_animationSpeed, const int & a_rows);
 
 	void setHIndex(int a_hindex, const int & a_maxFrames);
-	void setSprite(const char * a_fileName, const int & a_maxFrames, const int & a_animationSpeed);
+	void setSprite(const char * a_fileName, const int & a_maxFrames, const int & a_animationSpeed, const int & a_rows);
     void draw(SDL_Surface* a_screen, const int & x, const int & y);
     void setTransparency(const Uint32 & color);
     void setTransparency(const int & red, const int & green, const int & blue);

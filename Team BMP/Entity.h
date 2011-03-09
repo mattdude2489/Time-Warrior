@@ -47,7 +47,7 @@ public:
 		for(int i = 0; i < NUM_RESISTANCES; i ++)
 			m_stats.resistances[i] = 0;
 	}
-	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite a_sprite)
+	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite * a_sprite)
 	{
 		m_stats.defence = a_def;
 		m_stats.intellect = a_int;
@@ -60,7 +60,7 @@ public:
 		m_stats.resistances[FIRE] = a_fRes;
 		m_stats.resistances[ICE] = a_iRes;
 		m_stats.resistances[LIGHTNING] = a_lRes;
-		m_mySprite = &a_sprite;
+		m_mySprite = a_sprite;
 		m_locations[SCREENLOC].x = CENTERSCREENX;
 		m_locations[SCREENLOC].y = CENTERSCREENY;
 	}

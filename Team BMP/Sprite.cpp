@@ -3,6 +3,7 @@
 #define SPRITE_MAX(a,b)	((a > b) ? a : b)
 #define SPRITE_MIN(a,b)	((a < b) ? a : b)
 
+//Default constructor.
 Sprite::Sprite()
 {
 	m_surface = NULL;
@@ -16,7 +17,8 @@ Sprite::Sprite()
 	m_hindex = 0;
 }
 
-Sprite::Sprite(const char * file, const int & a_frames, const int & a_speed) {
+//Second constructor.
+Sprite::Sprite(const char * file, const int & a_frames, const int & a_speed, const int & a_rows) {
     SDL_Surface *temp = SDL_LoadBMP(file);
     m_surface = SDL_DisplayFormat(temp);
     SDL_FreeSurface(temp);
@@ -26,7 +28,7 @@ Sprite::Sprite(const char * file, const int & a_frames, const int & a_speed) {
         m_speed = 0;
     } else {
         m_width = m_surface->w/a_frames;
-        m_height = m_surface->h;
+        m_height = m_surface->h/a_rows;
         m_speed = a_speed;
     }
     m_maxFrames = a_frames;
@@ -36,7 +38,8 @@ Sprite::Sprite(const char * file, const int & a_frames, const int & a_speed) {
     m_loopsToBeginning = true;
 }
 
-void Sprite::setSprite(const char * file, const int & a_frames, const int & a_speed) { //You can easily tell this isn't my code xD
+//Third constructor.
+void Sprite::setSprite(const char * file, const int & a_frames, const int & a_speed, const int & a_rows) {
 	SDL_Surface *temp = SDL_LoadBMP(file);
     m_surface = SDL_DisplayFormat(temp);
     SDL_FreeSurface(temp);
@@ -46,7 +49,7 @@ void Sprite::setSprite(const char * file, const int & a_frames, const int & a_sp
         m_speed = 0;
     } else {
         m_width = m_surface->w/a_frames;
-        m_height = m_surface->h;
+        m_height = m_surface->h/a_rows;
         m_speed = a_speed;
     }
     m_maxFrames = a_frames;
@@ -56,7 +59,8 @@ void Sprite::setSprite(const char * file, const int & a_frames, const int & a_sp
     m_loopsToBeginning = true;
 }
 
-Sprite::Sprite(const SDL_Surface* a_surface, const int & a_frames, const int & a_speed) {
+//MY GOD. HOW MANY CONSTRUCTORS ARE THERE. Fourth Constructor.
+Sprite::Sprite(const SDL_Surface* a_surface, const int & a_frames, const int & a_speed, const int & a_rows) {
 	if(a_surface == NULL) {
 		m_surface = NULL;
 		m_width = 0;
@@ -73,7 +77,7 @@ Sprite::Sprite(const SDL_Surface* a_surface, const int & a_frames, const int & a
 			SDL_SetColorKey(m_surface, SDL_RLEACCEL|SDL_SRCCOLORKEY, f->colorkey);
 		}
 		m_width = m_surface->w/a_frames;
-		m_height = m_surface->h;
+		m_height = m_surface->h/a_rows;
 		m_speed = a_speed;
 	}
 	m_maxFrames = a_frames;
@@ -84,7 +88,7 @@ Sprite::Sprite(const SDL_Surface* a_surface, const int & a_frames, const int & a
 }
 
 void Sprite::draw(SDL_Surface* a_screen, const int & x, const int & y) {
-	SDL_Rect dstrect = {x,y,0,0};
+	SDL_Rect dstrect = {x,y,32,32};
 	// this blits the current frame from the sprite sheet
 	SDL_Rect animRect = {m_width*m_index,m_height*m_hindex,m_width,m_height}; //The starting position, which I only changed the original 0 to m_height*m_hindex.
 	SDL_BlitSurface(m_surface, &animRect, a_screen,&dstrect); //That should allow us to easily have multiple rows.
