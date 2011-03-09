@@ -194,6 +194,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Entity.h"
+				>
+			</File>
+			<File
 				RelativePath=".\spoint.h"
 				>
 			</File>
