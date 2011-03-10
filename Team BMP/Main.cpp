@@ -4,6 +4,7 @@
 #include "UserInput.h"
 #include "Chip.h"
 #include "Entity.h"
+#include "Player.h"
 
 //Some debugging includes
 #include <stdio.h>
@@ -36,7 +37,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Sprite test("Sprites/spriteTest.bmp", 3, 32, 4);
 	test.setTransparency(255,0,255);
 	test.setHIndex(2,3);
-	Entity eTest(0,0,0,0,0,0,0,0,&test);
+	Player eTest(0,0,0,0,0,0,0,0,&test);
 
 	if(test.isSprite())
 	{
@@ -75,6 +76,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		if(change)
 		{
 			printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
+			eTest.handleInput(ui);
 			change = false;
 		}
 
@@ -84,6 +86,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 		//draw
 		//test.draw(screen, 100, 100);
+		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		eTest.draw(screen);
 
 		SDL_Flip(screen);

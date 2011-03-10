@@ -1,6 +1,7 @@
 //UserInput Class.
-//Made on 3/5/11, edited on 3/7/11
+//Made on 3/5/11, edited on 3/9/11
 //Made by Matt Morrill, edited last by Matt Morrill
+#pragma once //Almost forgot this!
 
 class UserInput
 {

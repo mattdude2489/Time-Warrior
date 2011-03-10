@@ -34,7 +34,7 @@ enum e_eType{player, minion, boss};
 
 class Entity
 {
-private:
+protected:
 	Stats m_stats;
 	Location m_locations[NUM_LOCATIONS];//0 is screen, 1 is world
 	e_eType m_myType;
