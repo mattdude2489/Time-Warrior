@@ -33,7 +33,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	bool change = false;
 
 	//loading a sprite to see if it works with the entity
-	Sprite test("spriteTest.bmp", 3, 32, 4);
+	Sprite test("Sprites/spriteTest.bmp", 3, 32, 4);
 	test.setTransparency(255,0,255);
 	test.setHIndex(2,3);
 	Entity eTest(0,0,0,0,0,0,0,0,&test);
