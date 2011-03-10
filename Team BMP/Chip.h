@@ -1,5 +1,6 @@
 //Chip class
 //Author: John Parks
+//TODO: put Chip classes into different headers
 
 enum e_type {Armor, Magic, Weapon};
 enum e_subType {Head, Trunk, UpperLimb, LowerLimb, Divine, Lightning, Fire, Ice, Blunt, Range, Slash, Pierce};
