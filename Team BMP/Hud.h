@@ -3,55 +3,53 @@
 #include "Player.h"
 #include "srect.h"
 
-#define NUMBERBARS			3
-#define BACKBAR				0
-#define HEALTHBAR			1
-#define	ENERGYBAR			2
+#define NUM_BARS			3
+#define BAR_BACK			0
+#define BAR_HEALTH			1
+#define	BAR_ENERGY			2
 
-#define BACKCOLOR			0x0000ff
-#define HEALTHCOLOR			0xff0000
-#define	ENERGYCOLOR			0x00ff00
+#define COLOR_BACK			0x0000ff
+#define COLOR_HEALTH		0xff0000
+#define	COLOR_ENERGY		0x00ff00
 
-#define BHEIGHT				50
-#define	BWIDTH				100
-#define BX					50
-#define BY					500
+#define B_HEIGHT			50
+#define	B_WIDTH				100
+#define B_X					50
+#define B_Y					500
 
-#define CURRENT				0
-#define	MAX					1
 #define ONEHUNDREDPERCENT	100
 
 class Hud
 {
 private:
-	SRect bars[NUMBERBARS];
-	Uint32 colors[NUMBERBARS];
+	SRect bars[NUM_BARS];
+	Uint32 colors[NUM_BARS];
 
 public:
 	Hud()
 	{
-		for(int i = 0; i < NUMBERBARS; i++)
+		for(int i = 0; i < NUM_BARS; i++)
 		{
 			//set all to be same then modify
-			bars[i].setHeight(BHEIGHT);
-			bars[i].setWidth(BWIDTH);
-			bars[i].setX(BX);
-			bars[i].setY(BY);
+			bars[i].setHeight(B_HEIGHT);
+			bars[i].setWidth(B_WIDTH);
+			bars[i].setX(B_X);
+			bars[i].setY(B_Y);
 		}
-		bars[BACKBAR].setHeight(2*BHEIGHT);
-		bars[ENERGYBAR].setY(BY+BHEIGHT);
-		colors[BACKBAR] = BACKCOLOR;
-		colors[HEALTHBAR] = HEALTHCOLOR;
-		colors[ENERGYBAR] = ENERGYCOLOR;
+		bars[BAR_BACK].setHeight(2*B_HEIGHT);
+		bars[BAR_ENERGY].setY(B_Y+B_HEIGHT);
+		colors[BAR_BACK] = COLOR_BACK;
+		colors[BAR_HEALTH] = COLOR_HEALTH;
+		colors[BAR_ENERGY] = COLOR_ENERGY;
 	}
 	void updateHud(Player p)
 	{
-		bars[HEALTHBAR].setWidth( ((double)p.getStats().health[CURRENT]/(double)p.getStats().health[MAX]) * ONEHUNDREDPERCENT);
-		bars[ENERGYBAR].setWidth( ((double)p.getStats().energy[CURRENT]/(double)p.getStats().energy[MAX]) * ONEHUNDREDPERCENT);
+		bars[BAR_HEALTH].setWidth( ((double)p.getStats().health[STATS_CURRENT]/(double)p.getStats().health[STATS_MAX]) * ONEHUNDREDPERCENT);
+		bars[BAR_ENERGY].setWidth( ((double)p.getStats().energy[STATS_CURRENT]/(double)p.getStats().energy[STATS_MAX]) * ONEHUNDREDPERCENT);
 	}
 	void draw(SDL_Surface * screen)
 	{
-		for(int i = 0; i < NUMBERBARS; i++)
+		for(int i = 0; i < NUM_BARS; i++)
 		{
 			SDL_FillRect(screen, &bars[i], colors[i]);
 		}

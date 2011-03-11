@@ -1,6 +1,8 @@
 #pragma once
 #include "Sprite.h"
 
+#define	COLOR_TRANSPARENT		0xff00ff
+
 #define NUM_STATS				9
 #define CURRENT_AND_MAX			2
 #define STATS_CURRENT			0
@@ -70,14 +72,15 @@ public:
 		m_stats.resistances[RESIST_ICE] = a_iRes;
 		m_stats.resistances[RESIST_LIGHTNING] = a_lRes;
 		m_mySprite = a_sprite;
-		m_locations[LOC_SCREEN].x = CENTER_SCREEN_X;
-		m_locations[LOC_SCREEN].y = CENTER_SCREEN_Y;
+		setLocation(LOC_SCREEN, CENTER_SCREEN_X, CENTER_SCREEN_Y);
 		m_stats.energyregen = 5;
 		m_timeSinceLastUpdate = m_timeToRegen = 0;
 	}
 	Stats getStats(){return m_stats;}
 	Location getLocationScreen(){return m_locations[LOC_SCREEN];}
 	Location getLocationWorld(){return m_locations[LOC_WORLD];}
+	void move(int a_locIndex, int a_deltaX, int a_deltaY){m_locations[a_locIndex].x += a_deltaX; m_locations[a_locIndex].y += a_deltaY;}
+	void setLocation(int a_locIndex, int a_x, int a_y){m_locations[a_locIndex].x = a_x; m_locations[a_locIndex].y = a_y;}
 	void update(int a_time)
 	{
 	//	if(m_stats.energy[CURRENT] != m_stats.energy[MAX])

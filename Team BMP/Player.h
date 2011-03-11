@@ -4,6 +4,9 @@
 #pragma once
 #include "Entity.h"
 #include "UserInput.h"
+#include "Armor.h"
+#include "Magic.h"
+#include "Weapon.h"
 
 
 class Player : public Entity
