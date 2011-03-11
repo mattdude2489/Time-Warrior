@@ -5,7 +5,9 @@
 #include "Chip.h"
 #include "Entity.h"
 #include "Player.h"
+#include "World.h"
 #include "Hud.h"
+
 
 //Some debugging includes
 #include <stdio.h>
@@ -31,15 +33,16 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//the user interface variable
 	bool running = true;
 
-	//Some debugging for the UI.
-	bool change = false;
-
 	//loading a sprite to see if it works with the entity
 	Sprite test("Sprites/spriteTest.bmp", 3, 32, 4);
 	test.setTransparency(255,0,255);
 	test.setHIndex(2,3);
 	Player eTest(10,10,10,100,100,10,10,10,&test);
 	Hud Ghud;
+
+	World world;
+
+	world.setAnEntity(&eTest);
 
 	if(test.isSprite())
 	{
@@ -82,7 +85,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 		//update
 		//test.update(passed);
-		eTest.update(passed);
+		world.update(passed);
 
 		Ghud.updateHud(eTest);
 
@@ -90,7 +93,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//draw
 		//test.draw(screen, 100, 100);
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-		eTest.draw(screen);
+		world.draw(screen);
 		Ghud.draw(screen);
 
 		SDL_Flip(screen);

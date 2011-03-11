@@ -187,6 +187,10 @@
 				RelativePath=".\Sprite.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\World.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
