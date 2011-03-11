@@ -5,6 +5,8 @@
 #define NUM_LOCATIONS	2
 #define CURRENT2MAX		2
 #define NUM_RESISTANCES	3
+#define CURRENT			0
+#define	MAX				1
 
 #define SCREENLOC		0
 #define WORLDLOC		1
@@ -15,6 +17,8 @@
 
 #define CENTERSCREENX	400
 #define CENTERSCREENY	300
+
+#define TIMETOREGEN		5000
 //each array in this next area the first part is current and second is max
 struct Stats
 {
@@ -24,6 +28,7 @@ struct Stats
 	int intellect;
 	int defence;
 	int resistances[NUM_RESISTANCES];//fire/ice/lightning
+	int energyregen;
 };
 struct Location
 {
@@ -39,6 +44,8 @@ protected:
 	Location m_locations[NUM_LOCATIONS];//0 is screen, 1 is world
 	e_eType m_myType;
 	Sprite * m_mySprite;
+	int timeSinceLastUpdate;
+	int timeToRegen;
 public:
 	Entity(){
 		m_stats.defence = m_stats.intellect = m_stats.strength = 0;
@@ -46,6 +53,8 @@ public:
 			m_stats.energy[i] = m_stats.health[i] = 1;
 		for(int i = 0; i < NUM_RESISTANCES; i ++)
 			m_stats.resistances[i] = 0;
+		m_stats.energyregen = 5;
+		timeSinceLastUpdate =timeToRegen =  0;
 	}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite * a_sprite)
 	{
@@ -63,16 +72,54 @@ public:
 		m_mySprite = a_sprite;
 		m_locations[SCREENLOC].x = CENTERSCREENX;
 		m_locations[SCREENLOC].y = CENTERSCREENY;
+		m_stats.energyregen = 5;
+		timeSinceLastUpdate = timeToRegen = 0;
 	}
 	Stats getStats(){return m_stats;}
 	Location getLocationScreen(){return m_locations[SCREENLOC];}
 	Location getLocationWorld(){return m_locations[WORLDLOC];}
 	void update(int a_time)
 	{
+	//	if(m_stats.energy[CURRENT] != m_stats.energy[MAX])
+	//	{
+			if(timeSinceLastUpdate == 0)
+				timeSinceLastUpdate = a_time;
+			timeToRegen+= a_time - timeSinceLastUpdate;
+			if(timeToRegen > TIMETOREGEN)
+			{
+				m_stats.energy[CURRENT] += m_stats.energyregen;
+				if(m_stats.energy[CURRENT] > m_stats.energy[MAX])
+				{
+					m_stats.energy[CURRENT] = m_stats.energy[MAX];
+				}
+				timeToRegen = 0;
+			}
+	//	}
 		m_mySprite->update(a_time);
 	}
 	void draw(SDL_Surface * a_screen)
 	{
 		m_mySprite->draw(a_screen, m_locations[SCREENLOC].x,m_locations[SCREENLOC].y); 
+	}
+	void hit(int damage)
+	{
+		m_stats.health[CURRENT] -= damage;
+		if(m_stats.health[CURRENT] <0)
+		{
+			m_stats.health[CURRENT] = 0;
+		}
+		m_stats.energy[CURRENT] -= damage;
+		if(m_stats.energy[CURRENT] <0)
+		{
+			m_stats.energy[CURRENT] = 0;
+		}
+	}
+	void heal(int healammount)
+	{
+		m_stats.health[CURRENT]+= healammount;
+		if(m_stats.health[CURRENT] > m_stats.health[MAX])
+		{
+			m_stats.health[CURRENT] = m_stats.health[MAX];
+		}
 	}
 };
