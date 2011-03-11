@@ -1,12 +1,13 @@
 //Chip class
 //Author: John Parks
 #pragma once
+#include "Entity.h"
 
 enum e_type {Armor, Magic, Weapon};
 enum e_subType {Head, Trunk, UpperLimb, LowerLimb, Divine, Lightning, Fire, Ice, Blunt, Range, Slash, Pierce};
 enum e_subSubType {Basic, Advanced, Expert, Legend};
 
-class Chip
+class Chip : public Entity
 {
 	protected:
 		e_type m_type;
@@ -17,7 +18,7 @@ class Chip
 	public:
 		Chip(e_type a_type, e_subType a_subType, e_subSubType a_subSubType)
 			:m_type(a_type),m_subType(a_subType),m_subSubType(a_subSubType),
-			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_equip(false){}
+			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_equip(false){m_isAnimate = false;}
 		e_type getType(){return m_type;}
 		e_subType getSubType(){return m_subType;}
 		e_subSubType getSubSubType(){return m_subSubType;}

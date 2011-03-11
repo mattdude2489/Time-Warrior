@@ -121,7 +121,12 @@ class LegendLightning : public LightningMagic
 class FireMagic : public MagicChip
 {
 	public:
-		FireMagic(e_subSubType a_subSubType):MagicChip(Fire, a_subSubType){}
+		FireMagic(e_subSubType a_subSubType):MagicChip(Fire, a_subSubType)
+		{
+			setSprite("Sprites/magic_fire.bmp");
+			m_mySprite->setTransparency(255,0,255);
+			m_mySprite->setHIndex(0,3);
+		}
 };
 class BasicFire : public FireMagic
 {

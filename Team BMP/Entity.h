@@ -42,6 +42,7 @@ class Entity
 protected:
 	Stats m_stats;
 	Location m_locations[NUM_LOCATIONS];//0 is screen, 1 is world
+	bool m_isAnimate;
 	e_eType m_myType;
 	Sprite * m_mySprite;
 	int timeSinceLastUpdate;
@@ -55,7 +56,9 @@ public:
 			m_stats.resistances[i] = 0;
 		m_stats.energyregen = 5;
 		timeSinceLastUpdate =timeToRegen =  0;
+		m_isAnimate = true;
 	}
+	void setSprite(Sprite * a_sprite){m_mySprite = a_sprite;}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite * a_sprite)
 	{
 		m_stats.defence = a_def;
@@ -69,15 +72,17 @@ public:
 		m_stats.resistances[FIRE] = a_fRes;
 		m_stats.resistances[ICE] = a_iRes;
 		m_stats.resistances[LIGHTNING] = a_lRes;
-		m_mySprite = a_sprite;
+		setSprite(a_sprite);
 		m_locations[SCREENLOC].x = CENTERSCREENX;
 		m_locations[SCREENLOC].y = CENTERSCREENY;
 		m_stats.energyregen = 5;
 		timeSinceLastUpdate = timeToRegen = 0;
+		m_isAnimate = true;
 	}
 	Stats getStats(){return m_stats;}
 	Location getLocationScreen(){return m_locations[SCREENLOC];}
 	Location getLocationWorld(){return m_locations[WORLDLOC];}
+	bool isAnimate(){return m_isAnimate;}
 	void update(int a_time)
 	{
 	//	if(m_stats.energy[CURRENT] != m_stats.energy[MAX])
