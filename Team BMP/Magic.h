@@ -124,33 +124,34 @@ class Fire : public Magic
 		Fire(e_cSubSubType a_subSubType):Magic(FIRE, a_subSubType)
 		{
 			m_mySprite = &Sprite("Sprites/magic_fire.bmp", 3, 32, 4);
+			m_mySprite->setHIndex(a_subSubType,3);
 		}
 };
 class BasicFire : public Fire
 {
 	public:
-		BasicFire():Fire(BASIC){m_mySprite->setHIndex(m_subSubType,3);}
+		BasicFire():Fire(BASIC){}
 		char * getName(){return "Fireball";}
 		char * getDescription(){return "Fire projectile.";}
 };
 class AdvancedFire : public Fire
 {
 	public:
-		AdvancedFire():Fire(ADVANCED){m_mySprite->setHIndex(m_subSubType,3);}
+		AdvancedFire():Fire(ADVANCED){}
 		char * getName(){return "Fire Blast";}
 		char * getDescription(){return "Fire explosion.";}
 };
 class ExpertFire : public Fire
 {
 	public:
-		ExpertFire():Fire(EXPERT){m_mySprite->setHIndex(m_subSubType,3);}
+		ExpertFire():Fire(EXPERT){}
 		char * getName(){return "Armageddon";}
 		char * getDescription(){return "Fire area-of-effect.";}
 };
 class LegendFire : public Fire
 {
 	public:
-		LegendFire():Fire(LEGEND){m_mySprite->setHIndex(m_subSubType,3);}
+		LegendFire():Fire(LEGEND){}
 		char * getName(){return "Phoenix";}
 		char * getDescription(){return "Fire guardian.";}
 };
