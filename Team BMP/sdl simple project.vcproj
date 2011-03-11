@@ -194,11 +194,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Armor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Chip.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Entity.h"
+				>
+			</File>
+			<File
+				RelativePath=".\graphics_constants.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Magic.h"
 				>
 			</File>
 			<File
@@ -219,6 +231,10 @@
 			</File>
 			<File
 				RelativePath=".\UserInput.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Weapon.h"
 				>
 			</File>
 		</Filter>
