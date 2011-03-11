@@ -1,6 +1,6 @@
 //Basic player class, which extends Entity.h
 //Authored by Matt Morrill, created on 3/9/11
-//Edited Last by Matt Morrill, created on 3/9/11
+//Edited Last by Matt Morrill, created on 3/10/11
 #pragma once
 #include "Entity.h"
 #include "UserInput.h"

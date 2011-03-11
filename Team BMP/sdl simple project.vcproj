@@ -237,6 +237,10 @@
 				RelativePath=".\Weapon.h"
 				>
 			</File>
+			<File
+				RelativePath=".\World.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
