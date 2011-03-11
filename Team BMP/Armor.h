@@ -3,22 +3,22 @@
 #pragma once
 #include "Chip.h"
 
-class ArmorChip : public Chip
+class Armor : public Chip
 {
 	public:
-		ArmorChip(e_subType a_subType, e_subSubType a_subSubType)
-			:Chip(Armor, a_subType, a_subSubType){}
+		Armor(e_cSubType a_subType, e_cSubSubType a_subSubType)
+			:Chip(ARMOR, a_subType, a_subSubType){}
 		bool shouldApplyEffect()
 		{
 			switch(m_subSubType)
 			{
-			case Basic:
+			case BASIC:
 				return false;
 				break;
-			case Advanced:
+			case ADVANCED:
 				return false;
 				break;
-			case Expert:
+			case EXPERT:
 				return false;
 				break;
 			default:
@@ -29,13 +29,13 @@ class ArmorChip : public Chip
 		{
 			switch(m_subType)
 			{
-			case Head:
+			case HEAD:
 				break;
-			case Trunk:
+			case TRUNK:
 				break;
-			case UpperLimb:
+			case LIMB_UPPER:
 				break;
-			case LowerLimb:
+			case LIMB_LOWER:
 				break;
 			}
 		}

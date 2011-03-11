@@ -2,9 +2,9 @@
 #include "Player.h"
 #include "UserInput.h"
 
-Player::Player()
+Player::Player():Entity()
 {
-	m_myType = player; //Tells the Entity that it's a PLAYER. YEAH. REMEMBER THEM? THE PLAYERS. YEAH. THEY EXIST TOO.
+	m_myType = PLAYER; //Tells the Entity that it's a PLAYER. YEAH. REMEMBER THEM? THE PLAYERS. YEAH. THEY EXIST TOO.
 	//Otherwise, let the usual Entity constructor occur.
 }
 

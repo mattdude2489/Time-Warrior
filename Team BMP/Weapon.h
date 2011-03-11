@@ -3,22 +3,22 @@
 #pragma once
 #include "Chip.h"
 
-class WeaponChip : public Chip
+class Weapon : public Chip
 {
 	public:
-		WeaponChip(e_subType a_subType, e_subSubType a_subSubType)
-			:Chip(Weapon, a_subType, a_subSubType){}
+		Weapon(e_cSubType a_subType, e_cSubSubType a_subSubType)
+			:Chip(WEAPON, a_subType, a_subSubType){}
 		bool shouldApplyEffect()
 		{
 			switch(m_subSubType)
 			{
-			case Basic:
+			case BASIC:
 				return false;
 				break;
-			case Advanced:
+			case ADVANCED:
 				return false;
 				break;
-			case Expert:
+			case EXPERT:
 				return false;
 				break;
 			default:
@@ -29,16 +29,16 @@ class WeaponChip : public Chip
 		{
 			switch(m_subType)
 			{
-			case Blunt:
+			case BLUNT:
 				//apply secondary effect
 				break;
-			case Range:
+			case RANGE:
 				//apply secondary effect
 				break;
-			case Slash:
+			case SLASH:
 				//apply secondary effect
 				break;
-			case Pierce:
+			case PIERCE:
 				//apply secondary effect
 				break;
 			}
