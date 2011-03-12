@@ -38,12 +38,18 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	test.setTransparency(COLOR_TRANSPARENT);
 	test.setHIndex(2,3);
 	Player eTest(10,10,10,100,100,10,10,10,&test);
-	BasicFire chip;
+	BasicFire chp1;
+	AdvancedFire chp2;
+	ExpertFire chp3;
+	LegendFire chp4;
 	Hud Ghud;
 	World world;
 
 	world.setAnEntity(&eTest);
-	world.setAnEntity(&chip);
+	world.setAnEntity(&chp1);
+	world.setAnEntity(&chp2);
+	world.setAnEntity(&chp3);
+	world.setAnEntity(&chp4);
 
 	if(test.isSprite())
 	{

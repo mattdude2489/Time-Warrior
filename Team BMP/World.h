@@ -7,7 +7,7 @@
 
 #pragma once
 
-#define NUMBER_OF_ENTITIES 2
+#define NUMBER_OF_ENTITIES 5
 
 class World
 {
