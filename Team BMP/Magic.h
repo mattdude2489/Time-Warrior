@@ -123,9 +123,12 @@ class Fire : public Magic
 	public:
 		Fire(e_cSubSubType a_subSubType):Magic(FIRE, a_subSubType)
 		{
-			m_mySprite = &Sprite("Sprites/magic_fire.bmp", 3, 32, 4);
-			m_mySprite->setHIndex(a_subSubType,3);
+			m_mySprite = new Sprite("Sprites/magic_fire.bmp", 3, 1, 4);
+			m_mySprite->setTransparency(COLOR_TRANSPARENT);
+			m_mySprite->setHIndex(m_subSubType,3);
+			setLocation(LOC_SCREEN, CENTER_SCREEN_X+32, CENTER_SCREEN_Y);
 		}
+		~Fire(){delete m_mySprite;}
 };
 class BasicFire : public Fire
 {

@@ -35,14 +35,15 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	//loading a sprite to see if it works with the entity
 	Sprite test("Sprites/spriteTest.bmp", 3, 32, 4);
-	test.setTransparency(255,0,255);
+	test.setTransparency(COLOR_TRANSPARENT);
 	test.setHIndex(2,3);
 	Player eTest(10,10,10,100,100,10,10,10,&test);
+	BasicFire chip;
 	Hud Ghud;
-
 	World world;
 
 	world.setAnEntity(&eTest);
+	world.setAnEntity(&chip);
 
 	if(test.isSprite())
 	{
