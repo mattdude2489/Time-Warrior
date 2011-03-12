@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "srect.h"
+#include "trueTextPrinter.h"
 
 #define NUM_BARS			3
 #define BAR_BACK			0
@@ -12,10 +13,10 @@
 #define COLOR_HEALTH		0xff0000
 #define	COLOR_ENERGY		0x00ff00
 
-#define B_HEIGHT			50
+#define B_HEIGHT			10
 #define	B_WIDTH				100
 #define B_X					50
-#define B_Y					500
+#define B_Y					580
 
 #define ONEHUNDREDPERCENT	100
 
@@ -24,7 +25,7 @@ class Hud
 private:
 	SRect bars[NUM_BARS];
 	Uint32 colors[NUM_BARS];
-
+	TTtext m_text;
 public:
 	Hud()
 	{
@@ -41,6 +42,7 @@ public:
 		colors[BAR_BACK] = COLOR_BACK;
 		colors[BAR_HEALTH] = COLOR_HEALTH;
 		colors[BAR_ENERGY] = COLOR_ENERGY;
+		m_text.setMessage("testing");
 	}
 	void updateHud(Player p)
 	{
@@ -49,6 +51,7 @@ public:
 	}
 	void draw(SDL_Surface * screen)
 	{
+		m_text.printMessage(screen, 0,0);
 		for(int i = 0; i < NUM_BARS; i++)
 		{
 			SDL_FillRect(screen, &bars[i], colors[i]);
