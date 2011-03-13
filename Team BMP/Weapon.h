@@ -10,7 +10,7 @@ class Weapon : public Chip
 			:Chip(WEAPON, a_subType, a_subSubType){}
 		bool shouldApplyEffect()
 		{
-			switch(m_subSubType)
+			switch(m_cSubSubType)
 			{
 			case BASIC:
 				return false;
@@ -27,7 +27,7 @@ class Weapon : public Chip
 		}
 		void applyEffect()
 		{
-			switch(m_subType)
+			switch(m_cSubType)
 			{
 			case BLUNT:
 				//apply secondary effect

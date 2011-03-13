@@ -10,7 +10,7 @@ class Armor : public Chip
 			:Chip(ARMOR, a_subType, a_subSubType){}
 		bool shouldApplyEffect()
 		{
-			switch(m_subSubType)
+			switch(m_cSubSubType)
 			{
 			case BASIC:
 				return false;
@@ -27,7 +27,7 @@ class Armor : public Chip
 		}
 		void applyEffect()
 		{
-			switch(m_subType)
+			switch(m_cSubType)
 			{
 			case HEAD:
 				break;

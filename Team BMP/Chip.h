@@ -10,18 +10,18 @@ enum e_chipSubSubType {BASIC, ADVANCED, EXPERT, LEGEND};
 class Chip : public Entity
 {
 	protected:
-		e_chipType m_type;
-		e_chipSubType m_subType;
-		e_chipSubSubType m_subSubType;
+		e_chipType m_cType;
+		e_chipSubType m_cSubType;
+		e_chipSubSubType m_cSubSubType;
 		int m_level, m_cost, m_costLv, m_dmg, m_dmgLv;
 		bool m_equip;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
-			:m_type(a_type),m_subType(a_subType),m_subSubType(a_subSubType),
-			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_equip(false){m_myType = CHIP;}
-		e_chipType getType(){return m_type;}
-		e_chipSubType getSubType(){return m_subType;}
-		e_chipSubSubType getSubSubType(){return m_subSubType;}
+			:m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
+			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_equip(false){m_eType = CHIP;}
+		e_chipType getType(){return m_cType;}
+		e_chipSubType getSubType(){return m_cSubType;}
+		e_chipSubSubType getSubSubType(){return m_cSubSubType;}
 		int getLevel(){return m_level;}
 		int getCost(){return m_cost;}
 		int getDamage(){return m_dmg;}

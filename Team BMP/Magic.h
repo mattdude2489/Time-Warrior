@@ -16,7 +16,7 @@ class Magic : public Chip
 		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
 		bool shouldApplyEffect()
 		{
-			switch(m_subSubType)
+			switch(m_cSubSubType)
 			{
 			case BASIC:
 				//calc if collision
@@ -36,7 +36,7 @@ class Magic : public Chip
 		}
 		void applyEffect()
 		{
-			switch(m_subType)
+			switch(m_cSubType)
 			{
 			case DIVINE:
 				//apply elemental effect
@@ -55,28 +55,28 @@ class Magic : public Chip
 		void setSprite(const char * a_fileName)
 		{
 			const int maxFrames = 3;
-			m_mySprite = new Sprite(a_fileName, maxFrames, 1, LEGEND+1);
-			m_mySprite->setTransparency(COLOR_TRANSPARENT);
-			m_mySprite->setHIndex(m_subSubType, maxFrames);
+			m_sprite = new Sprite(a_fileName, maxFrames, 1, LEGEND+1);
+			m_sprite->setTransparency(COLOR_TRANSPARENT);
+			m_sprite->setHIndex(m_cSubSubType, maxFrames);
 			m_isSpriteInit = true;
-			setLocation(LOC_SCREEN, CENTER_SCREEN_X+(m_subSubType+1)*35, CENTER_SCREEN_Y);
-			switch(m_subSubType)
+			setLocation(LOC_SCREEN, CENTER_SCREEN_X+(m_cSubSubType+1)*35, CENTER_SCREEN_Y);
+			switch(m_cSubSubType)
 			{
 			case BASIC:
-				m_mySprite->stretch(50,50);
+				m_sprite->stretch(50,50);
 				break;
 			case ADVANCED:
-				m_mySprite->stretch(200,200);
+				m_sprite->stretch(200,200);
 				break;
 			case EXPERT:
-				m_mySprite->stretch(300,300);
+				m_sprite->stretch(300,300);
 				break;
 			}
 		}
 		~Magic()
 		{
 			if(m_isSpriteInit)
-				delete m_mySprite;
+				delete m_sprite;
 		}
 };
 class Divine : public Magic

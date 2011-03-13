@@ -43,9 +43,9 @@ class Entity
 {
 protected:
 	Stats m_stats;
-	Location m_locations[NUM_LOCATIONS];//0 is screen, 1 is world
-	e_entityType m_myType;
-	Sprite * m_mySprite;
+	Location m_locations[NUM_LOCATIONS];//LOC_SCREEN/LOC_WORLD
+	e_entityType m_eType;
+	Sprite * m_sprite;
 	int m_timeSinceLastUpdate;
 	int m_timeToRegen;
 public:
@@ -71,7 +71,7 @@ public:
 		m_stats.resistances[RESIST_FIRE] = a_fRes;
 		m_stats.resistances[RESIST_ICE] = a_iRes;
 		m_stats.resistances[RESIST_LIGHTNING] = a_lRes;
-		m_mySprite = a_sprite;
+		m_sprite = a_sprite;
 		setLocation(LOC_SCREEN, CENTER_SCREEN_X, CENTER_SCREEN_Y);
 		m_stats.energyregen = 5;
 		m_timeSinceLastUpdate = m_timeToRegen = 0;
@@ -98,11 +98,11 @@ public:
 				m_timeToRegen = 0;
 			}
 	//	}
-		m_mySprite->update(a_time);
+		m_sprite->update(a_time);
 	}
 	void draw(SDL_Surface * a_screen)
 	{
-		m_mySprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
+		m_sprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
 	}
 	void hit(int damage)
 	{
