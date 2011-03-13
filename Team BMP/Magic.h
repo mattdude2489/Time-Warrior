@@ -60,6 +60,18 @@ class Magic : public Chip
 			m_mySprite->setHIndex(m_subSubType, maxFrames);
 			m_isSpriteInit = true;
 			setLocation(LOC_SCREEN, CENTER_SCREEN_X+(m_subSubType+1)*35, CENTER_SCREEN_Y);
+			switch(m_subSubType)
+			{
+			case BASIC:
+				m_mySprite->stretch(50,50);
+				break;
+			case ADVANCED:
+				m_mySprite->stretch(200,200);
+				break;
+			case EXPERT:
+				m_mySprite->stretch(300,300);
+				break;
+			}
 		}
 		~Magic()
 		{
