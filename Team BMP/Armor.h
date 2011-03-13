@@ -6,7 +6,7 @@
 class Armor : public Chip
 {
 	public:
-		Armor(e_cSubType a_subType, e_cSubSubType a_subSubType)
+		Armor(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(ARMOR, a_subType, a_subSubType){}
 		bool shouldApplyEffect()
 		{

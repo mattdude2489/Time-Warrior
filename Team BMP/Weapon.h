@@ -6,7 +6,7 @@
 class Weapon : public Chip
 {
 	public:
-		Weapon(e_cSubType a_subType, e_cSubSubType a_subSubType)
+		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(WEAPON, a_subType, a_subSubType){}
 		bool shouldApplyEffect()
 		{

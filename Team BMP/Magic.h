@@ -9,7 +9,7 @@ class Magic : public Chip
 		int m_dmgCombo, m_dmgComboLv;
 		bool m_isSpriteInit;
 	public:
-		Magic(e_cSubType a_subType, e_cSubSubType a_subSubType)
+		Magic(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(MAGIC, a_subType, a_subSubType),
 			m_dmgCombo(0),m_dmgComboLv(0),m_isSpriteInit(false){}
 		int getComboBonus(){return m_dmgCombo;}
@@ -82,7 +82,7 @@ class Magic : public Chip
 class Divine : public Magic
 {
 	public:
-		Divine(e_cSubSubType a_subSubType):Magic(DIVINE, a_subSubType){setSprite("Sprites/magic_divine.bmp");}
+		Divine(e_chipSubSubType a_subSubType):Magic(DIVINE, a_subSubType){setSprite("Sprites/magic_divine.bmp");}
 };
 class BasicDivine : public Divine
 {
@@ -115,7 +115,7 @@ class LegendDivine : public Divine
 class Lightning : public Magic
 {
 	public:
-		Lightning(e_cSubSubType a_subSubType):Magic(LIGHTNING, a_subSubType){setSprite("Sprites/magic_lightning.bmp");}
+		Lightning(e_chipSubSubType a_subSubType):Magic(LIGHTNING, a_subSubType){setSprite("Sprites/magic_lightning.bmp");}
 };
 class BasicLightning : public Lightning
 {
@@ -148,7 +148,7 @@ class LegendLightning : public Lightning
 class Fire : public Magic
 {
 	public:
-		Fire(e_cSubSubType a_subSubType):Magic(FIRE, a_subSubType){setSprite("Sprites/magic_fire.bmp");}
+		Fire(e_chipSubSubType a_subSubType):Magic(FIRE, a_subSubType){setSprite("Sprites/magic_fire.bmp");}
 };
 class BasicFire : public Fire
 {
@@ -181,7 +181,7 @@ class LegendFire : public Fire
 class Ice : public Magic
 {
 	public:
-		Ice(e_cSubSubType a_subSubType):Magic(ICE, a_subSubType){setSprite("Sprites/magic_ice.bmp");}
+		Ice(e_chipSubSubType a_subSubType):Magic(ICE, a_subSubType){setSprite("Sprites/magic_ice.bmp");}
 };
 class BasicIce : public Ice
 {

@@ -37,14 +37,14 @@ struct Location
 	int x;
 	int y;
 };
-enum e_eType{PLAYER, MINION, BOSS, CHIP};
+enum e_entityType{PLAYER, MINION, BOSS, CHIP};
 
 class Entity
 {
 protected:
 	Stats m_stats;
 	Location m_locations[NUM_LOCATIONS];//0 is screen, 1 is world
-	e_eType m_myType;
+	e_entityType m_myType;
 	Sprite * m_mySprite;
 	int m_timeSinceLastUpdate;
 	int m_timeToRegen;
