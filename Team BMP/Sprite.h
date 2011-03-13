@@ -42,6 +42,8 @@ public:
     int m_indexIterator;
 	/** what is the total number of frames */
     int m_maxFrames;
+	/** what is the total number of rows */
+	int m_maxRows;
 	/** the image that this sprite uses */
     SDL_Surface* m_surface;
 

@@ -32,6 +32,7 @@ Sprite::Sprite(const char * file, const int & a_frames, const int & a_speed, con
         m_speed = a_speed;
     }
     m_maxFrames = a_frames;
+	m_maxRows = a_rows;
     m_running = (m_maxFrames > 1);
 	restart();
     m_indexIterator = 1;
@@ -584,18 +585,24 @@ void Sprite::stretch(Sprite & sprite, float stretchX, float stretchY) {
 		SDL_LockSurface(sprite.getSurface());
 	}
 	int zoomedWidth = zoomed->w/sprite.m_maxFrames;
+	int zoomedHeight = zoomed->h/sprite.m_maxRows;
 
-	for(int y = 0; y < zoomed->h; y++) {
-		for(int x = 0; x < zoomedWidth; x++) {
+	//Quadruple for loop...EH HA HA HA. Please don't kill me.
+	for(int z = 0; z < sprite.m_maxRows; z++)
+	{
+		for(int y = 0; y < (zoomedHeight*sprite.m_maxRows); y++) { //really, please don't. no really. DON'T.
+			for(int x = 0; x < zoomedWidth; x++) {
 		// iterate over each animation as opposed to the whole sprite, to ensure that each animation is resized properly
-			for(int i = 0; i < sprite.m_maxFrames; i++) {
-			setPixel(zoomed, (zoomedWidth * i) + x, y, sprite.getPixel((sprite.getWidth() * i) + (int)(x/stretchX),(int)(y/stretchY) ));
+				for(int i = 0; i < sprite.m_maxFrames; i++) {
+					setPixel(zoomed, (zoomedWidth * i) + x, y, sprite.getPixel((sprite.getWidth() * i) + (int)(x/stretchX),(int)(y/stretchY) ));
+				}
 			}
 		}
 	}
 
 	sprite.m_width = zoomedWidth;
-	sprite.m_height = zoomed->h;
+	sprite.m_height = zoomedHeight;
+
 	if(sprite.getSurface()->flags & SDL_SRCCOLORKEY ) {
 		SDL_SetColorKey(zoomed, SDL_RLEACCEL|SDL_SRCCOLORKEY, f->colorkey );
 	}

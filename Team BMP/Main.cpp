@@ -79,6 +79,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 				case SDL_KEYDOWN: //This will work until we can get it without using a switch statement.
 					ui.setKey(e.key.keysym.sym);
+			//		test.zoom(200);
 					ui.updateUI(false);
 					break;
 				case SDL_KEYUP:
@@ -96,11 +97,11 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 		Ghud.updateHud(eTest);
 
-
 		//draw
 		//test.draw(screen, 100, 100);
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
+		//test.draw(screen, 100, 100);
 		Ghud.draw(screen);
 
 		SDL_Flip(screen);
