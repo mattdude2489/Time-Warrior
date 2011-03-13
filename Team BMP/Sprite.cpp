@@ -587,15 +587,11 @@ void Sprite::stretch(Sprite & sprite, float stretchX, float stretchY) {
 	int zoomedWidth = zoomed->w/sprite.m_maxFrames;
 	int zoomedHeight = zoomed->h/sprite.m_maxRows;
 
-	//Quadruple for loop...EH HA HA HA. Please don't kill me.
-	for(int z = 0; z < sprite.m_maxRows; z++)
-	{
-		for(int y = 0; y < (zoomedHeight*sprite.m_maxRows); y++) { //really, please don't. no really. DON'T.
-			for(int x = 0; x < zoomedWidth; x++) {
+	for(int y = 0; y < (zoomedHeight*sprite.m_maxRows); y++) { //really, please don't. no really. DON'T.
+		for(int x = 0; x < zoomedWidth; x++) {
 		// iterate over each animation as opposed to the whole sprite, to ensure that each animation is resized properly
-				for(int i = 0; i < sprite.m_maxFrames; i++) {
-					setPixel(zoomed, (zoomedWidth * i) + x, y, sprite.getPixel((sprite.getWidth() * i) + (int)(x/stretchX),(int)(y/stretchY) ));
-				}
+			for(int i = 0; i < sprite.m_maxFrames; i++) {
+				setPixel(zoomed, (zoomedWidth * i) + x, y, sprite.getPixel((sprite.getWidth() * i) + (int)(x/stretchX),(int)(y/stretchY) ));
 			}
 		}
 	}
