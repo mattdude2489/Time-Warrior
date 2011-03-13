@@ -81,6 +81,7 @@ public:
 	Location getLocationWorld(){return m_locations[LOC_WORLD];}
 	void move(int a_locIndex, int a_deltaX, int a_deltaY){m_locations[a_locIndex].x += a_deltaX; m_locations[a_locIndex].y += a_deltaY;}
 	void setLocation(int a_locIndex, int a_x, int a_y){m_locations[a_locIndex].x = a_x; m_locations[a_locIndex].y = a_y;}
+	virtual void updateUnique(int a_time){}
 	void update(int a_time)
 	{
 	//	if(m_stats.energy[CURRENT] != m_stats.energy[MAX])
@@ -99,6 +100,7 @@ public:
 			}
 	//	}
 		m_sprite->update(a_time);
+		updateUnique(a_time);
 	}
 	void draw(SDL_Surface * a_screen)
 	{

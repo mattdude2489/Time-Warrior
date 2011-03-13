@@ -160,6 +160,7 @@ class BasicFire : public Fire
 		BasicFire():Fire(BASIC){}
 		char * getName(){return "Fireball";}
 		char * getDescription(){return "Fire projectile.";}
+		void updateUnique(int a_time){move(LOC_SCREEN,1,1);}
 };
 class AdvancedFire : public Fire
 {
