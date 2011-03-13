@@ -59,7 +59,7 @@ class Magic : public Chip
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			m_sprite->setHIndex(m_cSubSubType, maxFrames);
 			m_isSpriteInit = true;
-			setLocation(LOC_SCREEN, CENTER_SCREEN_X+(m_cSubSubType+1)*35, CENTER_SCREEN_Y);
+			setLocation(LOC_SCREEN, CENTER_SCREEN_X+m_cSubSubType*25, CENTER_SCREEN_Y);
 			switch(m_cSubSubType)
 			{
 			case BASIC:
@@ -70,6 +70,10 @@ class Magic : public Chip
 				break;
 			case EXPERT:
 				m_sprite->stretch(300,300);
+				setLocation(LOC_SCREEN, CENTER_SCREEN_X+m_cSubSubType*50, CENTER_SCREEN_Y);
+				break;
+			case LEGEND:
+				setLocation(LOC_SCREEN, CENTER_SCREEN_X+m_cSubSubType*75, CENTER_SCREEN_Y);
 				break;
 			}
 		}
