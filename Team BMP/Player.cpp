@@ -34,4 +34,6 @@ void Player::handleInput(UserInput ui)
 		m_sprite->setHIndex(3,3);
 		move(LOC_SCREEN, -5, 0);
 	}
+	if(ui.getClick() != 0)
+		m_gauntlet[SLOT_ATK1]->activate();
 }

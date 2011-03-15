@@ -41,7 +41,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	BasicFire chip;
 	Hud Ghud;
 	World world;
-	chip.activate(&eTest);
+	chip.setOwner(&eTest);
+	chip.levelUp();
+	eTest.setGauntletSlot(SLOT_ATK1, &chip);
 	world.setAnEntity(&eTest);
 	world.setAnEntity(&chip);
 

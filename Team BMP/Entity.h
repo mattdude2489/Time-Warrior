@@ -37,6 +37,8 @@ protected:
 	Sprite * m_sprite;
 	int m_timeSinceLastUpdate;
 	int m_timeToRegen;
+	bool m_shouldUpdate;
+	bool m_shouldDraw;
 public:
 	Entity(){
 		m_stats.defence = m_stats.intellect = m_stats.strength = 0;

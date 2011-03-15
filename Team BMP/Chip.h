@@ -15,6 +15,7 @@ class Chip : public Entity
 		e_chipSubSubType m_cSubSubType;
 		int m_level, m_cost, m_costLv, m_dmg, m_dmgLv;
 		bool m_isEquipped, m_isLaunched;
+		Entity * m_owner;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
@@ -27,6 +28,7 @@ class Chip : public Entity
 		int getDamage(){return m_dmg;}
 		bool isEquipped(){return m_isEquipped;}
 		void toggleEquip(){m_isEquipped = !m_isEquipped;}
+		void setOwner(Entity * a_owner){m_owner = a_owner;}
 			//define for each spell
 		virtual void levelUpUnique(){}
 		void levelUp()
@@ -38,11 +40,14 @@ class Chip : public Entity
 		}
 		virtual bool shouldApplyEffect(){return false;}//pass single entity as a parameter
 		virtual void applyEffect(){}//pass single entity as a parameter
-		void activate(Entity * a_player)//pass list of entities as a parameter
+		void activate()//pass list of entities as a parameter
 		{
-			setLocation(LOC_SCREEN,a_player->getLocationScreen().x,a_player->getLocationScreen().y);
-			if(m_cType == MAGIC && m_cSubSubType == BASIC)
-				m_isLaunched = true;
+			if(m_owner != NULL)
+			{
+				setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
+				if(m_cType == MAGIC && m_cSubSubType == BASIC)
+					m_isLaunched = true;
+			}
 			/*
 			for(int i = 0; i < size; ++i)
 			{

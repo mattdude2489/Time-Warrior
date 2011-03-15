@@ -8,7 +8,7 @@
 #include "Magic.h"
 #include "Weapon.h"
 
-enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_GEAR_HEAD, SLOT_GEAR_TRUNK, SLOT_GEAR_LIMB_UPPER, SLOT_GEAR_LIMB_LOWER, NUM_SLOTS};
+enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
 
 class Player : public Entity
 {
@@ -19,6 +19,36 @@ private:
 public:
 	Player();
 	void handleInput(UserInput ui);
+	void setGauntletSlot(int a_slot, Chip * a_chip)
+	{
+		bool isValid = false;
+		switch(a_slot)
+		{
+		case SLOT_ATK1:
+		case SLOT_ATK2:
+			if(a_chip->getLevel() > 0 && a_chip->getType() != ARMOR)
+				isValid = true;
+			break;
+		case SLOT_ARMOR_HEAD:
+			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == HEAD)
+				isValid = true;
+			break;
+		case SLOT_ARMOR_TRUNK:
+			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == TRUNK)
+				isValid = true;
+			break;
+		case SLOT_ARMOR_LIMB_UPPER:
+			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_UPPER)
+				isValid = true;
+			break;
+		case SLOT_ARMOR_LIMB_LOWER:
+			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_LOWER)
+				isValid = true;
+			break;
+		}
+		if(isValid)
+			m_gauntlet[a_slot] = a_chip;
+	}
 	//This is Alex's code...copypastaed. Because it works. Quite well in fact.
 	Player(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite * a_sprite)
 		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite)
