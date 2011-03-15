@@ -70,6 +70,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					ui.setMouse(e.motion.x, e.motion.y);
 					ui.setClick(e.motion.state);
 					break;
+				case SDL_MOUSEBUTTONUP:
+					ui.setMouse(e.motion.x, e.motion.y);
+					ui.setClick(0);
+					break;
 				case SDL_MOUSEMOTION: //If the mouse moves, then do this.
 					ui.setMouse(e.motion.x, e.motion.y);
 					break;
@@ -84,7 +88,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 			}
 		}
-		  	//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
+		  	printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 			eTest.handleInput(ui);
 
 		//update

@@ -3,7 +3,7 @@
 //Made by Matt Morrill, edited last by Matt Morrill
 #pragma once //Almost forgot this!
 
-enum e_mouseInfo {CLICK_NONE, CLICK_LEFT, CLICK_RIGHT};
+enum e_mouseInfo {CLICK_NONE, CLICK_LEFT, CLICK_MIDDLE, CLICK_RIGHT}; //These, sadly, cannot be enums.
 
 class UserInput
 {
