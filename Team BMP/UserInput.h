@@ -3,11 +3,13 @@
 //Made by Matt Morrill, edited last by Matt Morrill
 #pragma once //Almost forgot this!
 
+enum e_mouseInfo {CLICK_NONE, CLICK_LEFT, CLICK_RIGHT};
+
 class UserInput
 {
 	private:
 		int mouseX, mouseY;
-		int mouseClick; //0 is no clicks, 1 is left click, 2 is right click
+		int mouseClick;
 		char keyPressUpDown;
 		char keyPressLeftRight;
 		char initKey;
