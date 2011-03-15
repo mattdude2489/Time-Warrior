@@ -39,7 +39,7 @@ Sprite::Sprite(const char * file, const int & a_frames, const int & a_speed, con
     m_loopsToBeginning = true;
 }
 
-//Third constructor.
+//SetSprite function, in case we need to change the sprite easily.
 void Sprite::setSprite(const char * file, const int & a_frames, const int & a_speed, const int & a_rows) {
 	SDL_Surface *temp = SDL_LoadBMP(file);
     m_surface = SDL_DisplayFormat(temp);
