@@ -8,12 +8,14 @@
 #include "Magic.h"
 #include "Weapon.h"
 
+enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_GEAR_HEAD, SLOT_GEAR_TRUNK, SLOT_GEAR_LIMB_UPPER, SLOT_GEAR_LIMB_LOWER, NUM_SLOTS};
 
 class Player : public Entity
 {
 	//What goes here?
 private:
 	//Nada...for now.
+	Chip * m_gauntlet[NUM_SLOTS];
 public:
 	Player();
 	void handleInput(UserInput ui);

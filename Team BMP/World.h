@@ -1,13 +1,10 @@
 //World class. Contains the basic entities to easily update and draw to screen.
 //Which of course means...SDL. Is necessary. GODDAMMIT.
-
 //Created on March 10, 2011. Edited on March 10, 2011.
-
+#pragma once
 #include "Entity.h"
 
-#pragma once
-
-#define NUMBER_OF_ENTITIES 5
+#define NUMBER_OF_ENTITIES 2
 
 class World
 {

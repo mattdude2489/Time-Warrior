@@ -1,4 +1,4 @@
-//MagicChip class
+//Magic class
 //Author: John Parks
 #pragma once
 #include "Chip.h"
@@ -59,7 +59,6 @@ class Magic : public Chip
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			m_sprite->setHIndex(m_cSubSubType, maxFrames);
 			m_isSpriteInit = true;
-			setLocation(LOC_SCREEN, CENTER_SCREEN_X+m_cSubSubType*25, CENTER_SCREEN_Y);
 			switch(m_cSubSubType)
 			{
 			case BASIC:
@@ -70,12 +69,15 @@ class Magic : public Chip
 				break;
 			case EXPERT:
 				m_sprite->stretch(300,300);
-				setLocation(LOC_SCREEN, CENTER_SCREEN_X+m_cSubSubType*50, CENTER_SCREEN_Y);
 				break;
 			case LEGEND:
-				setLocation(LOC_SCREEN, CENTER_SCREEN_X+m_cSubSubType*75, CENTER_SCREEN_Y);
 				break;
 			}
+		}
+		void updateUnique(int a_time)
+		{
+			if(m_isLaunched)
+				move(LOC_SCREEN,1,1);
 		}
 		~Magic()
 		{
@@ -160,7 +162,6 @@ class BasicFire : public Fire
 		BasicFire():Fire(BASIC){}
 		char * getName(){return "Fireball";}
 		char * getDescription(){return "Fire projectile.";}
-		void updateUnique(int a_time){move(LOC_SCREEN,1,1);}
 };
 class AdvancedFire : public Fire
 {

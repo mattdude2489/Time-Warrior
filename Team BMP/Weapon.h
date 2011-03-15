@@ -1,4 +1,4 @@
-//WeaponChip class
+//Weapon class
 //Author: John Parks
 #pragma once
 #include "Chip.h"

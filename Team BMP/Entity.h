@@ -1,26 +1,15 @@
 #pragma once
 #include "Sprite.h"
 
+enum e_stats {STATS_CURRENT, STATS_MAX, CURRENT_AND_MAX, NUM_STATS = 9};
+enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
+enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
+
 #define	COLOR_TRANSPARENT		0xff00ff
-
-#define NUM_STATS				9
-#define CURRENT_AND_MAX			2
-#define STATS_CURRENT			0
-#define	STATS_MAX				1
-
-#define NUM_LOCATIONS			2
-#define LOC_SCREEN				0
-#define LOC_WORLD				1
-
-#define NUM_RESISTANCES			3
-#define RESIST_FIRE				0
-#define	RESIST_ICE				1
-#define	RESIST_LIGHTNING		2
-
 #define CENTER_SCREEN_X			400
 #define CENTER_SCREEN_Y			300
-
 #define TIME_TO_REGEN			5000
+
 //each array in this next area the first part is current and second is max
 struct Stats
 {
