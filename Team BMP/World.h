@@ -5,7 +5,7 @@
 #include "Entity.h"
 #include "templateVector.h"
 
-#define NUMBER_OF_ENTITIES 2
+#define NUMBER_OF_ENTITIES 3
 
 class World
 {

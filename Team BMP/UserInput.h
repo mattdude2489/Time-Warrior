@@ -3,7 +3,7 @@
 //Made by Matt Morrill, edited last by Matt Morrill
 #pragma once //Almost forgot this!
 
-enum e_mouseInfo {CLICK_NONE, CLICK_LEFT, CLICK_MIDDLE, CLICK_RIGHT}; //These, sadly, cannot be enums.
+enum e_mouseClick {CLICK_NONE, CLICK_LEFT, CLICK_MIDDLE, CLICK_RIGHT};
 
 class UserInput
 {
@@ -15,7 +15,7 @@ class UserInput
 		char initKey;
 
 	public:
-		UserInput():mouseX(0), mouseY(0), mouseClick(0), keyPressUpDown('n'), keyPressLeftRight('n'), initKey('n'){} //Basic constructor.
+		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown('n'), keyPressLeftRight('n'), initKey('n'){} //Basic constructor.
 		void setMouse(int x, int y) {mouseX = x; mouseY = y;} 
 		int getMouseX() {return mouseX;}
 		int getMouseY() {return mouseY;}

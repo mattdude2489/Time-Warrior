@@ -1,7 +1,7 @@
 #pragma once
 #include "Sprite.h"
 
-enum e_stats {STATS_CURRENT, STATS_MAX, CURRENT_AND_MAX, NUM_STATS = 9};
+enum e_stats {STATS_CURRENT, STATS_MAX, NUM_STAT_INSTANCES, NUM_STATS = 9};
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
 
@@ -13,8 +13,8 @@ enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
 //each array in this next area the first part is current and second is max
 struct Stats
 {
-	int health[CURRENT_AND_MAX];
-	int energy[CURRENT_AND_MAX];
+	int health[NUM_STAT_INSTANCES];
+	int energy[NUM_STAT_INSTANCES];
 	int strength;
 	int intellect;
 	int defence;
@@ -42,7 +42,7 @@ protected:
 public:
 	Entity(){
 		m_stats.defence = m_stats.intellect = m_stats.strength = 0;
-		for(int i = 0; i < CURRENT_AND_MAX; i++)
+		for(int i = 0; i < NUM_STAT_INSTANCES; i++)
 			m_stats.energy[i] = m_stats.health[i] = 1;
 		for(int i = 0; i < NUM_RESISTANCES; i ++)
 			m_stats.resistances[i] = 0;
@@ -54,7 +54,7 @@ public:
 		m_stats.defence = a_def;
 		m_stats.intellect = a_int;
 		m_stats.strength = a_str;
-		for(int i = 0; i < CURRENT_AND_MAX; i++)
+		for(int i = 0; i < NUM_STAT_INSTANCES; i++)
 		{
 			m_stats.energy[i] = a_energy;
 			m_stats.health[i] = a_health;

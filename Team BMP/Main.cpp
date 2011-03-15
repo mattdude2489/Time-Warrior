@@ -39,13 +39,18 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	test.setHIndex(2,3);
 	Player eTest(10,10,10,100,100,10,10,10,&test);
 	BasicFire chip;
+	BasicIce chip2;
 	Hud Ghud;
 	World world;
 	chip.setOwner(&eTest);
 	chip.levelUp();
+	chip2.setOwner(&eTest);
+	chip2.levelUp();
 	eTest.setGauntletSlot(SLOT_ATK1, &chip);
+	eTest.setGauntletSlot(SLOT_ATK2, &chip2);
 	world.setAnEntity(&eTest);
 	world.setAnEntity(&chip);
+	world.setAnEntity(&chip2);
 
 	if(test.isSprite())
 	{
@@ -88,7 +93,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 			}
 		}
-		  	printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
+		  	//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 			eTest.handleInput(ui);
 
 		//update

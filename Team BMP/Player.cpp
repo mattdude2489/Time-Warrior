@@ -36,4 +36,6 @@ void Player::handleInput(UserInput ui)
 	}
 	if(ui.getClick() == CLICK_LEFT)
 		m_gauntlet[SLOT_ATK1]->activate();
+	if(ui.getClick() == CLICK_RIGHT)
+		m_gauntlet[SLOT_ATK2]->activate();
 }
