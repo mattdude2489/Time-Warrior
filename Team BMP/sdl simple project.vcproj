@@ -242,6 +242,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\templateVector.h"
+				>
+			</File>
+			<File
 				RelativePath=".\trueTextPrinter.h"
 				>
 			</File>
