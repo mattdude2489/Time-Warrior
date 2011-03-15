@@ -35,7 +35,13 @@ void Player::handleInput(UserInput ui)
 		move(LOC_SCREEN, -5, 0);
 	}
 	if(ui.getClick() == CLICK_LEFT)
+	{
+		m_gauntlet[SLOT_ATK1]->setTarget(ui.getMouseX(), ui.getMouseY());
 		m_gauntlet[SLOT_ATK1]->activate();
+	}
 	if(ui.getClick() == CLICK_RIGHT)
+	{
+		m_gauntlet[SLOT_ATK2]->setTarget(ui.getMouseX(), ui.getMouseY());
 		m_gauntlet[SLOT_ATK2]->activate();
+	}
 }

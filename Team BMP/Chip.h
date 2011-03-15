@@ -16,6 +16,7 @@ class Chip : public Entity
 		int m_level, m_cost, m_costLv, m_dmg, m_dmgLv;
 		bool m_isEquipped, m_isLaunched;
 		Entity * m_owner;
+		Location m_target;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
@@ -29,6 +30,7 @@ class Chip : public Entity
 		bool isEquipped(){return m_isEquipped;}
 		void toggleEquip(){m_isEquipped = !m_isEquipped;}
 		void setOwner(Entity * a_owner){m_owner = a_owner;}
+		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
 			//define for each spell
 		virtual void levelUpUnique(){}
 		void levelUp()

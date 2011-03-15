@@ -77,7 +77,12 @@ class Magic : public Chip
 		void updateUnique(int a_time)
 		{
 			if(m_isLaunched)
-				move(LOC_SCREEN,1,1);
+			{
+				int max = 5;
+				int deltaX = (m_target.x - m_locations[LOC_SCREEN].x)/max;
+				int deltaY = (m_target.y - m_locations[LOC_SCREEN].y)/max;
+				move(LOC_SCREEN,deltaX,deltaY);
+			}
 		}
 		~Magic()
 		{
