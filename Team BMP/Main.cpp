@@ -100,7 +100,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//test.update(passed);
 		world.update(passed);
 
-		Ghud.updateHud(eTest);
+		Ghud.updateHud(eTest, ui);
 
 		//draw
 		//test.draw(screen, 100, 100);

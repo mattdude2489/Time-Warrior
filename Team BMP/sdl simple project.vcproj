@@ -193,36 +193,16 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Header Files"
+			Name="Resource headers"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Armor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Chip.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Entity.h"
+				RelativePath=".\ButtonAndWindow.h"
 				>
 			</File>
 			<File
 				RelativePath=".\graphics_constants.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Hud.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Magic.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Player.h"
 				>
 			</File>
 			<File
@@ -253,14 +233,6 @@
 				RelativePath=".\UserInput.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Weapon.h"
-				>
-			</File>
-			<File
-				RelativePath=".\World.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -269,6 +241,42 @@
 			>
 			<File
 				RelativePath=".\arial.ttf"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Game Headers"
+			>
+			<File
+				RelativePath=".\Armor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Chip.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Entity.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Hud.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Magic.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Player.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Weapon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\World.h"
 				>
 			</File>
 		</Filter>

@@ -1,7 +1,8 @@
 #pragma once
 #include "Sprite.h"
 
-enum e_stats {STATS_CURRENT, STATS_MAX, NUM_STAT_INSTANCES, NUM_STATS = 9};
+enum e_stats {STATS_CURRENT, STATS_MAX, NUM_STAT_INSTANCES, NUM_STATS = 11};
+enum e_statname	{CHELTH, MHEALTH, CENERGY, MENERGY, STR, INT, DEF, ENERGYGEN, REZFIRE, REZICE, REZLIGHT};
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
 
@@ -9,6 +10,7 @@ enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
 #define CENTER_SCREEN_X			400
 #define CENTER_SCREEN_Y			300
 #define TIME_TO_REGEN			5000
+
 
 //each array in this next area the first part is current and second is max
 struct Stats
@@ -20,6 +22,97 @@ struct Stats
 	int defence;
 	int resistances[NUM_RESISTANCES];//RESIST_FIRE/RESIST_ICE/RESIST_LIGHTNING
 	int energyregen;
+
+	void copy(Stats a_stats)
+	{
+		strength = a_stats.strength;
+		intellect = a_stats.intellect;
+		defence = a_stats.defence;
+		energyregen = a_stats.energyregen;
+		for(int i = 0; i < NUM_STAT_INSTANCES; i ++)
+		{
+			health[i] = a_stats.health[i];
+			energy[i] = a_stats.energy[i];
+		}
+		for(int i = 0; i < NUM_RESISTANCES ; i++)
+		{
+			resistances[i] = a_stats.resistances[i];
+		}
+	}
+	bool compare(Stats a_stats)//return false if not same otherwise return true they are the same
+	{
+		if(strength != a_stats.strength)				return false;
+		if(intellect != a_stats.intellect)				return false;
+		if(defence != a_stats.defence)					return false;
+		if(energyregen != a_stats.energyregen)			return false;
+		for(int i = 0; i < NUM_STAT_INSTANCES; i ++)
+		{
+			if(health[i] != a_stats.health[i])			return false;
+			if(energy[i] != a_stats.energy[i])			return false;
+		}
+		for(int i = 0; i < NUM_RESISTANCES ; i++)
+		{
+			if(resistances[i] != a_stats.resistances[i])return false;
+		}
+		return true;
+	}
+	int getStatNumber(int stat)//this is ugly i know but i want the stats to stay seperate so it is easier to read and not have to deal with too many arrays
+	{
+		//returns the stat based on a number
+		switch(stat)
+		{
+		case CHELTH:return health[STATS_CURRENT];
+			break;
+		case MHEALTH:return health[STATS_MAX];
+			break;
+		case STR:return strength;
+			break;
+		case INT:return intellect;
+			break;
+		case DEF:return defence;
+			break;
+		case ENERGYGEN:return energyregen;
+			break;
+		case CENERGY:return energy[STATS_CURRENT];
+			break;
+		case MENERGY:return energy[STATS_MAX];
+			break;
+		case REZFIRE:return resistances[RESIST_FIRE];
+			break;
+		case REZICE:return resistances[RESIST_ICE];
+			break;
+		case REZLIGHT:return resistances[RESIST_LIGHTNING];
+			break;
+		}
+	}
+	char * getName(int i_stat)
+	{
+		switch(i_stat)//once again sorry for the dirtyness just trying to get code that works
+		{
+			case CHELTH:return "Health :%i";
+				break;
+			case MHEALTH:return "/%i";
+				break;
+			case STR:return "Strength: %i";
+				break;
+			case INT:return "Intellect: %i";
+				break;
+			case DEF:return "Defence: %i";
+				break;
+			case ENERGYGEN:return "Regen: %i";
+				break;
+			case CENERGY:return "Energy: %i";
+				break;
+			case MENERGY:return "/%i";
+				break;
+			case REZFIRE:return "Fire: %i";
+				break;
+			case REZICE:return "Ice: %i";
+				break;
+			case REZLIGHT:return "Lightning: %i";
+				break;
+		}
+	}
 };
 struct Location
 {
