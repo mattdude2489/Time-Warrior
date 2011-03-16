@@ -74,14 +74,40 @@ class Magic : public Chip
 				break;
 			}
 		}
+		void switchSign(double & a_num){a_num *= -1;}
+		void switchSignIf(double & a_num, bool a_shouldChange)
+		{
+			if(a_shouldChange)
+				switchSign(a_num);
+		}
 		void updateUnique(int a_time)
 		{
 			if(m_isLaunched)
 			{
-				int max = 5;
-				int deltaX = (m_target.x - m_locations[LOC_SCREEN].x)/max;
-				int deltaY = (m_target.y - m_locations[LOC_SCREEN].y)/max;
-				move(LOC_SCREEN,deltaX,deltaY);
+				int max = 10;
+				double deltaX = (m_target.x - m_locations[LOC_SCREEN].x);
+				double deltaY = (m_target.y - m_locations[LOC_SCREEN].y);
+				bool switchSignX = deltaX < 0;
+				bool switchSignY = deltaY < 0;
+				switchSignIf(deltaX, switchSignX);
+				switchSignIf(deltaY, switchSignY);
+				if(deltaX > max || deltaY > max)
+				{
+					double slope = deltaY / deltaX;
+					if(deltaX > max)
+					{
+						deltaX = max;
+						deltaY = slope * deltaX;
+					}
+					else if(deltaY > max)
+					{
+						deltaY = max;
+						deltaX = deltaY / slope;
+					}
+				}
+				switchSignIf(deltaX, switchSignX);
+				switchSignIf(deltaY, switchSignY);
+				move(LOC_SCREEN,(int)deltaX,(int)deltaY);
 			}
 		}
 		~Magic()
