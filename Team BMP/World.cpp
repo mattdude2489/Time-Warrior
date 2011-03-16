@@ -16,20 +16,21 @@ World::World()
 	while(c != EOF)
 	{
 		Tile hi;
-		hi.currentTexture = new Sprite("Sprites/grassTexture.bmp", 1, 0, 1);
-		if(c == 'G')
+		switch(c)
 		{
-			hi.currentTexture->setHIndex(0, 1);
-		}
-		if(c == '\n')
-		{
+		case '\n':
 			y++;
 			x = 0;
+			break;
+		case 'G':
+			hi.currentTexture = new Sprite("Sprites/grassTexture.bmp", 1, 0, 1);
+			//hi.currentTexture->setHIndex(0, 1);
+			hi.posX = x;
+			hi.posY = y;
+			x++;
+			m_mapOfWorld.add(hi);
+			break;
 		}
-		hi.posX = x;
-		hi.posY = y;
-		x++;
-		m_mapOfWorld.add(hi);
 		c = fgetc(infile);
 	}
 	fclose(infile);
