@@ -95,7 +95,7 @@ public:
 		for(int i = 0; i < NUM_STATS; i ++)
 		{
 			m_text[i].printMessage(a_screen, t_x, t_y);
-			if(i == CHELTH || i == CENERGY)
+			if(i == CHEALTH || i == CENERGY)
 			{
 				t_x += m_text[i].getMesageWidth();
 			}

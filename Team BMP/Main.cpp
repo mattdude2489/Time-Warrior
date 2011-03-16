@@ -53,9 +53,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.setAnEntity(&chip);
 	world.setAnEntity(&chip2);
 
-	if(test.isSprite())
+	if(!world.getSuccess())
 	{
-		printf("Heya! \n");
+		printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");
 	}
 
 	while(running) //While loop, can be easily used for testing.

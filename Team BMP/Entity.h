@@ -2,7 +2,7 @@
 #include "Sprite.h"
 
 enum e_stats {STATS_CURRENT, STATS_MAX, NUM_STAT_INSTANCES, NUM_STATS = 11};
-enum e_statname	{CHELTH, MHEALTH, CENERGY, MENERGY, STR, INT, DEF, ENERGYGEN, REZFIRE, REZICE, REZLIGHT};
+enum e_statname	{CHEALTH, MHEALTH, CENERGY, MENERGY, STR, INT, DEF, ENERGYGEN, REZFIRE, REZICE, REZLIGHT};
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
 
@@ -61,7 +61,7 @@ struct Stats
 		//returns the stat based on a number
 		switch(stat)
 		{
-		case CHELTH:return health[STATS_CURRENT];
+		case CHEALTH:return health[STATS_CURRENT];
 			break;
 		case MHEALTH:return health[STATS_MAX];
 			break;
@@ -89,7 +89,7 @@ struct Stats
 	{
 		switch(i_stat)//once again sorry for the dirtyness just trying to get code that works
 		{
-			case CHELTH:return "Health :%i";
+			case CHEALTH:return "Health :%i";
 				break;
 			case MHEALTH:return "/%i";
 				break;

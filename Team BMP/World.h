@@ -5,6 +5,8 @@
 #include "Entity.h"
 #include "templateVector.h"
 
+#include <stdio.h>
+
 struct Tile
 {
 	Sprite* currentTexture;
@@ -18,6 +20,7 @@ private:
 	//Entity * m_mapOfEntities[NUMBER_OF_ENTITIES]; //TODO: MAGIC NUMBERS. Or maybe a vector list.
 	templateVector<Entity*> m_mapOfEntities;
 	templateVector<Tile> m_mapOfWorld;
+	bool success;
 public:
 	World();
 	~World();
@@ -27,4 +30,5 @@ public:
 	{
 		m_mapOfEntities.add(newEntity);
 	}
+	bool getSuccess() {return success;}
 };
