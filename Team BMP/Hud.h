@@ -66,8 +66,8 @@ public:
 	void updateHud(Player p, UserInput ui)
 	{
 		handleInput(ui);
-		bars[BAR_HEALTH].setWidth( ((double)p.getStats().health[STATS_CURRENT]/(double)p.getStats().health[STATS_MAX]) * ONE_HUNDRED_PERCENT);
-		bars[BAR_ENERGY].setWidth( ((double)p.getStats().energy[STATS_CURRENT]/(double)p.getStats().energy[STATS_MAX]) * ONE_HUNDRED_PERCENT);
+		bars[BAR_HEALTH].setWidth( (int)((double)p.getStats().health[STATS_CURRENT]/(double)p.getStats().health[STATS_MAX]) * ONE_HUNDRED_PERCENT);
+		bars[BAR_ENERGY].setWidth( (int)((double)p.getStats().energy[STATS_CURRENT]/(double)p.getStats().energy[STATS_MAX]) * ONE_HUNDRED_PERCENT);
 		if(!p.getStats().compare(m_statWin.getStats()))
 		{
 			m_statWin.setPlayerStats(p);
