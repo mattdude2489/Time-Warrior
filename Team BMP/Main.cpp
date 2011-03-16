@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "World.h"
 #include "Hud.h"
+#include "audiohandler.h"
 
 
 //Some debugging includes

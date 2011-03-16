@@ -3,6 +3,24 @@
 #include "surfaceFunctions.h"
 #define FONTSIZE		15
 
+class MyFont
+{
+private:
+	TTF_Font * m_font;
+public:
+	MyFont()
+	{
+		TTF_Init();
+		m_font = TTF_OpenFont("arial.ttf",FONTSIZE);
+	}
+	TTF_Font * getFont(){return m_font;}
+	~MyFont()
+	{
+		TTF_CloseFont(m_font);
+		TTF_Quit();
+	}
+};
+
 class TTtext
 {
 private:
@@ -14,17 +32,12 @@ private:
 public:
 	TTtext()//inits everything to print text
 	{
-		TTF_Init();
 		m_textColor.b = 255;
 		m_textColor.r = 0;
 		m_textColor.g = 0;
 		m_backColor.b = 255;
 		m_backColor.r = 255;
 		m_backColor.g = 255;
-	}
-	void loadFont()
-	{
-		m_font = TTF_OpenFont("arial.ttf",FONTSIZE);
 	}
 	void setMessage(char * a_message)//sets the text to print, this will need to be done every message
 	{
@@ -36,14 +49,9 @@ public:
 		apply_surface(a_x, a_y, m_message, a_screen);
 	}
 	int getMesageWidth(){return m_message->w;}
-	TTF_Font * getFont(){return m_font;}
 	void setFont(TTF_Font * a_font){m_font = a_font;}
 	~TTtext()
 	{
 		SDL_FreeSurface(m_message);
-		if(m_font != NULL){
-			TTF_CloseFont(m_font);
-		}
-		TTF_Quit();
 	}
 };

@@ -25,7 +25,8 @@ class Hud
 private:
 	SRect bars[NUM_BARS];
 	Uint32 colors[NUM_BARS];
-	TTtext m_text;
+	MyFont m_myFont;
+	//TTtext m_text;
 	StatWindow m_statWin;
 	bool m_showStats;
 	Button m_statButton;
@@ -46,8 +47,7 @@ public:
 		colors[BAR_BACK] = COLOR_BACK;
 		colors[BAR_HEALTH] = COLOR_HEALTH;
 		colors[BAR_ENERGY] = COLOR_ENERGY;
-		m_text.loadFont();
-		m_statWin.InitText(m_text.getFont());
+		m_statWin.InitText(m_myFont.getFont());
 		m_statButton.setUpButton(STATBUTTONSETTINGS);
 		m_showStats = false;
 		//m_text.setMessage("testing");

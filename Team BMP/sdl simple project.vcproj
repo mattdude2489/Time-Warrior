@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_ttf.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_ttf.lib SDL_mixer.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -198,6 +198,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\audioHandler.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ButtonAndWindow.h"
 				>
 			</File>
@@ -239,10 +243,54 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath=".\arial.ttf"
+			<Filter
+				Name="Fonts"
 				>
-			</File>
+				<File
+					RelativePath=".\arial.ttf"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Music"
+				>
+				<File
+					RelativePath=".\Music\Track0.mp3"
+					>
+				</File>
+				<File
+					RelativePath=".\Music\Track1.mp3"
+					>
+				</File>
+				<File
+					RelativePath=".\Music\Track2.mp3"
+					>
+				</File>
+				<File
+					RelativePath=".\Music\Track3.mp3"
+					>
+				</File>
+				<File
+					RelativePath=".\Music\Track4.mp3"
+					>
+				</File>
+				<File
+					RelativePath=".\Music\Track5.mp3"
+					>
+				</File>
+				<File
+					RelativePath=".\Music\Track6.mp3"
+					>
+				</File>
+				<File
+					RelativePath=".\Music\Track7.mp3"
+					>
+				</File>
+				<File
+					RelativePath=".\Music\Track8.mp3"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Game Headers"
