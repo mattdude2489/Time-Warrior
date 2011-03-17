@@ -85,8 +85,12 @@ class Magic : public Chip
 			if(m_isLaunched)
 			{
 				int max = 10;
-				double deltaX = (m_target.x - m_locations[LOC_SCREEN].x);
-				double deltaY = (m_target.y - m_locations[LOC_SCREEN].y);
+				double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
+				double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
+				if(deltaX == 0 && deltaY == 0)
+					m_isLaunched = m_shouldDraw = false;
+				else
+				{
 				bool switchSignX = deltaX < 0;
 				bool switchSignY = deltaY < 0;
 				switchSignIf(deltaX, switchSignX);
@@ -108,6 +112,7 @@ class Magic : public Chip
 				switchSignIf(deltaX, switchSignX);
 				switchSignIf(deltaY, switchSignY);
 				move(LOC_SCREEN,(int)deltaX,(int)deltaY);
+				}
 			}
 		}
 		~Magic()

@@ -81,9 +81,7 @@ protected:
 	Location m_locations[NUM_LOCATIONS];//LOC_SCREEN/LOC_WORLD
 	e_entityType m_eType;
 	Sprite * m_sprite;
-	int m_timeSinceLastUpdate;
-	int m_timeToRegen;
-	bool m_shouldUpdate;
+	int m_timeSinceLastUpdate, m_timeToRegen;
 	bool m_shouldDraw;
 public:
 	Entity(){
@@ -92,6 +90,7 @@ public:
 		m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX] = m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX] = 1;
 		m_stats.m_stats[ENERGY_REGEN] = 5;
 		m_timeSinceLastUpdate = m_timeToRegen =  0;
+		m_shouldDraw = true;
 	}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite * a_sprite)
 	{
@@ -107,6 +106,7 @@ public:
 		m_sprite = a_sprite;
 		setLocation(LOC_SCREEN, CENTER_SCREEN_X, CENTER_SCREEN_Y);
 		m_timeSinceLastUpdate = m_timeToRegen = 0;
+		m_shouldDraw = true;
 	}
 	Stats getStats(){return m_stats;}
 	Location getLocationScreen(){return m_locations[LOC_SCREEN];}
@@ -134,7 +134,8 @@ public:
 	}
 	void draw(SDL_Surface * a_screen)
 	{
-		m_sprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
+		if(m_shouldDraw)
+			m_sprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
 	}
 	void hit(int damage)
 	{
