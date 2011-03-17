@@ -19,7 +19,7 @@ public:
 		currentTrack = 0;
 		for(int i = 0; i < NUM_SONGS; i ++)
 		{
-			sprintf(temp, "Music/Track%i.wav", i);
+			sprintf_s(temp, "Music/Track%i.wav", i);
 			m_music[i] = Mix_LoadMUS(temp);
 		}
 	}
