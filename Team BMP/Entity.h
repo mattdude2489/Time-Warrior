@@ -1,10 +1,9 @@
 #pragma once
 #include "Sprite.h"
 
-enum e_statInstances {STAT_CURRENT, STAT_MAX, NUM_STAT_INSTANCES};
-enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
-enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STR, INT, DEF, RES_FIRE, RES_ICE, RES_LIGHTNING, NUM_STATS};
+enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
+enum e_entityType{PLAYER, MINION, BOSS, CHIP};
 
 #define	COLOR_TRANSPARENT		0xff00ff
 #define CENTER_SCREEN_X			400
@@ -15,76 +14,29 @@ enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 //each array in this next area the first part is current and second is max
 struct Stats
 {
-	int health[NUM_STAT_INSTANCES];
-	int energy[NUM_STAT_INSTANCES];
-	int strength;
-	int intellect;
-	int defence;
-	int resistances[NUM_RESISTANCES];//RESIST_FIRE/RESIST_ICE/RESIST_LIGHTNING
-	int energyregen;
+	int m_stats[NUM_STATS];
 
 	void copy(Stats a_stats)
 	{
-		strength = a_stats.strength;
-		intellect = a_stats.intellect;
-		defence = a_stats.defence;
-		energyregen = a_stats.energyregen;
-		for(int i = 0; i < NUM_STAT_INSTANCES; i ++)
-		{
-			health[i] = a_stats.health[i];
-			energy[i] = a_stats.energy[i];
-		}
-		for(int i = 0; i < NUM_RESISTANCES ; i++)
-		{
-			resistances[i] = a_stats.resistances[i];
-		}
+		for(int i = 0; i < NUM_STATS; ++i)
+			m_stats[i] = a_stats.m_stats[i];
 	}
 	bool compare(Stats a_stats)//return false if not same otherwise return true they are the same
 	{
-		if(strength != a_stats.strength)				return false;
-		if(intellect != a_stats.intellect)				return false;
-		if(defence != a_stats.defence)					return false;
-		if(energyregen != a_stats.energyregen)			return false;
-		for(int i = 0; i < NUM_STAT_INSTANCES; i ++)
+		for(int i = 0; i < NUM_STATS; ++i)
 		{
-			if(health[i] != a_stats.health[i])			return false;
-			if(energy[i] != a_stats.energy[i])			return false;
-		}
-		for(int i = 0; i < NUM_RESISTANCES ; i++)
-		{
-			if(resistances[i] != a_stats.resistances[i])return false;
+			if(m_stats[i] != a_stats.m_stats[i])
+				return false;
 		}
 		return true;
 	}
 	int getStatNumber(int stat)//this is ugly i know but i want the stats to stay seperate so it is easier to read and not have to deal with too many arrays
 	{
 		//returns the stat based on a number
-		switch(stat)
-		{
-		case HEALTH_CURRENT:return health[STAT_CURRENT];
-			break;
-		case HEALTH_MAX:return health[STAT_MAX];
-			break;
-		case STR:return strength;
-			break;
-		case INT:return intellect;
-			break;
-		case DEF:return defence;
-			break;
-		case ENERGY_REGEN:return energyregen;
-			break;
-		case ENERGY_CURRENT:return energy[STAT_CURRENT];
-			break;
-		case ENERGY_MAX:return energy[STAT_MAX];
-			break;
-		case RES_FIRE:return resistances[RESIST_FIRE];
-			break;
-		case RES_ICE:return resistances[RESIST_ICE];
-			break;
-		case RES_LIGHTNING:return resistances[RESIST_LIGHTNING];
-			break;
-		default:return 0;
-		}
+		if(stat < 0 || stat > NUM_STATS)
+			return 0;
+		else
+			return m_stats[stat];
 	}
 	char * getName(int i_stat)
 	{
@@ -94,11 +46,11 @@ struct Stats
 				break;
 			case HEALTH_MAX:return "/%i";
 				break;
-			case STR:return "Strength: %i";
+			case STRENGTH:return "Strength: %i";
 				break;
-			case INT:return "Intellect: %i";
+			case INTELLECT:return "Intellect: %i";
 				break;
-			case DEF:return "Defence: %i";
+			case DEFENSE:return "Defence: %i";
 				break;
 			case ENERGY_REGEN:return "Regen: %i";
 				break;
@@ -106,11 +58,11 @@ struct Stats
 				break;
 			case ENERGY_MAX:return "/%i";
 				break;
-			case RES_FIRE:return "Fire: %i";
+			case RESISTANCE_FIRE:return "Fire: %i";
 				break;
-			case RES_ICE:return "Ice: %i";
+			case RESISTANCE_ICE:return "Ice: %i";
 				break;
-			case RES_LIGHTNING:return "Lightning: %i";
+			case RESISTANCE_LIGHTNING:return "Lightning: %i";
 				break;
 			default:return "Invalid";
 		}
@@ -121,7 +73,6 @@ struct Location
 	int x;
 	int y;
 };
-enum e_entityType{PLAYER, MINION, BOSS, CHIP};
 
 class Entity
 {
@@ -136,30 +87,25 @@ protected:
 	bool m_shouldDraw;
 public:
 	Entity(){
-		m_stats.defence = m_stats.intellect = m_stats.strength = 0;
-		for(int i = 0; i < NUM_STAT_INSTANCES; i++)
-			m_stats.energy[i] = m_stats.health[i] = 1;
-		for(int i = 0; i < NUM_RESISTANCES; i ++)
-			m_stats.resistances[i] = 0;
-		m_stats.energyregen = 5;
+		for(int i = 0; i < NUM_STATS; ++i)
+			m_stats.m_stats[i] = 0;
+		m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX] = m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX] = 1;
+		m_stats.m_stats[ENERGY_REGEN] = 5;
 		m_timeSinceLastUpdate = m_timeToRegen =  0;
 	}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite * a_sprite)
 	{
-		m_stats.defence = a_def;
-		m_stats.intellect = a_int;
-		m_stats.strength = a_str;
-		for(int i = 0; i < NUM_STAT_INSTANCES; i++)
-		{
-			m_stats.energy[i] = a_energy;
-			m_stats.health[i] = a_health;
-		}
-		m_stats.resistances[RESIST_FIRE] = a_fRes;
-		m_stats.resistances[RESIST_ICE] = a_iRes;
-		m_stats.resistances[RESIST_LIGHTNING] = a_lRes;
+		m_stats.m_stats[DEFENSE] = a_def;
+		m_stats.m_stats[INTELLECT] = a_int;
+		m_stats.m_stats[STRENGTH] = a_str;
+		m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX] = a_health;
+		m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX] = a_energy;
+		m_stats.m_stats[RESISTANCE_FIRE] = a_fRes;
+		m_stats.m_stats[RESISTANCE_ICE] = a_iRes;
+		m_stats.m_stats[RESISTANCE_LIGHTNING] = a_lRes;
+		m_stats.m_stats[ENERGY_REGEN] = 5;
 		m_sprite = a_sprite;
 		setLocation(LOC_SCREEN, CENTER_SCREEN_X, CENTER_SCREEN_Y);
-		m_stats.energyregen = 5;
 		m_timeSinceLastUpdate = m_timeToRegen = 0;
 	}
 	Stats getStats(){return m_stats;}
@@ -177,11 +123,9 @@ public:
 			m_timeToRegen += a_time - m_timeSinceLastUpdate;
 			if(m_timeToRegen > TIME_TO_REGEN)
 			{
-				m_stats.energy[STAT_CURRENT] += m_stats.energyregen;
-				if(m_stats.energy[STAT_CURRENT] > m_stats.energy[STAT_MAX])
-				{
-					m_stats.energy[STAT_CURRENT] = m_stats.energy[STAT_MAX];
-				}
+				m_stats.m_stats[ENERGY_CURRENT] += m_stats.m_stats[ENERGY_REGEN];
+				if(m_stats.m_stats[ENERGY_CURRENT] > m_stats.m_stats[ENERGY_MAX])
+					m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX];
 				m_timeToRegen = 0;
 			}
 	//	}
@@ -194,23 +138,17 @@ public:
 	}
 	void hit(int damage)
 	{
-		m_stats.health[STAT_CURRENT] -= damage;
-		if(m_stats.health[STAT_CURRENT] <0)
-		{
-			m_stats.health[STAT_CURRENT] = 0;
-		}
-		m_stats.energy[STAT_CURRENT] -= damage;
-		if(m_stats.energy[STAT_CURRENT] <0)
-		{
-			m_stats.energy[STAT_CURRENT] = 0;
-		}
+		m_stats.m_stats[HEALTH_CURRENT] -= damage;
+		if(m_stats.m_stats[HEALTH_CURRENT] <0)
+			m_stats.m_stats[HEALTH_CURRENT] = 0;
+		m_stats.m_stats[ENERGY_CURRENT] -= damage;
+		if(m_stats.m_stats[ENERGY_CURRENT] <0)
+			m_stats.m_stats[ENERGY_CURRENT] = 0;
 	}
 	void heal(int healamount)
 	{
-		m_stats.health[STAT_CURRENT]+= healamount;
-		if(m_stats.health[STAT_CURRENT] > m_stats.health[STAT_MAX])
-		{
-			m_stats.health[STAT_CURRENT] = m_stats.health[STAT_MAX];
-		}
+		m_stats.m_stats[HEALTH_CURRENT]+= healamount;
+		if(m_stats.m_stats[HEALTH_CURRENT] > m_stats.m_stats[HEALTH_MAX])
+			m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX];
 	}
 };
