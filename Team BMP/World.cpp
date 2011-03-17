@@ -2,15 +2,36 @@
 
 World::World()
 {
+	setWorld("Maps/HubWorldMap.txt");
+}
+
+World::~World()
+{
+		for(int i = 0; i < m_mapOfWorld.getSize(); i++)
+			delete m_mapOfWorld.get(i).currentTexture;
+}
+
+bool World::setWorld(char * fileName)
+{
 	FILE * infile;
-	infile = fopen("Maps/HubWorldMap.txt", "r");
+	infile = fopen(fileName, "r");
+
+	//Clear the previous map of the world, in order to create a better one.
+	if(m_mapOfWorld.getSize() != 0)
+		if(m_mapOfWorld.get(0).currentTexture->isSprite())
+		{
+			for(int i = 0; i < m_mapOfWorld.getSize(); i++)
+				delete m_mapOfWorld.get(i).currentTexture;
+		}
+	m_mapOfWorld.release();
+	//start the actual loading of the textures.
 	int c = 0;
 	int x, y;
 	x = y = 0;
 	if(infile == NULL)
 	{
 		success = false;
-		return;
+		return success;
 	}
 	c = fgetc(infile);
 	while(c != EOF)
@@ -33,14 +54,11 @@ World::World()
 		}
 		c = fgetc(infile);
 	}
+	success = true;
 	fclose(infile);
+	return success;
 }
 
-World::~World()
-{
-		for(int i = 0; i < m_mapOfEntities.getSize(); i++)
-			delete m_mapOfWorld.get(i).currentTexture;
-}
 void World::draw(SDL_Surface *a_screen)
 {
 	for(int k = 0; k < m_mapOfWorld.getSize(); k++)

@@ -31,4 +31,5 @@ public:
 		m_mapOfEntities.add(newEntity);
 	}
 	bool getSuccess() {return success;}
+	bool setWorld(char * fileName);
 };
