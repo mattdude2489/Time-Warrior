@@ -1,10 +1,10 @@
 #pragma once
 #include "Sprite.h"
 
-enum e_statInstances {STATS_CURRENT, STATS_MAX, NUM_STAT_INSTANCES};
-enum e_stats {HEALTH_CUR, HEALTH_MAX, ENERGY_CUR, ENERGY_MAX, STR, INT, DEF, ENERGY_REGEN, RES_FIRE, RES_ICE, RES_LIGHTNING, NUM_STATS};
-enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
+enum e_statInstances {STAT_CURRENT, STAT_MAX, NUM_STAT_INSTANCES};
 enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
+enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STR, INT, DEF, RES_FIRE, RES_ICE, RES_LIGHTNING, NUM_STATS};
+enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 
 #define	COLOR_TRANSPARENT		0xff00ff
 #define CENTER_SCREEN_X			400
@@ -61,9 +61,9 @@ struct Stats
 		//returns the stat based on a number
 		switch(stat)
 		{
-		case HEALTH_CUR:return health[STATS_CURRENT];
+		case HEALTH_CURRENT:return health[STAT_CURRENT];
 			break;
-		case HEALTH_MAX:return health[STATS_MAX];
+		case HEALTH_MAX:return health[STAT_MAX];
 			break;
 		case STR:return strength;
 			break;
@@ -73,9 +73,9 @@ struct Stats
 			break;
 		case ENERGY_REGEN:return energyregen;
 			break;
-		case ENERGY_CUR:return energy[STATS_CURRENT];
+		case ENERGY_CURRENT:return energy[STAT_CURRENT];
 			break;
-		case ENERGY_MAX:return energy[STATS_MAX];
+		case ENERGY_MAX:return energy[STAT_MAX];
 			break;
 		case RES_FIRE:return resistances[RESIST_FIRE];
 			break;
@@ -90,7 +90,7 @@ struct Stats
 	{
 		switch(i_stat)//once again sorry for the dirtyness just trying to get code that works
 		{
-			case HEALTH_CUR:return "Health :%i";
+			case HEALTH_CURRENT:return "Health :%i";
 				break;
 			case HEALTH_MAX:return "/%i";
 				break;
@@ -102,7 +102,7 @@ struct Stats
 				break;
 			case ENERGY_REGEN:return "Regen: %i";
 				break;
-			case ENERGY_CUR:return "Energy: %i";
+			case ENERGY_CURRENT:return "Energy: %i";
 				break;
 			case ENERGY_MAX:return "/%i";
 				break;
@@ -177,10 +177,10 @@ public:
 			m_timeToRegen += a_time - m_timeSinceLastUpdate;
 			if(m_timeToRegen > TIME_TO_REGEN)
 			{
-				m_stats.energy[STATS_CURRENT] += m_stats.energyregen;
-				if(m_stats.energy[STATS_CURRENT] > m_stats.energy[STATS_MAX])
+				m_stats.energy[STAT_CURRENT] += m_stats.energyregen;
+				if(m_stats.energy[STAT_CURRENT] > m_stats.energy[STAT_MAX])
 				{
-					m_stats.energy[STATS_CURRENT] = m_stats.energy[STATS_MAX];
+					m_stats.energy[STAT_CURRENT] = m_stats.energy[STAT_MAX];
 				}
 				m_timeToRegen = 0;
 			}
@@ -194,23 +194,23 @@ public:
 	}
 	void hit(int damage)
 	{
-		m_stats.health[STATS_CURRENT] -= damage;
-		if(m_stats.health[STATS_CURRENT] <0)
+		m_stats.health[STAT_CURRENT] -= damage;
+		if(m_stats.health[STAT_CURRENT] <0)
 		{
-			m_stats.health[STATS_CURRENT] = 0;
+			m_stats.health[STAT_CURRENT] = 0;
 		}
-		m_stats.energy[STATS_CURRENT] -= damage;
-		if(m_stats.energy[STATS_CURRENT] <0)
+		m_stats.energy[STAT_CURRENT] -= damage;
+		if(m_stats.energy[STAT_CURRENT] <0)
 		{
-			m_stats.energy[STATS_CURRENT] = 0;
+			m_stats.energy[STAT_CURRENT] = 0;
 		}
 	}
 	void heal(int healamount)
 	{
-		m_stats.health[STATS_CURRENT]+= healamount;
-		if(m_stats.health[STATS_CURRENT] > m_stats.health[STATS_MAX])
+		m_stats.health[STAT_CURRENT]+= healamount;
+		if(m_stats.health[STAT_CURRENT] > m_stats.health[STAT_MAX])
 		{
-			m_stats.health[STATS_CURRENT] = m_stats.health[STATS_MAX];
+			m_stats.health[STAT_CURRENT] = m_stats.health[STAT_MAX];
 		}
 	}
 };
