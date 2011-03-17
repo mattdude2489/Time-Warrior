@@ -48,6 +48,7 @@ class Chip : public Entity
 		{
 			if(m_owner != NULL)
 			{
+				m_shouldDraw = true;
 				setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
 				if(m_cType == MAGIC && m_cSubSubType == BASIC)
 					m_isLaunched = true;

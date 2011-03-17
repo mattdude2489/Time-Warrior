@@ -109,6 +109,9 @@ public:
 		m_shouldDraw = true;
 	}
 	Stats getStats(){return m_stats;}
+	void setType(e_entityType type) {m_eType = type;}
+	int getType() {return (int)m_eType;}
+	bool getVisible() {return m_shouldDraw;}
 	Location getLocationScreen(){return m_locations[LOC_SCREEN];}
 	Location getLocationWorld(){return m_locations[LOC_WORLD];}
 	void move(int a_locIndex, int a_deltaX, int a_deltaY){m_locations[a_locIndex].x += a_deltaX; m_locations[a_locIndex].y += a_deltaY;}
@@ -151,5 +154,21 @@ public:
 		m_stats.m_stats[HEALTH_CURRENT]+= healamount;
 		if(m_stats.m_stats[HEALTH_CURRENT] > m_stats.m_stats[HEALTH_MAX])
 			m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX];
+	}
+	//Says if there is a collision between two entities.
+	bool collide(Entity * otherEntity)
+	{
+		//If one of them is the chip; get rid of it. Right now. Seriously, just don't do it.
+		if(m_eType == CHIP)
+			return false;
+		if(m_eType == otherEntity->m_eType)
+			return false;
+
+		//If they are two players, you need not care. If it's two minions, need not care. Two chips...why did they get this far?
+		//If two sprites collide, return true.
+		if(m_shouldDraw && otherEntity->getVisible())
+			if(m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *otherEntity->m_sprite, otherEntity->getLocationScreen().x, otherEntity->getLocationScreen().y))
+				return true;
+		
 	}
 };

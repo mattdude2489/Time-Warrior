@@ -47,11 +47,18 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	chip.levelUp();
 	chip2.setOwner(&eTest);
 	chip2.levelUp();
+
+	Sprite aTest("Sprites/greenguy.bmp", 3, 32, 4);
+	aTest.setTransparency(COLOR_TRANSPARENT);
+	aTest.setHIndex(2, 3);
+	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &aTest);
+
 	eTest.setGauntletSlot(SLOT_ATK1, &chip);
 	eTest.setGauntletSlot(SLOT_ATK2, &chip2);
 	world.setAnEntity(&eTest);
 	world.setAnEntity(&chip);
 	world.setAnEntity(&chip2);
+	world.setAnEntity(&fightTest);
 	//music test stuff
 	audioHandler ah;
 	ah.playMusic();
@@ -108,6 +115,12 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//test.draw(screen, 100, 100);
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
+		if(fightTest.collide(&chip))
+		{
+			printf("Hi, collision has occurred between chip1 and the player.");
+			int damn = chip.getDamage();
+			fightTest.hit(damn);
+		}
 		//test.draw(screen, 100, 100);
 		Ghud.draw(screen);
 
