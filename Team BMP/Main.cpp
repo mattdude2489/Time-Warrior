@@ -52,12 +52,13 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.setAnEntity(&eTest);
 	world.setAnEntity(&chip);
 	world.setAnEntity(&chip2);
-
+	//music test stuff
+	audioHandler ah;
+	ah.playMusic();
 	if(!world.getSuccess())
 	{
 		printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");
 	}
-
 	while(running) //While loop, can be easily used for testing.
 	{
 		//update the time
