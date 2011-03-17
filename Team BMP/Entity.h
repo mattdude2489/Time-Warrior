@@ -1,8 +1,8 @@
 #pragma once
 #include "Sprite.h"
 
-enum e_stats {STATS_CURRENT, STATS_MAX, NUM_STAT_INSTANCES, NUM_STATS = 11};
-enum e_statname	{CHEALTH, MHEALTH, CENERGY, MENERGY, STR, INT, DEF, ENERGYGEN, REZFIRE, REZICE, REZLIGHT};
+enum e_statInstances {STATS_CURRENT, STATS_MAX, NUM_STAT_INSTANCES};
+enum e_stats {HEALTH_CUR, HEALTH_MAX, ENERGY_CUR, ENERGY_MAX, STR, INT, DEF, ENERGY_REGEN, RES_FIRE, RES_ICE, RES_LIGHTNING, NUM_STATS};
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_resistances {RESIST_FIRE, RESIST_ICE, RESIST_LIGHTNING, NUM_RESISTANCES};
 
@@ -61,9 +61,9 @@ struct Stats
 		//returns the stat based on a number
 		switch(stat)
 		{
-		case CHEALTH:return health[STATS_CURRENT];
+		case HEALTH_CUR:return health[STATS_CURRENT];
 			break;
-		case MHEALTH:return health[STATS_MAX];
+		case HEALTH_MAX:return health[STATS_MAX];
 			break;
 		case STR:return strength;
 			break;
@@ -71,27 +71,28 @@ struct Stats
 			break;
 		case DEF:return defence;
 			break;
-		case ENERGYGEN:return energyregen;
+		case ENERGY_REGEN:return energyregen;
 			break;
-		case CENERGY:return energy[STATS_CURRENT];
+		case ENERGY_CUR:return energy[STATS_CURRENT];
 			break;
-		case MENERGY:return energy[STATS_MAX];
+		case ENERGY_MAX:return energy[STATS_MAX];
 			break;
-		case REZFIRE:return resistances[RESIST_FIRE];
+		case RES_FIRE:return resistances[RESIST_FIRE];
 			break;
-		case REZICE:return resistances[RESIST_ICE];
+		case RES_ICE:return resistances[RESIST_ICE];
 			break;
-		case REZLIGHT:return resistances[RESIST_LIGHTNING];
+		case RES_LIGHTNING:return resistances[RESIST_LIGHTNING];
 			break;
+		default:return 0;
 		}
 	}
 	char * getName(int i_stat)
 	{
 		switch(i_stat)//once again sorry for the dirtyness just trying to get code that works
 		{
-			case CHEALTH:return "Health :%i";
+			case HEALTH_CUR:return "Health :%i";
 				break;
-			case MHEALTH:return "/%i";
+			case HEALTH_MAX:return "/%i";
 				break;
 			case STR:return "Strength: %i";
 				break;
@@ -99,18 +100,19 @@ struct Stats
 				break;
 			case DEF:return "Defence: %i";
 				break;
-			case ENERGYGEN:return "Regen: %i";
+			case ENERGY_REGEN:return "Regen: %i";
 				break;
-			case CENERGY:return "Energy: %i";
+			case ENERGY_CUR:return "Energy: %i";
 				break;
-			case MENERGY:return "/%i";
+			case ENERGY_MAX:return "/%i";
 				break;
-			case REZFIRE:return "Fire: %i";
+			case RES_FIRE:return "Fire: %i";
 				break;
-			case REZICE:return "Ice: %i";
+			case RES_ICE:return "Ice: %i";
 				break;
-			case REZLIGHT:return "Lightning: %i";
+			case RES_LIGHTNING:return "Lightning: %i";
 				break;
+			default:return "Invalid";
 		}
 	}
 };
@@ -203,9 +205,9 @@ public:
 			m_stats.energy[STATS_CURRENT] = 0;
 		}
 	}
-	void heal(int healammount)
+	void heal(int healamount)
 	{
-		m_stats.health[STATS_CURRENT]+= healammount;
+		m_stats.health[STATS_CURRENT]+= healamount;
 		if(m_stats.health[STATS_CURRENT] > m_stats.health[STATS_MAX])
 		{
 			m_stats.health[STATS_CURRENT] = m_stats.health[STATS_MAX];
