@@ -35,7 +35,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	bool running = true;
 
 	//loading a sprite to see if it works with the entity
-	SDL_Sprite test("Sprites/spriteTest.bmp", 25, 32, 32, 4);
+	SDL_Sprite test("Sprites/spriteTest.bmp", 24, 32, 32, 4);
 	test.setTransparency(COLOR_TRANSPARENT);
 	//test.setHIndex(2,3);
 	test.restart(2);
@@ -60,12 +60,17 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.setAnEntity(&chip2);
 	world.setAnEntity(&fightTest);
 	//music test stuff
+	
 	AudioHandler ah;
 	ah.playMusic();
+
+
 	if(!world.getSuccess())
 	{
 		printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");
 	}
+
+
 	while(running) //While loop, can be easily used for testing.
 	{
 		//update the time

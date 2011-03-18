@@ -28,28 +28,28 @@ void Player::handleInput(UserInput * ui)
 	if(ui->getKeyUD() == 'w')
 	{
 		//m_sprite->setHIndex(0, 3); //BOO MAGIC NUMBERS.
-		m_sprite->restart(0);
+		m_sprite->setRIndex(0);
 		move(LOC_SCREEN, 0, -5);
 	}
 	
 	if(ui->getKeyLR() == 'd')
 	{
 		//m_sprite->setHIndex(1,3);
-		m_sprite->restart(1);
+		m_sprite->setRIndex(1);
 		move(LOC_SCREEN, 5, 0);
 	}
 	
 	if(ui->getKeyUD() == 's')
 	{
 		//m_sprite->setHIndex(2,3);
-		m_sprite->restart(2);
+		m_sprite->setRIndex(2);
 		move(LOC_SCREEN, 0, 5);
 	}
 	
 	if(ui->getKeyLR() == 'a')
 	{
 		//m_sprite->setHIndex(3,3);
-		m_sprite->restart(3);
+		m_sprite->setRIndex(3);
 		move(LOC_SCREEN, -5, 0);
 	}
 	if(ui->getClick() == CLICK_LEFT)
