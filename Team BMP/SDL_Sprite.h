@@ -9,7 +9,7 @@ Sprite library for SDL - using bitmaps
 This library was originally put together by Kenny Cason (v1.0, Sep 20, 2009),
 designed to be easily implemented into any C++ program using SDL. It was later
 modified slightly by Michael Vaganov for a Sprite-oriented GSP280 lab. Even later modified slightly
-by Matthew Morrill and Jared Bills for Team BMP's Senior Project.
+by Jared Bills, Matthew Morrill, and John Parks for Team BMP's Senior Project.
 
 Feel free to do what ever you want with it. enjoy!
 
@@ -119,6 +119,10 @@ public:
     const Uint32 & getWidth() const;
 	/** getHeight - return height of frame */
     const Uint32 & getHeight() const;
+	/** getWidthOffsetCenter - returns center of width offset of frame */
+	const Uint32 & getWidthOffsetCenter() const;
+	/** getHeightOffsetCenter - returns center of height offset of frame */
+	const Uint32 & getHeightOffsetCenter() const;
 	/** getSpriteWidth - return width of sprite's surface */
     const Uint32 getSpriteWidth() const;
 	/** getSpriteHeight - return height of sprite's surface */

@@ -443,6 +443,17 @@ const Uint32 & SDL_Sprite::getHeight() const {
 	//return frame height
 	return m_uiHeight;
 }
+
+/** getWidthOffsetCenter - returns center of width offset of frame */
+const Uint32 & SDL_Sprite::getWidthOffsetCenter() const {
+	return getWidth() / 2;
+}
+
+/** getHeightOffsetCenter - returns center of height offset of frame */
+const Uint32 & SDL_Sprite::getHeightOffsetCenter() const {
+	return getHeight() / 2;
+}
+
 /** getSpriteWidth - return width of sprite's surface */
 const Uint32 SDL_Sprite::getSpriteWidth() const {
 	//return surface width

@@ -122,6 +122,8 @@ public:
 	bool getVisible() {return m_shouldDraw;}
 	Location getLocationScreen(){return m_locations[LOC_SCREEN];}
 	Location getLocationWorld(){return m_locations[LOC_WORLD];}
+	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
+	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
 	void move(int a_locIndex, int a_deltaX, int a_deltaY){m_locations[a_locIndex].x += a_deltaX; m_locations[a_locIndex].y += a_deltaY;}
 	void setLocation(int a_locIndex, int a_x, int a_y){m_locations[a_locIndex].x = a_x; m_locations[a_locIndex].y = a_y;}
 	virtual void updateUnique(int a_time){}

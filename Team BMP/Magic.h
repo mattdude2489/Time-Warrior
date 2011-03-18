@@ -55,7 +55,6 @@ class Magic : public Chip
 		{
 			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, LEGEND+1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
-			m_sprite->restart(m_cSubSubType);
 			switch(m_cSubSubType)
 			{
 			case BASIC:
@@ -70,6 +69,26 @@ class Magic : public Chip
 			case LEGEND:
 				break;
 			}
+			m_sprite->restart(m_cSubSubType);
+		}
+		void activateUnique()
+		{
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
+				break;
+			case ADVANCED:
+				{
+					int ownerCenterX = m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter();
+					int ownerCenterY = m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter();
+					setLocation(LOC_SCREEN, ownerCenterX - m_sprite->getWidthOffsetCenter(), ownerCenterY - m_sprite->getHeightOffsetCenter());
+				}
+				break;
+			case EXPERT:
+				setLocation(LOC_SCREEN,m_target.x,m_target.y);
+				break;
+			}
 		}
 		void switchSign(double & a_num){a_num *= -1;}
 		void switchSignIf(double & a_num, bool a_shouldChange)
@@ -81,32 +100,45 @@ class Magic : public Chip
 		{
 			if(m_shouldDraw)
 			{
-				int max = 10;
-				double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
-				double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
-				if(deltaX != 0 && deltaY != 0)
+				switch(m_cSubSubType)
 				{
-					bool switchSignX = deltaX < 0;
-					bool switchSignY = deltaY < 0;
-					switchSignIf(deltaX, switchSignX);
-					switchSignIf(deltaY, switchSignY);
-					if(deltaX > max || deltaY > max)
+				case BASIC:
 					{
-						double slope = deltaY / deltaX;
-						if(deltaX > max)
+						int max = 10;
+						double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
+						double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
+						if(deltaX != 0 && deltaY != 0)
 						{
-							deltaX = max;
-							deltaY = slope * deltaX;
-						}
-						else if(deltaY > max)
-						{
-							deltaY = max;
-							deltaX = deltaY / slope;
+							bool switchSignX = deltaX < 0;
+							bool switchSignY = deltaY < 0;
+							switchSignIf(deltaX, switchSignX);
+							switchSignIf(deltaY, switchSignY);
+							if(deltaX > max || deltaY > max)
+							{
+								double slope = deltaY / deltaX;
+								if(deltaX > max)
+								{
+									deltaX = max;
+									deltaY = slope * deltaX;
+								}
+								else if(deltaY > max)
+								{
+									deltaY = max;
+									deltaX = deltaY / slope;
+								}
+							}
+							switchSignIf(deltaX, switchSignX);
+							switchSignIf(deltaY, switchSignY);
+							move(LOC_SCREEN,(int)deltaX,(int)deltaY);
 						}
 					}
-					switchSignIf(deltaX, switchSignX);
-					switchSignIf(deltaY, switchSignY);
-					move(LOC_SCREEN,(int)deltaX,(int)deltaY);
+					break;
+				case ADVANCED:
+					if(m_shouldDraw && m_sprite->getFrame() == 0)
+						m_shouldDraw = false;
+					break;
+				case EXPERT:
+					break;
 				}
 			}
 		}

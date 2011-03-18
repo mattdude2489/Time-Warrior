@@ -33,6 +33,7 @@ class Chip : public Entity
 		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
 			//define for each spell
 		virtual void levelUpUnique(){}
+		virtual void activateUnique(){}
 		void levelUp()
 		{
 			if(m_cType != ARMOR)
@@ -51,8 +52,8 @@ class Chip : public Entity
 				m_shouldDraw = true;
 				m_sprite->start();
 				m_sprite->setLoopToBegin(true);
-				if(m_owner != NULL && m_cType == MAGIC && m_cSubSubType == BASIC)
-					setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
+				if(m_owner != NULL)
+					activateUnique();
 			}
 			/*
 			for(int i = 0; i < size; ++i)
