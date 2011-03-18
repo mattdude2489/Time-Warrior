@@ -20,11 +20,7 @@ class Chip : public Entity
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
-			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_isEquipped(false)
-		{
-			m_eType = CHIP;
-			m_shouldDraw = false;
-		}
+			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_isEquipped(false){m_eType = CHIP;}
 		e_chipType getType(){return m_cType;}
 		e_chipSubType getSubType(){return m_cSubType;}
 		e_chipSubSubType getSubSubType(){return m_cSubSubType;}

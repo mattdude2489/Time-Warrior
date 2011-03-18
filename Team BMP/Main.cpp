@@ -48,8 +48,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	chip.levelUp();
 	chip2.setOwner(&eTest);
 	chip2.levelUp();
-
-	SDL_Sprite aTest("Sprites/greenguy.bmp", 32, 44, 32, 4);
+	SDL_Sprite aTest("Sprites/greenguy.bmp", 32, 33, 32, 4);
 	aTest.setTransparency(COLOR_TRANSPARENT);
 	aTest.restart(2);
 	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &aTest);

@@ -16,9 +16,9 @@ private:
 	Chip * m_gauntlet[NUM_SLOTS];
 public:
 	Player();
-	void activateGauntletAttack(int a_slot, int a_targetX, int a_targetY);
+	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY);
 	void handleInput(UserInput * ui);
-	void setGauntletSlot(int a_slot, Chip * a_chip)
+	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 	{
 		bool isValid = false;
 		switch(a_slot)
@@ -50,5 +50,10 @@ public:
 	}
 	//This is Alex's code...copypastaed. Because it works. Quite well in fact.
 	Player(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
-		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite){m_eType = PLAYER;}
+		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite)
+	{
+		m_eType = PLAYER;
+		for(int i = 0; i < NUM_SLOTS; ++i)
+			m_gauntlet[i] = NULL;
+	}
 };

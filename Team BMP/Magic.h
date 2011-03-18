@@ -7,11 +7,10 @@ class Magic : public Chip
 {
 	protected:
 		int m_dmgCombo, m_dmgComboLv;
-		bool m_isSpriteInit;
 	public:
 		Magic(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(MAGIC, a_subType, a_subSubType),
-			m_dmgCombo(0),m_dmgComboLv(0),m_isSpriteInit(false){}
+			m_dmgCombo(0),m_dmgComboLv(0){}
 		int getComboBonus(){return m_dmgCombo;}
 		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
 		bool shouldApplyEffect()
@@ -57,7 +56,6 @@ class Magic : public Chip
 			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, LEGEND+1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			m_sprite->restart(m_cSubSubType);
-			m_isSpriteInit = true;
 			switch(m_cSubSubType)
 			{
 			case BASIC:
@@ -114,7 +112,7 @@ class Magic : public Chip
 		}
 		~Magic()
 		{
-			if(m_isSpriteInit)
+			if(m_sprite->isSprite())
 				delete m_sprite;
 		}
 };

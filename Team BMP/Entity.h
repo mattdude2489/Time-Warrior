@@ -89,15 +89,7 @@ protected:
 	bool m_shouldDraw;
 	SDL_Rect m_hb;
 public:
-	Entity(){
-		for(int i = 0; i < NUM_STATS; ++i)
-			m_stats.m_stats[i] = 0;
-		m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX] = m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX] = 1;
-		m_stats.m_stats[ENERGY_REGEN] = 5;
-		m_timeSinceLastUpdate = m_timeToRegen =  0;
-		m_shouldDraw = true;
-	}
-	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
+	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
 	{
 		m_stats.m_stats[DEFENSE] = a_def;
 		m_stats.m_stats[INTELLECT] = a_int;
@@ -108,10 +100,17 @@ public:
 		m_stats.m_stats[RESISTANCE_ICE] = a_iRes;
 		m_stats.m_stats[RESISTANCE_LIGHTNING] = a_lRes;
 		m_stats.m_stats[ENERGY_REGEN] = 5;
-		m_sprite = a_sprite;
+		m_timeSinceLastUpdate = m_timeToRegen =  0;
 		setLocation(LOC_SCREEN, CENTER_SCREEN_X, CENTER_SCREEN_Y);
-		m_timeSinceLastUpdate = m_timeToRegen = 0;
+		m_shouldDraw = false;
+	}
+	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
+	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
+	{
+		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes);
 		m_shouldDraw = true;
+		m_sprite = a_sprite;
+		m_sprite->start();
 		m_hb.x = CENTER_SCREEN_X;
 		m_hb.y = CENTER_SCREEN_Y;
 		m_hb.w = m_sprite->getWidth();

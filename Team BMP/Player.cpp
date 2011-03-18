@@ -6,11 +6,13 @@ Player::Player():Entity()
 {
 	m_eType = PLAYER; //Tells the Entity that it's a PLAYER. YEAH. REMEMBER THEM? THE PLAYERS. YEAH. THEY EXIST TOO.
 	//Otherwise, let the usual Entity constructor occur.
+	for(int i = 0; i < NUM_SLOTS; ++i)
+		m_gauntlet[i] = NULL;
 }
 
-void Player::activateGauntletAttack(int a_slot, int a_targetX, int a_targetY)
+void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY)
 {
-	if(a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2)
+	if((a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2) && m_gauntlet[a_slot])
 	{
 		if(m_stats.m_stats[ENERGY_CURRENT] >= m_gauntlet[a_slot]->getCost())
 		{
