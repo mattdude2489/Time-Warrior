@@ -81,7 +81,7 @@ class Magic : public Chip
 		}
 		void updateUnique(int a_time)
 		{
-			if(m_shouldDraw && m_isActive)
+			if(m_shouldDraw)
 			{
 				int max = 10;
 				double deltaX = m_target.x - m_locations[LOC_SCREEN].x;

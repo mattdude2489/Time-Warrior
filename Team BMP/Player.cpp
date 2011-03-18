@@ -8,6 +8,18 @@ Player::Player():Entity()
 	//Otherwise, let the usual Entity constructor occur.
 }
 
+void Player::activateGauntletAttack(int a_slot, int a_targetX, int a_targetY)
+{
+	if(a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2)
+	{
+		if(m_stats.m_stats[ENERGY_CURRENT] >= m_gauntlet[a_slot]->getCost())
+		{
+			useEnergy(m_gauntlet[a_slot]->getCost());
+			m_gauntlet[a_slot]->setTarget(a_targetX, a_targetY);
+			m_gauntlet[a_slot]->activate();
+		}
+	}
+}
 void Player::handleInput(UserInput ui)
 {
 	//This is where the UI goes to get handled by the Player class. Well...it would've been world class, but we dun have one of them yet.
@@ -39,13 +51,7 @@ void Player::handleInput(UserInput ui)
 		move(LOC_SCREEN, -5, 0);
 	}
 	if(ui.getClick() == CLICK_LEFT)
-	{
-		m_gauntlet[SLOT_ATK1]->setTarget(ui.getMouseX(), ui.getMouseY());
-		m_gauntlet[SLOT_ATK1]->activate();
-	}
+		activateGauntletAttack(SLOT_ATK1, ui.getMouseX(), ui.getMouseY());
 	if(ui.getClick() == CLICK_RIGHT)
-	{
-		m_gauntlet[SLOT_ATK2]->setTarget(ui.getMouseX(), ui.getMouseY());
-		m_gauntlet[SLOT_ATK2]->activate();
-	}
+		activateGauntletAttack(SLOT_ATK2, ui.getMouseX(), ui.getMouseY());
 }

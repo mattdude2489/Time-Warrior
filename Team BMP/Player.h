@@ -16,6 +16,7 @@ private:
 	Chip * m_gauntlet[NUM_SLOTS];
 public:
 	Player();
+	void activateGauntletAttack(int a_slot, int a_targetX, int a_targetY);
 	void handleInput(UserInput ui);
 	void setGauntletSlot(int a_slot, Chip * a_chip)
 	{

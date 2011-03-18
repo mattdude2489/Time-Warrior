@@ -50,7 +50,6 @@ class Chip : public Entity
 			if(!m_isActive)
 			{
 				m_shouldDraw = m_isActive = true;
-				m_owner->useEnergy(m_cost);
 				if(m_owner != NULL && m_cType == MAGIC && m_cSubSubType == BASIC)
 					setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
 			}
