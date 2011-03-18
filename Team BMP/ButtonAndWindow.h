@@ -33,10 +33,10 @@ public:
 		m_buttonShape.setX(a_x);
 		m_buttonShape.setY(a_y);
 	}
-	bool wasClicked(UserInput a_input)//returns only if there is a click inside its bounds
+	bool wasClicked(UserInput * a_input)//returns only if there is a click inside its bounds
 	{
-		SPoint t_tempPoint(a_input.getMouseX(),a_input.getMouseY()); 
-		if(a_input.getClick())
+		SPoint t_tempPoint(a_input->getMouseX(),a_input->getMouseY()); 
+		if(a_input->getClick())
 		{
 			if(m_buttonShape.contains(t_tempPoint))
 			{
@@ -73,9 +73,9 @@ public:
 			m_text[i].setFont(a_font);
 		}
 	}
-	void setPlayerStats(Entity a_player)
+	void setPlayerStats(Entity * a_player)
 	{	
-		m_PlayerStats.copy(a_player.getStats());
+		m_PlayerStats.copy(a_player->getStats());
 		putStatsInText();
 	}
 	void putStatsInText()

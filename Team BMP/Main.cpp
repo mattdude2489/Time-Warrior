@@ -104,13 +104,13 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 			}
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
-		eTest.handleInput(ui);
+		eTest.handleInput(&ui);
 
 		//update
 		//test.update(passed);
 		world.update(passed);
 
-		Ghud.updateHud(eTest, ui);
+		Ghud.updateHud(&eTest, &ui);
 
 		//draw
 		//test.draw(screen, 100, 100);

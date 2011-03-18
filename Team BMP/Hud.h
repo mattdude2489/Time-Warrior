@@ -67,7 +67,7 @@ public:
 		m_showStats = false;
 		//m_text.setMessage("testing");
 	}
-	void handleInput(UserInput ui)
+	void handleInput(UserInput * ui)
 	{
 		if(m_statButton.wasClicked(ui)&&m_showStats == false)
 		{
@@ -78,12 +78,12 @@ public:
 			m_showStats = false;
 		}
 	}
-	void updateHud(Player p, UserInput ui)
+	void updateHud(Player * p, UserInput * ui)
 	{
 		handleInput(ui);
-		bars[BAR_HEALTH].setWidth( (int)((double)p.getStats().m_stats[HEALTH_CURRENT]/(double)p.getStats().m_stats[HEALTH_MAX]) * ONE_HUNDRED_PERCENT);
-		bars[BAR_ENERGY].setWidth( (int)((double)p.getStats().m_stats[ENERGY_CURRENT]/(double)p.getStats().m_stats[ENERGY_MAX]) * ONE_HUNDRED_PERCENT);
-		if(!p.getStats().compare(m_statWin.getStats()))
+		bars[BAR_HEALTH].setWidth( (int)((double)p->getStats().m_stats[HEALTH_CURRENT]/(double)p->getStats().m_stats[HEALTH_MAX]) * ONE_HUNDRED_PERCENT);
+		bars[BAR_ENERGY].setWidth( (int)((double)p->getStats().m_stats[ENERGY_CURRENT]/(double)p->getStats().m_stats[ENERGY_MAX]) * ONE_HUNDRED_PERCENT);
+		if(!p->getStats().compare(m_statWin.getStats()))
 		{
 			m_statWin.setPlayerStats(p);
 		}
