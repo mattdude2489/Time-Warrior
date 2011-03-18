@@ -9,27 +9,23 @@
 
 struct Tile
 {
-	SDL_Sprite* currentTexture;
+	SDL_Sprite * currentTexture;
 	bool collide;
-	int posX, posY;
+	Location pos;
 };
 
 class World
 {
 private:
-	//Entity * m_mapOfEntities[NUMBER_OF_ENTITIES]; //TODO: MAGIC NUMBERS. Or maybe a vector list.
 	templateVector<Entity*> m_mapOfEntities;
 	templateVector<Tile> m_mapOfWorld;
-	bool success;
+	bool m_success;
 public:
 	World();
 	~World();
 	void draw(SDL_Surface * a_screen);
 	void update(Uint32 timePassed);
-	void setAnEntity(Entity * newEntity)
-	{
-		m_mapOfEntities.add(newEntity);
-	}
-	bool getSuccess() {return success;}
+	void setAnEntity(Entity * newEntity){m_mapOfEntities.add(newEntity);}
+	bool getSuccess() {return m_success;}
 	bool setWorld(char * fileName);
 };

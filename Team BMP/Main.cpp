@@ -65,11 +65,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	ah.playMusic();
 
 
-	if(!world.getSuccess())
-	{
-		printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");
-	}
-
+	if(!world.getSuccess()){printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");}
 
 	while(running) //While loop, can be easily used for testing.
 	{

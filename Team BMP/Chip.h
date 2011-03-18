@@ -34,7 +34,6 @@ class Chip : public Entity
 		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
 			//define for each spell
 		virtual void levelUpUnique(){}
-		virtual void activateUnique(){}
 		void levelUp()
 		{
 			if(m_cType != ARMOR)
@@ -44,25 +43,37 @@ class Chip : public Entity
 			m_dmg += m_dmgLv;
 			levelUpUnique();
 		}
-		virtual bool shouldApplyEffect(){return false;}//pass single entity as a parameter
-		virtual void applyEffect(){}//pass single entity as a parameter
+		virtual void activateUnique(){}
+		virtual bool shouldApplyEffect(Entity * a_entity){return false;}//pass single entity as a parameter
+		virtual void applyEffect(Entity * a_entity){}//pass single entity as a parameter
 		void activate()//pass list of entities as a parameter
 		{
-			if(!m_shouldDraw)
+			if(m_owner)
 			{
-				m_shouldDraw = true;
-				m_sprite->start();
-				m_sprite->setLoopToBegin(true);
-				if(m_owner != NULL)
+				if(!m_shouldDraw)
+				{
+					m_shouldDraw = true;
+					m_sprite->start();
+					m_sprite->setLoopToBegin(true);
 					activateUnique();
+				}
+				else
+				{
+					bool collisionMade = false;
+					
+					/*for(int i = 0; i < size; ++i)
+					{
+						if(shouldApplyEffect(a_entity))
+						{
+							applyEffect(a_entity);
+							collisionMade = true;
+						}
+					}*/
+					
+					if(!(!collisionMade && m_cType == MAGIC && m_cSubSubType == BASIC))
+						deactivate();
+				}
 			}
-			/*
-			for(int i = 0; i < size; ++i)
-			{
-				if(shouldApplyEffect(i))
-					applyEffect(i)
-			}
-			*/
 		}
 		void deactivate(){m_shouldDraw = false;}
 		virtual char * getName(){return "Chip";}

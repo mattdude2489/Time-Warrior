@@ -5,13 +5,15 @@ enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REG
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_entityType{PLAYER, MINION, BOSS, CHIP};
 
-#define COLOR_BACK			0x0000ff
-#define COLOR_HEALTH		0xff0000
-#define	COLOR_ENERGY		0x00ff00
-#define COLOR_BASE			0xffffff
+#define COLOR_HEALTH			0xff0000
+#define	COLOR_ENERGY			0x00ff00
+#define COLOR_BACK				0x0000ff
+#define COLOR_BASE				0xffffff
 #define	COLOR_TRANSPARENT		0xff00ff
-#define CENTER_SCREEN_X			400
-#define CENTER_SCREEN_Y			300
+
+#define SCREEN_CENTER_X			400
+#define SCREEN_CENTER_Y			300
+
 #define TIME_TO_REGEN			5000
 
 
@@ -72,11 +74,7 @@ struct Stats
 		}
 	}
 };
-struct Location
-{
-	int x;
-	int y;
-};
+struct Location{int x, y;};
 
 class Entity
 {
@@ -101,7 +99,7 @@ public:
 		m_stats.m_stats[RESISTANCE_LIGHTNING] = a_lRes;
 		m_stats.m_stats[ENERGY_REGEN] = 5;
 		m_timeSinceLastUpdate = m_timeToRegen =  0;
-		setLocation(LOC_SCREEN, CENTER_SCREEN_X, CENTER_SCREEN_Y);
+		setLocation(LOC_SCREEN, SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_shouldDraw = false;
 	}
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
@@ -111,8 +109,8 @@ public:
 		m_shouldDraw = true;
 		m_sprite = a_sprite;
 		m_sprite->start();
-		m_hb.x = CENTER_SCREEN_X;
-		m_hb.y = CENTER_SCREEN_Y;
+		m_hb.x = SCREEN_CENTER_X;
+		m_hb.y = SCREEN_CENTER_Y;
 		m_hb.w = m_sprite->getWidth();
 		m_hb.h = 5;
 	}
@@ -143,7 +141,6 @@ public:
 		m_hb.x = m_locations[LOC_SCREEN].x;
 		m_hb.y = m_locations[LOC_SCREEN].y;
 		m_hb.w = (((double)m_stats.getStatNumber(HEALTH_CURRENT)/(double)m_stats.getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
-
 		m_sprite->update(a_time);
 		updateUnique(a_time);
 	}
@@ -175,19 +172,20 @@ public:
 			m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX];
 	}
 	//Says if there is a collision between two entities.
+	bool collideSimple(Entity * otherEntity)
+	{
+		if(m_shouldDraw && otherEntity->getVisible())
+			return m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *otherEntity->m_sprite, otherEntity->getLocationScreen().x, otherEntity->getLocationScreen().y);
+		else
+			return false;
+	}
 	bool collide(Entity * otherEntity)
 	{
 		//If one of them is the chip; get rid of it. Right now. Seriously, just don't do it.
 		//If they are two players, you need not care. If it's two minions, need not care.
 		if(m_eType == CHIP || m_eType == otherEntity->m_eType)
 			return false;
-
 		//If two sprites collide, return true.
-		if(m_shouldDraw && otherEntity->getVisible())
-		{
-			return m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *otherEntity->m_sprite, otherEntity->getLocationScreen().x, otherEntity->getLocationScreen().y);
-		}
-		else
-			return false;
+		return collideSimple(otherEntity);
 	}
 };

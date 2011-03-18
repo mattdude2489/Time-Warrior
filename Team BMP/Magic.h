@@ -13,27 +13,51 @@ class Magic : public Chip
 			m_dmgCombo(0),m_dmgComboLv(0){}
 		int getComboBonus(){return m_dmgCombo;}
 		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
-		bool shouldApplyEffect()
+		void activateUnique()
 		{
 			switch(m_cSubSubType)
 			{
 			case BASIC:
-				//calc if collision
-				return false;
+				setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
 				break;
 			case ADVANCED:
-				//calc if within mini-radius
-				return false;
+				{
+					int ownerCenterX = m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter();
+					int ownerCenterY = m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter();
+					setLocation(LOC_SCREEN, ownerCenterX - m_sprite->getWidthOffsetCenter(), ownerCenterY - m_sprite->getHeightOffsetCenter());
+				}
 				break;
 			case EXPERT:
-				//calc if within greater radius
-				return false;
+				setLocation(LOC_SCREEN,m_target.x,m_target.y);
 				break;
-			default:
-				return false;
 			}
 		}
-		void applyEffect()
+		bool shouldApplyEffect(Entity * a_entity)
+		{
+			if(a_entity->getType() == CHIP)
+				return false;
+			else
+			{
+				switch(m_cSubSubType)
+				{
+				case BASIC:
+					//calc if collision
+					return collideSimple(a_entity);
+					break;
+				case ADVANCED:
+					//calc if within mini-radius
+					return false;
+					break;
+				case EXPERT:
+					//calc if within greater radius
+					return false;
+					break;
+				default:
+					return false;
+				}
+			}
+		}
+		void applyEffect(Entity * a_entity)
 		{
 			switch(m_cSubType)
 			{
@@ -45,6 +69,7 @@ class Magic : public Chip
 				break;
 			case FIRE:
 				//apply elemental effect
+				a_entity->hit(m_dmg);
 				break;
 			case ICE:
 				//apply elemental effect
@@ -70,25 +95,6 @@ class Magic : public Chip
 				break;
 			}
 			m_sprite->setRIndex(m_cSubSubType);
-		}
-		void activateUnique()
-		{
-			switch(m_cSubSubType)
-			{
-			case BASIC:
-				setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
-				break;
-			case ADVANCED:
-				{
-					int ownerCenterX = m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter();
-					int ownerCenterY = m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter();
-					setLocation(LOC_SCREEN, ownerCenterX - m_sprite->getWidthOffsetCenter(), ownerCenterY - m_sprite->getHeightOffsetCenter());
-				}
-				break;
-			case EXPERT:
-				setLocation(LOC_SCREEN,m_target.x,m_target.y);
-				break;
-			}
 		}
 		void switchSign(double & a_num){a_num *= -1;}
 		void switchSignIf(double & a_num, bool a_shouldChange)
