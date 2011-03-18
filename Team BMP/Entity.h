@@ -129,7 +129,7 @@ public:
 	virtual void updateUnique(int a_time){}
 	void update(int a_time)
 	{
-		m_sprite->start();
+		//m_sprite->start();
 		if(m_timeSinceLastUpdate == 0)
 			m_timeSinceLastUpdate = a_time;
 		m_timeToRegen += a_time - m_timeSinceLastUpdate;

@@ -69,7 +69,7 @@ class Magic : public Chip
 			case LEGEND:
 				break;
 			}
-			m_sprite->restart(m_cSubSubType);
+			m_sprite->setRIndex(m_cSubSubType);
 		}
 		void activateUnique()
 		{
