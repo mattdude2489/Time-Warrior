@@ -146,7 +146,8 @@ public:
 	{
 		if(m_shouldDraw)
 		{
-			SDL_FillRect(a_screen, &m_hb, 0x00ff00);
+			if(m_eType != CHIP)
+				SDL_FillRect(a_screen, &m_hb, 0x00ff00);
 			m_sprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
 		}
 	}
@@ -178,8 +179,10 @@ public:
 
 		//If two sprites collide, return true.
 		if(m_shouldDraw && otherEntity->getVisible())
-			if(m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *otherEntity->m_sprite, otherEntity->getLocationScreen().x, otherEntity->getLocationScreen().y))
-				return true;
-		
+		{
+			return m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *otherEntity->m_sprite, otherEntity->getLocationScreen().x, otherEntity->getLocationScreen().y);
+		}
+		else
+			return false;
 	}
 };

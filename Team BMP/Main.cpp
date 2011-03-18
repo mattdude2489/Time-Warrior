@@ -51,7 +51,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	SDL_Sprite aTest("Sprites/greenguy.bmp", 32, 44, 32, 4);
 	aTest.setTransparency(COLOR_TRANSPARENT);
-	//aTest.setHIndex(2, 3);
 	aTest.restart(2);
 	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &aTest);
 
