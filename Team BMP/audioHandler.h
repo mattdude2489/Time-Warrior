@@ -6,13 +6,13 @@
 
 #define NUM_SONGS				9
 
-class audioHandler
+class AudioHandler
 {
 private:
 	Mix_Music * m_music[NUM_SONGS];
 	int currentTrack;
 public:
-	audioHandler()
+	AudioHandler()
 	{
 		Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT,2,4096);
 		char temp[32];
@@ -47,7 +47,7 @@ public:
 		currentTrack = a_index;
 		playMusic();
 	}
-	~audioHandler()
+	~AudioHandler()
 	{
 		for(int i = 0; i < NUM_SONGS; i ++)
 		{

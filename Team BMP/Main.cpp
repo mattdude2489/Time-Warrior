@@ -38,7 +38,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Sprite test("Sprites/spriteTest.bmp", 3, 32, 4);
 	test.setTransparency(COLOR_TRANSPARENT);
 	test.setHIndex(2,3);
-	Player eTest(10,10,10,100,100,10,10,10,&test);
+	Player eTest(15,1,39,100,100,100,5,9,&test);
 	BasicFire chip;
 	BasicIce chip2;
 	Hud Ghud;
@@ -60,7 +60,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.setAnEntity(&chip2);
 	world.setAnEntity(&fightTest);
 	//music test stuff
-	audioHandler ah;
+	AudioHandler ah;
 	ah.playMusic();
 	if(!world.getSuccess())
 	{
@@ -102,8 +102,8 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 			}
 		}
-		  	//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
-			eTest.handleInput(ui);
+		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
+		eTest.handleInput(ui);
 
 		//update
 		//test.update(passed);

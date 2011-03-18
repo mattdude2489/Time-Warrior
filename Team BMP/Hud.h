@@ -5,16 +5,21 @@
 #include "trueTextPrinter.h"
 #include "ButtonAndWIndow.h"
 
-enum e_bars {BAR_BACK, BAR_HEALTH, BAR_ENERGY, NUM_BARS};
+enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, NUM_BARS};
 
 #define COLOR_BACK			0x0000ff
 #define COLOR_HEALTH		0xff0000
 #define	COLOR_ENERGY		0x00ff00
+#define COLOR_BASE			0xffffff
 
 #define B_HEIGHT			10
 #define	B_WIDTH				100
 #define B_X					50
 #define B_Y					580
+#define BASEX				0
+#define BASEY				550
+#define BASEWIDTH			800
+#define BASEHEIGHT			50
 
 #define ONE_HUNDRED_PERCENT	100
 
@@ -37,10 +42,20 @@ public:
 		for(int i = 0; i < NUM_BARS; i++)
 		{
 			//set all to be same then modify
-			bars[i].setHeight(B_HEIGHT);
-			bars[i].setWidth(B_WIDTH);
-			bars[i].setX(B_X);
-			bars[i].setY(B_Y);
+			if(i != HUD_BASE)
+			{
+				bars[i].setHeight(B_HEIGHT);
+				bars[i].setWidth(B_WIDTH);
+				bars[i].setX(B_X);
+				bars[i].setY(B_Y);
+			}
+			else
+			{
+				bars[i].setHeight(BASEHEIGHT);
+				bars[i].setWidth(BASEWIDTH);
+				bars[i].setX(BASEX);
+				bars[i].setY(BASEY);
+			}
 		}
 		bars[BAR_BACK].setHeight(2*B_HEIGHT);
 		bars[BAR_ENERGY].setY(B_Y+B_HEIGHT);

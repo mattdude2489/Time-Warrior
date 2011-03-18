@@ -83,6 +83,7 @@ protected:
 	Sprite * m_sprite;
 	int m_timeSinceLastUpdate, m_timeToRegen;
 	bool m_shouldDraw;
+	SDL_Rect m_hb;
 public:
 	Entity(){
 		for(int i = 0; i < NUM_STATS; ++i)
@@ -107,6 +108,10 @@ public:
 		setLocation(LOC_SCREEN, CENTER_SCREEN_X, CENTER_SCREEN_Y);
 		m_timeSinceLastUpdate = m_timeToRegen = 0;
 		m_shouldDraw = true;
+		m_hb.x = CENTER_SCREEN_X;
+		m_hb.y = CENTER_SCREEN_Y;
+		m_hb.w = m_sprite->getWidth();
+		m_hb.h = 5;
 	}
 	Stats getStats(){return m_stats;}
 	void setType(e_entityType type) {m_eType = type;}
@@ -119,33 +124,41 @@ public:
 	virtual void updateUnique(int a_time){}
 	void update(int a_time)
 	{
-	//	if(m_stats.energy[CURRENT] != m_stats.energy[MAX])
-	//	{
-			if(m_timeSinceLastUpdate == 0)
-				m_timeSinceLastUpdate = a_time;
-			m_timeToRegen += a_time - m_timeSinceLastUpdate;
-			if(m_timeToRegen > TIME_TO_REGEN)
-			{
-				m_stats.m_stats[ENERGY_CURRENT] += m_stats.m_stats[ENERGY_REGEN];
-				if(m_stats.m_stats[ENERGY_CURRENT] > m_stats.m_stats[ENERGY_MAX])
-					m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX];
-				m_timeToRegen = 0;
-			}
-	//	}
+	
+		if(m_timeSinceLastUpdate == 0)
+			m_timeSinceLastUpdate = a_time;
+		m_timeToRegen += a_time - m_timeSinceLastUpdate;
+		if(m_timeToRegen > TIME_TO_REGEN)
+		{
+			m_stats.m_stats[ENERGY_CURRENT] += m_stats.m_stats[ENERGY_REGEN];
+			if(m_stats.m_stats[ENERGY_CURRENT] > m_stats.m_stats[ENERGY_MAX])
+				m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX];
+			m_timeToRegen = 0;
+		}
+		m_hb.x = m_locations[LOC_SCREEN].x;
+		m_hb.y = m_locations[LOC_SCREEN].y;
+		m_hb.w = (((double)m_stats.getStatNumber(HEALTH_CURRENT)/(double)m_stats.getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
+
 		m_sprite->update(a_time);
 		updateUnique(a_time);
 	}
 	void draw(SDL_Surface * a_screen)
 	{
 		if(m_shouldDraw)
+		{
+			SDL_FillRect(a_screen, &m_hb, 0x00ff00);
 			m_sprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
+		}
 	}
 	void hit(int damage)
 	{
 		m_stats.m_stats[HEALTH_CURRENT] -= damage;
 		if(m_stats.m_stats[HEALTH_CURRENT] <0)
 			m_stats.m_stats[HEALTH_CURRENT] = 0;
-		m_stats.m_stats[ENERGY_CURRENT] -= damage;
+	}
+	void useEnergy(int a_energy)
+	{
+		m_stats.m_stats[ENERGY_CURRENT] -= a_energy;
 		if(m_stats.m_stats[ENERGY_CURRENT] <0)
 			m_stats.m_stats[ENERGY_CURRENT] = 0;
 	}
