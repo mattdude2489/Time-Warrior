@@ -52,12 +52,13 @@ class Magic : public Chip
 				break;
 			}
 		}
-		void setSprite(const char * a_fileName)
+		void setSprite(char * a_fileName)
 		{
 			const int maxFrames = 3;
-			m_sprite = new Sprite(a_fileName, maxFrames, 1, LEGEND+1);
+			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, 4);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
-			m_sprite->setHIndex(m_cSubSubType, maxFrames);
+//			m_sprite->setHIndex(m_cSubSubType, maxFrames);
+			m_sprite->restart(LEGEND+1);
 			m_isSpriteInit = true;
 			switch(m_cSubSubType)
 			{

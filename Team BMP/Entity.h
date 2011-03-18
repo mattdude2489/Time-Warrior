@@ -1,5 +1,5 @@
 #pragma once
-#include "Sprite.h"
+#include "SDL_Sprite.h"
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
@@ -80,7 +80,7 @@ protected:
 	Stats m_stats;
 	Location m_locations[NUM_LOCATIONS];//LOC_SCREEN/LOC_WORLD
 	e_entityType m_eType;
-	Sprite * m_sprite;
+	SDL_Sprite * m_sprite;
 	int m_timeSinceLastUpdate, m_timeToRegen;
 	bool m_shouldDraw;
 	SDL_Rect m_hb;
@@ -93,7 +93,7 @@ public:
 		m_timeSinceLastUpdate = m_timeToRegen =  0;
 		m_shouldDraw = true;
 	}
-	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite * a_sprite)
+	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
 		m_stats.m_stats[DEFENSE] = a_def;
 		m_stats.m_stats[INTELLECT] = a_int;

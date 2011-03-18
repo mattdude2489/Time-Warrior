@@ -266,7 +266,7 @@ void SDL_Sprite::update(const Uint32 & a_kruiMSPassed) {
 						//set the frame index to the last frame
 						m_uiCIndex = maxFrames - 1;
 						//change the sprite to animate backwards
-						m_iIndexIterator = -miIndexIterator;
+						m_iIndexIterator = -m_iIndexIterator;
 					}
 					//else if sprite loops to the beginning
 					else

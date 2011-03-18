@@ -9,7 +9,7 @@
 
 struct Tile
 {
-	Sprite* currentTexture;
+	SDL_Sprite* currentTexture;
 	bool collide;
 	int posX, posY;
 };

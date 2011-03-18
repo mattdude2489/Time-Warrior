@@ -180,6 +180,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SDL_Sprite.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\spoint.cpp"
 				>
 			</File>
@@ -317,6 +321,10 @@
 			</File>
 			<File
 				RelativePath=".\Player.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SDL_Sprite.h"
 				>
 			</File>
 			<File

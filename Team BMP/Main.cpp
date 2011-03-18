@@ -35,9 +35,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	bool running = true;
 
 	//loading a sprite to see if it works with the entity
-	Sprite test("Sprites/spriteTest.bmp", 3, 32, 4);
+	SDL_Sprite test("Sprites/spriteTest.bmp", 25, 32, 32, 4);
 	test.setTransparency(COLOR_TRANSPARENT);
-	test.setHIndex(2,3);
+	//test.setHIndex(2,3);
+	test.restart(2);
 	Player eTest(15,1,39,100,100,100,5,9,&test);
 	BasicFire chip;
 	BasicIce chip2;
@@ -48,9 +49,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	chip2.setOwner(&eTest);
 	chip2.levelUp();
 
-	Sprite aTest("Sprites/greenguy.bmp", 3, 32, 4);
+	SDL_Sprite aTest("Sprites/greenguy.bmp", 32, 44, 32, 4);
 	aTest.setTransparency(COLOR_TRANSPARENT);
-	aTest.setHIndex(2, 3);
+	//aTest.setHIndex(2, 3);
+	aTest.restart(2);
 	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &aTest);
 
 	eTest.setGauntletSlot(SLOT_ATK1, &chip);

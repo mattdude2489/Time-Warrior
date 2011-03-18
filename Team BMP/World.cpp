@@ -44,7 +44,7 @@ bool World::setWorld(char * fileName)
 			x = 0;
 			break;
 		case 'G':
-			hi.currentTexture = new Sprite("Sprites/grassTexture.bmp", 1, 0, 1);
+			hi.currentTexture = new SDL_Sprite("Sprites/grassTexture.bmp", 32, 32, 1, 1);
 			//hi.currentTexture->setHIndex(0, 1);
 			hi.posX = x;
 			hi.posY = y;

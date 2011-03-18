@@ -50,7 +50,7 @@ public:
 			m_gauntlet[a_slot] = a_chip;
 	}
 	//This is Alex's code...copypastaed. Because it works. Quite well in fact.
-	Player(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, Sprite * a_sprite)
+	Player(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
 		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite)
 	{
 		m_eType = PLAYER;
