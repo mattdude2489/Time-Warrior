@@ -7,11 +7,6 @@
 
 enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, NUM_BARS};
 
-#define COLOR_BACK			0x0000ff
-#define COLOR_HEALTH		0xff0000
-#define	COLOR_ENERGY		0x00ff00
-#define COLOR_BASE			0xffffff
-
 #define B_HEIGHT			10
 #define	B_WIDTH				100
 #define B_X					50
@@ -81,8 +76,8 @@ public:
 	void updateHud(Player * p, UserInput * ui)
 	{
 		handleInput(ui);
-		bars[BAR_HEALTH].setWidth( (int)((double)p->getStats().m_stats[HEALTH_CURRENT]/(double)p->getStats().m_stats[HEALTH_MAX]) * ONE_HUNDRED_PERCENT);
-		bars[BAR_ENERGY].setWidth( (int)((double)p->getStats().m_stats[ENERGY_CURRENT]/(double)p->getStats().m_stats[ENERGY_MAX]) * ONE_HUNDRED_PERCENT);
+		bars[BAR_HEALTH].setWidth(((double)p->getStats().m_stats[HEALTH_CURRENT]/(double)p->getStats().m_stats[HEALTH_MAX]) * ONE_HUNDRED_PERCENT);
+		bars[BAR_ENERGY].setWidth(((double)p->getStats().m_stats[ENERGY_CURRENT]/(double)p->getStats().m_stats[ENERGY_MAX]) * ONE_HUNDRED_PERCENT);
 		if(!p->getStats().compare(m_statWin.getStats()))
 		{
 			m_statWin.setPlayerStats(p);

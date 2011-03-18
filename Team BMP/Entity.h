@@ -5,6 +5,10 @@ enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REG
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_entityType{PLAYER, MINION, BOSS, CHIP};
 
+#define COLOR_BACK			0x0000ff
+#define COLOR_HEALTH		0xff0000
+#define	COLOR_ENERGY		0x00ff00
+#define COLOR_BASE			0xffffff
 #define	COLOR_TRANSPARENT		0xff00ff
 #define CENTER_SCREEN_X			400
 #define CENTER_SCREEN_Y			300
@@ -147,7 +151,7 @@ public:
 		if(m_shouldDraw)
 		{
 			if(m_eType != CHIP)
-				SDL_FillRect(a_screen, &m_hb, 0x00ff00);
+				SDL_FillRect(a_screen, &m_hb, COLOR_HEALTH);
 			m_sprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
 		}
 	}
