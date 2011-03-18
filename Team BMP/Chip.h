@@ -14,13 +14,13 @@ class Chip : public Entity
 		e_chipSubType m_cSubType;
 		e_chipSubSubType m_cSubSubType;
 		int m_level, m_cost, m_costLv, m_dmg, m_dmgLv;
-		bool m_isEquipped, m_isLaunched;
+		bool m_isEquipped, m_isActive;
 		Entity * m_owner;
 		Location m_target;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
-			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_isEquipped(false),m_isLaunched(false){m_eType = CHIP;}
+			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_isEquipped(false),m_isActive(false){m_eType = CHIP;}
 		e_chipType getType(){return m_cType;}
 		e_chipSubType getSubType(){return m_cSubType;}
 		e_chipSubSubType getSubSubType(){return m_cSubSubType;}
@@ -28,6 +28,7 @@ class Chip : public Entity
 		int getCost(){return m_cost;}
 		int getDamage(){return m_dmg;}
 		bool isEquipped(){return m_isEquipped;}
+		bool isActive(){return m_isActive;}
 		void toggleEquip(){m_isEquipped = !m_isEquipped;}
 		void setOwner(Entity * a_owner){m_owner = a_owner;}
 		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
@@ -46,12 +47,12 @@ class Chip : public Entity
 		virtual void applyEffect(){}//pass single entity as a parameter
 		void activate()//pass list of entities as a parameter
 		{
-			if(m_owner != NULL)
+			if(!m_isActive)
 			{
-				m_shouldDraw = true;
-				setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
-				if(m_cType == MAGIC && m_cSubSubType == BASIC)
-					m_isLaunched = true;
+				m_shouldDraw = m_isActive = true;
+				m_owner->useEnergy(m_cost);
+				if(m_owner != NULL && m_cType == MAGIC && m_cSubSubType == BASIC)
+					setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
 			}
 			/*
 			for(int i = 0; i < size; ++i)
@@ -61,6 +62,7 @@ class Chip : public Entity
 			}
 			*/
 		}
+		void deactivate(){m_shouldDraw = m_isActive = false;}
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
 };

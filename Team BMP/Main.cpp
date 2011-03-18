@@ -119,9 +119,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		world.draw(screen);
 		if(fightTest.collide(&chip))
 		{
-			printf("Hi, collision has occurred between chip1 and the player.");
-			int damn = chip.getDamage();
-			fightTest.hit(damn);
+			//printf("Hi, collision has occurred between chip1 and the player.");
+			fightTest.hit(chip.getDamage());
+			chip.deactivate();
 		}
 		//test.draw(screen, 100, 100);
 		Ghud.draw(screen);

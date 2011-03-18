@@ -172,12 +172,10 @@ public:
 	bool collide(Entity * otherEntity)
 	{
 		//If one of them is the chip; get rid of it. Right now. Seriously, just don't do it.
-		if(m_eType == CHIP)
-			return false;
-		if(m_eType == otherEntity->m_eType)
+		//If they are two players, you need not care. If it's two minions, need not care.
+		if(m_eType == CHIP || m_eType == otherEntity->m_eType)
 			return false;
 
-		//If they are two players, you need not care. If it's two minions, need not care. Two chips...why did they get this far?
 		//If two sprites collide, return true.
 		if(m_shouldDraw && otherEntity->getVisible())
 			if(m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *otherEntity->m_sprite, otherEntity->getLocationScreen().x, otherEntity->getLocationScreen().y))

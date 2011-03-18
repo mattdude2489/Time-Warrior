@@ -54,11 +54,9 @@ class Magic : public Chip
 		}
 		void setSprite(char * a_fileName)
 		{
-			const int maxFrames = 3;
-			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, 4);
+			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, LEGEND+1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
-//			m_sprite->setHIndex(m_cSubSubType, maxFrames);
-			m_sprite->restart(LEGEND+1);
+			m_sprite->restart(m_cSubSubType);
 			m_isSpriteInit = true;
 			switch(m_cSubSubType)
 			{
@@ -83,36 +81,34 @@ class Magic : public Chip
 		}
 		void updateUnique(int a_time)
 		{
-			if(m_isLaunched)
+			if(m_shouldDraw && m_isActive)
 			{
 				int max = 10;
 				double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
 				double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
-				if(deltaX == 0 && deltaY == 0)
-					m_isLaunched = m_shouldDraw = false;
-				else
+				if(deltaX != 0 && deltaY != 0)
 				{
-				bool switchSignX = deltaX < 0;
-				bool switchSignY = deltaY < 0;
-				switchSignIf(deltaX, switchSignX);
-				switchSignIf(deltaY, switchSignY);
-				if(deltaX > max || deltaY > max)
-				{
-					double slope = deltaY / deltaX;
-					if(deltaX > max)
+					bool switchSignX = deltaX < 0;
+					bool switchSignY = deltaY < 0;
+					switchSignIf(deltaX, switchSignX);
+					switchSignIf(deltaY, switchSignY);
+					if(deltaX > max || deltaY > max)
 					{
-						deltaX = max;
-						deltaY = slope * deltaX;
+						double slope = deltaY / deltaX;
+						if(deltaX > max)
+						{
+							deltaX = max;
+							deltaY = slope * deltaX;
+						}
+						else if(deltaY > max)
+						{
+							deltaY = max;
+							deltaX = deltaY / slope;
+						}
 					}
-					else if(deltaY > max)
-					{
-						deltaY = max;
-						deltaX = deltaY / slope;
-					}
-				}
-				switchSignIf(deltaX, switchSignX);
-				switchSignIf(deltaY, switchSignY);
-				move(LOC_SCREEN,(int)deltaX,(int)deltaY);
+					switchSignIf(deltaX, switchSignX);
+					switchSignIf(deltaY, switchSignY);
+					move(LOC_SCREEN,(int)deltaX,(int)deltaY);
 				}
 			}
 		}
