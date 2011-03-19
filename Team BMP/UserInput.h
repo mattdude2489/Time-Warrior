@@ -28,6 +28,7 @@ class UserInput
 		char getKeyLR() {return keyPressLeftRight;}
 		void setKey(char key) {initKey = key;}
 		char getKey() {return initKey;}
+		void resetClick() {mouseClick = 0;}
 		
 		//If the initKey is a W, A, S, or D, then set it to keyPressUpDown or keyPressLeftRight.
 		void updateUI(bool upDown)

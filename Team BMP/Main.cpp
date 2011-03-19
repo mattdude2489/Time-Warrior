@@ -30,7 +30,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	//the user interface variable
 	bool running = true;
-
 	//loading a sprite to see if it works with the entity
 	SDL_Sprite test("Sprites/spriteTest.bmp", 24, 32, 32, 4);
 	test.setTransparency(COLOR_TRANSPARENT);
@@ -63,7 +62,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	
 	AudioHandler ah;
 	ah.playMusic();
-
 
 	if(!world.getSuccess()){printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");}
 
@@ -104,7 +102,8 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 		eTest.handleInput(&ui, &world);
-
+		//reset the mouse input. Why was this so hard to figure out?
+		ui.resetClick();
 		//update
 		//test.update(passed);
 		world.update(passed);
@@ -113,6 +112,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 		//draw
 		//test.draw(screen, 100, 100);
+		//reset the screen.
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
 		/*if(fightTest.collide(&chip))
