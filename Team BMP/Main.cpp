@@ -42,6 +42,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Player eTest(15,1,39,100,100,100,5,9,&test);
 	BasicFire chip;
 	AdvancedFire chip2;
+	//ExpertFire chip2;
 	Hud Ghud;
 	World world;
 	chip.setOwner(&eTest);
@@ -96,7 +97,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 				case SDL_KEYDOWN: //This will work until we can get it without using a switch statement.
 					ui.setKey(e.key.keysym.sym);
-			//		test.zoom(200);
 					ui.updateUI(false);
 					break;
 				case SDL_KEYUP:
@@ -118,7 +118,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//test.draw(screen, 100, 100);
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
-		/*if(fightTest.collideSimple(&chip))
+		/*if(fightTest.collide(&chip))
 		{
 			printf("Hi, collision has occurred between chip1 and the player.\n");
 			fightTest.hit(chip.getDamage());

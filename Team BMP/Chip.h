@@ -87,11 +87,14 @@ class Chip : public Entity
 						collisionMade = true;
 					}
 				}
-				if((collisionMade && m_cType == MAGIC && m_cSubSubType == BASIC) || !m_firstIteration)
+				if((((m_cType == MAGIC && m_cSubSubType == BASIC)
+					|| (m_cType == WEAPON && m_cSubType == RANGE))
+					&& collisionMade) || !m_firstIteration)
 					deactivate();
 				else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
 				{
-					if((m_cType == MAGIC && m_cSubSubType != BASIC) || m_cType == WEAPON)
+					if((m_cType == MAGIC && m_cSubSubType != BASIC)
+						|| (m_cType == WEAPON && m_cSubType != RANGE))
 						m_firstIteration = false;
 				}
 			}

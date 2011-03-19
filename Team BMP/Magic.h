@@ -26,7 +26,7 @@ class Magic : public Chip
 				setLocation(LOC_SCREEN, ownerCenterX - m_sprite->getWidthOffsetCenter(), ownerCenterY - m_sprite->getHeightOffsetCenter());
 				break;
 			case EXPERT:
-				setLocation(LOC_SCREEN, m_target.x - m_sprite->getWidthOffsetCenter(), m_target.y - m_sprite->getHeightOffsetCenter());
+				setLocation(LOC_SCREEN, m_target.x, m_target.y);
 				break;
 			}
 		}
