@@ -12,10 +12,13 @@ enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
 #define COLOR_BASE				0xffffff
 #define	COLOR_TRANSPARENT		0xff00ff
 
-#define SCREEN_CENTER_X			400
-#define SCREEN_CENTER_Y			300
+#define SCREEN_WIDTH			800
+#define SCREEN_HEIGHT			600
+#define SCREEN_CENTER_X			(SCREEN_WIDTH/2)
+#define SCREEN_CENTER_Y			(SCREEN_HEIGHT/2)
+#define SCREEN_BPP				32
 
-#define TIME_TO_REGEN			500
+#define TIME_TO_REGEN			5000
 
 
 //each array in this next area the first part is current and second is max
@@ -129,11 +132,8 @@ public:
 	virtual void updateUnique(int a_time){}
 	void update(int a_time)
 	{
-		//m_sprite->start();
-		if(m_timeSinceLastUpdate == 0)
-			m_timeSinceLastUpdate = a_time;
-		m_timeToRegen += a_time - m_timeSinceLastUpdate;
-		if(m_timeToRegen > TIME_TO_REGEN)
+		m_timeToRegen += a_time;
+		if(m_timeToRegen >= TIME_TO_REGEN)
 		{
 			m_stats.m_stats[ENERGY_CURRENT] += m_stats.m_stats[ENERGY_REGEN];
 			if(m_stats.m_stats[ENERGY_CURRENT] > m_stats.m_stats[ENERGY_MAX])

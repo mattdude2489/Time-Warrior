@@ -13,10 +13,7 @@
 //Some debugging includes
 #include <stdio.h>
 
-#define WIDTH		800
-#define HEIGHT		600
-#define BPP			32
-#define FRAMEDELAY	20;
+#define FRAME_DELAY	20
 
 int main(int argc, char ** argv)//must be the header for sdl application and yes the arg stuff
 {
@@ -24,7 +21,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_Surface * screen = SDL_SetVideoMode(WIDTH, HEIGHT, BPP, SDL_SWSURFACE);
+	SDL_Surface * screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 	SDL_Event e;
 	UserInput ui; //This is the UserInput class.
 
@@ -76,7 +73,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		now = SDL_GetTicks();
 		passed = now - then;
 		then = now;
-		soon = now + FRAMEDELAY;
+		soon = now + FRAME_DELAY;
 
 		//input
 		while(SDL_PollEvent(&e)) //Polls the events of SDL
