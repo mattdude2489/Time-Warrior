@@ -60,6 +60,33 @@ class Chip : public Entity
 					m_sprite->setLoopToBegin(true);
 					activateUnique();
 				}
+				else
+				{
+					if(m_cType == MAGIC && m_cSubSubType == BASIC)
+					{
+						m_target.x -= m_sprite->getWidthOffsetCenter();
+						m_target.y -= m_sprite->getHeightOffsetCenter();
+					}
+				}
+			}
+		}
+		virtual void updateUniqueTwo(int a_time){}
+		void updateUnique(int a_time)
+		{
+			if(m_shouldDraw && m_owner && m_world)
+			{
+				updateUniqueTwo(a_time);
+				bool collisionMade = false;
+				for(int i = 0; i < m_world->getNumEntities(); ++i)
+				{
+					if(shouldApplyEffect(m_world->getEntity(i)))
+					{
+						applyEffect(m_world->getEntity(i));
+						collisionMade = true;
+					}
+				}
+				//if(collisionMade)// || && m_cSubSubType == BASIC))
+				//	deactivate();
 			}
 		}
 		void deactivate(){m_shouldDraw = false;}

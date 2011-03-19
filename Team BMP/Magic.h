@@ -15,20 +15,18 @@ class Magic : public Chip
 		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
 		void activateUnique()
 		{
+			int ownerCenterX = m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter();
+			int ownerCenterY = m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter();
+			m_target.x -= m_sprite->getWidthOffsetCenter();
+			m_target.y -= m_sprite->getHeightOffsetCenter();
 			switch(m_cSubSubType)
 			{
 			case BASIC:
-				setLocation(LOC_SCREEN,m_owner->getLocationScreen().x,m_owner->getLocationScreen().y);
-				break;
 			case ADVANCED:
-				{
-					int ownerCenterX = m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter();
-					int ownerCenterY = m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter();
-					setLocation(LOC_SCREEN, ownerCenterX - m_sprite->getWidthOffsetCenter(), ownerCenterY - m_sprite->getHeightOffsetCenter());
-				}
+				setLocation(LOC_SCREEN, ownerCenterX - m_sprite->getWidthOffsetCenter(), ownerCenterY - m_sprite->getHeightOffsetCenter());
 				break;
 			case EXPERT:
-				setLocation(LOC_SCREEN,m_target.x,m_target.y);
+				setLocation(LOC_SCREEN, m_target.x - m_sprite->getWidthOffsetCenter(), m_target.y - m_sprite->getHeightOffsetCenter());
 				break;
 			}
 		}
@@ -38,25 +36,21 @@ class Magic : public Chip
 				return false;
 			else
 			{
-				switch(m_cSubSubType)
+				switch(m_cSubType)
 				{
-				case BASIC:
-					//calc if collision
-					if(a_entity->getType() != PLAYER)
+				case DIVINE:
+					if(a_entity->getType() == PLAYER)
 						return collideSimple(a_entity);
 					else
 						return false;
 					break;
-				case ADVANCED:
-					//calc if within mini-radius
+				case LIGHTNING:
+				case FIRE:
+				case ICE:
 					if(a_entity->getType() != PLAYER)
 						return collideSimple(a_entity);
 					else
 						return false;
-					break;
-				case EXPERT:
-					//calc if within greater radius
-					return false;
 					break;
 				default:
 					return false;
@@ -68,18 +62,14 @@ class Magic : public Chip
 			switch(m_cSubType)
 			{
 			case DIVINE:
-				//apply elemental effect
+				if(a_entity->getType() == PLAYER)
+					a_entity->heal(m_dmg);
 				break;
 			case LIGHTNING:
-				//apply elemental effect
-				break;
 			case FIRE:
-				//apply elemental effect
+			case ICE:
 				if(a_entity->getType() != PLAYER)
 					a_entity->hit(m_dmg);
-				break;
-			case ICE:
-				//apply elemental effect
 				break;
 			}
 		}
@@ -109,7 +99,7 @@ class Magic : public Chip
 			if(a_shouldChange)
 				switchSign(a_num);
 		}
-		void updateUnique(int a_time)
+		void updateUniqueTwo(int a_time)
 		{
 			if(m_shouldDraw)
 			{
@@ -152,20 +142,6 @@ class Magic : public Chip
 					break;
 				case EXPERT:
 					break;
-				}
-				if(m_owner && m_world)
-				{
-					bool collisionMade = false;
-					for(int i = 0; i < m_world->getNumEntities(); ++i)
-					{
-						if(shouldApplyEffect(m_world->getEntity(i)))
-						{
-							applyEffect(m_world->getEntity(i));
-							collisionMade = true;
-						}
-					}
-					//if(collisionMade)// || && m_cSubSubType == BASIC))
-					//	deactivate();
 				}
 			}
 		}
