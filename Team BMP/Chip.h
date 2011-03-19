@@ -19,6 +19,7 @@ class Chip : public Entity
 		Entity * m_owner;
 		Location m_target;
 		World * m_world;
+		bool m_firstIteration;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
@@ -55,6 +56,7 @@ class Chip : public Entity
 			{
 				if(!m_shouldDraw)
 				{
+					m_firstIteration = true;
 					m_shouldDraw = true;
 					m_sprite->start();
 					m_sprite->setLoopToBegin(true);
@@ -85,8 +87,13 @@ class Chip : public Entity
 						collisionMade = true;
 					}
 				}
-				//if(collisionMade)// || && m_cSubSubType == BASIC))
-				//	deactivate();
+				if((collisionMade && m_cType == MAGIC && m_cSubSubType == BASIC) || !m_firstIteration)
+					deactivate();
+				else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
+				{
+					if((m_cType == MAGIC && m_cSubSubType != BASIC) || m_cType == WEAPON)
+						m_firstIteration = false;
+				}
 			}
 		}
 		void deactivate(){m_shouldDraw = false;}
