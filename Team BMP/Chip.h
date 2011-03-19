@@ -18,11 +18,12 @@ class Chip : public Entity
 		bool m_isEquipped;
 		Entity * m_owner;
 		Location m_target;
+		World * m_world;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),
-			m_isEquipped(false), m_owner(NULL){m_eType = CHIP;}
+			m_isEquipped(false), m_owner(NULL),m_world(NULL){m_eType = CHIP;}
 		e_chipType getType(){return m_cType;}
 		e_chipSubType getSubType(){return m_cSubType;}
 		e_chipSubSubType getSubSubType(){return m_cSubSubType;}
@@ -32,6 +33,7 @@ class Chip : public Entity
 		bool isEquipped(){return m_isEquipped;}
 		void toggleEquip(){m_isEquipped = !m_isEquipped;}
 		void setOwner(Entity * a_owner){m_owner = a_owner;}
+		void setWorld(World * a_world){m_world = a_world;}
 		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
 			//define for each spell
 		virtual void levelUpUnique(){}
@@ -45,9 +47,9 @@ class Chip : public Entity
 			levelUpUnique();
 		}
 		virtual void activateUnique(){}
-		virtual bool shouldApplyEffect(Entity * a_entity){return false;}//pass single entity as a parameter
-		virtual void applyEffect(Entity * a_entity){}//pass single entity as a parameter
-		void activate(World * a_world)//pass list of entities as a parameter
+		virtual bool shouldApplyEffect(Entity * a_entity){return false;}
+		virtual void applyEffect(Entity * a_entity){}
+		void activate()
 		{
 			if(m_owner)
 			{
@@ -57,20 +59,6 @@ class Chip : public Entity
 					m_sprite->start();
 					m_sprite->setLoopToBegin(true);
 					activateUnique();
-				}
-				else
-				{
-					bool collisionMade = false;
-					for(int i = 0; i < a_world->getNumEntities(); ++i)
-					{
-						if(shouldApplyEffect(a_world->getEntity(i)))
-						{
-							applyEffect(a_world->getEntity(i));
-							collisionMade = true;
-						}
-					}
-					if(!(!collisionMade && m_cType == MAGIC && m_cSubSubType == BASIC))
-						deactivate();
 				}
 			}
 		}

@@ -42,11 +42,17 @@ class Magic : public Chip
 				{
 				case BASIC:
 					//calc if collision
-					return collideSimple(a_entity);
+					if(a_entity->getType() != PLAYER)
+						return collideSimple(a_entity);
+					else
+						return false;
 					break;
 				case ADVANCED:
 					//calc if within mini-radius
-					return collideSimple(a_entity);
+					if(a_entity->getType() != PLAYER)
+						return collideSimple(a_entity);
+					else
+						return false;
 					break;
 				case EXPERT:
 					//calc if within greater radius
@@ -141,11 +147,25 @@ class Magic : public Chip
 					}
 					break;
 				case ADVANCED:
-					if(m_shouldDraw && m_sprite->getFrame() == 0)
-						m_shouldDraw = false;
+					//if(m_shouldDraw && m_sprite->getFrame() == 0)
+					//	m_shouldDraw = false;
 					break;
 				case EXPERT:
 					break;
+				}
+				if(m_owner && m_world)
+				{
+					bool collisionMade = false;
+					for(int i = 0; i < m_world->getNumEntities(); ++i)
+					{
+						if(shouldApplyEffect(m_world->getEntity(i)))
+						{
+							applyEffect(m_world->getEntity(i));
+							collisionMade = true;
+						}
+					}
+					//if(collisionMade)// || && m_cSubSubType == BASIC))
+					//	deactivate();
 				}
 			}
 		}

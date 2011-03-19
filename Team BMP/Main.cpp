@@ -45,8 +45,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Hud Ghud;
 	World world;
 	chip.setOwner(&eTest);
+	chip.setWorld(&world);
 	chip.levelUp();
 	chip2.setOwner(&eTest);
+	chip2.setWorld(&world);
 	chip2.levelUp();
 	SDL_Sprite aTest("Sprites/greenguy.bmp", 32, 33, 32, 4);
 	aTest.setTransparency(COLOR_TRANSPARENT);
@@ -116,7 +118,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//test.draw(screen, 100, 100);
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
-		/*if(fightTest.collide(&chip))
+		/*if(fightTest.collideSimple(&chip))
 		{
 			printf("Hi, collision has occurred between chip1 and the player.\n");
 			fightTest.hit(chip.getDamage());

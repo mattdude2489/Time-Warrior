@@ -10,7 +10,7 @@ Player::Player():Entity()
 		m_gauntlet[i] = NULL;
 }
 
-void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, World * a_world)
+void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY)
 {
 	if((a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2) && m_gauntlet[a_slot])
 	{
@@ -18,7 +18,7 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 		{
 			useEnergy(m_gauntlet[a_slot]->getCost());
 			m_gauntlet[a_slot]->setTarget(a_targetX, a_targetY);
-			m_gauntlet[a_slot]->activate(a_world);
+			m_gauntlet[a_slot]->activate();
 		}
 	}
 }
@@ -53,7 +53,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		move(LOC_SCREEN, -5, 0);
 	}
 	if(ui->getClick() == CLICK_LEFT)
-		activateGauntletAttack(SLOT_ATK1, ui->getMouseX(), ui->getMouseY(), a_world);
+		activateGauntletAttack(SLOT_ATK1, ui->getMouseX(), ui->getMouseY());
 	if(ui->getClick() == CLICK_RIGHT)
-		activateGauntletAttack(SLOT_ATK2, ui->getMouseX(), ui->getMouseY(), a_world);
+		activateGauntletAttack(SLOT_ATK2, ui->getMouseX(), ui->getMouseY());
 }
