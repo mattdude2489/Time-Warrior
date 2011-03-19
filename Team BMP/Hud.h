@@ -7,14 +7,10 @@
 
 enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, NUM_BARS};
 
-#define B_HEIGHT			10
-#define	B_WIDTH				100
-#define B_X					50
-#define B_Y					580
-#define BASEX				0
-#define BASEY				550
-#define BASEWIDTH			800
-#define BASEHEIGHT			50
+#define BAR_HEIGHT			10
+#define	BAR_WIDTH			100
+#define BAR_X				50
+#define BAR_Y				580
 
 #define ONE_HUNDRED_PERCENT	100
 
@@ -39,21 +35,21 @@ public:
 			//set all to be same then modify
 			if(i != HUD_BASE)
 			{
-				bars[i].setHeight(B_HEIGHT);
-				bars[i].setWidth(B_WIDTH);
-				bars[i].setX(B_X);
-				bars[i].setY(B_Y);
+				bars[i].setHeight(BAR_HEIGHT);
+				bars[i].setWidth(BAR_WIDTH);
+				bars[i].setX(BAR_X);
+				bars[i].setY(BAR_Y);
 			}
 			else
 			{
-				bars[i].setHeight(BASEHEIGHT);
-				bars[i].setWidth(BASEWIDTH);
-				bars[i].setX(BASEX);
-				bars[i].setY(BASEY);
+				bars[i].setHeight(HUD_HEIGHT);
+				bars[i].setWidth(HUD_WIDTH);
+				bars[i].setX(HUD_X);
+				bars[i].setY(HUD_Y);
 			}
 		}
-		bars[BAR_BACK].setHeight(2*B_HEIGHT);
-		bars[BAR_ENERGY].setY(B_Y+B_HEIGHT);
+		bars[BAR_BACK].setHeight(2*BAR_HEIGHT);
+		bars[BAR_ENERGY].setY(BAR_Y+BAR_HEIGHT);
 		colors[BAR_BACK] = COLOR_BACK;
 		colors[BAR_HEALTH] = COLOR_HEALTH;
 		colors[BAR_ENERGY] = COLOR_ENERGY;

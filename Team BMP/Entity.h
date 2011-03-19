@@ -6,20 +6,24 @@ enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REG
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
 
-#define COLOR_HEALTH			0xff0000
-#define	COLOR_ENERGY			0x00ff00
-#define COLOR_BACK				0x0000ff
-#define COLOR_BASE				0xffffff
-#define	COLOR_TRANSPARENT		0xff00ff
+#define COLOR_HEALTH		0xff0000
+#define	COLOR_ENERGY		0x00ff00
+#define COLOR_BACK			0x0000ff
+#define COLOR_BASE			0xffffff
+#define	COLOR_TRANSPARENT	0xff00ff
 
-#define SCREEN_WIDTH			800
-#define SCREEN_HEIGHT			600
-#define SCREEN_CENTER_X			(SCREEN_WIDTH/2)
-#define SCREEN_CENTER_Y			(SCREEN_HEIGHT/2)
-#define SCREEN_BPP				32
+#define SCREEN_WIDTH		800
+#define SCREEN_HEIGHT		600
+#define SCREEN_CENTER_X		(SCREEN_WIDTH/2)
+#define SCREEN_CENTER_Y		(SCREEN_HEIGHT/2)
+#define SCREEN_BPP			32
 
-#define TIME_TO_REGEN			5000
+#define HUD_WIDTH			SCREEN_WIDTH
+#define HUD_HEIGHT			50
+#define HUD_X				0
+#define HUD_Y				(SCREEN_HEIGHT - HUD_HEIGHT)
 
+#define TIME_TO_REGEN		5000
 
 //each array in this next area the first part is current and second is max
 struct Stats
