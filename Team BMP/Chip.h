@@ -2,6 +2,7 @@
 //Author: John Parks
 #pragma once
 #include "Entity.h"
+#include "World.h"
 
 enum e_chipType {ARMOR, MAGIC, WEAPON};
 enum e_chipSubType {HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE};
@@ -46,7 +47,7 @@ class Chip : public Entity
 		virtual void activateUnique(){}
 		virtual bool shouldApplyEffect(Entity * a_entity){return false;}//pass single entity as a parameter
 		virtual void applyEffect(Entity * a_entity){}//pass single entity as a parameter
-		void activate()//pass list of entities as a parameter
+		void activate(World * a_world)//pass list of entities as a parameter
 		{
 			if(m_owner)
 			{
@@ -60,16 +61,14 @@ class Chip : public Entity
 				else
 				{
 					bool collisionMade = false;
-					
-					/*for(int i = 0; i < size; ++i)
+					for(int i = 0; i < a_world->getNumEntities(); ++i)
 					{
-						if(shouldApplyEffect(a_entity))
+						if(shouldApplyEffect(a_world->getEntity(i)))
 						{
-							applyEffect(a_entity);
+							applyEffect(a_world->getEntity(i));
 							collisionMade = true;
 						}
-					}*/
-					
+					}
 					if(!(!collisionMade && m_cType == MAGIC && m_cSubSubType == BASIC))
 						deactivate();
 				}

@@ -5,8 +5,6 @@
 #include "Entity.h"
 #include "templateVector.h"
 
-#include <stdio.h>
-
 struct Tile
 {
 	SDL_Sprite * currentTexture;
@@ -28,4 +26,6 @@ public:
 	void setAnEntity(Entity * newEntity){m_mapOfEntities.add(newEntity);}
 	bool getSuccess() {return m_success;}
 	bool setWorld(char * fileName);
+	int getNumEntities(){return m_mapOfEntities.getSize();}
+	Entity * getEntity(int a_entity){return m_mapOfEntities.get(a_entity);}
 };

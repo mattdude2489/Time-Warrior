@@ -104,7 +104,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 			}
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
-		eTest.handleInput(&ui);
+		eTest.handleInput(&ui, &world);
 
 		//update
 		//test.update(passed);
@@ -116,12 +116,12 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//test.draw(screen, 100, 100);
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
-		if(fightTest.collide(&chip))
+		/*if(fightTest.collide(&chip))
 		{
 			printf("Hi, collision has occurred between chip1 and the player.\n");
 			fightTest.hit(chip.getDamage());
 			chip.deactivate();
-		}
+		}*/
 		//test.draw(screen, 100, 100);
 		Ghud.draw(screen);
 

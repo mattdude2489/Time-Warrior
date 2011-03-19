@@ -46,7 +46,7 @@ class Magic : public Chip
 					break;
 				case ADVANCED:
 					//calc if within mini-radius
-					return false;
+					return collideSimple(a_entity);
 					break;
 				case EXPERT:
 					//calc if within greater radius
@@ -69,7 +69,8 @@ class Magic : public Chip
 				break;
 			case FIRE:
 				//apply elemental effect
-				a_entity->hit(m_dmg);
+				if(a_entity->getType() != PLAYER)
+					a_entity->hit(m_dmg);
 				break;
 			case ICE:
 				//apply elemental effect

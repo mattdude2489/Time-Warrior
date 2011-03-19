@@ -7,6 +7,7 @@
 #include "Armor.h"
 #include "Magic.h"
 #include "Weapon.h"
+#include "World.h"
 
 enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
 
@@ -16,8 +17,8 @@ private:
 	Chip * m_gauntlet[NUM_SLOTS];
 public:
 	Player();
-	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY);
-	void handleInput(UserInput * ui);
+	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, World * a_world);
+	void handleInput(UserInput * ui, World * a_world);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 	{
 		bool isValid = false;
