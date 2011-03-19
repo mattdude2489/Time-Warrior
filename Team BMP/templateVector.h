@@ -90,4 +90,19 @@ public:
 	{
 		m_size = a_size;
 	}
+
+	/** Swap function.
+	@param: int a, int b
+	Swaps the two positions of a and b in the vector. **/
+
+	void swap(int a_first, int a_second)
+	{
+		SOMETHING p_swapHelp;
+		//make sure it can't go out of bounds.
+		if(a_first > m_size || a_second > m_size || a_first < 0 || a_second < 0)
+			return;
+		p_swapHelp = m_data[a_first];
+		m_data[a_first] = m_data[a_second];
+		m_data[a_second] = p_swapHelp;
+	}
 };

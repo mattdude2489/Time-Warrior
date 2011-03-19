@@ -56,14 +56,35 @@ bool World::setWorld(char * fileName)
 
 void World::draw(SDL_Surface * a_screen)
 {
+	//Texture draw.
 	for(int k = 0; k < m_mapOfWorld.getSize(); k++)
 		m_mapOfWorld.get(k).currentTexture->draw(a_screen, 32*m_mapOfWorld.get(k).pos.x, 32*m_mapOfWorld.get(k).pos.y);
+	//Entities draw.
 	for(int i = 0; i < m_mapOfEntities.getSize(); i++)
+	{
 		m_mapOfEntities.get(i)->draw(a_screen);
+	}
 }
 
 void World::update(Uint32 a_timePassed)
 {
 	for(int i = 0; i < m_mapOfEntities.getSize(); i++)
 		m_mapOfEntities.get(i)->update(a_timePassed);
+	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
+	sortOnYPosition();
+}
+
+void World::sortOnYPosition()
+{
+	//Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
+	for(int i = 0; i < m_mapOfEntities.getSize(); ++i)
+	{
+		for(int k = i; k < m_mapOfEntities.getSize(); ++k)
+		{
+			if(m_mapOfEntities.get(i)->getLocationScreen().y > m_mapOfEntities.get(k)->getLocationScreen().y)
+			{
+				m_mapOfEntities.swap(i, k);
+			}
+		}
+	}
 }

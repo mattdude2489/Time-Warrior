@@ -28,4 +28,5 @@ public:
 	bool setWorld(char * fileName);
 	int getNumEntities(){return m_mapOfEntities.getSize();}
 	Entity * getEntity(int a_entity){return m_mapOfEntities.get(a_entity);}
+	void sortOnYPosition();
 };
