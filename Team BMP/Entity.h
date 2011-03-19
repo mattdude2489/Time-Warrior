@@ -87,7 +87,7 @@ protected:
 	Location m_locations[NUM_LOCATIONS];//LOC_SCREEN/LOC_WORLD
 	e_entityType m_eType;
 	SDL_Sprite * m_sprite;
-	int m_timeSinceLastUpdate, m_timeToRegen;
+	int m_timeToRegen;
 	bool m_shouldDraw;
 	SDL_Rect m_hb;
 public:
@@ -102,7 +102,7 @@ public:
 		m_stats.m_stats[RESISTANCE_ICE] = a_iRes;
 		m_stats.m_stats[RESISTANCE_LIGHTNING] = a_lRes;
 		m_stats.m_stats[ENERGY_REGEN] = 5;
-		m_timeSinceLastUpdate = m_timeToRegen =  0;
+		m_timeToRegen =  0;
 		setLocation(LOC_SCREEN, SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_shouldDraw = false;
 	}
@@ -129,24 +129,24 @@ public:
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
 	void move(int a_locIndex, int a_deltaX, int a_deltaY){m_locations[a_locIndex].x += a_deltaX; m_locations[a_locIndex].y += a_deltaY;}
 	void setLocation(int a_locIndex, int a_x, int a_y){m_locations[a_locIndex].x = a_x; m_locations[a_locIndex].y = a_y;}
-	virtual void updateUnique(int a_time){}
-	void update(int a_time)
+	virtual void updateUnique(int a_timePassed){}
+	void update(int a_timePassed)
 	{
-		m_timeToRegen += a_time;
+		m_timeToRegen += a_timePassed;
 		if(m_timeToRegen >= TIME_TO_REGEN)
 		{
+			m_timeToRegen = 0;
 			m_stats.m_stats[ENERGY_CURRENT] += m_stats.m_stats[ENERGY_REGEN];
 			if(m_stats.m_stats[ENERGY_CURRENT] > m_stats.m_stats[ENERGY_MAX])
 				m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX];
-			m_timeToRegen = 0;
 			if(m_eType == DUMMY)
 				heal(m_stats.m_stats[ENERGY_REGEN]);
 		}
 		m_hb.x = m_locations[LOC_SCREEN].x;
 		m_hb.y = m_locations[LOC_SCREEN].y;
 		m_hb.w = (((double)m_stats.getStatNumber(HEALTH_CURRENT)/(double)m_stats.getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
-		m_sprite->update(a_time);
-		updateUnique(a_time);
+		m_sprite->update(a_timePassed);
+		updateUnique(a_timePassed);
 	}
 	void draw(SDL_Surface * a_screen)
 	{

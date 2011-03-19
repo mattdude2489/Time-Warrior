@@ -62,8 +62,8 @@ void World::draw(SDL_Surface * a_screen)
 		m_mapOfEntities.get(i)->draw(a_screen);
 }
 
-void World::update(Uint32 timePassed)
+void World::update(Uint32 a_timePassed)
 {
 	for(int i = 0; i < m_mapOfEntities.getSize(); i++)
-		m_mapOfEntities.get(i)->update(timePassed);
+		m_mapOfEntities.get(i)->update(a_timePassed);
 }

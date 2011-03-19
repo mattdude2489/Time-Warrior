@@ -99,7 +99,7 @@ class Magic : public Chip
 			if(a_shouldChange)
 				switchSign(a_num);
 		}
-		void updateUniqueTwo(int a_time)
+		void updateUniqueTwo(int a_timePassed)
 		{
 			if(m_shouldDraw)
 			{

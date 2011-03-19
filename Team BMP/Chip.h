@@ -72,12 +72,12 @@ class Chip : public Entity
 				}
 			}
 		}
-		virtual void updateUniqueTwo(int a_time){}
-		void updateUnique(int a_time)
+		virtual void updateUniqueTwo(int a_timePassed){}
+		void updateUnique(int a_timePassed)
 		{
 			if(m_shouldDraw && m_owner && m_world)
 			{
-				updateUniqueTwo(a_time);
+				updateUniqueTwo(a_timePassed);
 				bool collisionMade = false;
 				for(int i = 0; i < m_world->getNumEntities(); ++i)
 				{
