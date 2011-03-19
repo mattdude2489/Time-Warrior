@@ -7,15 +7,6 @@
 
 enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, NUM_BARS};
 
-#define BAR_HEIGHT			10
-#define	BAR_WIDTH			100
-#define BAR_X				50
-#define BAR_Y				580
-
-#define ONE_HUNDRED_PERCENT	100
-
-#define STATBUTTONSETTINGS	15,15,500,580
-
 class Hud
 {
 private:
@@ -54,20 +45,16 @@ public:
 		colors[BAR_HEALTH] = COLOR_HEALTH;
 		colors[BAR_ENERGY] = COLOR_ENERGY;
 		m_statWin.InitText(m_myFont.getFont());
-		m_statButton.setUpButton(STATBUTTONSETTINGS);
+		m_statButton.setUpButton(STAT_BUTTON_SETTINGS);
 		m_showStats = false;
 		//m_text.setMessage("testing");
 	}
 	void handleInput(UserInput * ui)
 	{
-		if(m_statButton.wasClicked(ui)&&m_showStats == false)
-		{
+		if(m_statButton.wasClicked(ui) && !m_showStats)
 			m_showStats = true;
-		}
-		else if(m_statButton.wasClicked(ui)&&m_showStats == true)
-		{
+		else if(m_statButton.wasClicked(ui) && m_showStats)
 			m_showStats = false;
-		}
 	}
 	void updateHud(Player * p, UserInput * ui)
 	{
@@ -80,13 +67,9 @@ public:
 	{
 		//m_text.printMessage(screen, 0,0);
 		for(int i = 0; i < NUM_BARS; i++)
-		{
 			SDL_FillRect(screen, &bars[i], colors[i]);
-		}
 		m_statButton.draw(screen);
 		if(m_showStats)
-		{
 			m_statWin.draw(screen);
-		}
 	}
 };

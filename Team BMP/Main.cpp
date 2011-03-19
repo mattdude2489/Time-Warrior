@@ -102,13 +102,11 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 		eTest.handleInput(&ui, &world);
+		//update
+		world.update(passed);
+		Ghud.updateHud(&eTest, &ui);
 		//reset the mouse input. Why was this so hard to figure out?
 		ui.resetClick();
-		//update
-		//test.update(passed);
-		world.update(passed);
-
-		Ghud.updateHud(&eTest, &ui);
 
 		//draw
 		//test.draw(screen, 100, 100);
