@@ -32,7 +32,7 @@ class Magic : public Chip
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
-			if(a_entity->getType() == CHIP)
+			if(a_entity->getType() == CHIP || a_entity == m_owner)
 				return false;
 			else
 			{

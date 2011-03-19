@@ -54,7 +54,7 @@ bool World::setWorld(char * fileName)
 	return m_success;
 }
 
-void World::draw(SDL_Surface *a_screen)
+void World::draw(SDL_Surface * a_screen)
 {
 	for(int k = 0; k < m_mapOfWorld.getSize(); k++)
 		m_mapOfWorld.get(k).currentTexture->draw(a_screen, 32*m_mapOfWorld.get(k).pos.x, 32*m_mapOfWorld.get(k).pos.y);

@@ -4,7 +4,7 @@
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
-enum e_entityType{PLAYER, MINION, BOSS, CHIP};
+enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
 
 #define COLOR_HEALTH			0xff0000
 #define	COLOR_ENERGY			0x00ff00
@@ -15,7 +15,7 @@ enum e_entityType{PLAYER, MINION, BOSS, CHIP};
 #define SCREEN_CENTER_X			400
 #define SCREEN_CENTER_Y			300
 
-#define TIME_TO_REGEN			5000
+#define TIME_TO_REGEN			500
 
 
 //each array in this next area the first part is current and second is max
@@ -114,6 +114,7 @@ public:
 		m_hb.y = SCREEN_CENTER_Y;
 		m_hb.w = m_sprite->getWidth();
 		m_hb.h = 5;
+		m_eType = DUMMY;
 	}
 	Stats getStats(){return m_stats;}
 	void setType(e_entityType type) {m_eType = type;}
@@ -138,6 +139,8 @@ public:
 			if(m_stats.m_stats[ENERGY_CURRENT] > m_stats.m_stats[ENERGY_MAX])
 				m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX];
 			m_timeToRegen = 0;
+			if(m_eType == DUMMY)
+				heal(m_stats.m_stats[ENERGY_REGEN]);
 		}
 		m_hb.x = m_locations[LOC_SCREEN].x;
 		m_hb.y = m_locations[LOC_SCREEN].y;
@@ -184,9 +187,9 @@ public:
 	{
 		//If one of them is the chip; get rid of it. Right now. Seriously, just don't do it.
 		//If they are two players, you need not care. If it's two minions, need not care.
-		if(m_eType == CHIP || m_eType == otherEntity->m_eType)
+		if(m_eType == CHIP || otherEntity->m_eType == CHIP || m_eType == otherEntity->m_eType)
 			return false;
-		//If two sprites collide, return true.
-		return collideSimple(otherEntity);
+		else
+			return collideSimple(otherEntity);
 	}
 };
