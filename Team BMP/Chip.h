@@ -6,7 +6,7 @@
 
 enum e_chipType {ARMOR, MAGIC, WEAPON};
 enum e_chipSubType {HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE};
-enum e_chipSubSubType {BASIC, ADVANCED, EXPERT, LEGEND};
+enum e_chipSubSubType {BASIC, ADVANCED, EXPERT, NUM_CHIP_LEVELS};
 
 class Chip : public Entity
 {
@@ -36,6 +36,20 @@ class Chip : public Entity
 		void setOwner(Entity * a_owner){m_owner = a_owner;}
 		void setWorld(World * a_world){m_world = a_world;}
 		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
+		int getOwnerCenterX()
+		{
+			if(m_owner)
+				return m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter();
+			else
+				return 0;
+		}
+		int getOwnerCenterY()
+		{
+			if(m_owner)
+				return m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter();
+			else
+				return 0;
+		}
 			//define for each spell
 		virtual void levelUpUnique(){}
 		void levelUp()
@@ -102,4 +116,5 @@ class Chip : public Entity
 		void deactivate(){m_shouldDraw = false;}
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
+		virtual void setSprite(char * a_fileName){}
 };

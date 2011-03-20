@@ -15,15 +15,13 @@ class Magic : public Chip
 		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
 		void activateUnique()
 		{
-			int ownerCenterX = m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter();
-			int ownerCenterY = m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter();
 			m_target.x -= m_sprite->getWidthOffsetCenter();
 			m_target.y -= m_sprite->getHeightOffsetCenter();
 			switch(m_cSubSubType)
 			{
 			case BASIC:
 			case ADVANCED:
-				setLocation(LOC_SCREEN, ownerCenterX - m_sprite->getWidthOffsetCenter(), ownerCenterY - m_sprite->getHeightOffsetCenter());
+				setLocation(LOC_SCREEN, getOwnerCenterX() - m_sprite->getWidthOffsetCenter(), getOwnerCenterY() - m_sprite->getHeightOffsetCenter());
 				break;
 			case EXPERT:
 				setLocation(LOC_SCREEN, m_target.x, m_target.y);
@@ -75,7 +73,7 @@ class Magic : public Chip
 		}
 		void setSprite(char * a_fileName)
 		{
-			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, LEGEND+1);
+			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, NUM_CHIP_LEVELS+1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			switch(m_cSubSubType)
 			{
@@ -88,8 +86,6 @@ class Magic : public Chip
 			case EXPERT:
 				m_sprite->stretch(300,300);
 				break;
-			case LEGEND:
-				break;
 			}
 			m_sprite->setRIndex(m_cSubSubType);
 		}
@@ -101,47 +97,34 @@ class Magic : public Chip
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
-			if(m_shouldDraw)
+			if(m_shouldDraw && m_cSubSubType == BASIC)
 			{
-				switch(m_cSubSubType)
+				int max = 10;
+				double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
+				double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
+				if(deltaX != 0 && deltaY != 0)
 				{
-				case BASIC:
+					bool switchSignX = deltaX < 0;
+					bool switchSignY = deltaY < 0;
+					switchSignIf(deltaX, switchSignX);
+					switchSignIf(deltaY, switchSignY);
+					if(deltaX > max || deltaY > max)
 					{
-						int max = 10;
-						double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
-						double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
-						if(deltaX != 0 && deltaY != 0)
+						double slope = deltaY / deltaX;
+						if(deltaX > max)
 						{
-							bool switchSignX = deltaX < 0;
-							bool switchSignY = deltaY < 0;
-							switchSignIf(deltaX, switchSignX);
-							switchSignIf(deltaY, switchSignY);
-							if(deltaX > max || deltaY > max)
-							{
-								double slope = deltaY / deltaX;
-								if(deltaX > max)
-								{
-									deltaX = max;
-									deltaY = slope * deltaX;
-								}
-								else if(deltaY > max)
-								{
-									deltaY = max;
-									deltaX = deltaY / slope;
-								}
-							}
-							switchSignIf(deltaX, switchSignX);
-							switchSignIf(deltaY, switchSignY);
-							move(LOC_SCREEN,(int)deltaX,(int)deltaY);
+							deltaX = max;
+							deltaY = slope * deltaX;
+						}
+						else if(deltaY > max)
+						{
+							deltaY = max;
+							deltaX = deltaY / slope;
 						}
 					}
-					break;
-				case ADVANCED:
-					//if(m_shouldDraw && m_sprite->getFrame() == 0)
-					//	m_shouldDraw = false;
-					break;
-				case EXPERT:
-					break;
+					switchSignIf(deltaX, switchSignX);
+					switchSignIf(deltaY, switchSignY);
+					move(LOC_SCREEN,(int)deltaX,(int)deltaY);
 				}
 			}
 		}
@@ -177,13 +160,13 @@ class ExpertDivine : public Divine
 		char * getName(){return "Sanctuary";}
 		char * getDescription(){return "Divine area-of-effect.";}
 };
-class LegendDivine : public Divine
+/*class LegendDivine : public Divine
 {
 	public:
 		LegendDivine():Divine(LEGEND){}
 		char * getName(){return "Angel";}
 		char * getDescription(){return "Divine guardian.";}
-};
+};*/
 class Lightning : public Magic
 {
 	public:
@@ -210,13 +193,13 @@ class ExpertLightning : public Lightning
 		char * getName(){return "Thunderstorm";}
 		char * getDescription(){return "Lightning area-of-effect.";}
 };
-class LegendLightning : public Lightning
+/*class LegendLightning : public Lightning
 {
 	public:
 		LegendLightning():Lightning(LEGEND){}
 		char * getName(){return "Thunderbird";}
 		char * getDescription(){return "Lightning guardian.";}
-};
+};*/
 class Fire : public Magic
 {
 	public:
@@ -243,13 +226,13 @@ class ExpertFire : public Fire
 		char * getName(){return "Armageddon";}
 		char * getDescription(){return "Fire area-of-effect.";}
 };
-class LegendFire : public Fire
+/*class LegendFire : public Fire
 {
 	public:
 		LegendFire():Fire(LEGEND){}
 		char * getName(){return "Phoenix";}
 		char * getDescription(){return "Fire guardian.";}
-};
+};*/
 class Ice : public Magic
 {
 	public:
@@ -276,10 +259,10 @@ class ExpertIce : public Ice
 		char * getName(){return "Blizzard";}
 		char * getDescription(){return "Ice area-of-effect.";}
 };
-class LegendIce : public Ice
+/*class LegendIce : public Ice
 {
 	public:
 		LegendIce():Ice(LEGEND){}
 		char * getName(){return "Roc";}
 		char * getDescription(){return "Ice guardian.";}
-};
+};*/
