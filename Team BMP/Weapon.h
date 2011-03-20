@@ -34,17 +34,17 @@ class Weapon : public Chip
 			case EXPERT:
 				switch(m_direction)
 				{
-				case 'a':
-				case 'd':
+				case KEY_LEFT:
+				case KEY_RIGHT:
 					m_rotateDeg = 270;
 					m_sprite->rotate270();
-					if(m_direction == 'd')
+					if(m_direction == KEY_RIGHT)
 					{
 						m_isFlipH = true;
 						m_sprite->flipHorizontal();
 					}
 					break;
-				case 's':
+				case KEY_DOWN:
 					m_isFlipH = m_isFlipV = true;
 					m_sprite->flipHorizontal();
 					m_sprite->flipVertical();
@@ -52,14 +52,14 @@ class Weapon : public Chip
 				}
 				switch(m_direction)
 				{
-				case 'w':
-				case 'a':
+				case KEY_UP:
+				case KEY_LEFT:
 					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
 					break;
-				case 's':
+				case KEY_DOWN:
 					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter());
 					break;
-				case 'd':
+				case KEY_RIGHT:
 					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter(), m_owner->getLocationScreen().y);
 					break;
 				}

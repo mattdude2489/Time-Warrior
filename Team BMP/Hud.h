@@ -5,7 +5,12 @@
 #include "trueTextPrinter.h"
 #include "ButtonAndWIndow.h"
 
+#define ONE_HUNDRED_PERCENT	100
+
+enum e_bar {BAR_WIDTH = ONE_HUNDRED_PERCENT, BAR_HEIGHT = HUD_HEIGHT/2, BAR_X = HUD_X, BAR_Y = HUD_Y};
 enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, NUM_BARS};
+
+#define STAT_BUTTON_SETTINGS	HUD_HEIGHT,HUD_HEIGHT,((HUD_X+HUD_WIDTH)-HUD_HEIGHT),HUD_Y
 
 class Hud
 {

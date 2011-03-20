@@ -4,6 +4,7 @@
 #pragma once //Almost forgot this!
 
 enum e_mouseClick {CLICK_NONE, CLICK_LEFT, CLICK_MIDDLE, CLICK_RIGHT};
+enum e_keyboardKey {KEY_NONE = 'n', KEY_UP = 'w', KEY_LEFT = 'a', KEY_DOWN = 's', KEY_RIGHT = 'd'};
 
 class UserInput
 {
@@ -15,7 +16,7 @@ class UserInput
 		char initKey;
 
 	public:
-		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown('n'), keyPressLeftRight('n'), initKey('n'){} //Basic constructor.
+		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE){} //Basic constructor.
 		void setMouse(int x, int y) {mouseX = x; mouseY = y;} 
 		int getMouseX() {return mouseX;}
 		int getMouseY() {return mouseY;}
@@ -35,26 +36,26 @@ class UserInput
 		{
 			if(upDown) //If the value is 0, false, then the key is up. UNSET the values.
 			{
-				if(initKey != 'n')
+				if(initKey != KEY_NONE)
 				{
-					if(initKey == 'w' || initKey == 's')
-						keyPressUpDown = 'n';
-					if(initKey == 'a' || initKey == 'd')
-						keyPressLeftRight = 'n';
+					if(initKey == KEY_UP || initKey == KEY_DOWN)
+						keyPressUpDown = KEY_NONE;
+					if(initKey == KEY_LEFT || initKey == KEY_RIGHT)
+						keyPressLeftRight = KEY_NONE;
 					if(!(initKey == 'm' || initKey == 'i'))
-						initKey = 'n'; //Reset the initial Key.
+						initKey = KEY_NONE; //Reset the initial Key.
 				}
 			}
 			else
 				//Set the values.
-				if(initKey != 'n')
+				if(initKey != KEY_NONE)
 				{
-					if(initKey == 'w' || initKey == 's')
+					if(initKey == KEY_UP || initKey == KEY_DOWN)
 						keyPressUpDown = initKey;
-					if(initKey == 'a' || initKey == 'd')
+					if(initKey == KEY_LEFT || initKey == KEY_RIGHT)
 						keyPressLeftRight = initKey;
 					if(!(initKey == 'm' || initKey == 'i'))
-						initKey = 'n'; //Reset the initial Key.
+						initKey = KEY_NONE; //Reset the initial Key.
 				}
 		}
 };
