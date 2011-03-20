@@ -17,14 +17,16 @@ class Weapon : public Chip
 			switch(m_direction)
 			{
 			case KEY_UP:
+				setLocation(LOC_SCREEN, (m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter()) - m_sprite->getWidthOffsetCenter(), (m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter()) - m_sprite->getHeight());
+				break;
 			case KEY_LEFT:
-				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
+				setLocation(LOC_SCREEN, (m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter()) - m_sprite->getWidth(), (m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter()) - m_sprite->getHeightOffsetCenter());
 				break;
 			case KEY_DOWN:
-				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter());
+				setLocation(LOC_SCREEN, (m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter()) - m_sprite->getWidthOffsetCenter(), m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter());
 				break;
 			case KEY_RIGHT:
-				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter(), m_owner->getLocationScreen().y);
+				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter(), (m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter()) - m_sprite->getHeightOffsetCenter());
 				break;
 			}
 		}
