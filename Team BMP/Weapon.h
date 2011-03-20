@@ -50,7 +50,19 @@ class Weapon : public Chip
 					m_sprite->flipVertical();
 					break;
 				}
-				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
+				switch(m_direction)
+				{
+				case 'w':
+				case 'a':
+					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
+					break;
+				case 's':
+					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter());
+					break;
+				case 'd':
+					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter(), m_owner->getLocationScreen().y);
+					break;
+				}
 				break;
 			}
 		}
@@ -111,7 +123,7 @@ class BasicSlash : public Slash
 		char * getDescription(){return "Slash attack.";}
 		void setSprite(char * a_fileName)
 		{
-			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, 1);
+			m_sprite = new SDL_Sprite(a_fileName, 32, 16, 32, 1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			//m_sprite->setRIndex(m_cSubSubType);
 		}
