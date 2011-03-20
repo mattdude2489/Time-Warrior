@@ -17,16 +17,16 @@ class Weapon : public Chip
 			switch(m_direction)
 			{
 			case KEY_UP:
-				setLocation(LOC_SCREEN, getOwnerCenterX() - m_sprite->getWidthOffsetCenter(), getOwnerCenterY() - m_sprite->getHeight());
+				setLocation(LOC_SCREEN, centerAroundOwnerCenterX(), getOwnerCenterY() - m_sprite->getHeight());
 				break;
 			case KEY_LEFT:
-				setLocation(LOC_SCREEN, getOwnerCenterX() - m_sprite->getWidth(), getOwnerCenterY() - m_sprite->getHeightOffsetCenter());
+				setLocation(LOC_SCREEN, getOwnerCenterX() - m_sprite->getWidth(), centerAroundOwnerCenterY());
 				break;
 			case KEY_DOWN:
-				setLocation(LOC_SCREEN, getOwnerCenterX() - m_sprite->getWidthOffsetCenter(), getOwnerCenterY());
+				setLocation(LOC_SCREEN, centerAroundOwnerCenterX(), getOwnerCenterY());
 				break;
 			case KEY_RIGHT:
-				setLocation(LOC_SCREEN, getOwnerCenterX(), getOwnerCenterY() - m_sprite->getHeightOffsetCenter());
+				setLocation(LOC_SCREEN, getOwnerCenterX(), centerAroundOwnerCenterY());
 				break;
 			}
 		}

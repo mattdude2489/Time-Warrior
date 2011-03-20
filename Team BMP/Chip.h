@@ -52,6 +52,8 @@ class Chip : public Entity
 			else
 				return 0;
 		}
+		int centerAroundOwnerCenterX(){return getOwnerCenterX() - m_sprite->getWidthOffsetCenter();}
+		int centerAroundOwnerCenterY(){return getOwnerCenterY() - m_sprite->getHeightOffsetCenter();}
 			//define for each spell
 		virtual void levelUpUnique(){}
 		void levelUp()

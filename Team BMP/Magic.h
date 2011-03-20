@@ -21,7 +21,7 @@ class Magic : public Chip
 			{
 			case BASIC:
 			case ADVANCED:
-				setLocation(LOC_SCREEN, getOwnerCenterX() - m_sprite->getWidthOffsetCenter(), getOwnerCenterY() - m_sprite->getHeightOffsetCenter());
+				setLocation(LOC_SCREEN, centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 				break;
 			case EXPERT:
 				setLocation(LOC_SCREEN, m_target.x, m_target.y);
@@ -133,7 +133,7 @@ class Magic : public Chip
 					}
 					break;
 				case ADVANCED:
-					setLocation(LOC_SCREEN, getOwnerCenterX() - m_sprite->getWidthOffsetCenter(), getOwnerCenterY() - m_sprite->getHeightOffsetCenter());
+					setLocation(LOC_SCREEN, centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 					break;
 				}
 			}
