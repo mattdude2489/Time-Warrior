@@ -5,20 +5,52 @@
 
 class Weapon : public Chip
 {
+	protected:
+		bool m_isFlipH, m_isFlipV;
+		int m_rotateDeg;
 	public:
 		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
-			:Chip(WEAPON, a_subType, a_subSubType){}
+			:Chip(WEAPON, a_subType, a_subSubType),
+			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0){}
 		void activateUnique()
 		{
+			if(m_isFlipH)
+			{
+				m_sprite->flipHorizontal();
+				m_isFlipH = false;
+			}
+			if(m_isFlipV)
+			{
+				m_sprite->flipVertical();
+				m_isFlipV = false;
+			}
+			for(int i = 0; i < (360/90) - m_rotateDeg / 90; ++i)
+				m_sprite->rotate90();
+			m_rotateDeg = 0;
 			switch(m_cSubSubType)
 			{
 			case BASIC:
 			case ADVANCED:
 			case EXPERT:
-				if(m_target.y > m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter())
-					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y+(m_owner->getHeightOffsetCenter()*2));
-				else
-					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
+				switch(m_direction)
+				{
+				case 'a':
+				case 'd':
+					m_rotateDeg = 270;
+					m_sprite->rotate270();
+					if(m_direction == 'd')
+					{
+						m_isFlipH = true;
+						m_sprite->flipHorizontal();
+					}
+					break;
+				case 's':
+					m_isFlipH = m_isFlipV = true;
+					m_sprite->flipHorizontal();
+					m_sprite->flipVertical();
+					break;
+				}
+				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
 				break;
 			}
 		}
@@ -79,7 +111,7 @@ class BasicSlash : public Slash
 		char * getDescription(){return "Slash attack.";}
 		void setSprite(char * a_fileName)
 		{
-			m_sprite = new SDL_Sprite(a_fileName, 32, 16, 32, 1);
+			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, 1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			//m_sprite->setRIndex(m_cSubSubType);
 		}

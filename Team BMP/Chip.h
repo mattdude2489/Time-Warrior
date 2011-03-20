@@ -20,6 +20,7 @@ class Chip : public Entity
 		Location m_target;
 		World * m_world;
 		bool m_firstIteration;
+		char m_direction;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
@@ -36,6 +37,7 @@ class Chip : public Entity
 		void setOwner(Entity * a_owner){m_owner = a_owner;}
 		void setWorld(World * a_world){m_world = a_world;}
 		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
+		void setDirection(char a_dir){m_direction = a_dir;}
 		int getOwnerCenterX()
 		{
 			if(m_owner)
