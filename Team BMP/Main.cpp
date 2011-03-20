@@ -36,8 +36,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//test.setHIndex(2,3);
 	test.restart(2);
 	Player eTest(15,1,39,100,100,100,5,9,&test);
-	BasicFire chip;
-	AdvancedFire chip2;
+	BasicSlash chip;
+	BasicFire chip2;
+	//AdvancedFire chip2;
 	//ExpertFire chip2;
 	Hud Ghud;
 	World world;

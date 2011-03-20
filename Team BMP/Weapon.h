@@ -8,6 +8,20 @@ class Weapon : public Chip
 	public:
 		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(WEAPON, a_subType, a_subSubType){}
+		void activateUnique()
+		{
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+			case ADVANCED:
+			case EXPERT:
+				if(m_target.y > m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter())
+					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y+(m_owner->getHeightOffsetCenter()*2));
+				else
+					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
+				break;
+			}
+		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
 			if(a_entity->getType() == CHIP || a_entity == m_owner)
@@ -17,7 +31,10 @@ class Weapon : public Chip
 				switch(m_cSubSubType)
 				{
 				case BASIC:
-					return false;
+					if(a_entity->getType() != PLAYER)
+						return collideSimple(a_entity);
+					else
+						return false;
 					break;
 				case ADVANCED:
 					return false;
