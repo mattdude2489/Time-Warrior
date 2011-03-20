@@ -7,8 +7,9 @@ enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0xffffff, COLOR_TRANSPARENT = 0xff00ff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
+enum e_sprite {SPRITE_SIZE = 32, SPRITE_SPEED = 1, SPRITE_ROWS = 4};
 
-#define TIME_TO_REGEN		5000
+#define TIME_TO_REGEN	5000
 
 //each array in this next area the first part is current and second is max
 struct Stats

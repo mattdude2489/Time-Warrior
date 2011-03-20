@@ -31,7 +31,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//the user interface variable
 	bool running = true;
 	//loading a sprite to see if it works with the entity
-	SDL_Sprite test("Sprites/spriteTest.bmp", 24, 32, 32, 4);
+	SDL_Sprite test("Sprites/spriteTest.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	test.setTransparency(COLOR_TRANSPARENT);
 	//test.setHIndex(2,3);
 	test.restart(2);
@@ -48,7 +48,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	chip2.setOwner(&eTest);
 	chip2.setWorld(&world);
 	chip2.levelUp();
-	SDL_Sprite aTest("Sprites/greenguy.bmp", 32, 33, 32, 4);
+	SDL_Sprite aTest("Sprites/greenguy.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	aTest.setTransparency(COLOR_TRANSPARENT);
 	aTest.restart(2);
 	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &aTest);

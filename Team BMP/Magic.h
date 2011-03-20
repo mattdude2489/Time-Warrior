@@ -73,7 +73,7 @@ class Magic : public Chip
 		}
 		void setSprite(char * a_fileName)
 		{
-			m_sprite = new SDL_Sprite(a_fileName, 32, 32, 32, NUM_CHIP_LEVELS+1);
+			m_sprite = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			switch(m_cSubSubType)
 			{
@@ -97,34 +97,44 @@ class Magic : public Chip
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
-			if(m_shouldDraw && m_cSubSubType == BASIC)
+			if(m_shouldDraw)
 			{
-				int max = 10;
-				double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
-				double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
-				if(deltaX != 0 && deltaY != 0)
+				switch(m_cSubSubType)
 				{
-					bool switchSignX = deltaX < 0;
-					bool switchSignY = deltaY < 0;
-					switchSignIf(deltaX, switchSignX);
-					switchSignIf(deltaY, switchSignY);
-					if(deltaX > max || deltaY > max)
+				case BASIC:
 					{
-						double slope = deltaY / deltaX;
-						if(deltaX > max)
+						int max = 10;
+						double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
+						double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
+						if(deltaX != 0 && deltaY != 0)
 						{
-							deltaX = max;
-							deltaY = slope * deltaX;
-						}
-						else if(deltaY > max)
-						{
-							deltaY = max;
-							deltaX = deltaY / slope;
+							bool switchSignX = deltaX < 0;
+							bool switchSignY = deltaY < 0;
+							switchSignIf(deltaX, switchSignX);
+							switchSignIf(deltaY, switchSignY);
+							if(deltaX > max || deltaY > max)
+							{
+								double slope = deltaY / deltaX;
+								if(deltaX > max)
+								{
+									deltaX = max;
+									deltaY = slope * deltaX;
+								}
+								else if(deltaY > max)
+								{
+									deltaY = max;
+									deltaX = deltaY / slope;
+								}
+							}
+							switchSignIf(deltaX, switchSignX);
+							switchSignIf(deltaY, switchSignY);
+							move(LOC_SCREEN,(int)deltaX,(int)deltaY);
 						}
 					}
-					switchSignIf(deltaX, switchSignX);
-					switchSignIf(deltaY, switchSignY);
-					move(LOC_SCREEN,(int)deltaX,(int)deltaY);
+					break;
+				case ADVANCED:
+					setLocation(LOC_SCREEN, getOwnerCenterX() - m_sprite->getWidthOffsetCenter(), getOwnerCenterY() - m_sprite->getHeightOffsetCenter());
+					break;
 				}
 			}
 		}

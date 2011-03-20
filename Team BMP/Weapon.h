@@ -12,6 +12,22 @@ class Weapon : public Chip
 		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(WEAPON, a_subType, a_subSubType),
 			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0){}
+		void setLocationUsingDirection()
+		{
+			switch(m_direction)
+			{
+			case KEY_UP:
+			case KEY_LEFT:
+				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
+				break;
+			case KEY_DOWN:
+				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter());
+				break;
+			case KEY_RIGHT:
+				setLocation(LOC_SCREEN, m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter(), m_owner->getLocationScreen().y);
+				break;
+			}
+		}
 		void activateUnique()
 		{
 			if(m_isFlipH)
@@ -50,19 +66,7 @@ class Weapon : public Chip
 					m_sprite->flipVertical();
 					break;
 				}
-				switch(m_direction)
-				{
-				case KEY_UP:
-				case KEY_LEFT:
-					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y);
-					break;
-				case KEY_DOWN:
-					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x, m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter());
-					break;
-				case KEY_RIGHT:
-					setLocation(LOC_SCREEN, m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter(), m_owner->getLocationScreen().y);
-					break;
-				}
+				setLocationUsingDirection();
 				break;
 			}
 		}
@@ -104,6 +108,20 @@ class Weapon : public Chip
 				break;
 			}
 		}
+		void updateUniqueTwo(int a_timePassed)
+		{
+			if(m_shouldDraw)
+			{
+				switch(m_cSubSubType)
+				{
+				case BASIC:
+				case ADVANCED:
+				case EXPERT:
+					setLocationUsingDirection();
+					break;
+				}
+			}
+		}
 		~Weapon()
 		{
 			if(m_sprite->isSprite())
@@ -123,7 +141,7 @@ class BasicSlash : public Slash
 		char * getDescription(){return "Slash attack.";}
 		void setSprite(char * a_fileName)
 		{
-			m_sprite = new SDL_Sprite(a_fileName, 32, 16, 32, 1);
+			m_sprite = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE/2, SPRITE_SPEED, 1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			//m_sprite->setRIndex(m_cSubSubType);
 		}
