@@ -37,10 +37,7 @@ class Magic : public Chip
 				switch(m_cSubType)
 				{
 				case DIVINE:
-					if(a_entity->getType() == PLAYER)
-						return collideSimple(a_entity);
-					else
-						return false;
+					return collideSimple(a_entity);
 					break;
 				case LIGHTNING:
 				case FIRE:
@@ -60,8 +57,11 @@ class Magic : public Chip
 			switch(m_cSubType)
 			{
 			case DIVINE:
+				m_owner->heal(m_dmg);
 				if(a_entity->getType() == PLAYER)
 					a_entity->heal(m_dmg);
+				else
+					a_entity->hit(m_dmg/2);
 				break;
 			case LIGHTNING:
 			case FIRE:
