@@ -133,7 +133,7 @@ public:
 		}
 		m_hb.x = m_locations[LOC_SCREEN].x;
 		m_hb.y = m_locations[LOC_SCREEN].y;
-		m_hb.w = (((double)m_stats.getStatNumber(HEALTH_CURRENT)/(double)m_stats.getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
+		m_hb.w = (Uint16)(((double)m_stats.getStatNumber(HEALTH_CURRENT)/(double)m_stats.getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
 		m_sprite->update(a_timePassed);
 		updateUnique(a_timePassed);
 	}

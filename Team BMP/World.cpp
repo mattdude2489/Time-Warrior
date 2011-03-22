@@ -4,20 +4,20 @@ World::World(){setWorld("Maps/HubWorldMap.txt");}
 
 World::~World()
 {
-		for(int i = 0; i < m_mapOfWorld.getSize(); i++)
+		for(int i = 0; i < m_mapOfWorld.size(); i++)
 			delete m_mapOfWorld.get(i).currentTexture;
 }
 
 bool World::setWorld(char * fileName)
 {
 	FILE * infile;
-	infile = fopen(fileName, "r");
+	fopen_s(&infile, fileName, "r");
 
 	//Clear the previous map of the world, in order to create a better one.
-	if(m_mapOfWorld.getSize() != 0)
+	if(m_mapOfWorld.size() != 0)
 		if(m_mapOfWorld.get(0).currentTexture->isSprite())
 		{
-			for(int i = 0; i < m_mapOfWorld.getSize(); i++)
+			for(int i = 0; i < m_mapOfWorld.size(); i++)
 				delete m_mapOfWorld.get(i).currentTexture;
 		}
 	m_mapOfWorld.release();
@@ -57,10 +57,10 @@ bool World::setWorld(char * fileName)
 void World::draw(SDL_Surface * a_screen)
 {
 	//Texture draw.
-	for(int k = 0; k < m_mapOfWorld.getSize(); k++)
+	for(int k = 0; k < m_mapOfWorld.size(); k++)
 		m_mapOfWorld.get(k).currentTexture->draw(a_screen, 32*m_mapOfWorld.get(k).pos.x, 32*m_mapOfWorld.get(k).pos.y);
 	//Entities draw.
-	for(int i = 0; i < m_mapOfEntities.getSize(); i++)
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
 		m_mapOfEntities.get(i)->draw(a_screen);
 	}
@@ -68,7 +68,7 @@ void World::draw(SDL_Surface * a_screen)
 
 void World::update(Uint32 a_timePassed)
 {
-	for(int i = 0; i < m_mapOfEntities.getSize(); i++)
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i)->update(a_timePassed);
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	sortOnYPosition();
@@ -77,9 +77,9 @@ void World::update(Uint32 a_timePassed)
 void World::sortOnYPosition()
 {
 	//Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
-	for(int i = 0; i < m_mapOfEntities.getSize(); ++i)
+	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 	{
-		for(int k = i; k < m_mapOfEntities.getSize(); ++k)
+		for(int k = i; k < m_mapOfEntities.size(); ++k)
 		{
 			if(m_mapOfEntities.get(i)->getLocationScreen().y > m_mapOfEntities.get(k)->getLocationScreen().y)
 			{

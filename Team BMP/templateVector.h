@@ -1,108 +1,262 @@
 #pragma once
 
-#define DEFAULT_INITIAL_SIZE		10
+#include "templatearray.h"
 
-// the templating requires the I modify m_data, add, get, 
-
-template <class SOMETHING>
-class templateVector
+/**
+ * simple templated vector. Ideal for dynamic lists of primitive types and single pointers.
+ * @WARNING template with virtual types, or types that will be pointed to at your own risk!
+ * @author mvaganov@hotmail.com December 2009
+ */
+template<typename DATA_TYPE>
+class TemplateVector : public TemplateArray<DATA_TYPE>
 {
 private:
-	/** where in memory the array is stored */
-	SOMETHING * m_data;
-	/** allocated is around double the size */
-	int m_allocated;	
-	/** however many elements the user wants */
+	/** number of valid elements that the caller thinks we have.. */
 	int m_size;
+
 public:
-	templateVector()
-		// initializer list
-		:m_data(0), m_allocated(0), m_size(0)
+	/** sets all fields to an initial data state. WARNING: can cause memory leaks if used without care */
+	inline void init()
 	{
-//		m_data = 0;
-//		m_allocated = 0;
-//		m_size = 0;
+		TemplateArray<DATA_TYPE>::init();
+		m_size = 0;
 	}
 
-	/** @return the size of the array */
-	int getSize()
+	/** cleans up memory */
+	inline void release()
+	{
+		TemplateArray<DATA_TYPE>::release();
+		m_size = 0;
+	}
+
+	/** @return true of the copy finished correctly */
+	inline bool copy(const TemplateVector<DATA_TYPE> & a_vector)
+	{
+		if(ensureCapacity(a_vector.m_size))
+		{
+			for(int i = 0; i < a_vector.m_size; ++i)
+			{
+				set(i, a_vector.get(i));
+			}
+			m_size = a_vector.m_size;
+			return true;
+		}
+		return false;
+	}
+
+	/** copy constructor */
+	inline TemplateVector(
+		const TemplateVector<DATA_TYPE> & a_vector)
+	{
+		init();
+		copy(a_vector);
+	}
+
+	/** default constructor allocates no list (zero size) */
+	inline TemplateVector(){init();}
+
+	/** format constructor */
+	inline TemplateVector(const int & a_size,
+		const DATA_TYPE & a_defaultValue)
+	{
+		init();
+		ensureCapacity(a_size);
+		for(int i = 0; i < a_size; ++i)
+			add(a_defaultValue);
+	}
+
+	/** @return the last value in the list */
+	inline DATA_TYPE & getLast()
+	{
+		return m_data[m_size-1];
+	}
+
+	/** @return the last added value in the list, and lose that value */
+	inline DATA_TYPE & pop()
+	{
+		return m_data[--m_size];
+	}
+
+	/**
+	 * @param value to add to the list 
+	 * @note adding a value may cause memory allocation
+	 */
+	void add(const DATA_TYPE & a_value)
+	{
+		// where am i storing these values?
+		// if i don't have a place to store them, i better make one.
+		if(m_data == 0)
+		{
+			// make a new list to store numbers in TODO magic number
+			allocateToSize(10);
+		}
+		// if we don't have enough memory allocated for this list
+		if(m_size >= m_allocated)
+		{
+			// make a bigger list
+			allocateToSize(m_allocated*2);
+		}
+		set(m_size, a_value);
+		m_size++;
+	}
+
+	/**
+	 * @param a_value to add to the list if it isnt in the list already
+	 * @return true the index where the element exists
+	 */
+	int addNoDuplicates(const DATA_TYPE & a_value)
+	{
+		int index = indexOf(a_value);
+		if(index < 0)
+		{
+			index = m_size;
+			add(a_value);
+		}
+		return index;
+	}
+
+	/** @param a_vector a vector to add all the elements from */
+	inline void addVector(const TemplateVector<DATA_TYPE> & a_vector)
+	{
+		for(int i = 0; i < a_vector.size(); ++i)
+		{
+			add(a_vector.get(i));
+		}
+	}
+
+	/** @return the size of the list */
+	inline const int & size() const
 	{
 		return m_size;
 	}
 
 	/** 
-	 * @return the value at the given index
+	 * @param size the user wants the vector to be (chopping off elements)
+	 * @return false if could not allocate memory
+	 * @note may cause memory allocation if size is bigger than current
 	 */
-	SOMETHING & get(int a_index)
+	inline bool setSize(const int & a_size)
 	{
-		return m_data[a_index];
+		if(!ensureCapacity(a_size))
+			return false;
+		m_size = a_size;
+		return true;
+	}
+
+	/** sets size to zero, but does not deallocate any memory */
+	inline void clear()
+	{
+		setSize(0);
+	}
+
+	/** 
+	 * @param a_index is overwritten by the next element, which is 
+	 * overwritten by the next element, and so on, till the last element
+	 */
+	void remove(const int & a_index)
+	{
+		moveDown(a_index+1, -1, m_size);
+		setSize(m_size-1);
+	}
+
+	/** 
+	 * @param a_index where to insert a_value. shifts elements in the vector.
+	 */
+	void insert(const int & a_index, const DATA_TYPE & a_value)
+	{
+		setSize(m_size+1);
+		moveUp(m_data, a_index, 1, m_size);
+		set(a_index, a_value);
+	}
+
+	/** 
+	 * @return first element from the list and moves the rest up 
+	 * @note removes the first element from the list
+	 */
+	inline const DATA_TYPE pull()
+	{
+		DATA_TYPE value = get(0);
+		remove(0);
+		return value;
+	}
+
+	/** @param a_index is replaced by the last element, then size is reduced. */
+	inline void removeFast(const int & a_index)
+	{
+		swap(a_index, m_size-1);
+		setSize(m_size-1);
+	}
+
+	/** @return the index of the first appearance of a_value in this vector. uses == */
+	inline int indexOf(const DATA_TYPE & a_value) const
+	{
+		for(int i = 0; i < m_size; ++i)
+		{
+			if(get(i) == a_value)
+				return i;
+		}
+		return -1;
+	}
+
+	/** @return index of 1st a_value at or after a_startingIndex. uses == */
+	inline int indexOf(const DATA_TYPE & a_value, const int & a_startingIndex) const
+	{
+		return indexOf(a_value, a_startingIndex, m_size);
+	}
+
+	/** 
+	 * will only work correctly if the TemplateVector is sorted.
+	 * @return the index of the given value, -1 if the value is not in the list
+	 */
+	int indexOfWithBinarySearch(const DATA_TYPE & a_value)
+	{
+		if(m_size)
+		{
+			return indexOfWithBinarySearch(a_value, 0, m_size);
+		}
+		return -1;    // failed to find key
 	}
 
 	/**
-	 * @param a_value the value to add to the end of the vector
+	 * @param a_value first appearance replaced by last element. breaks if not in list
 	 */
-	void add(SOMETHING a_value)
+	inline void removeDataFast(const DATA_TYPE & a_value)
 	{
-		// if the vector has not been allocated
-		if(!m_data)
-		{
-			m_data = new SOMETHING[DEFAULT_INITIAL_SIZE];
-			m_allocated = DEFAULT_INITIAL_SIZE;
-		}
-		if(m_size >= m_allocated)
-		{
-			// this is the size of the new array we want
-			int newSize = m_allocated + DEFAULT_INITIAL_SIZE;
-			// get that bigger block of memory
-			SOMETHING * biggerBlock = new SOMETHING[newSize];
-			// copy the old data into the new block
-			for(int i = 0; i < m_allocated; ++i)
-			{
-				biggerBlock[i] = m_data[i];
-			}
-			// now we don't need the old block anymore...
-			delete m_data;
-			// replace the old block with the new
-			m_data = biggerBlock;
-			m_allocated = newSize;
-		}
-		m_data[m_size] = a_value;
-		m_size++;
+		removeFast(indexOf(a_value));
 	}
 
-	/** destructor callable w/o killing the data structure */
-	void release()
+	/**
+	 * @param a_listToExclude removes these elements from *this list
+	 * @return true if at least one element was removed
+	 */
+	inline bool removeListFast(const TemplateVector<DATA_TYPE> & a_listToExclude)
 	{
-		delete m_data;
-		m_data = 0;
-		m_allocated = 0;
-		m_size = 0;
+		bool aTermWasRemoved = false;
+		for(int e = 0; e < a_listToExclude.size(); ++e)
+		{
+			for(int i = 0; i < size(); ++i)
+			{
+				if(a_listToExclude.get(e) == get(i))
+				{
+					removeFast(i);
+					--i;
+					aTermWasRemoved = true;
+				}
+			}
+		}
+		return aTermWasRemoved;
+	}
+
+	/** @param a_value first appearance is removed. breaks if not in list */
+	inline void removeData(const DATA_TYPE & a_value)
+	{
+		remove(indexOf(a_value));
 	}
 
 	/** destructor */
-	~templateVector()
+	inline ~TemplateVector()
 	{
 		release();
 	}
 
-	/** @note very dangerous function for a vector to have. */
-	void setSize(int a_size)
-	{
-		m_size = a_size;
-	}
-
-	/** Swap function.
-	@param: int a, int b
-	Swaps the two positions of a and b in the vector. **/
-
-	void swap(int a_first, int a_second)
-	{
-		SOMETHING p_swapHelp;
-		//make sure it can't go out of bounds.
-		if(a_first > m_size || a_second > m_size || a_first < 0 || a_second < 0)
-			return;
-		p_swapHelp = m_data[a_first];
-		m_data[a_first] = m_data[a_second];
-		m_data[a_second] = p_swapHelp;
-	}
 };

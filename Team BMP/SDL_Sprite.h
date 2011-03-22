@@ -26,6 +26,7 @@ bills [DOT] jared [AT] gmail [DOT] com
 class SDL_Sprite {
 
 private:
+
 	/** whether or not sprite's surface is being managed outside the sprite class */
 	bool m_bExternalSurfaceManagement;
 	/** whether to animate during the update */
@@ -120,9 +121,9 @@ public:
 	/** getHeight - return height of frame */
     const Uint32 & getHeight() const;
 	/** getWidthOffsetCenter - returns center of width offset of frame */
-	const Uint32 & getWidthOffsetCenter() const;
+	const Uint32 getWidthOffsetCenter() const;
 	/** getHeightOffsetCenter - returns center of height offset of frame */
-	const Uint32 & getHeightOffsetCenter() const;
+	const Uint32 getHeightOffsetCenter() const;
 	/** getSpriteWidth - return width of sprite's surface */
     const Uint32 getSpriteWidth() const;
 	/** getSpriteHeight - return height of sprite's surface */
