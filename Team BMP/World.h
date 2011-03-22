@@ -10,6 +10,7 @@ struct Tile
 	SDL_Sprite * currentTexture;
 	bool collide;
 	Location pos;
+	int indexOfSpriteRow;
 };
 
 class World

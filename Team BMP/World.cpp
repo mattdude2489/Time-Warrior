@@ -1,11 +1,13 @@
 #include "World.h"
 
-World::World(){setWorld("Maps/HubWorldMap.txt");}
+World::World(){m_success = setWorld("Maps/HubWorldMap.txt");}
 
 World::~World()
 {
-		for(int i = 0; i < m_mapOfWorld.size(); i++)
-			delete m_mapOfWorld.get(i).currentTexture;
+		/*for(int i = 0; i < m_mapOfWorld.size(); i++)
+			delete m_mapOfWorld.get(i).currentTexture;*/
+	//because ALL of the tiles only hold ONE texture, it only needs to be deleted ONCE.
+	delete m_mapOfWorld.get(0).currentTexture;// Hooray for trying to delete memory that's ALREADY GONE!?
 }
 
 bool World::setWorld(char * fileName)
@@ -21,7 +23,9 @@ bool World::setWorld(char * fileName)
 				delete m_mapOfWorld.get(i).currentTexture;
 		}
 	m_mapOfWorld.release();
-
+	//Screw it. I'm gonna do this Java style.
+//	SDL_Sprite * sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
+	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
 	//start the actual loading of the textures.
 	if(infile == NULL)
 		m_success = false;
@@ -39,10 +43,19 @@ bool World::setWorld(char * fileName)
 				x = 0;
 				break;
 			case 'G':
-				hi.currentTexture = new SDL_Sprite("Sprites/grassTexture.bmp", 32, 32, 1, 1);
+				hi.currentTexture = sprite;
 				hi.pos.x = x;
 				hi.pos.y = y;
 				x++;
+				hi.indexOfSpriteRow = 0;
+				m_mapOfWorld.add(hi);
+				break;
+			case 'D':
+				hi.currentTexture = sprite;
+				hi.pos.x = x;
+				hi.pos.y = y;
+				x++;
+				hi.indexOfSpriteRow = 1;
 				m_mapOfWorld.add(hi);
 				break;
 			}
@@ -58,7 +71,10 @@ void World::draw(SDL_Surface * a_screen)
 {
 	//Texture draw.
 	for(int k = 0; k < m_mapOfWorld.size(); k++)
+	{
+		m_mapOfWorld.get(k).currentTexture->setRIndex(m_mapOfWorld.get(k).indexOfSpriteRow);
 		m_mapOfWorld.get(k).currentTexture->draw(a_screen, 32*m_mapOfWorld.get(k).pos.x, 32*m_mapOfWorld.get(k).pos.y);
+	}
 	//Entities draw.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
