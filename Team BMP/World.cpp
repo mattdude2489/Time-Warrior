@@ -36,6 +36,7 @@ bool World::setWorld(char * fileName)
 		while(c != EOF)
 		{
 			Tile hi;
+			//Initial setup switch.
 			switch(c)
 			{
 			case '\n':
@@ -43,22 +44,26 @@ bool World::setWorld(char * fileName)
 				x = 0;
 				break;
 			case 'G':
-				hi.currentTexture = sprite;
-				hi.pos.x = x;
-				hi.pos.y = y;
-				x++;
-				hi.indexOfSpriteRow = 0;
-				m_mapOfWorld.add(hi);
-				break;
 			case 'D':
 				hi.currentTexture = sprite;
 				hi.pos.x = x;
 				hi.pos.y = y;
 				x++;
-				hi.indexOfSpriteRow = 1;
-				m_mapOfWorld.add(hi);
 				break;
 			}
+
+			//Anything else in particular switch. So in other words, creations of entities, any particulars of the map.
+			//Will happen in this switch statement.
+			switch(c)
+			{
+			case 'G':
+				hi.indexOfSpriteRow = 0;
+				break;
+			case 'D':
+				hi.indexOfSpriteRow = 1;
+				break;
+			}
+			m_mapOfWorld.add(hi);
 			c = fgetc(infile);
 		}
 		m_success = true;
