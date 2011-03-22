@@ -7,9 +7,8 @@ enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
 enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0xffffff, COLOR_TRANSPARENT = 0xff00ff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
-enum e_sprite {SPRITE_SIZE = 32, SPRITE_SPEED = 1, SPRITE_ROWS = 4};
-
-#define TIME_TO_REGEN	5000
+enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS*5, TIME_EXPIRE = TIME_SECOND_MS*10};
+enum e_sprite {SPRITE_SIZE = 32, SPRITE_SPEED = TIME_SECOND_MS/30, SPRITE_ROWS = 4};
 
 //each array in this next area the first part is current and second is max
 struct Stats
@@ -123,7 +122,7 @@ public:
 	void update(int a_timePassed)
 	{
 		m_timeToRegen += a_timePassed;
-		if(m_timeToRegen >= TIME_TO_REGEN)
+		if(m_timeToRegen >= TIME_SECOND_MS)
 		{
 			m_timeToRegen = 0;
 			m_stats.m_stats[ENERGY_CURRENT] += m_stats.m_stats[ENERGY_REGEN];
