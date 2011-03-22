@@ -107,7 +107,7 @@ class Chip : public Entity
 				}
 				if((((m_cType == MAGIC && m_cSubSubType == BASIC)
 					|| (m_cType == WEAPON && m_cSubType == RANGE))
-					&& collisionMade) || !m_firstIteration)
+					&& collisionMade) || (!m_firstIteration && m_sprite->getFrame() == 0))
 					deactivate();
 				else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
 				{

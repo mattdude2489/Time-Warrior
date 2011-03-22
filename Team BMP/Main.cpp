@@ -13,8 +13,6 @@
 //Some debugging includes
 #include <stdio.h>
 
-#define FRAME_DELAY	20
-
 int main(int argc, char ** argv)//must be the header for sdl application and yes the arg stuff
 {
 	//INIT
@@ -26,7 +24,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	UserInput ui; //This is the UserInput class.
 
 	//Timer stuff, for updateing sprites and anything else
-	Uint32 then = SDL_GetTicks(), now, soon, passed;
+	Uint32 then = SDL_GetTicks(), now, passed;
 
 	//the user interface variable
 	bool running = true;
@@ -72,7 +70,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		now = SDL_GetTicks();
 		passed = now - then;
 		then = now;
-		soon = now + FRAME_DELAY;
 
 		//input
 		while(SDL_PollEvent(&e)) //Polls the events of SDL
@@ -86,7 +83,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 				case SDL_MOUSEBUTTONUP:
 					ui.setMouse(e.motion.x, e.motion.y);
-					ui.setClick(0);
+					ui.setClick(CLICK_NONE);
 					break;
 				case SDL_MOUSEMOTION: //If the mouse moves, then do this.
 					ui.setMouse(e.motion.x, e.motion.y);
