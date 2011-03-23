@@ -188,10 +188,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Sprite.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\World.cpp"
 				>
 			</File>
@@ -215,10 +211,6 @@
 			</File>
 			<File
 				RelativePath=".\spoint.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Sprite.h"
 				>
 			</File>
 			<File

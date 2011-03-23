@@ -22,10 +22,7 @@ private:
 	SRect m_buttonShape;
 public:
 	Button(){}
-	Button(int a_width, int a_height, int a_x, int a_y)
-	{
-		setUpButton(a_width, a_height, a_x, a_y);
-	}
+	Button(int a_width, int a_height, int a_x, int a_y){setUpButton(a_width, a_height, a_x, a_y);}
 	void setUpButton(int a_width, int a_height, int a_x, int a_y)
 	{
 		m_buttonShape.setWidth(a_width);
@@ -39,9 +36,7 @@ public:
 		if(a_input->getClick())
 		{
 			if(m_buttonShape.contains(t_tempPoint))
-			{
 				return true;//the click was inside the button;
-			}
 		}
 		return false;//return false in not
 	}
@@ -56,7 +51,7 @@ class StatWindow
 {
 private:
 	TTtext m_text[NUM_STATS];
-	Stats m_PlayerStats;
+	Entity * m_player;
 	SRect m_window;
 public:
 	StatWindow()
@@ -65,25 +60,22 @@ public:
 		m_window.setWidth(WINDOWWIDTH);
 		m_window.setPosition(WINDOWXY);
 	}
-	Stats getStats(){return m_PlayerStats;}
 	void InitText(TTF_Font * a_font)
 	{
-		for(int i = 0; i < NUM_STATS; i ++)
-		{
+		for(int i = 0; i < NUM_STATS; i++)
 			m_text[i].setFont(a_font);
-		}
 	}
-	void setPlayerStats(Entity * a_player)
+	void setPlayer(Entity * a_player)
 	{	
-		m_PlayerStats.copy(a_player->getStats());
+		m_player = a_player;
 		putStatsInText();
 	}
 	void putStatsInText()
 	{
 		char c_temp[CHARSIZE];
-		for(int i = 0; i < NUM_STATS; i ++)
+		for(int i = 0; i < NUM_STATS; i++)
 		{
-			sprintf_s(c_temp, m_PlayerStats.getName(i), m_PlayerStats.getStatNumber(i));
+			sprintf_s(c_temp, m_player->getStatName(i), m_player->getStatNumber(i));
 			m_text[i].setMessage(c_temp);
 		}
 	}
@@ -92,13 +84,11 @@ public:
 		int t_x, t_y;
 		t_x = t_y = TEXTSTART;
 		SDL_FillRect(a_screen, &m_window, WINDOWCOLOR);
-		for(int i = 0; i < NUM_STATS; i ++)
+		for(int i = 0; i < NUM_STATS; i++)
 		{
 			m_text[i].printMessage(a_screen, t_x, t_y);
 			if(i == HEALTH_CURRENT || i == ENERGY_CURRENT)
-			{
 				t_x += m_text[i].getMesageWidth();
-			}
 			else
 			{
 				t_x = TEXTSTART;
@@ -106,5 +96,4 @@ public:
 			}
 		}
 	}
-
 };

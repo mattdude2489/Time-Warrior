@@ -14,7 +14,7 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 {
 	if((a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2) && m_gauntlet[a_slot])
 	{
-		if(m_stats.m_stats[ENERGY_CURRENT] >= m_gauntlet[a_slot]->getCost())
+		if(m_stats[ENERGY_CURRENT] >= m_gauntlet[a_slot]->getCost())
 		{
 			useEnergy(m_gauntlet[a_slot]->getCost());
 			m_gauntlet[a_slot]->setTarget(a_targetX, a_targetY);

@@ -11,68 +11,10 @@ enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_EXPIRE = TIME_SECOND_MS*5};
 enum e_sprite {SPRITE_SIZE = 32, SPRITE_SPEED = TIME_SECOND_MS/30, SPRITE_ROWS = 4};
 
-//each array in this next area the first part is current and second is max
-struct Stats
-{
-	int m_stats[NUM_STATS];
-
-	void copy(Stats a_stats)
-	{
-		for(int i = 0; i < NUM_STATS; ++i)
-			m_stats[i] = a_stats.m_stats[i];
-	}
-	bool compare(Stats a_stats)//return false if not same otherwise return true they are the same
-	{
-		for(int i = 0; i < NUM_STATS; ++i)
-		{
-			if(m_stats[i] != a_stats.m_stats[i])
-				return false;
-		}
-		return true;
-	}
-	int getStatNumber(int stat)//this is ugly i know but i want the stats to stay seperate so it is easier to read and not have to deal with too many arrays
-	{
-		//returns the stat based on a number
-		if(stat < 0 || stat > NUM_STATS)
-			return 0;
-		else
-			return m_stats[stat];
-	}
-	char * getName(int i_stat)
-	{
-		switch(i_stat)//once again sorry for the dirtyness just trying to get code that works
-		{
-			case HEALTH_CURRENT:return "Health :%i";
-				break;
-			case HEALTH_MAX:return "/%i";
-				break;
-			case ENERGY_CURRENT:return "Energy: %i";
-				break;
-			case ENERGY_MAX:return "/%i";
-				break;
-			case ENERGY_REGEN:return "\tRegen: %i";
-				break;
-			case STRENGTH:return "Strength: %i";
-				break;
-			case INTELLECT:return "Intellect: %i";
-				break;
-			case DEFENSE:return "Defense: %i";
-				break;
-			case RESISTANCE_FIRE:return "\tFire: %i";
-				break;
-			case RESISTANCE_ICE:return "\tIce: %i";
-				break;
-			case RESISTANCE_LIGHTNING:return "\tLightning: %i";
-				break;
-			default:return "Invalid";
-		}
-	}
-};
-
 class Entity
 {
 protected:
-	Stats m_stats;
+	int m_stats[NUM_STATS];
 	SPoint m_locations[NUM_LOCATIONS];//LOC_SCREEN/LOC_WORLD
 	e_entityType m_eType;
 	SDL_Sprite * m_sprite;
@@ -82,15 +24,15 @@ protected:
 public:
 	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
 	{
-		m_stats.m_stats[DEFENSE] = a_def;
-		m_stats.m_stats[INTELLECT] = a_int;
-		m_stats.m_stats[STRENGTH] = a_str;
-		m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX] = a_health;
-		m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX] = a_energy;
-		m_stats.m_stats[RESISTANCE_FIRE] = a_fRes;
-		m_stats.m_stats[RESISTANCE_ICE] = a_iRes;
-		m_stats.m_stats[RESISTANCE_LIGHTNING] = a_lRes;
-		m_stats.m_stats[ENERGY_REGEN] = 1;
+		m_stats[DEFENSE] = a_def;
+		m_stats[INTELLECT] = a_int;
+		m_stats[STRENGTH] = a_str;
+		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX] = a_health;
+		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX] = a_energy;
+		m_stats[RESISTANCE_FIRE] = a_fRes;
+		m_stats[RESISTANCE_ICE] = a_iRes;
+		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
+		m_stats[ENERGY_REGEN] = 1;
 		m_timeToRegen =  0;
 		setLocation(LOC_SCREEN, SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_shouldDraw = false;
@@ -108,7 +50,6 @@ public:
 		m_hb.h = 5;
 		m_eType = DUMMY;
 	}
-	Stats getStats(){return m_stats;}
 	void setType(e_entityType type) {m_eType = type;}
 	int getType() {return (int)m_eType;}
 	bool getVisible() {return m_shouldDraw;}
@@ -125,15 +66,13 @@ public:
 		if(m_timeToRegen >= TIME_SECOND_MS)
 		{
 			m_timeToRegen = 0;
-			m_stats.m_stats[ENERGY_CURRENT] += m_stats.m_stats[ENERGY_REGEN];
-			if(m_stats.m_stats[ENERGY_CURRENT] > m_stats.m_stats[ENERGY_MAX])
-				m_stats.m_stats[ENERGY_CURRENT] = m_stats.m_stats[ENERGY_MAX];
+			regen(m_stats[ENERGY_REGEN]);
 			if(m_eType == DUMMY)
-				heal(m_stats.m_stats[ENERGY_REGEN]);
+				heal(m_stats[ENERGY_REGEN]);
 		}
 		m_hb.x = m_locations[LOC_SCREEN].x;
 		m_hb.y = m_locations[LOC_SCREEN].y;
-		m_hb.w = (Uint16)(((double)m_stats.getStatNumber(HEALTH_CURRENT)/(double)m_stats.getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
+		m_hb.w = (Uint16)(((double)getStatNumber(HEALTH_CURRENT)/(double)getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
 		m_sprite->update(a_timePassed);
 		updateUnique(a_timePassed);
 	}
@@ -146,39 +85,71 @@ public:
 			m_sprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
 		}
 	}
-	void hit(int damage)
+	void hit(int a_amount)
 	{
-		m_stats.m_stats[HEALTH_CURRENT] -= damage;
-		if(m_stats.m_stats[HEALTH_CURRENT] <0)
-			m_stats.m_stats[HEALTH_CURRENT] = 0;
+		m_stats[HEALTH_CURRENT] -= a_amount;
+		if(m_stats[HEALTH_CURRENT] < 0)
+			m_stats[HEALTH_CURRENT] = 0;
 	}
-	void useEnergy(int a_energy)
+	void useEnergy(int a_amount)
 	{
-		m_stats.m_stats[ENERGY_CURRENT] -= a_energy;
-		if(m_stats.m_stats[ENERGY_CURRENT] <0)
-			m_stats.m_stats[ENERGY_CURRENT] = 0;
+		m_stats[ENERGY_CURRENT] -= a_amount;
+		if(m_stats[ENERGY_CURRENT] < 0)
+			m_stats[ENERGY_CURRENT] = 0;
 	}
-	void heal(int healamount)
+	void heal(int a_amount)
 	{
-		m_stats.m_stats[HEALTH_CURRENT]+= healamount;
-		if(m_stats.m_stats[HEALTH_CURRENT] > m_stats.m_stats[HEALTH_MAX])
-			m_stats.m_stats[HEALTH_CURRENT] = m_stats.m_stats[HEALTH_MAX];
+		m_stats[HEALTH_CURRENT] += a_amount;
+		if(m_stats[HEALTH_CURRENT] > m_stats[HEALTH_MAX])
+			m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
+	}
+	void regen(int a_amount)
+	{
+		m_stats[ENERGY_CURRENT] += a_amount;
+		if(m_stats[ENERGY_CURRENT] > m_stats[ENERGY_MAX])
+			m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
 	}
 	//Says if there is a collision between two entities.
-	bool collideSimple(Entity * otherEntity)
+	bool collideSimple(Entity * a_entity)
 	{
-		if(m_shouldDraw && otherEntity->getVisible())
-			return m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *otherEntity->m_sprite, otherEntity->getLocationScreen().x, otherEntity->getLocationScreen().y);
+		if(m_shouldDraw && a_entity->getVisible())
+			return m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *a_entity->m_sprite, a_entity->getLocationScreen().x, a_entity->getLocationScreen().y);
 		else
 			return false;
 	}
-	bool collide(Entity * otherEntity)
+	bool collide(Entity * a_entity)
 	{
 		//If one of them is the chip; get rid of it. Right now. Seriously, just don't do it.
 		//If they are two players, you need not care. If it's two minions, need not care.
-		if(m_eType == CHIP || otherEntity->m_eType == CHIP || m_eType == otherEntity->m_eType)
+		if(m_eType == CHIP || a_entity->m_eType == CHIP || m_eType == a_entity->m_eType)
 			return false;
 		else
-			return collideSimple(otherEntity);
+			return collideSimple(a_entity);
+	}
+	int getStatNumber(int a_stat)
+	{
+		//returns the stat based on a number
+		if(a_stat < 0 || a_stat > NUM_STATS)
+			return 0;
+		else
+			return m_stats[a_stat];
+	}
+	char * getStatName(int a_stat)
+	{
+		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works
+		{
+			case HEALTH_CURRENT:		return "Health :%i";		break;
+			case HEALTH_MAX:			return "/%i";				break;
+			case ENERGY_CURRENT:		return "Energy: %i";		break;
+			case ENERGY_MAX:			return "/%i";				break;
+			case ENERGY_REGEN:			return "\tRegen: %i";		break;
+			case STRENGTH:				return "Strength: %i";		break;
+			case INTELLECT:				return "Intellect: %i";		break;
+			case DEFENSE:				return "Defense: %i";		break;
+			case RESISTANCE_FIRE:		return "\tFire: %i";		break;
+			case RESISTANCE_ICE:		return "\tIce: %i";			break;
+			case RESISTANCE_LIGHTNING:	return "\tLightning: %i";	break;
+			default:					return "Invalid";
+		}
 	}
 };
