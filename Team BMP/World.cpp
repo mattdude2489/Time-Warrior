@@ -25,7 +25,7 @@ bool World::setWorld(char * fileName)
 	m_mapOfWorld.release();
 	//Screw it. I'm gonna do this Java style.
 //	SDL_Sprite * sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
-	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
+	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS+1);
 	//start the actual loading of the textures.
 	if(infile == NULL)
 		m_success = false;
@@ -33,9 +33,9 @@ bool World::setWorld(char * fileName)
 	{
 		int c = 0, x = 0, y = 0;
 		c = fgetc(infile);
+		Tile hi;
 		while(c != EOF)
 		{
-			Tile hi;
 			//Initial setup switch. Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
 			switch(c)
 			{
