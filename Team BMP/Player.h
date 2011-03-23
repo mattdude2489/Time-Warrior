@@ -12,16 +12,15 @@
 enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
 enum e_hud {HUD_WIDTH = SCREEN_WIDTH, HUD_HEIGHT = 25, HUD_X = 0, HUD_Y = SCREEN_HEIGHT-HUD_HEIGHT};
 
-#define NUM_INV_ATK (2*NUM_CHIP_SUBS_PER_TYPE*NUM_CHIP_LEVELS)
-
 class Player : public Entity
 {
 private:
 	Chip * m_gauntlet[NUM_SLOTS];
-	Chip * m_attackInventory[NUM_INV_ATK];
+	Chip * m_attackInventory[WEAPON][NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
 public:
 	Player();
 	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction);
+	void setHotKeyChip(e_gauntletSlots a_slot, e_chipSubSubType a_level);
 	void handleInput(UserInput * ui, World * a_world);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 	{
@@ -56,8 +55,6 @@ public:
 		if(isValid)
 			m_gauntlet[a_slot] = a_chip;
 	}
-	int getAttackInventorySlot(Chip * a_chip, int a_subSubType){return a_chip->getType() * ((a_chip->getSubType() - NUM_CHIP_SUBS_PER_TYPE) + a_subSubType);}
-	int getAttackInventorySlot(Chip * a_chip){return getAttackInventorySlot(a_chip, a_chip->getSubSubType());}
 	void addToAttackInventory(Chip * a_chip)
 	{
 		switch(a_chip->getType())
@@ -65,7 +62,7 @@ public:
 		case MAGIC:
 		case WEAPON:
 			a_chip->setOwner(this);
-			m_attackInventory[getAttackInventorySlot(a_chip)] = a_chip;
+			m_attackInventory[a_chip->getType()-1][a_chip->getSubType()][a_chip->getSubSubType()] = a_chip;
 			break;
 		}
 	}
@@ -76,7 +73,13 @@ public:
 		m_eType = PLAYER;
 		for(int i = 0; i < NUM_SLOTS; ++i)
 			m_gauntlet[i] = NULL;
-		for(int i = 0; i < NUM_INV_ATK; ++i)
-			m_attackInventory[i] = NULL;
+		for(int i = 0; i < WEAPON; ++i)
+		{
+			for(int j = 0; j < NUM_CHIP_SUBS_PER_TYPE; ++j)
+			{
+				for(int k = 0; k < NUM_CHIP_LEVELS; ++k)
+					m_attackInventory[i][j][k] = NULL;
+			}
+		}
 	}
 };
