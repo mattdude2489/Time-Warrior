@@ -9,7 +9,7 @@ struct Tile
 {
 	SDL_Sprite * currentTexture;
 	bool collide;
-	Location pos;
+	SPoint pos;
 	int indexOfSpriteRow;
 };
 

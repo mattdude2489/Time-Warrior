@@ -1,5 +1,6 @@
 #pragma once
 #include "SDL_Sprite.h"
+#include "spoint.h"
 #include <stdio.h>
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
@@ -67,13 +68,12 @@ struct Stats
 		}
 	}
 };
-struct Location{int x, y;};
 
 class Entity
 {
 protected:
 	Stats m_stats;
-	Location m_locations[NUM_LOCATIONS];//LOC_SCREEN/LOC_WORLD
+	SPoint m_locations[NUM_LOCATIONS];//LOC_SCREEN/LOC_WORLD
 	e_entityType m_eType;
 	SDL_Sprite * m_sprite;
 	int m_timeToRegen;
@@ -112,8 +112,8 @@ public:
 	void setType(e_entityType type) {m_eType = type;}
 	int getType() {return (int)m_eType;}
 	bool getVisible() {return m_shouldDraw;}
-	Location getLocationScreen(){return m_locations[LOC_SCREEN];}
-	Location getLocationWorld(){return m_locations[LOC_WORLD];}
+	SPoint getLocationScreen(){return m_locations[LOC_SCREEN];}
+	SPoint getLocationWorld(){return m_locations[LOC_WORLD];}
 	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
 	void move(int a_locIndex, int a_deltaX, int a_deltaY){m_locations[a_locIndex].x += a_deltaX; m_locations[a_locIndex].y += a_deltaY;}

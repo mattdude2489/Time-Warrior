@@ -17,7 +17,7 @@ class Chip : public Entity
 		int m_level, m_cost, m_costLv, m_dmg, m_dmgLv;
 		bool m_isEquipped;
 		Entity * m_owner;
-		Location m_target;
+		SPoint m_target;
 		World * m_world;
 		bool m_firstIteration;
 		char m_direction;
