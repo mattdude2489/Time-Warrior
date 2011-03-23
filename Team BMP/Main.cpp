@@ -36,16 +36,22 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Player eTest(15,1,39,100,100,100,5,9,&test);
 	BasicSlash chip;
 	BasicFire chip2;
-	//AdvancedFire chip2;
-	//ExpertFire chip2;
+	AdvancedFire chip3;
+	ExpertFire chip4;
+	eTest.addToAttackInventory(&chip);
+	eTest.addToAttackInventory(&chip2);
+	eTest.addToAttackInventory(&chip3);
+	eTest.addToAttackInventory(&chip4);
 	Hud Ghud;
 	World world;
-	chip.setOwner(&eTest);
 	chip.setWorld(&world);
 	chip.levelUp();
-	chip2.setOwner(&eTest);
 	chip2.setWorld(&world);
 	chip2.levelUp();
+	chip3.setWorld(&world);
+	chip3.levelUp();
+	chip4.setWorld(&world);
+	chip4.levelUp();
 	SDL_Sprite aTest("Sprites/greenguy.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	aTest.setTransparency(COLOR_TRANSPARENT);
 	aTest.restart(2);
@@ -56,6 +62,8 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.setAnEntity(&eTest);
 	world.setAnEntity(&chip);
 	world.setAnEntity(&chip2);
+	world.setAnEntity(&chip3);
+	world.setAnEntity(&chip4);
 	world.setAnEntity(&fightTest);
 	//music test stuff
 	

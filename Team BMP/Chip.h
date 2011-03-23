@@ -4,8 +4,8 @@
 #include "Entity.h"
 #include "World.h"
 
-enum e_chipType {ARMOR, MAGIC, WEAPON};
-enum e_chipSubType {HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE};
+enum e_chipType {ARMOR, MAGIC, WEAPON, NUM_CHIP_TYPES};
+enum e_chipSubType {HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE, NUM_TOTAL_CHIP_SUBS, NUM_CHIP_SUBS_PER_TYPE = NUM_TOTAL_CHIP_SUBS/NUM_CHIP_TYPES};
 enum e_chipSubSubType {BASIC, ADVANCED, EXPERT, NUM_CHIP_LEVELS};
 
 class Chip : public Entity
@@ -58,8 +58,17 @@ class Chip : public Entity
 		virtual void levelUpUnique(){}
 		void levelUp()
 		{
-			if(m_cType != ARMOR)
-				m_costLv = m_dmgLv = 5;
+			switch(m_cType)
+			{
+			case MAGIC:
+			case WEAPON:
+				m_dmgLv = 5;
+				if(m_cType == MAGIC)
+					m_costLv = 5 * (m_cSubSubType + 1);
+				else
+					m_costLv = 5 * m_cSubSubType;
+				break;
+			}
 			m_level++;
 			m_cost += m_costLv;
 			m_dmg += m_dmgLv;
@@ -74,6 +83,7 @@ class Chip : public Entity
 			{
 				if(!m_shouldDraw)
 				{
+					m_owner->useEnergy(m_cost);
 					m_firstIteration = true;
 					m_shouldDraw = true;
 					m_sprite->start();
@@ -84,6 +94,7 @@ class Chip : public Entity
 				{
 					if(m_cType == MAGIC && m_cSubSubType == BASIC)
 					{
+						m_owner->useEnergy(m_cost);
 						m_target.x -= m_sprite->getWidthOffsetCenter();
 						m_target.y -= m_sprite->getHeightOffsetCenter();
 					}

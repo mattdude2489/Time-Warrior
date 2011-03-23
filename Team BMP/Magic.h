@@ -42,7 +42,7 @@ class Magic : public Chip
 				case LIGHTNING:
 				case FIRE:
 				case ICE:
-					if(a_entity->getType() != PLAYER)
+					if(a_entity->getType() != m_owner->getType())
 						return collideSimple(a_entity);
 					else
 						return false;
@@ -58,7 +58,7 @@ class Magic : public Chip
 			{
 			case DIVINE:
 				m_owner->heal(m_dmg);
-				if(a_entity->getType() == PLAYER)
+				if(a_entity->getType() == m_owner->getType())
 					a_entity->heal(m_dmg);
 				else
 					a_entity->hit(m_dmg/2);
@@ -66,7 +66,7 @@ class Magic : public Chip
 			case LIGHTNING:
 			case FIRE:
 			case ICE:
-				if(a_entity->getType() != PLAYER)
+				if(a_entity->getType() != m_owner->getType())
 					a_entity->hit(m_dmg);
 				break;
 			}

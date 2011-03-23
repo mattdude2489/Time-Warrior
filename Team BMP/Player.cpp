@@ -16,7 +16,6 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 	{
 		if(m_stats[ENERGY_CURRENT] >= m_gauntlet[a_slot]->getCost())
 		{
-			useEnergy(m_gauntlet[a_slot]->getCost());
 			m_gauntlet[a_slot]->setTarget(a_targetX, a_targetY);
 			m_gauntlet[a_slot]->setDirection(a_direction);
 			m_gauntlet[a_slot]->activate();
@@ -57,6 +56,27 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		m_sprite->setRIndex(3);
 		move(LOC_SCREEN, -5, 0);
 		lastKey = KEY_LEFT;
+	}
+	switch(ui->getKey())
+	{
+	case KEY_HOT_ATK1_BAS:
+		setGauntletSlot(SLOT_ATK1, m_attackInventory[getAttackInventorySlot(m_gauntlet[SLOT_ATK1], BASIC)]);
+		break;
+	case KEY_HOT_ATK1_ADV:
+		setGauntletSlot(SLOT_ATK1, m_attackInventory[getAttackInventorySlot(m_gauntlet[SLOT_ATK1], ADVANCED)]);
+		break;
+	case KEY_HOT_ATK1_EXP:
+		setGauntletSlot(SLOT_ATK1, m_attackInventory[getAttackInventorySlot(m_gauntlet[SLOT_ATK1], EXPERT)]);
+		break;
+	case KEY_HOT_ATK2_BAS:
+		setGauntletSlot(SLOT_ATK2, m_attackInventory[getAttackInventorySlot(m_gauntlet[SLOT_ATK2], BASIC)]);
+		break;
+	case KEY_HOT_ATK2_ADV:
+		setGauntletSlot(SLOT_ATK2, m_attackInventory[getAttackInventorySlot(m_gauntlet[SLOT_ATK2], ADVANCED)]);
+		break;
+	case KEY_HOT_ATK2_EXP:
+		setGauntletSlot(SLOT_ATK2, m_attackInventory[getAttackInventorySlot(m_gauntlet[SLOT_ATK2], EXPERT)]);
+		break;
 	}
 	if(ui->getClick() == CLICK_LEFT && ui->getMouseY() < HUD_Y)
 		activateGauntletAttack(SLOT_ATK1, ui->getMouseX(), ui->getMouseY(), lastKey);
