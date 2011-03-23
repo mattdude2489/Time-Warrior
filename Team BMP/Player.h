@@ -20,7 +20,6 @@ private:
 public:
 	Player();
 	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction);
-	void setHotKeyChip(e_gauntletSlots a_slot, e_chipSubSubType a_level);
 	void handleInput(UserInput * ui, World * a_world);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 	{
@@ -55,6 +54,7 @@ public:
 		if(isValid)
 			m_gauntlet[a_slot] = a_chip;
 	}
+	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level);
 	void addToAttackInventory(Chip * a_chip)
 	{
 		switch(a_chip->getType())

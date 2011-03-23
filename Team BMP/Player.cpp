@@ -22,7 +22,7 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 		}
 	}
 }
-void Player::setHotKeyChip(e_gauntletSlots a_slot, e_chipSubSubType a_level){setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getType()-1][m_gauntlet[a_slot]->getSubType()][a_level]);}
+void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level){setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getType()-1][m_gauntlet[a_slot]->getSubType()][a_level]);}
 void Player::handleInput(UserInput * ui, World * a_world)
 {
 	static char lastKey = KEY_NONE; 
@@ -61,25 +61,25 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	switch(ui->getHKeyL())
 	{
 	case KEY_HOT_ATK2_BAS:
-		setHotKeyChip(SLOT_ATK1, BASIC);
+		setGauntletSlot(SLOT_ATK1, BASIC);
 		break;
 	case KEY_HOT_ATK2_ADV:
-		setHotKeyChip(SLOT_ATK1, ADVANCED);
+		setGauntletSlot(SLOT_ATK1, ADVANCED);
 		break;
 	case KEY_HOT_ATK2_EXP:
-		setHotKeyChip(SLOT_ATK1, EXPERT);
+		setGauntletSlot(SLOT_ATK1, EXPERT);
 		break;
 	}
 	switch(ui->getHKeyR())
 	{
 	case KEY_HOT_ATK2_BAS:
-		setHotKeyChip(SLOT_ATK2, BASIC);
+		setGauntletSlot(SLOT_ATK2, BASIC);
 		break;
 	case KEY_HOT_ATK2_ADV:
-		setHotKeyChip(SLOT_ATK2, ADVANCED);
+		setGauntletSlot(SLOT_ATK2, ADVANCED);
 		break;
 	case KEY_HOT_ATK2_EXP:
-		setHotKeyChip(SLOT_ATK2, EXPERT);
+		setGauntletSlot(SLOT_ATK2, EXPERT);
 		break;
 	}
 	if(ui->getClick() == CLICK_LEFT && ui->getMouseY() < HUD_Y)
