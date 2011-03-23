@@ -36,7 +36,7 @@ bool World::setWorld(char * fileName)
 		while(c != EOF)
 		{
 			Tile hi;
-			//Initial setup switch.
+			//Initial setup switch. Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
 			switch(c)
 			{
 			case '\n':
@@ -45,6 +45,9 @@ bool World::setWorld(char * fileName)
 				break;
 			case 'G':
 			case 'D':
+			case 'H':
+			case 'V':
+			case 'M':
 				hi.currentTexture = sprite;
 				hi.pos.x = x;
 				hi.pos.y = y;
@@ -52,7 +55,7 @@ bool World::setWorld(char * fileName)
 				break;
 			}
 
-			//Anything else in particular switch. So in other words, creations of entities, any particulars of the map.
+			//"Anything else in particular" switch. So in other words, creations of entities, any particulars of the map.
 			//Will happen in this switch statement.
 			switch(c)
 			{
@@ -61,6 +64,15 @@ bool World::setWorld(char * fileName)
 				break;
 			case 'D':
 				hi.indexOfSpriteRow = 1;
+				break;
+			case 'H':
+				hi.indexOfSpriteRow = 2;
+				break;
+			case 'V':
+				hi.indexOfSpriteRow = 3;
+				break;
+			case 'M':
+				hi.indexOfSpriteRow = 4;
 				break;
 			}
 			m_mapOfWorld.add(hi);
