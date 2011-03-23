@@ -6,11 +6,11 @@
 class Magic : public Chip
 {
 	protected:
-		int m_dmgCombo, m_dmgComboLv, m_timeExpire;
+		int m_dmgCombo, m_dmgComboLv;
 	public:
 		Magic(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(MAGIC, a_subType, a_subSubType),
-			m_dmgCombo(0),m_dmgComboLv(0), m_timeExpire(0){}
+			m_dmgCombo(0),m_dmgComboLv(0){}
 		int getComboBonus(){return m_dmgCombo;}
 		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
 		void activateUnique()
@@ -129,14 +129,13 @@ class Magic : public Chip
 							switchSignIf(deltaX, switchSignX);
 							switchSignIf(deltaY, switchSignY);
 							move(LOC_SCREEN,(int)deltaX,(int)deltaY);
-							m_timeExpire = 0;
 						}
 						else
 						{
-							m_timeExpire += a_timePassed;
-							if(m_timeExpire >= TIME_EXPIRE)
+							m_timer += a_timePassed;
+							if(m_timer >= TIME_EXPIRE)
 							{
-								m_timeExpire = 0;
+								m_timer = 0;
 								deactivate();
 							}
 						}

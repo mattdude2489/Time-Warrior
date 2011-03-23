@@ -21,7 +21,7 @@ protected:
 	int m_timeToRegen;
 	bool m_shouldDraw;
 	SDL_Rect m_hb;
-	int m_timeInactive;
+	int m_timer;
 public:
 	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
 	{
@@ -37,7 +37,7 @@ public:
 		m_timeToRegen =  0;
 		setLocation(LOC_SCREEN, SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_shouldDraw = false;
-		m_timeInactive = 0;
+		m_timer = 0;
 	}
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
@@ -62,7 +62,7 @@ public:
 	void move(int a_locIndex, int a_deltaX, int a_deltaY)
 	{
 		m_locations[a_locIndex].x += a_deltaX; m_locations[a_locIndex].y += a_deltaY;
-		m_timeInactive = 0;
+		m_timer = 0;
 		m_sprite->start();
 	}
 	void setLocation(int a_locIndex, int a_x, int a_y){m_locations[a_locIndex].x = a_x; m_locations[a_locIndex].y = a_y;}
@@ -79,8 +79,8 @@ public:
 		}
 		if(m_eType != CHIP)
 		{
-			m_timeInactive += a_timePassed;
-			if(m_timeInactive >= TIME_INACTIVE && m_sprite->getFrame() == 1)
+			m_timer += a_timePassed;
+			if(m_timer >= TIME_INACTIVE && m_sprite->getFrame() == 1)
 				m_sprite->stop();
 		}
 		m_hb.x = m_locations[LOC_SCREEN].x;
