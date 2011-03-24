@@ -4,7 +4,7 @@
 #include "UserInput.h"
 #include "spoint.h"
 #include "trueTextPrinter.h"
-#include "Entity.h"
+#include "Player.h"
 #include <stdio.h>
 
 #define BUTTONCOLOR			0xffff00
@@ -51,7 +51,7 @@ class StatWindow
 {
 private:
 	TTtext m_text[NUM_STATS];
-	Entity * m_player;
+	Player * m_player;
 	SRect m_window;
 public:
 	StatWindow()
@@ -65,7 +65,8 @@ public:
 		for(int i = 0; i < NUM_STATS; i++)
 			m_text[i].setFont(a_font);
 	}
-	void setPlayer(Entity * a_player)
+	Player * getPlayer(){return m_player;}
+	void setPlayer(Player * a_player)
 	{	
 		m_player = a_player;
 		putStatsInText();

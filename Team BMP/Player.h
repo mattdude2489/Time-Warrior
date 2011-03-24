@@ -66,6 +66,14 @@ public:
 			break;
 		}
 	}
+	void drawAtk1(SDL_Surface * a_screen, int a_x, int a_y)
+	{
+		m_gauntlet[SLOT_ATK1]->drawHUD(a_screen, a_x, a_y);
+	}
+	void drawAtk2(SDL_Surface * a_screen, int a_x, int a_y)
+	{
+		m_gauntlet[SLOT_ATK2]->drawHUD(a_screen, a_x, a_y);
+	}
 	//This is Alex's code...copypastaed. Because it works. Quite well in fact.
 	Player(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
 		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite)

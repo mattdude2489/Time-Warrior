@@ -74,6 +74,8 @@ public:
 		for(int i = 0; i < NUM_BARS; i++)
 			SDL_FillRect(screen, &bars[i], colors[i]);
 		m_statButton.draw(screen);
+		m_statWin.getPlayer()->drawAtk1(screen, HUD_X + ONE_HUNDRED_PERCENT, HUD_Y);
+		m_statWin.getPlayer()->drawAtk2(screen, HUD_X + (2 * ONE_HUNDRED_PERCENT), HUD_Y);
 		if(m_showStats)
 			m_statWin.draw(screen);
 	}

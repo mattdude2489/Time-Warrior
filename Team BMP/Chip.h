@@ -21,6 +21,7 @@ class Chip : public Entity
 		World * m_world;
 		bool m_firstIteration;
 		char m_direction;
+		SDL_Sprite * m_spriteHUD;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
@@ -132,4 +133,5 @@ class Chip : public Entity
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
 		virtual void setSprite(char * a_fileName){}
+		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){m_spriteHUD->draw(a_screen, a_x, a_y);}
 };

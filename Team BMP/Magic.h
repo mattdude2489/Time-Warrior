@@ -75,6 +75,8 @@ class Magic : public Chip
 		{
 			m_sprite = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
+			m_spriteHUD = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
+			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
 			switch(m_cSubSubType)
 			{
 			case BASIC:
@@ -88,6 +90,7 @@ class Magic : public Chip
 				break;
 			}
 			m_sprite->setRIndex(m_cSubSubType);
+			m_spriteHUD->setRIndex(m_cSubSubType);
 		}
 		void switchSign(double & a_num){a_num *= -1;}
 		void switchSignIf(double & a_num, bool a_shouldChange)
@@ -151,6 +154,8 @@ class Magic : public Chip
 		{
 			if(m_sprite->isSprite())
 				delete m_sprite;
+			if(m_spriteHUD->isSprite())
+				delete m_spriteHUD;
 		}
 };
 class Divine : public Magic

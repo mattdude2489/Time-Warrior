@@ -128,6 +128,8 @@ class Weapon : public Chip
 		{
 			if(m_sprite->isSprite())
 				delete m_sprite;
+			if(m_spriteHUD->isSprite())
+				delete m_spriteHUD;
 		}
 };
 class Slash : public Weapon
@@ -146,5 +148,7 @@ class BasicSlash : public Slash
 			m_sprite = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE/2, SPRITE_SPEED, 1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			//m_sprite->setRIndex(m_cSubSubType);
+			m_spriteHUD = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE/2, SPRITE_SPEED, 1);
+			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
 		}
 };
