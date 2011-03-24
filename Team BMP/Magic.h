@@ -91,6 +91,9 @@ class Magic : public Chip
 			}
 			m_sprite->setRIndex(m_cSubSubType);
 			m_spriteHUD->setRIndex(m_cSubSubType);
+			m_spriteHUD->start();
+			m_spriteHUD->update(3*SPRITE_SPEED);
+			m_spriteHUD->update(1);
 		}
 		void switchSign(double & a_num){a_num *= -1;}
 		void switchSignIf(double & a_num, bool a_shouldChange)

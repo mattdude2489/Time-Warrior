@@ -150,5 +150,8 @@ class BasicSlash : public Slash
 			//m_sprite->setRIndex(m_cSubSubType);
 			m_spriteHUD = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE/2, SPRITE_SPEED, 1);
 			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
+			m_spriteHUD->start();
+			m_spriteHUD->update(3*SPRITE_SPEED);
+			m_spriteHUD->update(1);
 		}
 };
