@@ -1,6 +1,6 @@
 #include "World.h"
 
-World::World(){m_success = setWorld("Maps/HubWorldMap.txt");}
+World::World(){m_success = setWorld("Maps/HubWorldMap.txt"); clientPlayerIndex = 0;}
 
 World::~World()
 {
@@ -26,6 +26,7 @@ bool World::setWorld(char * fileName)
 	//Screw it. I'm gonna do this Java style.
 //	SDL_Sprite * sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
 	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS+1);
+	sprite->setTransparency(COLOR_TRANSPARENT);
 	//start the actual loading of the textures.
 	if(infile == NULL)
 		m_success = false;
@@ -48,10 +49,12 @@ bool World::setWorld(char * fileName)
 			case 'H':
 			case 'V':
 			case 'M':
+			case 'B':
 				hi.currentTexture = sprite;
-				hi.pos.x = x;
-				hi.pos.y = y;
+				hi.pos.x = x*32;
+				hi.pos.y = y*32;
 				x++;
+				hi.collide = false;
 				break;
 			}
 
@@ -74,6 +77,10 @@ bool World::setWorld(char * fileName)
 			case 'M':
 				hi.indexOfSpriteRow = 4;
 				break;
+			case 'B':
+				hi.collide = true;
+				hi.indexOfSpriteRow = 5;
+				break;
 			}
 			m_mapOfWorld.add(hi);
 			c = fgetc(infile);
@@ -90,7 +97,7 @@ void World::draw(SDL_Surface * a_screen)
 	for(int k = 0; k < m_mapOfWorld.size(); k++)
 	{
 		m_mapOfWorld.get(k).currentTexture->setRIndex(m_mapOfWorld.get(k).indexOfSpriteRow);
-		m_mapOfWorld.get(k).currentTexture->draw(a_screen, 32*m_mapOfWorld.get(k).pos.x, 32*m_mapOfWorld.get(k).pos.y);
+		m_mapOfWorld.get(k).currentTexture->draw(a_screen, m_mapOfWorld.get(k).pos.x, m_mapOfWorld.get(k).pos.y);
 	}
 	//Entities draw.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
@@ -103,6 +110,38 @@ void World::update(Uint32 a_timePassed)
 {
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i)->update(a_timePassed);
+
+	
+	static SPoint prevLoc;
+	
+	//for(int i = 0; i < m_mapOfWorld.size(); i++)
+	//{
+	//	//if(((m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x == m_mapOfWorld.get(i).pos.x) && 
+	//	//	(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y == m_mapOfWorld.get(i).pos.y)) && 
+	//	//	m_mapOfWorld.get(i).collide)
+	//	//	m_mapOfEntities.get(clientPlayerIndex)->setLocation(0, prevLoc.x, prevLoc.y);
+	//	if(m_mapOfEntities.get(clientPlayerIndex)->getSprite()->rectCollide(
+	//		m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x,
+	//		m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y,
+	//		*m_mapOfWorld.get(i).currentTexture,
+	//		m_mapOfWorld.get(i).pos.x,
+	//		m_mapOfWorld.get(i).pos.y) && m_mapOfWorld.get(i).collide)
+
+	//		m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
+	//}
+
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	{
+		if(i != clientPlayerIndex)
+			m_mapOfEntities.get(i)->move(0,-1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x - prevLoc.x), -1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y - prevLoc.y));
+	}
+
+	for(int i = 0; i < m_mapOfWorld.size(); i++)
+	{
+		m_mapOfWorld.get(i).pos.set(m_mapOfWorld.get(i).pos.x - (m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x - prevLoc.x), m_mapOfWorld.get(i).pos.y - (m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y - prevLoc.y));
+	}
+
+	prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	sortOnYPosition();
 }
@@ -118,6 +157,14 @@ void World::sortOnYPosition()
 			{
 				m_mapOfEntities.swap(i, k);
 			}
+		}
+	}
+	for(int z = 0; z < m_mapOfEntities.size(); ++z)
+	{
+		if(m_mapOfEntities.get(z)->getType() == 1)
+		{
+			clientPlayerIndex = z;
+			break;
 		}
 	}
 }

@@ -19,6 +19,7 @@ private:
 	TemplateVector<Entity*> m_mapOfEntities;
 	TemplateVector<Tile> m_mapOfWorld;
 	bool m_success;
+	int clientPlayerIndex;
 public:
 	World();
 	~World();

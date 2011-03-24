@@ -130,6 +130,7 @@ public:
 		else
 			return false;
 	}
+	SDL_Sprite * getSprite() {return m_sprite;}
 	bool collide(Entity * a_entity)
 	{
 		//If one of them is the chip; get rid of it. Right now. Seriously, just don't do it.
