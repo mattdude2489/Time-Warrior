@@ -13,7 +13,6 @@
 //#define WITH_NETWORKING
 #define WITHOUT_NETWORKING
 
-
 //Some debugging includes
 #include <stdio.h>
 
@@ -181,7 +180,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}
 #endif
 		SDL_Flip(screen);
-		SDL_Delay(100);
+		SDL_Delay(SPRITE_SPEED);
 	}
 
 	SDL_FreeSurface(screen);

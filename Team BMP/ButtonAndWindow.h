@@ -5,7 +5,6 @@
 #include "spoint.h"
 #include "trueTextPrinter.h"
 #include "Player.h"
-#include <stdio.h>
 
 #define BUTTONCOLOR			0xffff00
 #define WINDOWCOLOR			0xffffff
