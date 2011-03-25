@@ -112,7 +112,7 @@ void World::update(Uint32 a_timePassed)
 		m_mapOfEntities.get(i)->update(a_timePassed);
 
 	
-	static SPoint prevLoc;
+	static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld();
 	
 	//for(int i = 0; i < m_mapOfWorld.size(); i++)
 	//{
