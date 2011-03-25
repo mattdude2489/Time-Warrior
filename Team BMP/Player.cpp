@@ -2,14 +2,64 @@
 #include "Player.h"
 #include "UserInput.h"
 
-Player::Player():Entity()
+void Player::init()
 {
-	m_eType = PLAYER; //Tells the Entity that it's a PLAYER. YEAH. REMEMBER THEM? THE PLAYERS. YEAH. THEY EXIST TOO.
-	//Otherwise, let the usual Entity constructor occur.
+	m_eType = PLAYER;
 	for(int i = 0; i < NUM_SLOTS; ++i)
 		m_gauntlet[i] = NULL;
+	for(int i = 0; i < WEAPON; ++i)
+	{
+		for(int j = 0; j < NUM_CHIP_SUBS_PER_TYPE; ++j)
+		{
+			for(int k = 0; k < NUM_CHIP_LEVELS; ++k)
+				m_attackInventory[i][j][k] = NULL;
+		}
+	}
 }
-
+void Player::addToAttackInventory(Chip * a_chip)
+{
+	switch(a_chip->getType())
+	{
+	case MAGIC:
+	case WEAPON:
+		a_chip->setOwner(this);
+		m_attackInventory[a_chip->getType()-1][a_chip->getSubType()][a_chip->getSubSubType()] = a_chip;
+		break;
+	}
+}
+void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
+{
+	bool isValid = false;
+	if(a_chip)
+	{
+		switch(a_slot)
+		{
+		case SLOT_ATK1:
+		case SLOT_ATK2:
+			if(a_chip->getLevel() > 0 && a_chip->getType() != ARMOR)
+				isValid = true;
+			break;
+		case SLOT_ARMOR_HEAD:
+			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == HEAD)
+				isValid = true;
+			break;
+		case SLOT_ARMOR_TRUNK:
+			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == TRUNK)
+				isValid = true;
+			break;
+		case SLOT_ARMOR_LIMB_UPPER:
+			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_UPPER)
+				isValid = true;
+			break;
+		case SLOT_ARMOR_LIMB_LOWER:
+			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_LOWER)
+				isValid = true;
+			break;
+		}
+	}
+	if(isValid)
+		m_gauntlet[a_slot] = a_chip;
+}
 void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction)
 {
 	if((a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2) && m_gauntlet[a_slot])
@@ -22,7 +72,6 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 		}
 	}
 }
-void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level){setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getType()-1][m_gauntlet[a_slot]->getSubType()][a_level]);}
 void Player::handleInput(UserInput * ui, World * a_world)
 {
 	static char lastKey = KEY_NONE; 

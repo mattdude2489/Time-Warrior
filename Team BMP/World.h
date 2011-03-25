@@ -12,7 +12,6 @@ struct Tile
 	SPoint pos;
 	int indexOfSpriteRow;
 };
-
 class World
 {
 private:
@@ -21,14 +20,14 @@ private:
 	bool m_success;
 	int clientPlayerIndex;
 public:
-	World();
+	World(){m_success = setWorld("Maps/HubWorldMap.txt"); clientPlayerIndex = 0;}
 	~World();
-	void draw(SDL_Surface * a_screen);
-	void update(Uint32 timePassed);
 	void setAnEntity(Entity * newEntity){m_mapOfEntities.add(newEntity);}
-	bool getSuccess() {return m_success;}
+	void sortOnYPosition();
+	void update(Uint32 timePassed);
+	void draw(SDL_Surface * a_screen);
 	bool setWorld(char * fileName);
+	bool getSuccess() {return m_success;}
 	int getNumEntities(){return m_mapOfEntities.size();}
 	Entity * getEntity(int a_entity){return m_mapOfEntities.get(a_entity);}
-	void sortOnYPosition();
 };

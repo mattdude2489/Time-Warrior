@@ -1,7 +1,5 @@
 #include "World.h"
 
-World::World(){m_success = setWorld("Maps/HubWorldMap.txt"); clientPlayerIndex = 0;}
-
 World::~World()
 {
 		/*for(int i = 0; i < m_mapOfWorld.size(); i++)
@@ -9,7 +7,6 @@ World::~World()
 	//because ALL of the tiles only hold ONE texture, it only needs to be deleted ONCE.
 	delete m_mapOfWorld.get(0).currentTexture;// Hooray for trying to delete memory that's ALREADY GONE!?
 }
-
 bool World::setWorld(char * fileName)
 {
 	FILE * infile;
@@ -90,22 +87,28 @@ bool World::setWorld(char * fileName)
 	}
 	return m_success;
 }
-
-void World::draw(SDL_Surface * a_screen)
+void World::sortOnYPosition()
 {
-	//Texture draw.
-	for(int k = 0; k < m_mapOfWorld.size(); k++)
+	//Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
+	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 	{
-		m_mapOfWorld.get(k).currentTexture->setRIndex(m_mapOfWorld.get(k).indexOfSpriteRow);
-		m_mapOfWorld.get(k).currentTexture->draw(a_screen, m_mapOfWorld.get(k).pos.x, m_mapOfWorld.get(k).pos.y);
+		for(int k = i; k < m_mapOfEntities.size(); ++k)
+		{
+			if(m_mapOfEntities.get(i)->getLocation().y > m_mapOfEntities.get(k)->getLocation().y)
+			{
+				m_mapOfEntities.swap(i, k);
+			}
+		}
 	}
-	//Entities draw.
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	for(int z = 0; z < m_mapOfEntities.size(); ++z)
 	{
-		m_mapOfEntities.get(i)->draw(a_screen);
+		if(m_mapOfEntities.get(z)->getType() == 1)
+		{
+			clientPlayerIndex = z;
+			break;
+		}
 	}
 }
-
 void World::update(Uint32 a_timePassed)
 {
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
@@ -133,26 +136,17 @@ void World::update(Uint32 a_timePassed)
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	sortOnYPosition();
 }
-
-void World::sortOnYPosition()
+void World::draw(SDL_Surface * a_screen)
 {
-	//Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
-	for(int i = 0; i < m_mapOfEntities.size(); ++i)
+	//Texture draw.
+	for(int k = 0; k < m_mapOfWorld.size(); k++)
 	{
-		for(int k = i; k < m_mapOfEntities.size(); ++k)
-		{
-			if(m_mapOfEntities.get(i)->getLocation().y > m_mapOfEntities.get(k)->getLocation().y)
-			{
-				m_mapOfEntities.swap(i, k);
-			}
-		}
+		m_mapOfWorld.get(k).currentTexture->setRIndex(m_mapOfWorld.get(k).indexOfSpriteRow);
+		m_mapOfWorld.get(k).currentTexture->draw(a_screen, m_mapOfWorld.get(k).pos.x, m_mapOfWorld.get(k).pos.y);
 	}
-	for(int z = 0; z < m_mapOfEntities.size(); ++z)
+	//Entities draw.
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
-		if(m_mapOfEntities.get(z)->getType() == 1)
-		{
-			clientPlayerIndex = z;
-			break;
-		}
+		m_mapOfEntities.get(i)->draw(a_screen);
 	}
 }

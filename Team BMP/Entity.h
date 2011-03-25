@@ -14,15 +14,12 @@ enum e_sprite {SPRITE_SIZE = 32, SPRITE_SPEED = TIME_SECOND_MS/30, SPRITE_ROWS =
 class Entity
 {
 protected:
-	int m_stats[NUM_STATS];
-	SPoint m_location;
-	SPoint * m_camera;
+	int m_stats[NUM_STATS], m_timeToRegen, m_timer;
 	e_entityType m_eType;
-	SDL_Sprite * m_sprite;
-	int m_timeToRegen;
 	bool m_shouldDraw;
+	SPoint m_location, *m_camera;
+	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
-	int m_timer;
 public:
 	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
 	{
@@ -35,24 +32,19 @@ public:
 		m_stats[RESISTANCE_ICE] = a_iRes;
 		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
 		m_stats[ENERGY_REGEN] = 1;
-		m_timeToRegen =  0;
-		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+		m_timeToRegen = m_timer = 0;
 		m_shouldDraw = false;
-		m_timer = 0;
+		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_camera = NULL;
 	}
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
 		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes);
+		m_eType = DUMMY;
 		m_shouldDraw = true;
 		m_sprite = a_sprite;
 		m_sprite->start();
-		//m_hb.x = SCREEN_CENTER_X;
-		//m_hb.y = SCREEN_CENTER_Y;
-		//m_hb.w = m_sprite->getWidth();
-		m_hb.h = 5;
-		m_eType = DUMMY;
 	}
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setType(e_entityType type) {m_eType = type;}
@@ -95,6 +87,7 @@ public:
 		m_hb.x = m_location.x - m_camera->x;
 		m_hb.y = m_location.y - m_camera->y;
 		m_hb.w = (Uint16)(((double)getStatNumber(HEALTH_CURRENT)/(double)getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
+		m_hb.h = 5;
 		m_sprite->update(a_timePassed);
 		updateUnique(a_timePassed);
 	}
