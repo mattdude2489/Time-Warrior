@@ -233,6 +233,58 @@
 				RelativePath=".\UserInput.h"
 				>
 			</File>
+			<Filter
+				Name="Networking shit"
+				>
+				<File
+					RelativePath=".\bytebuffer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\bytebuffer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\clientmodule.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\clientmodule.h"
+					>
+				</File>
+				<File
+					RelativePath=".\netmodule.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\netmodule.h"
+					>
+				</File>
+				<File
+					RelativePath=".\servermodule.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\servermodule.h"
+					>
+				</File>
+				<File
+					RelativePath=".\templatearray.h"
+					>
+				</File>
+				<File
+					RelativePath=".\templatevector2.h"
+					>
+				</File>
+				<File
+					RelativePath=".\winsockerrorhelp.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\winsockerrorhelp.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

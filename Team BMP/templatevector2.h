@@ -5,12 +5,16 @@
 /**
  * simple templated vector. Ideal for dynamic lists of primitive types and single pointers.
  * @WARNING template with virtual types, or types that will be pointed to at your own risk!
+ * in those situations, templates of pointers to those types are a much better idea.
  * @author mvaganov@hotmail.com December 2009
  */
 template<typename DATA_TYPE>
-class TemplateVector2 : public TemplateArray<DATA_TYPE>
+class TemplateVector : public TemplateArray<DATA_TYPE>
 {
 protected:
+	/** the default size to allocate new vectors to */
+	static const int DEFAULT_ALLOCATION_SIZE = 10;
+
 	/** number of valid elements that the caller thinks we have.. */
 	int m_size;
 
@@ -30,7 +34,7 @@ public:
 	}
 
 	/** @return true of the copy finished correctly */
-	inline bool copy(const TemplateVector2<DATA_TYPE> & a_vector)
+	inline bool copy(const TemplateVector<DATA_TYPE> & a_vector)
 	{
 		if(ensureCapacity(a_vector.m_size))
 		{
@@ -45,24 +49,41 @@ public:
 	}
 
 	/** copy constructor */
-	inline TemplateVector2(
-		const TemplateVector2<DATA_TYPE> & a_vector)
+	inline TemplateVector(
+		const TemplateVector<DATA_TYPE> & a_vector)
 	{
 		init();
 		copy(a_vector);
 	}
 
 	/** default constructor allocates no list (zero size) */
-	inline TemplateVector2(){init();}
+	inline TemplateVector(){init();}
+
+	/** add an array to this vector */
+	inline void add(const int & a_size,
+		const DATA_TYPE * a_values)
+	{
+		ensureCapacity(size()+a_size);
+		for(int i = 0; i < a_size; ++i)
+			add(a_values[i]);
+	}
 
 	/** format constructor */
-	inline TemplateVector2(const int & a_size,
+	inline TemplateVector(const int & a_size,
 		const DATA_TYPE & a_defaultValue)
+	{
+		init();
+		add(a_size, a_defaultValue);
+	}
+
+	/** complete constructor */
+	inline TemplateVector(const int & a_size,
+		DATA_TYPE * const & a_defaultValues)
 	{
 		init();
 		ensureCapacity(a_size);
 		for(int i = 0; i < a_size; ++i)
-			add(a_defaultValue);
+			add(a_defaultValues[i]);
 	}
 
 	/** @return the last value in the list */
@@ -87,8 +108,8 @@ public:
 		// if i don't have a place to store them, i better make one.
 		if(m_data == 0)
 		{
-			// make a new list to store numbers in TODO magic number
-			allocateToSize(10);
+			// make a new list to store numbers in
+			allocateToSize(DEFAULT_ALLOCATION_SIZE);
 		}
 		// if we don't have enough memory allocated for this list
 		if(m_size >= m_allocated)
@@ -116,7 +137,7 @@ public:
 	}
 
 	/** @param a_vector a vector to add all the elements from */
-	inline void addVector(const TemplateVector2<DATA_TYPE> & a_vector)
+	inline void addVector(const TemplateVector<DATA_TYPE> & a_vector)
 	{
 		for(int i = 0; i < a_vector.size(); ++i)
 		{
@@ -155,7 +176,7 @@ public:
 	 */
 	void remove(const int & a_index)
 	{
-		moveDown(a_index+1, -1, m_size);
+		moveDown(a_index, -1, m_size);
 		setSize(m_size-1);
 	}
 
@@ -165,7 +186,7 @@ public:
 	void insert(const int & a_index, const DATA_TYPE & a_value)
 	{
 		setSize(m_size+1);
-		moveUp(m_data, a_index, 1, m_size);
+		moveUp(a_index, 1, m_size);
 		set(a_index, a_value);
 	}
 
@@ -204,7 +225,7 @@ public:
 		return indexOf(a_value, a_startingIndex, m_size);
 	}
 
-	/** 
+	/**
 	 * will only work correctly if the TemplateVector is sorted.
 	 * @return the index of the given value, -1 if the value is not in the list
 	 */
@@ -212,9 +233,45 @@ public:
 	{
 		if(m_size)
 		{
-			return indexOfWithBinarySearch(a_value, 0, m_size);
+			return TemplateArray::indexOfWithBinarySearch(a_value, 0, m_size);
 		}
 		return -1;    // failed to find key
+	}
+
+	/**
+	 * uses binary sort to put values in the correct index. safe if soring is always used
+	 * @param a_value value to insert in order
+	 * @param a_allowDuplicates will not insert duplicates if set to false
+	 * @return the index where a_value was inserted
+	 */
+	int insertSorted(const DATA_TYPE & a_value, const bool & a_allowDuplicates)
+	{
+		int index;
+		if(!m_size || a_value < get(0))
+		{
+			index = 0;
+		}
+		else if(!(a_value < get(m_size-1)))
+		{
+			index = m_size;
+		}
+		else
+		{
+			int first = 0, last = m_size;
+			while (first <= last)
+			{
+				index = (first + last) / 2;
+				if (!(a_value < m_data[index]))
+					first = index + 1;
+				else if (a_value < m_data[index]) 
+					last = index - 1;
+			}
+			if(!(a_value < m_data[index]))
+				index++;
+		}
+		if(!m_size  || a_allowDuplicates || a_value != m_data[index])
+			insert(index, a_value);
+		return index;
 	}
 
 	/**
@@ -229,7 +286,7 @@ public:
 	 * @param a_listToExclude removes these elements from *this list
 	 * @return true if at least one element was removed
 	 */
-	inline bool removeListFast(const TemplateVector2<DATA_TYPE> & a_listToExclude)
+	inline bool removeListFast(const TemplateVector<DATA_TYPE> & a_listToExclude)
 	{
 		bool aTermWasRemoved = false;
 		for(int e = 0; e < a_listToExclude.size(); ++e)
@@ -254,9 +311,8 @@ public:
 	}
 
 	/** destructor */
-	inline ~TemplateVector2()
+	inline ~TemplateVector()
 	{
 		release();
 	}
-
 };

@@ -74,4 +74,23 @@ class UserInput
 						initKey = KEY_NONE; //Reset the initial Key.
 				}
 		}
+		void sendUi2Server(char a_str[])
+		{
+			
+			sprintf(a_str, "%c%c", keyPressLeftRight, keyPressUpDown);
+		}
+		bool keysChanged(char a_in[])
+		{
+			if(keyPressLeftRight == a_in[0]){
+				if(keyPressUpDown == a_in[1]){
+					return true;}
+			}
+
+			return false;
+		}
+		void convertServerInfo(char * a_in)
+		{
+			keyPressLeftRight = a_in[0];
+			keyPressUpDown = a_in[1];
+		}
 };

@@ -16,8 +16,8 @@ struct Tile
 class World
 {
 private:
-	TemplateVector<Entity*> m_mapOfEntities;
-	TemplateVector<Tile> m_mapOfWorld;
+	TemplateVector2<Entity*> m_mapOfEntities;
+	TemplateVector2<Tile> m_mapOfWorld;
 	bool m_success;
 	int clientPlayerIndex;
 public:

@@ -8,6 +8,7 @@
 #include "World.h"
 #include "Hud.h"
 #include "audiohandler.h"
+#include "servermodule.h"
 
 
 //Some debugging includes
@@ -22,6 +23,21 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	SDL_Surface * screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 	SDL_Event e;
 	UserInput ui; //This is the UserInput class.
+	//networking
+	ServerModule s(9999);
+	while(s.getState() != NetModule::LISTENING)
+	{
+		s.run();
+		printf("Server state: %s \n", s.getStateText());
+	}
+	ClientModule c("127.0.1",9999);
+	while(s.size() == 0)
+	{
+		s.run();
+		printf("Server state: %s \n", s.getStateText());
+		c.run();
+		printf("Client state: %s \n", c.getStateText());
+	}
 
 	//Timer stuff, for updateing sprites and anything else
 	Uint32 then = SDL_GetTicks(), now, passed;
@@ -69,8 +85,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	
 	AudioHandler ah;
 	ah.playMusic();
-
+	char send[10], old[10], *in;
 	if(!world.getSuccess()){printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");}
+	UserInput aui;
 
 	while(running) //While loop, can be easily used for testing.
 	{
@@ -78,7 +95,17 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		now = SDL_GetTicks();
 		passed = now - then;
 		then = now;
+		if(c.getInbox()->getRawList() != NULL)
+		{
+			in = (char *)c.getInbox()->getRawList();
+			c.getInbox()->clear();
+			aui.convertServerInfo(in);
+			printf("converted data: %c %c\n", aui.getKeyLR(), aui.getKeyUD());
+		//	printf("server state: %s\n clientState: %s\n", s.getStateText(),c.getStateText()); 
+		}
 
+		s.run();
+		c.run();
 		//input
 		while(SDL_PollEvent(&e)) //Polls the events of SDL
 		{
@@ -107,7 +134,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 			}
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
-		eTest.handleInput(&ui, &world);
+		eTest.handleInput(&aui, &world);
 		//update
 		world.update(passed);
 		Ghud.updateHud(&eTest, &ui);
@@ -127,7 +154,15 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}*/
 		//test.draw(screen, 100, 100);
 		Ghud.draw(screen);
-
+	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
+		ui.sendUi2Server(send);
+		if(aui.getKeyLR() != ui.getKeyLR() || aui.getKeyUD() != ui.getKeyUD())
+		{
+			
+			c.getOutbox()->add(send);
+		//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
+		}
+		
 		SDL_Flip(screen);
 		SDL_Delay(100);
 	}
