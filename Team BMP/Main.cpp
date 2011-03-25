@@ -172,7 +172,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//test.draw(screen, 100, 100);
 		Ghud.draw(screen);
 	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
-		ui.sendUi2Server(send);
 #ifdef WITH_NETWORKING
 		ui.sendUi2Server(send);
 		if(aui.getKeyLR() != ui.getKeyLR() || aui.getKeyUD() != ui.getKeyUD())

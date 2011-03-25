@@ -135,7 +135,10 @@ void World::update(Uint32 a_timePassed)
 		if(i != clientPlayerIndex)
 			m_mapOfEntities.get(i)->move(LOC_SCREEN,-1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x - prevLoc.x), -1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y - prevLoc.y));
 	}*/
-
+	for(int i = 0; i < m_mapOfWorld.size(); i++)
+	{
+		m_mapOfWorld.get(i).pos.set(m_mapOfWorld.get(i).pos.x - (m_mapOfEntities.get(clientPlayerIndex)->getLocation().x - prevLoc.x), m_mapOfWorld.get(i).pos.y - (m_mapOfEntities.get(clientPlayerIndex)->getLocation().y - prevLoc.y));
+	}
 	prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	sortOnYPosition();
