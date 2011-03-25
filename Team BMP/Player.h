@@ -17,10 +17,22 @@ class Player : public Entity
 private:
 	Chip * m_gauntlet[NUM_SLOTS];
 	Chip * m_attackInventory[WEAPON][NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
+	SPoint m_cameraP;
 public:
 	Player();
 	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction);
+	SPoint * getCamera(){return &m_cameraP;}
+	void moveUnique(int a_deltaX, int a_deltaY)
+	{
+		m_cameraP.x += a_deltaX;
+		m_cameraP.y += a_deltaY;
+	}
 	void handleInput(UserInput * ui, World * a_world);
+	void setLocationUnique(int a_x, int a_y)
+	{
+		m_cameraP.x = a_x - SCREEN_CENTER_X;
+		m_cameraP.x = a_y - SCREEN_CENTER_Y;
+	}
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 	{
 		bool isValid = false;

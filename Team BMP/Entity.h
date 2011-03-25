@@ -15,7 +15,8 @@ class Entity
 {
 protected:
 	int m_stats[NUM_STATS];
-	SPoint m_locations[NUM_LOCATIONS];//LOC_SCREEN/LOC_WORLD
+	SPoint m_location;
+	SPoint * m_camera;
 	e_entityType m_eType;
 	SDL_Sprite * m_sprite;
 	int m_timeToRegen;
@@ -35,9 +36,10 @@ public:
 		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
 		m_stats[ENERGY_REGEN] = 1;
 		m_timeToRegen =  0;
-		setLocation(LOC_SCREEN, SCREEN_CENTER_X, SCREEN_CENTER_Y);
+		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_shouldDraw = false;
 		m_timer = 0;
+		m_camera = NULL;
 	}
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
@@ -46,26 +48,33 @@ public:
 		m_shouldDraw = true;
 		m_sprite = a_sprite;
 		m_sprite->start();
-		m_hb.x = m_locations[LOC_SCREEN].getX();
-		m_hb.y = m_locations[LOC_SCREEN].getY();
-		m_hb.w = m_sprite->getWidth();
+		//m_hb.x = SCREEN_CENTER_X;
+		//m_hb.y = SCREEN_CENTER_Y;
+		//m_hb.w = m_sprite->getWidth();
 		m_hb.h = 5;
 		m_eType = DUMMY;
 	}
+	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setType(e_entityType type) {m_eType = type;}
 	int getType() {return (int)m_eType;}
 	bool getVisible() {return m_shouldDraw;}
-	SPoint getLocationScreen(){return m_locations[LOC_SCREEN];}
-	SPoint getLocationWorld(){return m_locations[LOC_WORLD];}
+	SPoint getLocation(){return m_location;}
 	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
-	void move(int a_locIndex, int a_deltaX, int a_deltaY)
+	virtual void moveUnique(int a_deltaX, int a_deltaY){}
+	void move(int a_deltaX, int a_deltaY)
 	{
-		m_locations[a_locIndex].x += a_deltaX; m_locations[a_locIndex].y += a_deltaY;
+		moveUnique(a_deltaX, a_deltaY);
+		m_location.x += a_deltaX; m_location.y += a_deltaY;
 		m_timer = 0;
 		m_sprite->start();
 	}
-	void setLocation(int a_locIndex, int a_x, int a_y){m_locations[a_locIndex].x = a_x; m_locations[a_locIndex].y = a_y;}
+	virtual void setLocationUnique(int a_x, int a_y){}
+	void setLocation(int a_x, int a_y)
+	{
+		setLocationUnique(a_x, a_y);
+		m_location.x = a_x; m_location.y = a_y;
+	}
 	virtual void updateUnique(int a_timePassed){}
 	void update(int a_timePassed)
 	{
@@ -83,19 +92,19 @@ public:
 			if(m_timer >= TIME_INACTIVE && m_sprite->getFrame() == 1)
 				m_sprite->stop();
 		}
-		m_hb.x = m_locations[LOC_SCREEN].x;
-		m_hb.y = m_locations[LOC_SCREEN].y;
+		m_hb.x = m_location.x - m_camera->x;
+		m_hb.y = m_location.y - m_camera->y;
 		m_hb.w = (Uint16)(((double)getStatNumber(HEALTH_CURRENT)/(double)getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
 		m_sprite->update(a_timePassed);
 		updateUnique(a_timePassed);
 	}
 	void draw(SDL_Surface * a_screen)
 	{
-		if(m_shouldDraw)
+		if(m_shouldDraw && m_camera)
 		{
 			if(m_eType != CHIP)
 				SDL_FillRect(a_screen, &m_hb, COLOR_HEALTH);
-			m_sprite->draw(a_screen, m_locations[LOC_SCREEN].x,m_locations[LOC_SCREEN].y); 
+			m_sprite->draw(a_screen, m_location.x - m_camera->x, m_location.y - m_camera->y); 
 		}
 	}
 	void hit(int a_amount)
@@ -126,7 +135,7 @@ public:
 	bool collideSimple(Entity * a_entity)
 	{
 		if(m_shouldDraw && a_entity->getVisible())
-			return m_sprite->rectCollide(m_locations[LOC_SCREEN].x, m_locations[LOC_SCREEN].y, *a_entity->m_sprite, a_entity->getLocationScreen().x, a_entity->getLocationScreen().y);
+			return m_sprite->rectCollide(m_location.x, m_location.y, *a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
 		else
 			return false;
 	}

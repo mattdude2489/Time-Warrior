@@ -21,10 +21,10 @@ class Magic : public Chip
 			{
 			case BASIC:
 			case ADVANCED:
-				setLocation(LOC_SCREEN, centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
+				setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 				break;
 			case EXPERT:
-				setLocation(LOC_SCREEN, m_target.x, m_target.y);
+				setLocation(m_target.x, m_target.y);
 				break;
 			}
 		}
@@ -110,8 +110,8 @@ class Magic : public Chip
 				case BASIC:
 					{
 						int max = 10;
-						double deltaX = m_target.x - m_locations[LOC_SCREEN].x;
-						double deltaY = m_target.y - m_locations[LOC_SCREEN].y;
+						double deltaX = m_target.x - m_location.x;
+						double deltaY = m_target.y - m_location.y;
 						if(deltaX != 0 && deltaY != 0)
 						{
 							bool switchSignX = deltaX < 0;
@@ -134,7 +134,7 @@ class Magic : public Chip
 							}
 							switchSignIf(deltaX, switchSignX);
 							switchSignIf(deltaY, switchSignY);
-							move(LOC_SCREEN,(int)deltaX,(int)deltaY);
+							move((int)deltaX,(int)deltaY);
 						}
 						else
 						{
@@ -148,7 +148,7 @@ class Magic : public Chip
 					}
 					break;
 				case ADVANCED:
-					setLocation(LOC_SCREEN, centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
+					setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 					break;
 				}
 			}

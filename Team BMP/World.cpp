@@ -112,7 +112,7 @@ void World::update(Uint32 a_timePassed)
 		m_mapOfEntities.get(i)->update(a_timePassed);
 
 	
-	static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld();
+	static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	
 	//for(int i = 0; i < m_mapOfWorld.size(); i++)
 	//{
@@ -130,20 +130,13 @@ void World::update(Uint32 a_timePassed)
 	//		m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
 	//}
 
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	/*for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
 		if(i != clientPlayerIndex)
-		{
-			m_mapOfEntities.get(i)->move(0,-1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x - prevLoc.x), -1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y - prevLoc.y));
-		}
-	}
+			m_mapOfEntities.get(i)->move(LOC_SCREEN,-1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x - prevLoc.x), -1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y - prevLoc.y));
+	}*/
 
-	for(int i = 0; i < m_mapOfWorld.size(); i++)
-	{
-		m_mapOfWorld.get(i).pos.set(m_mapOfWorld.get(i).pos.x - (m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x - prevLoc.x), m_mapOfWorld.get(i).pos.y - (m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y - prevLoc.y));
-	}
-
-	prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld();
+	prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	sortOnYPosition();
 }
@@ -155,7 +148,7 @@ void World::sortOnYPosition()
 	{
 		for(int k = i; k < m_mapOfEntities.size(); ++k)
 		{
-			if(m_mapOfEntities.get(i)->getLocationScreen().y > m_mapOfEntities.get(k)->getLocationScreen().y)
+			if(m_mapOfEntities.get(i)->getLocation().y > m_mapOfEntities.get(k)->getLocation().y)
 			{
 				m_mapOfEntities.swap(i, k);
 			}

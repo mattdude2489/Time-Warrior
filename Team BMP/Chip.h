@@ -42,14 +42,14 @@ class Chip : public Entity
 		int getOwnerCenterX()
 		{
 			if(m_owner)
-				return m_owner->getLocationScreen().x + m_owner->getWidthOffsetCenter();
+				return m_owner->getLocation().x + m_owner->getWidthOffsetCenter();
 			else
 				return 0;
 		}
 		int getOwnerCenterY()
 		{
 			if(m_owner)
-				return m_owner->getLocationScreen().y + m_owner->getHeightOffsetCenter();
+				return m_owner->getLocation().y + m_owner->getHeightOffsetCenter();
 			else
 				return 0;
 		}
