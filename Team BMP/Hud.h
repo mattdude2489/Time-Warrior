@@ -46,6 +46,7 @@ public:
 		}
 		bars[BAR_BACK].setHeight(2*BAR_HEIGHT);
 		bars[BAR_ENERGY].setY(BAR_Y+BAR_HEIGHT);
+		colors[HUD_BASE] = COLOR_BASE;
 		colors[BAR_BACK] = COLOR_BACK;
 		colors[BAR_HEALTH] = COLOR_HEALTH;
 		colors[BAR_ENERGY] = COLOR_ENERGY;
@@ -74,8 +75,8 @@ public:
 		for(int i = 0; i < NUM_BARS; i++)
 			SDL_FillRect(screen, &bars[i], colors[i]);
 		m_statButton.draw(screen);
-		m_statWin.getPlayer()->drawAtk1(screen, HUD_X + ONE_HUNDRED_PERCENT, HUD_Y);
-		m_statWin.getPlayer()->drawAtk2(screen, HUD_X + (2 * ONE_HUNDRED_PERCENT), HUD_Y);
+		for(int i = 0; i < 2; ++i)
+			m_statWin.getPlayer()->drawSlot((e_gauntletSlots)i, screen, (HUD_X + HUD_WIDTH) - ((2-(i-1)) * HUD_HEIGHT), HUD_Y);
 		if(m_showStats)
 			m_statWin.draw(screen);
 	}

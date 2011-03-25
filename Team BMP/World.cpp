@@ -110,30 +110,20 @@ void World::update(Uint32 a_timePassed)
 {
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i)->update(a_timePassed);
-
-	
 	static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
-	
-	//for(int i = 0; i < m_mapOfWorld.size(); i++)
-	//{
-	//	//if(((m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x == m_mapOfWorld.get(i).pos.x) && 
-	//	//	(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y == m_mapOfWorld.get(i).pos.y)) && 
-	//	//	m_mapOfWorld.get(i).collide)
-	//	//	m_mapOfEntities.get(clientPlayerIndex)->setLocation(0, prevLoc.x, prevLoc.y);
-	//	if(m_mapOfEntities.get(clientPlayerIndex)->getSprite()->rectCollide(
-	//		m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x,
-	//		m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y,
-	//		*m_mapOfWorld.get(i).currentTexture,
-	//		m_mapOfWorld.get(i).pos.x,
-	//		m_mapOfWorld.get(i).pos.y) && m_mapOfWorld.get(i).collide)
-
-	//		m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
-	//}
-
-	/*for(int i = 0; i < m_mapOfEntities.size(); i++)
+	/*for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{
-		if(i != clientPlayerIndex)
-			m_mapOfEntities.get(i)->move(LOC_SCREEN,-1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x - prevLoc.x), -1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y - prevLoc.y));
+		if(((m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x == m_mapOfWorld.get(i).pos.x) && 
+			(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y == m_mapOfWorld.get(i).pos.y)) && 
+			m_mapOfWorld.get(i).collide)
+			m_mapOfEntities.get(clientPlayerIndex)->setLocation(0, prevLoc.x, prevLoc.y);
+		if(m_mapOfEntities.get(clientPlayerIndex)->getSprite()->rectCollide(
+			m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x,
+			m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y,
+			*m_mapOfWorld.get(i).currentTexture,
+			m_mapOfWorld.get(i).pos.x,
+			m_mapOfWorld.get(i).pos.y) && m_mapOfWorld.get(i).collide)
+			m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
 	}*/
 	for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{

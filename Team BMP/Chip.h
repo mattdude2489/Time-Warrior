@@ -53,6 +53,16 @@ class Chip : public Entity
 			else
 				return 0;
 		}
+		void initHudSprite()
+		{
+			if(m_spriteHUD->isSprite())
+			{
+				m_spriteHUD->start();
+				m_spriteHUD->update(m_spriteHUD->getMaxFrames()*SPRITE_SPEED);
+				m_spriteHUD->update(1);
+				m_spriteHUD->stop();
+			}
+		}
 		int centerAroundOwnerCenterX(){return getOwnerCenterX() - m_sprite->getWidthOffsetCenter();}
 		int centerAroundOwnerCenterY(){return getOwnerCenterY() - m_sprite->getHeightOffsetCenter();}
 			//define for each spell
