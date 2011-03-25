@@ -83,7 +83,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		break;
 	}
 	if(ui->getClick() == CLICK_LEFT && ui->getMouseY() < HUD_Y)
-		activateGauntletAttack(SLOT_ATK1, ui->getMouseX(), ui->getMouseY(), lastKey);
+		activateGauntletAttack(SLOT_ATK1, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey);
 	if(ui->getClick() == CLICK_RIGHT && ui->getMouseY() < HUD_Y)
-		activateGauntletAttack(SLOT_ATK2, ui->getMouseX(), ui->getMouseY(), lastKey);
+		activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey);
 }
