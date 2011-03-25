@@ -46,8 +46,8 @@ public:
 		m_shouldDraw = true;
 		m_sprite = a_sprite;
 		m_sprite->start();
-		m_hb.x = SCREEN_CENTER_X;
-		m_hb.y = SCREEN_CENTER_Y;
+		m_hb.x = m_locations[LOC_SCREEN].getX();
+		m_hb.y = m_locations[LOC_SCREEN].getY();
 		m_hb.w = m_sprite->getWidth();
 		m_hb.h = 5;
 		m_eType = DUMMY;

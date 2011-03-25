@@ -133,7 +133,9 @@ void World::update(Uint32 a_timePassed)
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
 		if(i != clientPlayerIndex)
+		{
 			m_mapOfEntities.get(i)->move(0,-1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x - prevLoc.x), -1*(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y - prevLoc.y));
+		}
 	}
 
 	for(int i = 0; i < m_mapOfWorld.size(); i++)

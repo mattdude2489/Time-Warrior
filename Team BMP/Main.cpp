@@ -10,6 +10,9 @@
 #include "audiohandler.h"
 #include "servermodule.h"
 
+//#define WITH_NETWORKING
+#define WITHOUT_NETWORKING
+
 
 //Some debugging includes
 #include <stdio.h>
@@ -24,6 +27,8 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	SDL_Event e;
 	UserInput ui; //This is the UserInput class.
 	//networking
+
+#ifdef WITH_NETWORKING
 	ServerModule s(9999);
 	while(s.getState() != NetModule::LISTENING)
 	{
@@ -38,7 +43,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		c.run();
 		printf("Client state: %s \n", c.getStateText());
 	}
-
+#endif
 	//Timer stuff, for updateing sprites and anything else
 	Uint32 then = SDL_GetTicks(), now, passed;
 
@@ -95,6 +100,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		now = SDL_GetTicks();
 		passed = now - then;
 		then = now;
+#ifdef WITH_NETWORKING
 		if(c.getInbox()->getRawList() != NULL)
 		{
 			in = (char *)c.getInbox()->getRawList();
@@ -106,6 +112,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 		s.run();
 		c.run();
+#endif
 		//input
 		while(SDL_PollEvent(&e)) //Polls the events of SDL
 		{
@@ -134,7 +141,12 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 			}
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
+#ifdef WITH_NETWORKING
 		eTest.handleInput(&aui, &world);
+#endif
+#ifdef WITHOUT_NETWORKING
+		eTest.handleInput(&ui, &world);
+#endif
 		//update
 		world.update(passed);
 		Ghud.updateHud(&eTest, &ui);
@@ -155,6 +167,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//test.draw(screen, 100, 100);
 		Ghud.draw(screen);
 	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
+#ifdef WITH_NETWORKING
 		ui.sendUi2Server(send);
 		if(aui.getKeyLR() != ui.getKeyLR() || aui.getKeyUD() != ui.getKeyUD())
 		{
@@ -162,6 +175,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 			c.getOutbox()->add(send);
 		//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 		}
+#endif
 		
 		SDL_Flip(screen);
 		SDL_Delay(100);
