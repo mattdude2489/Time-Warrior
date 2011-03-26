@@ -23,6 +23,7 @@ public:
 	World(){m_success = setWorld("Maps/HubWorldMap.txt"); clientPlayerIndex = 0;}
 	~World();
 	void setAnEntity(Entity * newEntity){m_mapOfEntities.add(newEntity);}
+	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void update(Uint32 timePassed);
 	void draw(SDL_Surface * a_screen);

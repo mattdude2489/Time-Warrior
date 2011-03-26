@@ -79,18 +79,13 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	eTest.setGauntletSlot(SLOT_ATK1, &chip);
 	eTest.setGauntletSlot(SLOT_ATK2, &chip2);
-	eTest.setCamera(eTest.getCamera());
-	chip.setCamera(eTest.getCamera());
-	chip2.setCamera(eTest.getCamera());
-	chip3.setCamera(eTest.getCamera());
-	chip4.setCamera(eTest.getCamera());
-	fightTest.setCamera(eTest.getCamera());
 	world.setAnEntity(&eTest);
 	world.setAnEntity(&chip);
 	world.setAnEntity(&chip2);
 	world.setAnEntity(&chip3);
 	world.setAnEntity(&chip4);
 	world.setAnEntity(&fightTest);
+	world.setCamera(eTest.getCamera());
 	//music test stuff
 	
 	AudioHandler ah;
@@ -156,19 +151,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		Ghud.updateHud(&eTest, &ui);
 		//reset the mouse input. Why was this so hard to figure out?
 		ui.resetClick();
-
 		//draw
-		//test.draw(screen, 100, 100);
 		//reset the screen.
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
-		/*if(fightTest.collide(&chip))
-		{
-			printf("Hi, collision has occurred between chip1 and the player.\n");
-			fightTest.hit(chip.getDamage());
-			chip.deactivate();
-		}*/
-		//test.draw(screen, 100, 100);
 		Ghud.draw(screen);
 	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 #ifdef WITH_NETWORKING

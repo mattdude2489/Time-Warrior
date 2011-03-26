@@ -87,6 +87,11 @@ bool World::setWorld(char * fileName)
 	}
 	return m_success;
 }
+void World::setCamera(SPoint * a_camera)
+{
+	for(int i = 0; i < m_mapOfEntities.size(); ++i)
+		m_mapOfEntities.get(i)->setCamera(a_camera);
+}
 void World::sortOnYPosition()
 {
 	//Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
@@ -111,9 +116,9 @@ void World::sortOnYPosition()
 }
 void World::update(Uint32 a_timePassed)
 {
+	static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i)->update(a_timePassed);
-	static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	/*for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{
 		if(((m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x == m_mapOfWorld.get(i).pos.x) && 
@@ -128,10 +133,7 @@ void World::update(Uint32 a_timePassed)
 			m_mapOfWorld.get(i).pos.y) && m_mapOfWorld.get(i).collide)
 			m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
 	}*/
-	for(int i = 0; i < m_mapOfWorld.size(); i++)
-	{
-		m_mapOfWorld.get(i).pos.set(m_mapOfWorld.get(i).pos.x - (m_mapOfEntities.get(clientPlayerIndex)->getLocation().x - prevLoc.x), m_mapOfWorld.get(i).pos.y - (m_mapOfEntities.get(clientPlayerIndex)->getLocation().y - prevLoc.y));
-	}
+	for(int i = 0; i < m_mapOfWorld.size(); i++){m_mapOfWorld.get(i).pos.set(m_mapOfWorld.get(i).pos.x - (m_mapOfEntities.get(clientPlayerIndex)->getLocation().x - prevLoc.x), m_mapOfWorld.get(i).pos.y - (m_mapOfEntities.get(clientPlayerIndex)->getLocation().y - prevLoc.y));}
 	prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	sortOnYPosition();
@@ -145,8 +147,5 @@ void World::draw(SDL_Surface * a_screen)
 		m_mapOfWorld.get(k).currentTexture->draw(a_screen, m_mapOfWorld.get(k).pos.x, m_mapOfWorld.get(k).pos.y);
 	}
 	//Entities draw.
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
-	{
-		m_mapOfEntities.get(i)->draw(a_screen);
-	}
+	for(int i = 0; i < m_mapOfEntities.size(); i++){m_mapOfEntities.get(i)->draw(a_screen);}
 }
