@@ -3,7 +3,7 @@
 #include "spoint.h"
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
-enum e_locations {LOC_SCREEN, LOC_WORLD, NUM_LOCATIONS};
+//enum e_locations {LOC_CURRENT, LOC_PREV, NUM_LOCATIONS};
 enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
@@ -77,9 +77,9 @@ public:
 			if(m_eType == DUMMY)
 				heal(m_stats[ENERGY_REGEN]);
 		}
+		m_timer += a_timePassed;
 		if(m_eType != CHIP)
 		{
-			m_timer += a_timePassed;
 			if(m_timer >= TIME_INACTIVE && m_sprite->getFrame() == 1)
 				m_sprite->stop();
 		}

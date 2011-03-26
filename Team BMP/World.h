@@ -9,8 +9,9 @@ struct Tile
 {
 	SDL_Sprite * currentTexture;
 	bool collide;
-	SPoint pos;
+	SPoint pos, *cam;
 	int indexOfSpriteRow;
+	SPoint getLocationScreen(){return pos.difference(*cam);}
 };
 class World
 {

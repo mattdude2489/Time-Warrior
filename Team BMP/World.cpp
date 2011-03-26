@@ -91,6 +91,8 @@ void World::setCamera(SPoint * a_camera)
 {
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 		m_mapOfEntities.get(i)->setCamera(a_camera);
+	for(int i = 0; i < m_mapOfWorld.size(); ++i)
+		m_mapOfWorld.get(i).cam = a_camera;
 }
 void World::sortOnYPosition()
 {
@@ -133,7 +135,6 @@ void World::update(Uint32 a_timePassed)
 			m_mapOfWorld.get(i).pos.y) && m_mapOfWorld.get(i).collide)
 			m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
 	}*/
-	for(int i = 0; i < m_mapOfWorld.size(); i++){m_mapOfWorld.get(i).pos.set(m_mapOfWorld.get(i).pos.x - (m_mapOfEntities.get(clientPlayerIndex)->getLocation().x - prevLoc.x), m_mapOfWorld.get(i).pos.y - (m_mapOfEntities.get(clientPlayerIndex)->getLocation().y - prevLoc.y));}
 	prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	sortOnYPosition();
@@ -141,10 +142,10 @@ void World::update(Uint32 a_timePassed)
 void World::draw(SDL_Surface * a_screen)
 {
 	//Texture draw.
-	for(int k = 0; k < m_mapOfWorld.size(); k++)
+	for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{
-		m_mapOfWorld.get(k).currentTexture->setRIndex(m_mapOfWorld.get(k).indexOfSpriteRow);
-		m_mapOfWorld.get(k).currentTexture->draw(a_screen, m_mapOfWorld.get(k).pos.x, m_mapOfWorld.get(k).pos.y);
+		m_mapOfWorld.get(i).currentTexture->setRIndex(m_mapOfWorld.get(i).indexOfSpriteRow);
+		m_mapOfWorld.get(i).currentTexture->draw(a_screen, m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y);
 	}
 	//Entities draw.
 	for(int i = 0; i < m_mapOfEntities.size(); i++){m_mapOfEntities.get(i)->draw(a_screen);}

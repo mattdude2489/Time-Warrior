@@ -136,12 +136,8 @@ class Magic : public Chip
 						}
 						else
 						{
-							m_timer += a_timePassed;
 							if(m_timer >= TIME_EXPIRE)
-							{
-								m_timer = 0;
 								deactivate();
-							}
 						}
 					}
 					break;
