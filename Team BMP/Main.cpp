@@ -11,7 +11,7 @@
 #include "servermodule.h"
 
 //#define WITH_NETWORKING
-#define WITHOUT_NETWORKING
+#define WITH_NETWORKING
 
 //Some debugging includes
 #include <stdio.h>
@@ -49,7 +49,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//the user interface variable
 	bool running = true;
 	//loading a sprite to see if it works with the entity
-	SDL_Sprite test("Sprites/spriteTest.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
+	SDL_Sprite test("Sprites/skeleton.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	test.setTransparency(COLOR_TRANSPARENT);
 	//test.setHIndex(2,3);
 	test.restart(2);
@@ -91,6 +91,8 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	AudioHandler ah;
 	ah.playMusic();
 	char send[10], old[10], *in;
+	bool changeInInfoSoSend = false;
+	
 	if(!world.getSuccess()){printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");}
 	UserInput aui;
 
@@ -105,8 +107,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		{
 			in = (char *)c.getInbox()->getRawList();
 			c.getInbox()->clear();
-			aui.convertServerInfo(in);
-			printf("converted data: %c %c\n", aui.getKeyLR(), aui.getKeyUD());
+			//aui.convertServerInfo(in);
+			eTest.handleServerInfo(in);
+		//	printf("converted data: %c %c\n", aui.getKeyLR(), aui.getKeyUD());
 		//	printf("server state: %s\n clientState: %s\n", s.getStateText(),c.getStateText()); 
 		}
 		s.run();
@@ -131,6 +134,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 				case SDL_KEYDOWN: //This will work until we can get it without using a switch statement.
 					ui.setKey(e.key.keysym.sym);
+					printf("Key Pressed: %c \n", e.key.keysym.sym);
 					ui.updateUI(false);
 					break;
 				case SDL_KEYUP:
@@ -141,7 +145,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 #ifdef WITH_NETWORKING
-		eTest.handleInput(&aui, &world);
+		//eTest.handleInput(&aui, &world);
 #endif
 #ifdef WITHOUT_NETWORKING
 		eTest.handleInput(&ui, &world);
@@ -159,9 +163,19 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 #ifdef WITH_NETWORKING
 		ui.sendUi2Server(send);
-		if(aui.getKeyLR() != ui.getKeyLR() || aui.getKeyUD() != ui.getKeyUD())
+		for(int i = 0; i < strlen(send)&& changeInInfoSoSend == false; i++)
+		{
+			if(old[i] != send[i])
+				changeInInfoSoSend = true;
+		}
+		if(changeInInfoSoSend)
 		{	
 			c.getOutbox()->add(send);
+			for(int i = 0; i < strlen(old); i++)
+			{
+				old[i] = send[i];
+			}
+			changeInInfoSoSend = false;
 		//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 		}
 #endif

@@ -76,7 +76,6 @@ class UserInput
 		}
 		void sendUi2Server(char a_str[])
 		{
-			
 			sprintf(a_str, "%c%c", keyPressLeftRight, keyPressUpDown);
 		}
 		bool keysChanged(char a_in[])

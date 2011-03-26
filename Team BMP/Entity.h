@@ -168,4 +168,18 @@ public:
 			default:					return "Invalid";
 		}
 	}
+	void handleServerInfo(char * a_in)
+	{
+
+		if(a_in[0] == 'a')
+			move(-5, 0);
+		else if(a_in[0] == 'd')
+			move(5, 0);
+		if(a_in[1] == 'w')
+			move(0,-5);	
+		else if(a_in[1] =='s')
+			move(0,5);	
+			
+
+	}
 };
