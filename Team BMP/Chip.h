@@ -119,15 +119,12 @@ class Chip : public Entity
 			{
 				updateUniqueTwo(a_timePassed);
 				bool collisionMade = false;
-				for(int i = 0; i < m_world->getNumEntities(); ++i)
+				for(int i = 0; i < m_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); ++i)
 				{
-					if(m_world->getNumEntities(i) != 0)
+					if(shouldApplyEffect(m_world->getEntity(i, m_location.x, m_location.y)))
 					{
-						if(shouldApplyEffect(m_world->getEntity(i, m_location.x, m_location.y)))
-						{
-							applyEffect(m_world->getEntity(i, m_location.x, m_location.y));
-							collisionMade = true;
-						}
+						applyEffect(m_world->getEntity(i, m_location.x, m_location.y));
+						collisionMade = true;
 					}
 				}
 				if((((m_cType == MAGIC && m_cSubSubType == BASIC)

@@ -32,6 +32,8 @@ public:
 	void update(Uint32 timePassed);
 	void draw(SDL_Surface * a_screen);
 	bool setWorld(char * fileName);
+	Grid * getGrid(int a_index) {return &m_mapOfEntities.get(a_index);}
+	Grid * getGrid(int a_x, int a_y);
 	bool getSuccess() {return m_success;}
 	int getNumEntities(int i) {return m_mapOfEntities.get(i).getNumberOfEntities();}
 	int getNumEntities();

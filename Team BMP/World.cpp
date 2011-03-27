@@ -170,10 +170,18 @@ int World::getNumEntities()
 	return currentCount;
 }
 
+Grid * World::getGrid(int a_x, int a_y)
+{
+	int gridValueX = (int) a_x / (int)(maxWorldX/NUM_GRIDSROWCOLS);
+	int gridValueY = (int) a_y / (int)(maxWorldY/NUM_GRIDSROWCOLS);
+	int gridValue = gridValueX + (4 * gridValueY);
+	return &m_mapOfEntities.get(gridValue);
+}
+
 void World::update(Uint32 a_timePassed)
 {
 	//static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
-
+	//Making sure that the entities are all in their correct grids.
 	for(int z = 0; z < m_mapOfEntities.size(); z++)
 	{
 		for(int i = 0; i < m_mapOfEntities.get(z).getNumberOfEntities(); i++)
@@ -189,11 +197,6 @@ void World::update(Uint32 a_timePassed)
 			}
 		}
 	}
-
-	/*a_x = (int)a_x / (int)(maxWorldX/NUM_GRIDSROWCOLS);
-	a_y = (int)a_y / (int)(maxWorldY/NUM_GRIDSROWCOLS);
-	int i = a_x + (NUM_GRIDSROWCOLS * a_y);
-	return m_mapOfEntities.get(i).getEntityAt(a_entity);*/
 
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i).update(a_timePassed);
