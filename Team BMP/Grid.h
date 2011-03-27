@@ -32,15 +32,15 @@ public:
 	//@param: True if returning entity is Player, false is not.
 	Entity * getPlayer(bool &isOneThere)
 	{
+		isOneThere = false;
 		for(int i = 0; i < m_mapOfEntities.size(); i++)
 		{
-			if(m_mapOfEntities.get(i)->getType() == 1)
+			if(m_mapOfEntities.get(i)->getType() == PLAYER)
 			{
 				isOneThere = true;
 				return m_mapOfEntities.get(i);
 			}
 		}
-		isOneThere = false;
 		//return m_mapOfEntities.get(0);
 	}
 	//@Return: returns the size of the current vector of the Grid.
