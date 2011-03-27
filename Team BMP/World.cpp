@@ -118,7 +118,7 @@ void World::sortOnYPosition()
 }
 void World::update(Uint32 a_timePassed)
 {
-	static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
+	//static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i)->update(a_timePassed);
 	/*for(int i = 0; i < m_mapOfWorld.size(); i++)
@@ -135,7 +135,7 @@ void World::update(Uint32 a_timePassed)
 			m_mapOfWorld.get(i).pos.y) && m_mapOfWorld.get(i).collide)
 			m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
 	}*/
-	prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
+	//prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	sortOnYPosition();
 }

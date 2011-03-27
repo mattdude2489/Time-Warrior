@@ -10,7 +10,6 @@
 #include "audiohandler.h"
 #include "servermodule.h"
 
-//#define WITH_NETWORKING
 #define WITH_NETWORKING
 
 //Some debugging includes
@@ -79,12 +78,12 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	eTest.setGauntletSlot(SLOT_ATK1, &chip);
 	eTest.setGauntletSlot(SLOT_ATK2, &chip2);
-	world.setAnEntity(&eTest);
-	world.setAnEntity(&chip);
-	world.setAnEntity(&chip2);
-	world.setAnEntity(&chip3);
-	world.setAnEntity(&chip4);
-	world.setAnEntity(&fightTest);
+	world.add(&eTest);
+	world.add(&chip);
+	world.add(&chip2);
+	world.add(&chip3);
+	world.add(&chip4);
+	world.add(&fightTest);
 	world.setCamera(eTest.getCamera());
 	//music test stuff
 	
@@ -146,8 +145,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 #ifdef WITH_NETWORKING
 		//eTest.handleInput(&aui, &world);
-#endif
-#ifdef WITHOUT_NETWORKING
+#else
 		eTest.handleInput(&ui, &world);
 #endif
 		//update
