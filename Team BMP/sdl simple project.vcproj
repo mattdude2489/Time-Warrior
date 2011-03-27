@@ -356,6 +356,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Grid.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Hud.h"
 				>
 			</File>

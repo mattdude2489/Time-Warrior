@@ -1,5 +1,23 @@
 #include "World.h"
 
+#define NUM_GRIDS 16
+#define NUM_GRIDSROWCOLS 4
+
+World::World()
+{
+	m_success = setWorld("Maps/HubWorldMap.txt"); 
+	clientPlayerIndex = 0; 
+	currentWorld = 0; 
+	//For the current hubworld, the dimensions are 800 x 600.
+	maxWorldX = 800; maxWorldY = 600;
+	//Setting up the 16 grids. The number can easily be changed.
+	for(int i = 0; i < NUM_GRIDS; i++)
+	{
+		Grid gridSys;
+		m_mapOfEntities.add(gridSys);	
+	}
+}
+
 World::~World()
 {
 		/*for(int i = 0; i < m_mapOfWorld.size(); i++)
@@ -11,7 +29,11 @@ bool World::setWorld(char * fileName)
 {
 	FILE * infile;
 	fopen_s(&infile, fileName, "r");
-
+	if(fileName == "Maps/HubWorldMap.txt")
+	{
+		currentWorld = 0;
+		maxWorldX = 800; maxWorldY = 600;
+	}
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
 		if(m_mapOfWorld.get(0).currentTexture->isSprite())
@@ -89,15 +111,19 @@ bool World::setWorld(char * fileName)
 }
 void World::setCamera(SPoint * a_camera)
 {
-	for(int i = 0; i < m_mapOfEntities.size(); ++i)
-		m_mapOfEntities.get(i)->setCamera(a_camera);
+	//Dammit people, COMMENT.
+	for(int i = 0; i < NUM_GRIDS; ++i)
+	{
+		for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
+			m_mapOfEntities.get(i).getEntityAt(k)->setCamera(a_camera);
+	}
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 		m_mapOfWorld.get(i).cam = a_camera;
 }
 void World::sortOnYPosition()
 {
 	//Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
-	for(int i = 0; i < m_mapOfEntities.size(); ++i)
+	/*for(int i = 0; i < m_mapOfEntities.size(); ++i)
 	{
 		for(int k = i; k < m_mapOfEntities.size(); ++k)
 		{
@@ -106,21 +132,75 @@ void World::sortOnYPosition()
 				m_mapOfEntities.swap(i, k);
 			}
 		}
-	}
-	for(int z = 0; z < m_mapOfEntities.size(); ++z)
+	}*/
+	for(int i = 0; i < m_mapOfEntities.size(); ++i)
+		m_mapOfEntities.get(i).sortOnYPosition();
+	for(int z = 0; z < m_mapOfEntities.size(); z++)
 	{
-		if(m_mapOfEntities.get(z)->getType() == 1)
-		{
-			clientPlayerIndex = z;
-			break;
-		}
+		bool successfulPlayer;
+		if(m_mapOfEntities.get(z).getPlayer(successfulPlayer)->getType() == 1)
+			clientPlayerIndex = z; //Which grid the Player's in. once we know that, we can just use getPlayer.
 	}
 }
+void World::add(Entity *newEntity)
+{
+	int a_x = newEntity->getLocation().x / (int)maxWorldX/NUM_GRIDSROWCOLS;
+	int a_y = newEntity->getLocation().y / (int)maxWorldY/NUM_GRIDSROWCOLS;
+	a_y *= 4;
+	int gridXY = a_x + a_y;
+	m_mapOfEntities.get(gridXY).setEntity(newEntity);
+}
+
+//Gets the entity in the grid, based on the x and y values passed in.
+Entity * World::getEntity(int a_entity, int a_x, int a_y)
+{
+	a_x = (int)a_x / (int)(maxWorldX/NUM_GRIDSROWCOLS);
+	a_y = (int)a_y / (int)(maxWorldY/NUM_GRIDSROWCOLS);
+	int i = a_x + (NUM_GRIDSROWCOLS * a_y);
+	return m_mapOfEntities.get(i).getEntityAt(a_entity);
+}
+
+int World::getNumEntities()
+{
+	int currentCount = 0;
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	{
+		currentCount += m_mapOfEntities.get(i).getNumberOfEntities();
+	}
+	return currentCount;
+}
+
 void World::update(Uint32 a_timePassed)
 {
 	//static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
+
+	for(int z = 0; z < m_mapOfEntities.size(); z++)
+	{
+		for(int i = 0; i < m_mapOfEntities.get(z).getNumberOfEntities(); i++)
+		{
+			Entity * cE = m_mapOfEntities.get(z).getEntityAt(i);
+			int gridValueX = (int)cE->getLocation().x / (int)(maxWorldX/NUM_GRIDSROWCOLS);
+			int gridValueY = (int)cE->getLocation().y / (int)(maxWorldY/NUM_GRIDSROWCOLS);
+			int gridValue = gridValueX + (4 * gridValueY);
+			if(gridValue != z)
+			{
+				m_mapOfEntities.get(gridValue).setEntity(cE);
+				m_mapOfEntities.get(z).remove(i);
+			}
+		}
+	}
+
+	/*a_x = (int)a_x / (int)(maxWorldX/NUM_GRIDSROWCOLS);
+	a_y = (int)a_y / (int)(maxWorldY/NUM_GRIDSROWCOLS);
+	int i = a_x + (NUM_GRIDSROWCOLS * a_y);
+	return m_mapOfEntities.get(i).getEntityAt(a_entity);*/
+
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
-		m_mapOfEntities.get(i)->update(a_timePassed);
+		m_mapOfEntities.get(i).update(a_timePassed);
+	bool successPlayer;
+	Entity * cp = m_mapOfEntities.get(clientPlayerIndex).getPlayer(successPlayer); //This pointer will be erased soon afterwards.
+	//It's merely there to take away the typing and make it easier to read.
+	static SPoint prevLoc = cp->getLocation();
 	/*for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{
 		if(((m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x == m_mapOfWorld.get(i).pos.x) && 
@@ -135,18 +215,39 @@ void World::update(Uint32 a_timePassed)
 			m_mapOfWorld.get(i).pos.y) && m_mapOfWorld.get(i).collide)
 			m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
 	}*/
-	//prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
+	for(int i = 0; i < m_mapOfWorld.size(); i++)
+	{
+		m_mapOfWorld.get(i).pos.set(m_mapOfWorld.get(i).pos.x - (cp->getLocation().x - prevLoc.x), m_mapOfWorld.get(i).pos.y - (cp->getLocation().y - prevLoc.y));
+	}
+	prevLoc = cp->getLocation();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
-	sortOnYPosition();
+	//Make sure for each grid's sorting.
+	for(int i = 0; i < m_mapOfEntities.size(); ++i)
+	{
+		m_mapOfEntities.get(i).sortOnYPosition();
+	}
 }
 void World::draw(SDL_Surface * a_screen)
 {
-	//Texture draw.
-	for(int i = 0; i < m_mapOfWorld.size(); i++)
+	////Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
+	//for(int i = 0; i < m_mapOfEntities.size(); ++i)
+	//{
+	//	for(int k = i; k < m_mapOfEntities.size(); ++k)
+	//	{
+	//		if(m_mapOfEntities.get(i)->getLocation().y > m_mapOfEntities.get(k)->getLocation().y)
+	//		{
+	//			m_mapOfEntities.swap(i, k);
+	//		}
+	//	}
+	//}
+	//Entities draw.
+	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
 		m_mapOfWorld.get(i).currentTexture->setRIndex(m_mapOfWorld.get(i).indexOfSpriteRow);
 		m_mapOfWorld.get(i).currentTexture->draw(a_screen, m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y);
 	}
-	//Entities draw.
-	for(int i = 0; i < m_mapOfEntities.size(); i++){m_mapOfEntities.get(i)->draw(a_screen);}
+	for(int i = 0; i < m_mapOfEntities.size(); ++i)
+	{
+		m_mapOfEntities.get(i).draw(a_screen); //Why does it seem like the Entities are getting further and further away from direct access?
+	}
 }

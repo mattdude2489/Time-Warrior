@@ -10,7 +10,7 @@
 #include "audiohandler.h"
 #include "servermodule.h"
 
-#define WITH_NETWORKING
+//#define WITH_NETWORKING
 
 //Some debugging includes
 #include <stdio.h>
