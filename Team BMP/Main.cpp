@@ -64,6 +64,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Hud Ghud;
 	World world;
 	chip.setWorld(&world);
+	eTest.setWorld(&world);
 	chip.levelUp();
 	chip2.setWorld(&world);
 	chip2.levelUp();

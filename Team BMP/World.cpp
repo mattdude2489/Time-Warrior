@@ -53,6 +53,7 @@ bool World::setWorld(char * fileName)
 			{
 			case '\n':
 				y++;
+				tileX = x;
 				x = 0;
 				break;
 			case 'G':
@@ -68,7 +69,7 @@ bool World::setWorld(char * fileName)
 				hi.collide = false;
 				break;
 			}
-
+			tileY = y;
 			//"Anything else in particular" switch. So in other words, creations of entities, any particulars of the map.
 			//Will happen in this switch statement.
 			switch(c)
@@ -112,19 +113,16 @@ void World::setCamera(SPoint * a_camera)
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 		m_mapOfWorld.get(i).cam = a_camera;
 }
+
+Tile * World::getTile(int a_x,int a_y)
+{
+	int tileIndex = (int) a_x / tileX;
+	tileIndex += ((int) a_y / tileX)*tileY; //28 is the number of tiles per row. Switch to #define next chance.
+	return &m_mapOfWorld.get(tileIndex);
+}
+
 void World::sortOnYPosition()
 {
-	//Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
-	/*for(int i = 0; i < m_mapOfEntities.size(); ++i)
-	{
-		for(int k = i; k < m_mapOfEntities.size(); ++k)
-		{
-			if(m_mapOfEntities.get(i)->getLocation().y > m_mapOfEntities.get(k)->getLocation().y)
-			{
-				m_mapOfEntities.swap(i, k);
-			}
-		}
-	}*/
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 		m_mapOfEntities.get(i).sortOnYPosition();
 	for(int z = 0; z < m_mapOfEntities.size(); z++)
@@ -154,10 +152,9 @@ void World::update(Uint32 a_timePassed)
 
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i).update(a_timePassed);
-	//bool successPlayer;
-	//Entity * cp = m_mapOfEntities.get(clientPlayerIndex).getPlayer(successPlayer); //This pointer will be erased soon afterwards.
+	bool successPlayer;
+	Entity * cp = m_mapOfEntities.get(clientPlayerIndex).getPlayer(successPlayer); //This pointer will be erased soon afterwards.
 	//It's merely there to take away the typing and make it easier to read.
-	//static SPoint prevLoc = cp->getLocation();
 	/*for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{
 		if(((m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x == m_mapOfWorld.get(i).pos.x) && 
@@ -180,17 +177,6 @@ void World::update(Uint32 a_timePassed)
 }
 void World::draw(SDL_Surface * a_screen)
 {
-	////Selection sort, using the Y position. Dear god. Let's hope it doesn't slow it down too much.
-	//for(int i = 0; i < m_mapOfEntities.size(); ++i)
-	//{
-	//	for(int k = i; k < m_mapOfEntities.size(); ++k)
-	//	{
-	//		if(m_mapOfEntities.get(i)->getLocation().y > m_mapOfEntities.get(k)->getLocation().y)
-	//		{
-	//			m_mapOfEntities.swap(i, k);
-	//		}
-	//	}
-	//}
 	//Entities draw.
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{

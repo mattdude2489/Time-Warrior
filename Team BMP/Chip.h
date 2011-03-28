@@ -18,10 +18,10 @@ class Chip : public Entity
 		bool m_isEquipped;
 		Entity * m_owner;
 		SPoint m_target;
-		World * m_world;
 		bool m_firstIteration;
 		char m_direction;
 		SDL_Sprite * m_spriteHUD;
+		World * m_world;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
@@ -35,8 +35,8 @@ class Chip : public Entity
 		int getDamage(){return m_dmg;}
 		bool isEquipped(){return m_isEquipped;}
 		void toggleEquip(){m_isEquipped = !m_isEquipped;}
-		void setOwner(Entity * a_owner){m_owner = a_owner;}
 		void setWorld(World * a_world){m_world = a_world;}
+		void setOwner(Entity * a_owner){m_owner = a_owner;}
 		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
 		void setDirection(char a_dir){m_direction = a_dir;}
 		int getOwnerCenterX()
@@ -115,6 +115,10 @@ class Chip : public Entity
 		virtual void updateUniqueTwo(int a_timePassed){}
 		void updateUnique(int a_timePassed)
 		{
+			/*if(m_world->getTile(m_location.x, m_location.y)->collide)
+			{
+				m_location = m_prevLoc;
+			}*/
 			if(m_shouldDraw && m_owner && m_world)
 			{
 				updateUniqueTwo(a_timePassed);

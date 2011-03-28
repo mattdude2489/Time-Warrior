@@ -17,7 +17,7 @@ protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer;
 	e_entityType m_eType;
 	bool m_shouldDraw;
-	SPoint m_location, *m_camera;
+	SPoint m_location, *m_camera, m_prevLoc;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 public:
@@ -35,6 +35,8 @@ public:
 		m_timeToRegen = m_timer = 0;
 		m_shouldDraw = false;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+		m_prevLoc.x = SCREEN_CENTER_X;
+		m_prevLoc.y = SCREEN_CENTER_Y;
 		m_camera = NULL;
 	}
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
@@ -56,6 +58,7 @@ public:
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
 	void move(int a_deltaX, int a_deltaY)
 	{
+		m_prevLoc = m_location;
 		moveUnique(a_deltaX, a_deltaY);
 		m_location.x += a_deltaX; m_location.y += a_deltaY;
 		m_timer = 0;
@@ -67,6 +70,13 @@ public:
 		setLocationUnique(a_x, a_y);
 		m_location.x = a_x; m_location.y = a_y;
 	}
+	void setLocation(SPoint newLoc)
+	{
+		setLocationUnique(newLoc.x, newLoc.y);
+		m_location.x = newLoc.x;
+		m_location.y = newLoc.y;
+	}
+	SPoint getPreviousLocation() {return m_prevLoc;}
 	virtual void updateUnique(int a_timePassed){}
 	void update(int a_timePassed)
 	{

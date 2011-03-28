@@ -1,7 +1,6 @@
 //World class. Contains the basic entities to easily update and draw to screen.
 //Created on March 10, 2011. Edited on March 25, 2011.
 #pragma once
-#include "Entity.h"
 #include "Grid.h"
 #include "templatevector.h"
 
@@ -23,6 +22,7 @@ private:
 	int clientPlayerIndex;
 	int currentWorld;
 	int maxWorldX, maxWorldY; //how big the world is...maximally. Used for Grids.
+	int tileX, tileY;
 public:
 	World();
 	~World();
@@ -30,6 +30,7 @@ public:
 	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void update(Uint32 timePassed);
+	Tile * getTile(int a_x, int a_y);
 	void draw(SDL_Surface * a_screen);
 	bool setWorld(char * fileName);
 	bool getSuccess() {return m_success;}
