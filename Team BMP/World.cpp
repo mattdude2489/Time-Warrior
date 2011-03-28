@@ -2,7 +2,7 @@
 
 World::World()
 {
-	m_success = setWorld("Maps/HubWorldMap.txt"); 
+	m_success = setWorld("Maps/HubWorldMap.txt");
 	clientPlayerIndex = 0; 
 	maxWorldX = SCREEN_WIDTH;
 	maxWorldY = SCREEN_HEIGHT;
@@ -13,7 +13,6 @@ World::World()
 		m_mapOfEntities.add(gridSys);	
 	}
 }
-
 World::~World()
 {
 		/*for(int i = 0; i < m_mapOfWorld.size(); i++)
@@ -102,13 +101,13 @@ bool World::setWorld(char * fileName)
 	}
 	return m_success;
 }
+//sets up a camera for each entity & tile, so they correctly move relative to the player
 void World::setCamera(SPoint * a_camera)
 {
-	//Dammit people, COMMENT.
 	for(int i = 0; i < NUM_GRIDS; ++i)
 	{
 		for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
-			m_mapOfEntities.get(i).getEntityAt(k)->setCamera(a_camera);
+			m_mapOfEntities.get(i).getEntity(k)->setCamera(a_camera);
 	}
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 		m_mapOfWorld.get(i).cam = a_camera;
@@ -131,44 +130,10 @@ void World::sortOnYPosition()
 	for(int z = 0; z < m_mapOfEntities.size(); z++)
 	{
 		bool successfulPlayer;
-		if(m_mapOfEntities.get(z).getPlayer(successfulPlayer)->getType() == 1)
+		if(m_mapOfEntities.get(z).getPlayer(successfulPlayer)->getType() == PLAYER)
 			clientPlayerIndex = z; //Which grid the Player's in. once we know that, we can just use getPlayer.
 	}
 }
-void World::add(Entity *newEntity)
-{
-	int a_x = (int)newEntity->getLocation().x / (int)maxWorldX/NUM_GRIDS_PER_ROW_COL;
-	int a_y = (int)newEntity->getLocation().y / (int)maxWorldY/NUM_GRIDS_PER_ROW_COL;
-	int gridXY = a_x + (4 * a_y);
-	m_mapOfEntities.get(gridXY).setEntity(newEntity);
-}
-
-//Gets the entity in the grid, based on the x and y values passed in.
-Entity * World::getEntity(int a_entity, int a_x, int a_y)
-{
-	a_x /= (int)(maxWorldX/NUM_GRIDS_PER_ROW_COL);
-	a_y /= (int)(maxWorldY/NUM_GRIDS_PER_ROW_COL);
-	return m_mapOfEntities.get(a_x + (NUM_GRIDS_PER_ROW_COL * a_y)).getEntityAt(a_entity);
-}
-
-int World::getNumEntities()
-{
-	int currentCount = 0;
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
-	{
-		currentCount += m_mapOfEntities.get(i).getNumberOfEntities();
-	}
-	return currentCount;
-}
-
-Grid * World::getGrid(int a_x, int a_y)
-{
-	int gridValueX = (int) a_x / (int)(maxWorldX/NUM_GRIDS_PER_ROW_COL);
-	int gridValueY = (int) a_y / (int)(maxWorldY/NUM_GRIDS_PER_ROW_COL);
-	int gridValue = gridValueX + (4 * gridValueY);
-	return &m_mapOfEntities.get(gridValue);
-}
-
 void World::update(Uint32 a_timePassed)
 {
 	//static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
@@ -178,14 +143,10 @@ void World::update(Uint32 a_timePassed)
 	{
 		for(int i = 0; i < m_mapOfEntities.get(z).getNumberOfEntities(); i++)
 		{
-			cE = m_mapOfEntities.get(z).getEntityAt(i);
-			int gridValueX = (int)cE->getLocation().x / (int)(maxWorldX/NUM_GRIDS_PER_ROW_COL);
-			int gridValueY = (int)cE->getLocation().y / (int)(maxWorldY/NUM_GRIDS_PER_ROW_COL);
-			int gridValue = gridValueX + (4 * gridValueY);
-			if(gridValue != z)
+			cE = m_mapOfEntities.get(z).getEntity(i);
+			if(getLocationGrid(cE) != z)
 			{
-				printf("(%d, %d) = %d,%d\n", cE->getLocation().x, cE->getLocation().y, z, gridValue);
-				m_mapOfEntities.get(gridValue).setEntity(cE);
+				m_mapOfEntities.get(getLocationGrid(cE)).setEntity(cE);
 				m_mapOfEntities.get(z).remove(i);
 			}
 		}
@@ -215,9 +176,7 @@ void World::update(Uint32 a_timePassed)
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	//Make sure for each grid's sorting.
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
-	{
 		m_mapOfEntities.get(i).sortOnYPosition();
-	}
 }
 void World::draw(SDL_Surface * a_screen)
 {
@@ -239,7 +198,12 @@ void World::draw(SDL_Surface * a_screen)
 		m_mapOfWorld.get(i).currentTexture->draw(a_screen, m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y);
 	}
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
-	{
 		m_mapOfEntities.get(i).draw(a_screen); //Why does it seem like the Entities are getting further and further away from direct access?
-	}
+}
+int World::getNumEntities()
+{
+	int currentCount = 0;
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+		currentCount += getNumEntities(i);
+	return currentCount;
 }

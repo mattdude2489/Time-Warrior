@@ -23,7 +23,7 @@ public:
 	//@param: The entity to add to the grid.
 	void setEntity(Entity * newEntity) {m_mapOfEntities.add(newEntity);}
 	//@param: The index of the returning Entity. NO ERROR DETECTION...SO DON'T BE WRONG.
-	Entity * getEntityAt(int index) 
+	Entity * getEntity(int index) 
 	{
 		if(m_mapOfEntities.size() != 0)
 			return m_mapOfEntities.get(index);

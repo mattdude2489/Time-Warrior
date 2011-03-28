@@ -26,17 +26,21 @@ private:
 public:
 	World();
 	~World();
-	void add(Entity * newEntity); //TODO: FIX THIS LOL.
+	void add(Entity * newEntity){m_mapOfEntities.get(getLocationGrid(newEntity)).setEntity(newEntity);}
 	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void update(Uint32 timePassed);
 	void draw(SDL_Surface * a_screen);
 	bool setWorld(char * fileName);
-	Grid * getGrid(int a_index) {return &m_mapOfEntities.get(a_index);}
-	Grid * getGrid(int a_x, int a_y);
 	bool getSuccess() {return m_success;}
+	int getGridWidth(){return maxWorldX/NUM_GRIDS_PER_ROW_COL;}
+	int getGridHeight(){return maxWorldY/NUM_GRIDS_PER_ROW_COL;}
+	int getLocationGrid(int a_x, int a_y){return (a_x / getGridWidth()) + (4 * (a_y / getGridHeight()));}
+	int getLocationGrid(Entity * a_entity){return getLocationGrid(a_entity->getLocation().x, a_entity->getLocation().y);}
 	int getNumEntities(int i) {return m_mapOfEntities.get(i).getNumberOfEntities();}
 	int getNumEntities();
-	Entity * getEntity(int a_entity, int a_grid){return m_mapOfEntities.get(a_grid).getEntityAt(a_entity);}
-	Entity * getEntity(int a_entity, int a_x, int a_y); //So that each entity does NOT need to know which grid it's in!
+	Entity * getEntity(int a_entity, int a_grid){return m_mapOfEntities.get(a_grid).getEntity(a_entity);}
+	Entity * getEntity(int a_entity, int a_x, int a_y){return m_mapOfEntities.get(getLocationGrid(a_x, a_y)).getEntity(a_entity);} //So that each entity does NOT need to know which grid it's in!
+	Grid * getGrid(int a_index) {return &m_mapOfEntities.get(a_index);}
+	Grid * getGrid(int a_x, int a_y){return &m_mapOfEntities.get(getLocationGrid(a_x, a_y));}
 };
