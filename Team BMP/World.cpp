@@ -1,8 +1,5 @@
 #include "World.h"
 
-#define NUM_GRIDS 16
-#define NUM_GRIDSROWCOLS 4
-
 World::World()
 {
 	m_success = setWorld("Maps/HubWorldMap.txt"); 
@@ -140,8 +137,8 @@ void World::sortOnYPosition()
 }
 void World::add(Entity *newEntity)
 {
-	int a_x = (int)newEntity->getLocation().x / (int)maxWorldX/NUM_GRIDSROWCOLS;
-	int a_y = (int)newEntity->getLocation().y / (int)maxWorldY/NUM_GRIDSROWCOLS;
+	int a_x = (int)newEntity->getLocation().x / (int)maxWorldX/NUM_GRIDS_PER_ROW_COL;
+	int a_y = (int)newEntity->getLocation().y / (int)maxWorldY/NUM_GRIDS_PER_ROW_COL;
 	int gridXY = a_x + (4 * a_y);
 	m_mapOfEntities.get(gridXY).setEntity(newEntity);
 }
@@ -149,10 +146,9 @@ void World::add(Entity *newEntity)
 //Gets the entity in the grid, based on the x and y values passed in.
 Entity * World::getEntity(int a_entity, int a_x, int a_y)
 {
-	a_x /= (int)(maxWorldX/NUM_GRIDSROWCOLS);
-	a_y /= (int)(maxWorldY/NUM_GRIDSROWCOLS);
-	int i = a_x + (NUM_GRIDSROWCOLS * a_y);
-	return m_mapOfEntities.get(i).getEntityAt(a_entity);
+	a_x /= (int)(maxWorldX/NUM_GRIDS_PER_ROW_COL);
+	a_y /= (int)(maxWorldY/NUM_GRIDS_PER_ROW_COL);
+	return m_mapOfEntities.get(a_x + (NUM_GRIDS_PER_ROW_COL * a_y)).getEntityAt(a_entity);
 }
 
 int World::getNumEntities()
@@ -167,8 +163,8 @@ int World::getNumEntities()
 
 Grid * World::getGrid(int a_x, int a_y)
 {
-	int gridValueX = (int) a_x / (int)(maxWorldX/NUM_GRIDSROWCOLS);
-	int gridValueY = (int) a_y / (int)(maxWorldY/NUM_GRIDSROWCOLS);
+	int gridValueX = (int) a_x / (int)(maxWorldX/NUM_GRIDS_PER_ROW_COL);
+	int gridValueY = (int) a_y / (int)(maxWorldY/NUM_GRIDS_PER_ROW_COL);
 	int gridValue = gridValueX + (4 * gridValueY);
 	return &m_mapOfEntities.get(gridValue);
 }
@@ -183,8 +179,8 @@ void World::update(Uint32 a_timePassed)
 		for(int i = 0; i < m_mapOfEntities.get(z).getNumberOfEntities(); i++)
 		{
 			cE = m_mapOfEntities.get(z).getEntityAt(i);
-			int gridValueX = (int)cE->getLocation().x / (int)(maxWorldX/NUM_GRIDSROWCOLS);
-			int gridValueY = (int)cE->getLocation().y / (int)(maxWorldY/NUM_GRIDSROWCOLS);
+			int gridValueX = (int)cE->getLocation().x / (int)(maxWorldX/NUM_GRIDS_PER_ROW_COL);
+			int gridValueY = (int)cE->getLocation().y / (int)(maxWorldY/NUM_GRIDS_PER_ROW_COL);
 			int gridValue = gridValueX + (4 * gridValueY);
 			if(gridValue != z)
 			{
