@@ -29,9 +29,11 @@ void Player::addToAttackInventory(Chip * a_chip)
 }
 void Player::updateUnique(int a_timePassed)
 {
-	if(m_world->getTile(m_location.x, m_location.y)->collide)
-		printf("collided with %d\n", m_world->getTile(m_location.x, m_location.y)->indexOfSpriteRow);
-		//move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+	if(m_world->getTile(m_location.x, m_location.y)->collide
+		|| m_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->collide
+		|| m_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->collide
+		|| m_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->collide)
+		move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 {

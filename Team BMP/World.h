@@ -43,6 +43,6 @@ public:
 	Entity * getEntity(int a_entity, int a_x, int a_y){return m_mapOfEntities.get(getLocationGrid(a_x, a_y)).getEntity(a_entity);} //So that each entity does NOT need to know which grid it's in!
 	Grid * getGrid(int a_index) {return &m_mapOfEntities.get(a_index);}
 	Grid * getGrid(int a_x, int a_y){return &m_mapOfEntities.get(getLocationGrid(a_x, a_y));}
-	Tile * getTile(int a_x, int a_y);
 	Tile * getTile(int a_tile){return &m_mapOfWorld.get(a_tile);}
+	Tile * getTile(int a_x,int a_y){return getTile(a_x/SPRITE_SIZE + ((a_y/SPRITE_SIZE)*tileX));}
 };
