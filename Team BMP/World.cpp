@@ -63,8 +63,8 @@ bool World::setWorld(char * fileName)
 			case 'M':
 			case 'B':
 				hi.currentTexture = sprite;
-				hi.pos.x = x*SPRITE_SIZE;
-				hi.pos.y = y*SPRITE_SIZE;
+				hi.pos.x = x * hi.currentTexture->getWidth();
+				hi.pos.y = y * hi.currentTexture->getHeight();
 				x++;
 				hi.collide = false;
 				break;
@@ -94,7 +94,17 @@ bool World::setWorld(char * fileName)
 				hi.indexOfSpriteRow = 5;
 				break;
 			}
-			m_mapOfWorld.add(hi);
+			switch(c)
+			{
+			case 'G':
+			case 'D':
+			case 'H':
+			case 'V':
+			case 'M':
+			case 'B':
+				m_mapOfWorld.add(hi);
+				break;
+			}
 			c = fgetc(infile);
 		}
 		m_success = true;
@@ -113,15 +123,12 @@ void World::setCamera(SPoint * a_camera)
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 		m_mapOfWorld.get(i).cam = a_camera;
 }
-
 Tile * World::getTile(int a_x,int a_y)
 {
-	int tileIndex = (int) a_x / tileX;
-	tileIndex += ((int) a_y / tileX)*tileY; //28 is the number of tiles per row. Switch to #define next chance.
+	int tileIndex = a_x/SPRITE_SIZE + ((a_y/SPRITE_SIZE)*tileX);//28 is the number of tiles per row. Switch to #define next chance.
 	printf("index: %d, row: %d\n", tileIndex, m_mapOfWorld.get(tileIndex).indexOfSpriteRow);
 	return &m_mapOfWorld.get(tileIndex);
 }
-
 void World::sortOnYPosition()
 {
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
