@@ -48,24 +48,26 @@ bool World::setWorld(char * fileName)
 		Tile hi;
 		while(c != EOF)
 		{
-			//Initial setup switch. Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
-			if(c == '\n')
+			if(y == 0)
+				y++;
+			//Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
+			if(c != '\n')
+			{
+				hi.currentTexture = sprite;
+				hi.pos.x = x * hi.currentTexture->getWidth();
+				hi.pos.y = y * hi.currentTexture->getHeight();
+				hi.collide = false;
+				x++;
+			}
+			else
 			{
 				y++;
 				tileX = x;
 				x = 0;
 			}
-			else
-			{
-				hi.currentTexture = sprite;
-				hi.pos.x = x * hi.currentTexture->getWidth();
-				hi.pos.y = y * hi.currentTexture->getHeight();
-				x++;
-				hi.collide = false;
-			}
-			tileY = y+1;
-			//"Anything else in particular" switch. So in other words, creations of entities, any particulars of the map.
-			//Will happen in this switch statement.
+			tileY = y;
+			//"Anything else in particular" switch
+			//Creations of entities & any particulars of the map
 			switch(c)
 			{
 			case 'G':
