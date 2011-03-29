@@ -49,25 +49,19 @@ bool World::setWorld(char * fileName)
 		while(c != EOF)
 		{
 			//Initial setup switch. Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
-			switch(c)
+			if(c == '\n')
 			{
-			case '\n':
 				y++;
 				tileX = x;
 				x = 0;
-				break;
-			case 'G':
-			case 'D':
-			case 'H':
-			case 'V':
-			case 'M':
-			case 'B':
+			}
+			else
+			{
 				hi.currentTexture = sprite;
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
 				x++;
 				hi.collide = false;
-				break;
 			}
 			tileY = y+1;
 			//"Anything else in particular" switch. So in other words, creations of entities, any particulars of the map.
@@ -90,21 +84,12 @@ bool World::setWorld(char * fileName)
 				hi.indexOfSpriteRow = 4;
 				break;
 			case 'B':
-				hi.collide = true;
 				hi.indexOfSpriteRow = 5;
+				hi.collide = true;
 				break;
 			}
-			switch(c)
-			{
-			case 'G':
-			case 'D':
-			case 'H':
-			case 'V':
-			case 'M':
-			case 'B':
+			if(c != '\n')
 				m_mapOfWorld.add(hi);
-				break;
-			}
 			c = fgetc(infile);
 		}
 		m_success = true;
