@@ -3,6 +3,7 @@
 //Made by Matt Morrill, edited last by Matt Morrill
 #pragma once //Almost forgot this!
 
+
 enum e_mouseClick {CLICK_NONE, CLICK_LEFT, CLICK_MIDDLE, CLICK_RIGHT};
 enum e_keyboardKey {KEY_NONE = 'n', KEY_UP = 'w', KEY_LEFT = 'a', KEY_DOWN = 's', KEY_RIGHT = 'd', KEY_HOT_ATK1_BAS = '1', KEY_HOT_ATK1_ADV = '2', KEY_HOT_ATK1_EXP = '3', KEY_HOT_ATK1_LEG = '4' ,KEY_HOT_ATK2_BAS = '5', KEY_HOT_ATK2_ADV = '6', KEY_HOT_ATK2_EXP = '7', KEY_HOT_ATK2_LEG = '8'};
 
@@ -76,7 +77,7 @@ class UserInput
 		}
 		void sendUi2Server(char a_str[])
 		{
-			sprintf(a_str, "%c%c", keyPressLeftRight, keyPressUpDown);
+			sprintf(a_str, "%c%c%i%03i%03i", keyPressLeftRight, keyPressUpDown, mouseClick, mouseX, mouseY );
 		}
 		bool keysChanged(char a_in[])
 		{
@@ -89,7 +90,14 @@ class UserInput
 		}
 		void convertServerInfo(char * a_in)
 		{
+			char buffer[10];
 			keyPressLeftRight = a_in[0];
 			keyPressUpDown = a_in[1];
+			buffer[0] = a_in[2];
+			mouseClick = atoi(buffer);
+			sprintf(buffer, "%c%c%c", a_in[3],a_in[4],a_in[5]);
+			mouseX = atoi(buffer);
+			sprintf(buffer, "%c%c%c", a_in[6],a_in[7],a_in[8]);
+			mouseY = atoi(buffer);
 		}
 };

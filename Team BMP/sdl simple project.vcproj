@@ -368,6 +368,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Minion.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Player.h"
 				>
 			</File>

@@ -9,8 +9,9 @@
 #include "Hud.h"
 #include "audiohandler.h"
 #include "servermodule.h"
+#include "Minion.h"
 
-//#define WITH_NETWORKING
+#define WITH_NETWORKING
 
 //Some debugging includes
 #include <stdio.h>
@@ -76,7 +77,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	aTest.setTransparency(COLOR_TRANSPARENT);
 	aTest.restart(2);
 	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &aTest);
-
 	eTest.setGauntletSlot(SLOT_ATK1, &chip);
 	eTest.setGauntletSlot(SLOT_ATK2, &chip2);
 	world.add(&eTest);
@@ -90,9 +90,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	
 	AudioHandler ah;
 	ah.playMusic();
-	char send[10], old[10], *in;
+#ifdef WITH_NETWORKING
+	char send[30], old[30], *in;
 	bool changeInInfoSoSend = false;
-	
+#endif
 	if(!world.getSuccess()){printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");}
 	UserInput aui;
 
@@ -107,9 +108,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		{
 			in = (char *)c.getInbox()->getRawList();
 			c.getInbox()->clear();
-			//aui.convertServerInfo(in);
-			eTest.handleServerInfo(in);
-		//	printf("converted data: %c %c\n", aui.getKeyLR(), aui.getKeyUD());
+			aui.convertServerInfo(in);
+			printf("mouse state after server: %i\n", aui.getClick());
+		//	eTest.handleServerInfo(in);
+		//	printf(in);
 		//	printf("server state: %s\n clientState: %s\n", s.getStateText(),c.getStateText()); 
 		}
 		s.run();
@@ -124,6 +126,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 				case SDL_MOUSEBUTTONDOWN:
 					ui.setMouse(e.motion.x, e.motion.y);
 					ui.setClick(e.motion.state);
+					printf("mouse state : %i \n", e.motion.state);
 					break;
 				case SDL_MOUSEBUTTONUP:
 					ui.setMouse(e.motion.x, e.motion.y);
@@ -145,15 +148,14 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 #ifdef WITH_NETWORKING
-		//eTest.handleInput(&aui, &world);
+		eTest.handleInput(&aui, &world);
 #else
 		eTest.handleInput(&ui, &world);
 #endif
 		//update
 		world.update(passed);
 		Ghud.updateHud(&eTest, &ui);
-		//reset the mouse input. Why was this so hard to figure out?
-		ui.resetClick();
+		
 		//draw
 		//reset the screen.
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
@@ -169,6 +171,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}
 		if(changeInInfoSoSend)
 		{	
+			printf("sent: %i vs hit: %i\n", send[2], ui.getClick());
 			c.getOutbox()->add(send);
 			for(int i = 0; i < strlen(old); i++)
 			{
@@ -178,6 +181,8 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 		}
 #endif
+		//reset the mouse input. Why was this so hard to figure out?
+		ui.resetClick();
 		SDL_Flip(screen);
 		SDL_Delay(SPRITE_SPEED);
 	}
