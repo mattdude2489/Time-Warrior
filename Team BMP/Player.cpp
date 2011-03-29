@@ -34,6 +34,8 @@ void Player::updateUnique(int a_timePassed)
 		|| m_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->collide
 		|| m_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->collide)
 		move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+
+	m_prevLoc = m_location;
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 {

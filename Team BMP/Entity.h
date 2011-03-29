@@ -59,7 +59,6 @@ public:
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
 	void move(int a_deltaX, int a_deltaY)
 	{
-		m_prevLoc = m_location;
 		moveUnique(a_deltaX, a_deltaY);
 		m_location.x += a_deltaX; m_location.y += a_deltaY;
 		m_timer = 0;
