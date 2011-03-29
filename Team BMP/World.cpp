@@ -48,8 +48,6 @@ bool World::setWorld(char * fileName)
 		Tile hi;
 		while(c != EOF)
 		{
-			if(y == 0)
-				y++;
 			//Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
 			if(c != '\n')
 			{
@@ -65,7 +63,7 @@ bool World::setWorld(char * fileName)
 				tileX = x;
 				x = 0;
 			}
-			tileY = y;
+			tileY = y+1;
 			//"Anything else in particular" switch
 			//Creations of entities & any particulars of the map
 			switch(c)
