@@ -24,9 +24,9 @@ public:
 	Player(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
 		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite){init();}
 	SPoint * getCamera(){return &m_cameraP;}
-	void setLocationUnique(int a_x, int a_y){m_cameraP.x = a_x - SCREEN_CENTER_X;m_cameraP.x = a_y - SCREEN_CENTER_Y;}
+	void setWorld(World * a_world){m_world = a_world;}
+	void setLocationUnique(int a_x, int a_y){m_cameraP.set(a_x - SCREEN_CENTER_X, a_y - SCREEN_CENTER_Y);}
 	void moveUnique(int a_deltaX, int a_deltaY){m_cameraP.x += a_deltaX;m_cameraP.y += a_deltaY;}
-	void setWorld(World * a_world) {m_world = a_world;}
 	void drawSlot(e_gauntletSlots a_slot, SDL_Surface * a_screen, int a_x, int a_y){m_gauntlet[a_slot]->drawHUD(a_screen, a_x, a_y);}
 	void addToAttackInventory(Chip * a_chip);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);

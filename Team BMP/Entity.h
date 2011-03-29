@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL_Sprite.h"
 #include "spoint.h"
+#include "UserInput.h"
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 //enum e_locations {LOC_CURRENT, LOC_PREV, NUM_LOCATIONS};
@@ -17,7 +18,7 @@ protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer;
 	e_entityType m_eType;
 	bool m_shouldDraw;
-	SPoint m_location, *m_camera, m_prevLoc;
+	SPoint m_location, m_prevLoc, *m_camera;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 public:
@@ -35,8 +36,7 @@ public:
 		m_timeToRegen = m_timer = 0;
 		m_shouldDraw = false;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
-		m_prevLoc.x = SCREEN_CENTER_X;
-		m_prevLoc.y = SCREEN_CENTER_Y;
+		m_prevLoc = m_location;
 		m_camera = NULL;
 	}
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
@@ -53,6 +53,7 @@ public:
 	int getType() {return (int)m_eType;}
 	bool getVisible() {return m_shouldDraw;}
 	SPoint getLocation(){return m_location;}
+	SPoint getPreviousLocation() {return m_prevLoc;}
 	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
@@ -68,15 +69,10 @@ public:
 	void setLocation(int a_x, int a_y)
 	{
 		setLocationUnique(a_x, a_y);
-		m_location.x = a_x; m_location.y = a_y;
+		m_location.x = a_x;
+		m_location.y = a_y;
 	}
-	void setLocation(SPoint newLoc)
-	{
-		setLocationUnique(newLoc.x, newLoc.y);
-		m_location.x = newLoc.x;
-		m_location.y = newLoc.y;
-	}
-	SPoint getPreviousLocation() {return m_prevLoc;}
+	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
 	virtual void updateUnique(int a_timePassed){}
 	void update(int a_timePassed)
 	{
@@ -135,11 +131,18 @@ public:
 		if(m_stats[ENERGY_CURRENT] > m_stats[ENERGY_MAX])
 			m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
 	}
+	bool collideSimple(SDL_Sprite * a_sprite, int a_x, int a_y)
+	{
+		if(m_shouldDraw && a_sprite->isSprite())
+			return m_sprite->rectCollide(m_location.x, m_location.y, *a_sprite, a_x, a_y);
+		else
+			return false;
+	}
 	//Says if there is a collision between two entities.
 	bool collideSimple(Entity * a_entity)
 	{
-		if(m_shouldDraw && a_entity->getVisible())
-			return m_sprite->rectCollide(m_location.x, m_location.y, *a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
+		if(a_entity->getVisible())
+			return collideSimple(a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
 		else
 			return false;
 	}
@@ -181,16 +184,23 @@ public:
 	}
 	void handleServerInfo(char * a_in)
 	{
-
-		if(a_in[0] == 'a')
+		switch(a_in[0])
+		{
+		case KEY_LEFT:
 			move(-5, 0);
-		else if(a_in[0] == 'd')
+			break;
+		case KEY_RIGHT:
 			move(5, 0);
-		if(a_in[1] == 'w')
+			break;
+		}
+		switch(a_in[1])
+		{
+		case KEY_UP:
 			move(0,-5);	
-		else if(a_in[1] =='s')
-			move(0,5);	
-			
-
+			break;
+		case KEY_DOWN:
+			move(0,5);
+			break;
+		}
 	}
 };

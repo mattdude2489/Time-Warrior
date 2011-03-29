@@ -30,7 +30,6 @@ public:
 	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void update(Uint32 timePassed);
-	Tile * getTile(int a_x, int a_y);
 	void draw(SDL_Surface * a_screen);
 	bool setWorld(char * fileName);
 	bool getSuccess() {return m_success;}
@@ -44,4 +43,6 @@ public:
 	Entity * getEntity(int a_entity, int a_x, int a_y){return m_mapOfEntities.get(getLocationGrid(a_x, a_y)).getEntity(a_entity);} //So that each entity does NOT need to know which grid it's in!
 	Grid * getGrid(int a_index) {return &m_mapOfEntities.get(a_index);}
 	Grid * getGrid(int a_x, int a_y){return &m_mapOfEntities.get(getLocationGrid(a_x, a_y));}
+	Tile * getTile(int a_x, int a_y);
+	Tile * getTile(int a_tile){return &m_mapOfWorld.get(a_tile);}
 };

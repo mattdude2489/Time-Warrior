@@ -63,13 +63,13 @@ bool World::setWorld(char * fileName)
 			case 'M':
 			case 'B':
 				hi.currentTexture = sprite;
-				hi.pos.x = x*32;
-				hi.pos.y = y*32;
+				hi.pos.x = x*SPRITE_SIZE;
+				hi.pos.y = y*SPRITE_SIZE;
 				x++;
 				hi.collide = false;
 				break;
 			}
-			tileY = y;
+			tileY = y+1;
 			//"Anything else in particular" switch. So in other words, creations of entities, any particulars of the map.
 			//Will happen in this switch statement.
 			switch(c)
@@ -118,6 +118,7 @@ Tile * World::getTile(int a_x,int a_y)
 {
 	int tileIndex = (int) a_x / tileX;
 	tileIndex += ((int) a_y / tileX)*tileY; //28 is the number of tiles per row. Switch to #define next chance.
+	printf("index: %d, row: %d\n", tileIndex, m_mapOfWorld.get(tileIndex).indexOfSpriteRow);
 	return &m_mapOfWorld.get(tileIndex);
 }
 
