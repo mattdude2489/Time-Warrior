@@ -11,7 +11,7 @@
 #include "servermodule.h"
 #include "Minion.h"
 
-#define WITH_NETWORKING
+//#define WITH_NETWORKING
 
 //Some debugging includes
 #include <stdio.h>
@@ -64,14 +64,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	eTest.addToAttackInventory(&chip4);
 	Hud Ghud;
 	World world;
-	eTest.setWorld(&world);
-	chip.setWorld(&world);
 	chip.levelUp();
-	chip2.setWorld(&world);
 	chip2.levelUp();
-	chip3.setWorld(&world);
 	chip3.levelUp();
-	chip4.setWorld(&world);
 	chip4.levelUp();
 	SDL_Sprite aTest("Sprites/greenguy.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	aTest.setTransparency(COLOR_TRANSPARENT);

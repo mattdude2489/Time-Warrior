@@ -21,12 +21,11 @@ class Chip : public Entity
 		bool m_firstIteration;
 		char m_direction;
 		SDL_Sprite * m_spriteHUD;
-		World * m_world;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_level(0),m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),
-			m_isEquipped(false), m_owner(NULL),m_world(NULL){m_eType = CHIP;}
+			m_isEquipped(false), m_owner(NULL){m_eType = CHIP;}
 		e_chipType getType(){return m_cType;}
 		e_chipSubType getSubType(){return m_cSubType;}
 		e_chipSubSubType getSubSubType(){return m_cSubSubType;}
@@ -35,7 +34,6 @@ class Chip : public Entity
 		int getDamage(){return m_dmg;}
 		bool isEquipped(){return m_isEquipped;}
 		void toggleEquip(){m_isEquipped = !m_isEquipped;}
-		void setWorld(World * a_world){m_world = a_world;}
 		void setOwner(Entity * a_owner){m_owner = a_owner;}
 		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
 		void setDirection(char a_dir){m_direction = a_dir;}
@@ -113,23 +111,19 @@ class Chip : public Entity
 			}
 		}
 		virtual void updateUniqueTwo(int a_timePassed){}
-		void updateUnique(int a_timePassed)
+		void updateUnique(int a_timePassed, World * a_world)
 		{
-			/*if(m_world->getTile(m_location.x, m_location.y)->collide)
-			{
-				m_location = m_prevLoc;
-			}*/
-			if(m_shouldDraw && m_owner && m_world)
+			if(m_shouldDraw && m_owner)
 			{
 				updateUniqueTwo(a_timePassed);
 				bool collisionMade = false;
 				for(int g = 0; g < NUM_GRIDS; ++g)
 				{
-					for(int i = 0; i < m_world->getGrid(g)->getNumberOfEntities(); ++i)
+					for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
 					{
-						if(shouldApplyEffect(m_world->getEntity(i, g)))
+						if(shouldApplyEffect(a_world->getEntity(i, g)))
 						{
-							applyEffect(m_world->getEntity(i, g));
+							applyEffect(a_world->getEntity(i, g));
 							collisionMade = true;
 						}
 					}

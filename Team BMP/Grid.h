@@ -65,11 +65,9 @@ public:
 		}
 	}
 	
-	void update(Uint32 timePassed) 
+	void update(Uint32 timePassed, World * a_world) 
 	{
 		for(int i = 0; i < m_mapOfEntities.size(); i++) 
-		{
-			m_mapOfEntities.get(i)->update(timePassed);
-		}
+			m_mapOfEntities.get(i)->update(timePassed, a_world);
 	}
 };

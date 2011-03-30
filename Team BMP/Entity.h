@@ -3,6 +3,9 @@
 #include "spoint.h"
 #include "UserInput.h"
 
+class World;
+struct Tile;
+
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 //enum e_locations {LOC_CURRENT, LOC_PREV, NUM_LOCATIONS};
 enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
@@ -72,30 +75,8 @@ public:
 		m_location.y = a_y;
 	}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
-	virtual void updateUnique(int a_timePassed){}
-	void update(int a_timePassed)
-	{
-		m_timeToRegen += a_timePassed;
-		if(m_timeToRegen >= TIME_SECOND_MS)
-		{
-			m_timeToRegen = 0;
-			regen(m_stats[ENERGY_REGEN]);
-			if(m_eType == DUMMY)
-				heal(m_stats[ENERGY_REGEN]);
-		}
-		m_timer += a_timePassed;
-		if(m_eType != CHIP)
-		{
-			if(m_timer >= TIME_INACTIVE && m_sprite->getFrame() == 1)
-				m_sprite->stop();
-		}
-		m_hb.x = m_location.x - m_camera->x;
-		m_hb.y = m_location.y - m_camera->y;
-		m_hb.w = (Uint16)(((double)getStatNumber(HEALTH_CURRENT)/(double)getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
-		m_hb.h = 5;
-		m_sprite->update(a_timePassed);
-		updateUnique(a_timePassed);
-	}
+	virtual void updateUnique(int a_timePassed, World * a_world){}
+	void update(int a_timePassed, World * a_world);
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	void draw(SDL_Surface * a_screen)
 	{

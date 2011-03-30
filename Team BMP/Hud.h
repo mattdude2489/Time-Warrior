@@ -65,8 +65,8 @@ public:
 	void updateHud(Player * p, UserInput * ui)
 	{
 		handleInput(ui);
-		bars[BAR_HEALTH].setWidth((int)((double)p->getStatNumber(HEALTH_CURRENT)/(double)p->getStatNumber(HEALTH_MAX)) * ONE_HUNDRED_PERCENT);
-		bars[BAR_ENERGY].setWidth((int)((double)p->getStatNumber(ENERGY_CURRENT)/(double)p->getStatNumber(ENERGY_MAX)) * ONE_HUNDRED_PERCENT);
+		bars[BAR_HEALTH].setWidth((double)p->getStatNumber(HEALTH_CURRENT)/(double)p->getStatNumber(HEALTH_MAX) * ONE_HUNDRED_PERCENT);
+		bars[BAR_ENERGY].setWidth((double)p->getStatNumber(ENERGY_CURRENT)/(double)p->getStatNumber(ENERGY_MAX) * ONE_HUNDRED_PERCENT);
 		m_statWin.setPlayer(p);
 	}
 	void draw(SDL_Surface * screen)

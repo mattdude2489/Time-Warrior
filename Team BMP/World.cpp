@@ -138,7 +138,7 @@ void World::update(Uint32 a_timePassed)
 	}
 
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
-		m_mapOfEntities.get(i).update(a_timePassed);
+		m_mapOfEntities.get(i).update(a_timePassed, this);
 	bool successPlayer;
 	Entity * cp = m_mapOfEntities.get(clientPlayerIndex).getPlayer(successPlayer); //This pointer will be erased soon afterwards.
 	//It's merely there to take away the typing and make it easier to read.
