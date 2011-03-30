@@ -9,21 +9,19 @@ enum e_states	{WANDER};
 class Minion : public Entity
 {
 private:
-	int lastDirectionChange;
+	int lastDirectionChange, m_state;
 	SPoint m_target;
-	int m_state;
 public:
 	Minion(){}
 	Minion(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
+		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite)
 	{
-		init(a_def,  a_int,  a_str,  a_health,  a_energy,  a_fRes,  a_iRes,  a_lRes);
-		m_sprite = a_sprite;
+		m_eType = MINION;
 		lastDirectionChange = 0;
 		m_state = WANDER;
 	}
 	void updateUnique(int a_timePassed)
 	{
-		m_sprite->update(a_timePassed);
 		wander(a_timePassed);
 		moveToTarget();
 	}
@@ -38,8 +36,5 @@ public:
 			lastDirectionChange = a_timePassed;
 		}
 	}
-	void moveToTarget()
-	{
-		m_location.difference(m_target);
-	}
+	void moveToTarget(){m_location.difference(m_target);}
 };
