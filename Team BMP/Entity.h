@@ -132,6 +132,25 @@ public:
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
 	virtual void updateUnique(int a_timePassed, World * a_world){}
 	bool getVisible() {return m_shouldDraw;}
+
+	//Due to the CPU intensive nature of the pixel Collision, this should rarely be used.
+	bool epicCollide(SDL_Sprite * a_sprite, int a_x, int a_y)
+	{
+		if(m_shouldDraw && a_sprite->isSprite())
+			return m_sprite->pixelCollide(m_location.x, m_location.y, *a_sprite, a_x, a_y);
+		else
+			return false;
+	}
+	bool epicCollide(Entity * a_entity)
+	{
+		if(a_entity->getVisible())
+		{
+			return epicCollide(a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
+		}
+		else
+			return false;
+	}
+
 	bool collideSimple(SDL_Sprite * a_sprite, int a_x, int a_y)
 	{
 		if(m_shouldDraw && a_sprite->isSprite())

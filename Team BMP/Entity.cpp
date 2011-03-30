@@ -44,7 +44,8 @@ void Entity::update(int a_timePassed, World * a_world)
 		{
 			if(collide(a_world->getEntity(i, m_location.x, m_location.y)))
 			{
-				move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+				if(epicCollide(a_world->getEntity(i, m_location.x, m_location.y)))
+					move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 			}
 		}
 	}
