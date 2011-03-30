@@ -49,11 +49,18 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//the user interface variable
 	bool running = true;
 	//loading a sprite to see if it works with the entity
-	SDL_Sprite test("Sprites/skeleton.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
+	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
+	SDL_Sprite test2("Sprites/greenguy.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
+	SDL_Sprite test3("Sprites/skeleton.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	test.setTransparency(COLOR_TRANSPARENT);
-	//test.setHIndex(2,3);
+	test2.setTransparency(COLOR_TRANSPARENT);
+	test3.setTransparency(COLOR_TRANSPARENT);
 	test.restart(2);
+	test2.restart(2);
+	test3.restart(2);
 	Player eTest(15,1,39,100,100,100,5,9,&test);
+	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &test2);
+	Minion minion(0, 0, 0, 100, 100, 0, 0, 0, &test3);
 	BasicSlash chip;
 	BasicFire chip2;
 	AdvancedFire chip3;
@@ -68,10 +75,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	chip2.levelUp();
 	chip3.levelUp();
 	chip4.levelUp();
-	SDL_Sprite aTest("Sprites/greenguy.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
-	aTest.setTransparency(COLOR_TRANSPARENT);
-	aTest.restart(2);
-	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &aTest);
 	eTest.setGauntletSlot(SLOT_ATK1, &chip);
 	eTest.setGauntletSlot(SLOT_ATK2, &chip2);
 	world.add(&eTest);
@@ -80,6 +83,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.add(&chip3);
 	world.add(&chip4);
 	world.add(&fightTest);
+	world.add(&minion);
 	world.setCamera(eTest.getCamera());
 	//music test stuff
 	

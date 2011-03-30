@@ -19,22 +19,50 @@ public:
 		m_eType = MINION;
 		lastDirectionChange = 0;
 		m_state = WANDER;
+		m_target.set(m_location);
 	}
-	void updateUnique(int a_timePassed, World * a_world)
-	{
-		wander(a_timePassed);
-		moveToTarget();
-	}
+	void updateUnique(int a_timePassed, World * a_world){wander(a_timePassed);}
 	void wander(int a_timePassed)
 	{
-		if((a_timePassed - lastDirectionChange) > WANDERDIRECTIONTIME)
+		lastDirectionChange += a_timePassed;
+		if(lastDirectionChange > WANDERDIRECTIONTIME)
 		{
 			int tX, tY;
 			tX = m_location.getX()+((rand()%RANDMAX)-WANDERDIST);//gives a + or - 50 change in wander
 			tY = m_location.getY()+((rand()%RANDMAX)-WANDERDIST);
 			m_target.set(tX, tY);
-			lastDirectionChange = a_timePassed;
+			lastDirectionChange = 0;
+		}
+		else
+		{
+			//TODO: code copied from Magic.h - need to put in function
+			int max = 10;
+			double deltaX = m_target.x - m_location.x;
+			double deltaY = m_target.y - m_location.y;
+			if(deltaX != 0 && deltaY != 0)
+			{
+				bool switchSignX = deltaX < 0;
+				bool switchSignY = deltaY < 0;
+				switchSignIf(deltaX, switchSignX);
+				switchSignIf(deltaY, switchSignY);
+				if(deltaX > max || deltaY > max)
+				{
+					double slope = deltaY / deltaX;
+					if(deltaX > max)
+					{
+						deltaX = max;
+						deltaY = slope * deltaX;
+					}
+					else if(deltaY > max)
+					{
+						deltaY = max;
+						deltaX = deltaY / slope;
+					}
+				}
+				switchSignIf(deltaX, switchSignX);
+				switchSignIf(deltaY, switchSignY);
+				move((int)deltaX,(int)deltaY);
+			}
 		}
 	}
-	void moveToTarget(){m_location.difference(m_target);}
 };

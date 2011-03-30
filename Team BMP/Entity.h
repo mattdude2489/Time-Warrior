@@ -67,6 +67,7 @@ public:
 		m_timer = 0;
 		m_sprite->start();
 	}
+	void move(SPoint a_point){move(a_point.x,a_point.y);}
 	void draw(SDL_Surface * a_screen)
 	{
 		if(m_shouldDraw && m_camera)
@@ -120,6 +121,12 @@ public:
 			move(0,5);
 			break;
 		}
+	}
+	void switchSign(double & a_num){a_num *= -1;}
+	void switchSignIf(double & a_num, bool a_shouldChange)
+	{
+		if(a_shouldChange)
+			switchSign(a_num);
 	}
 	virtual void setLocationUnique(int a_x, int a_y){}
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}

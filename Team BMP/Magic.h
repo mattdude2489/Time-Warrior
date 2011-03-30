@@ -93,12 +93,6 @@ class Magic : public Chip
 			m_spriteHUD->setRIndex(m_cSubSubType);
 			initHudSprite();
 		}
-		void switchSign(double & a_num){a_num *= -1;}
-		void switchSignIf(double & a_num, bool a_shouldChange)
-		{
-			if(a_shouldChange)
-				switchSign(a_num);
-		}
 		void updateUniqueTwo(int a_timePassed)
 		{
 			if(m_shouldDraw)
