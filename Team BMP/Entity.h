@@ -25,6 +25,15 @@ protected:
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 public:
+	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
+	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
+	{
+		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes);
+		m_eType = DUMMY;
+		m_shouldDraw = true;
+		m_sprite = a_sprite;
+		m_sprite->start();
+	}
 	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
 	{
 		m_stats[DEFENSE] = a_def;
@@ -42,24 +51,15 @@ public:
 		m_prevLoc = m_location;
 		m_camera = NULL;
 	}
-	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
-	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
-	{
-		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes);
-		m_eType = DUMMY;
-		m_shouldDraw = true;
-		m_sprite = a_sprite;
-		m_sprite->start();
-	}
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
-	void setType(e_entityType type) {m_eType = type;}
-	int getType() {return (int)m_eType;}
-	bool getVisible() {return m_shouldDraw;}
-	SPoint getLocation(){return m_location;}
-	SPoint getPreviousLocation() {return m_prevLoc;}
-	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
-	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
-	virtual void moveUnique(int a_deltaX, int a_deltaY){}
+	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
+	void update(int a_timePassed, World * a_world);
+	void setLocation(int a_x, int a_y)
+	{
+		setLocationUnique(a_x, a_y);
+		m_location.x = a_x;
+		m_location.y = a_y;
+	}
 	void move(int a_deltaX, int a_deltaY)
 	{
 		moveUnique(a_deltaX, a_deltaY);
@@ -67,17 +67,6 @@ public:
 		m_timer = 0;
 		m_sprite->start();
 	}
-	virtual void setLocationUnique(int a_x, int a_y){}
-	void setLocation(int a_x, int a_y)
-	{
-		setLocationUnique(a_x, a_y);
-		m_location.x = a_x;
-		m_location.y = a_y;
-	}
-	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
-	virtual void updateUnique(int a_timePassed, World * a_world){}
-	void update(int a_timePassed, World * a_world);
-	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	void draw(SDL_Surface * a_screen)
 	{
 		if(m_shouldDraw && m_camera)
@@ -111,57 +100,6 @@ public:
 		if(m_stats[ENERGY_CURRENT] > m_stats[ENERGY_MAX])
 			m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
 	}
-	bool collideSimple(SDL_Sprite * a_sprite, int a_x, int a_y)
-	{
-		if(m_shouldDraw && a_sprite->isSprite())
-			return m_sprite->rectCollide(m_location.x, m_location.y, *a_sprite, a_x, a_y);
-		else
-			return false;
-	}
-	//Says if there is a collision between two entities.
-	bool collideSimple(Entity * a_entity)
-	{
-		if(a_entity->getVisible())
-			return collideSimple(a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
-		else
-			return false;
-	}
-	SDL_Sprite * getSprite() {return m_sprite;}
-	bool collide(Entity * a_entity)
-	{
-		//If one of them is the chip; get rid of it. Right now. Seriously, just don't do it.
-		//If they are two players, you need not care. If it's two minions, need not care.
-		if(m_eType == CHIP || a_entity->m_eType == CHIP || m_eType == a_entity->m_eType)
-			return false;
-		else
-			return collideSimple(a_entity);
-	}
-	int getStatNumber(int a_stat)
-	{
-		//returns the stat based on a number
-		if(a_stat < 0 || a_stat > NUM_STATS)
-			return 0;
-		else
-			return m_stats[a_stat];
-	}
-	char * getStatName(int a_stat)
-	{
-		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works
-		{
-			case HEALTH_CURRENT:		return "Health :%i";		break;
-			case HEALTH_MAX:			return "/%i";				break;
-			case ENERGY_CURRENT:		return "Energy: %i";		break;
-			case ENERGY_MAX:			return "/%i";				break;
-			case ENERGY_REGEN:			return "\tRegen: %i";		break;
-			case STRENGTH:				return "Strength: %i";		break;
-			case INTELLECT:				return "Intellect: %i";		break;
-			case DEFENSE:				return "Defense: %i";		break;
-			case RESISTANCE_FIRE:		return "\tFire: %i";		break;
-			case RESISTANCE_ICE:		return "\tIce: %i";			break;
-			case RESISTANCE_LIGHTNING:	return "\tLightning: %i";	break;
-			default:					return "Invalid";
-		}
-	}
 	void handleServerInfo(char * a_in)
 	{
 		switch(a_in[0])
@@ -183,4 +121,65 @@ public:
 			break;
 		}
 	}
+	virtual void setLocationUnique(int a_x, int a_y){}
+	virtual void moveUnique(int a_deltaX, int a_deltaY){}
+	virtual void updateUnique(int a_timePassed, World * a_world){}
+	bool getVisible() {return m_shouldDraw;}
+	bool collideSimple(SDL_Sprite * a_sprite, int a_x, int a_y)
+	{
+		if(m_shouldDraw && a_sprite->isSprite())
+			return m_sprite->rectCollide(m_location.x, m_location.y, *a_sprite, a_x, a_y);
+		else
+			return false;
+	}
+	//Says if there is a collision between two entities.
+	bool collideSimple(Entity * a_entity)
+	{
+		if(a_entity->getVisible())
+			return collideSimple(a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
+		else
+			return false;
+	}
+	bool collide(Entity * a_entity)
+	{
+		//If one of them is the chip; get rid of it. Right now. Seriously, just don't do it.
+		//If they are two players, you need not care. If it's two minions, need not care.
+		if(m_eType == CHIP || a_entity->m_eType == CHIP || m_eType == a_entity->m_eType)
+			return false;
+		else
+			return collideSimple(a_entity);
+	}
+	char * getStatName(int a_stat)
+	{
+		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works
+		{
+			case HEALTH_CURRENT:		return "Health :%i";		break;
+			case HEALTH_MAX:			return "/%i";				break;
+			case ENERGY_CURRENT:		return "Energy: %i";		break;
+			case ENERGY_MAX:			return "/%i";				break;
+			case ENERGY_REGEN:			return "\tRegen: %i";		break;
+			case STRENGTH:				return "Strength: %i";		break;
+			case INTELLECT:				return "Intellect: %i";		break;
+			case DEFENSE:				return "Defense: %i";		break;
+			case RESISTANCE_FIRE:		return "\tFire: %i";		break;
+			case RESISTANCE_ICE:		return "\tIce: %i";			break;
+			case RESISTANCE_LIGHTNING:	return "\tLightning: %i";	break;
+			default:					return "Invalid";
+		}
+	}
+	int getType() {return (int)m_eType;}
+	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
+	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
+	int getStatNumber(int a_stat)
+	{
+		//returns the stat based on a number
+		if(a_stat < 0 || a_stat > NUM_STATS)
+			return 0;
+		else
+			return m_stats[a_stat];
+	}
+	SPoint getLocation(){return m_location;}
+	SPoint getPreviousLocation() {return m_prevLoc;}
+	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
+	SDL_Sprite * getSprite() {return m_sprite;}
 };

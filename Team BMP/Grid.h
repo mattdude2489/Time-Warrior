@@ -23,7 +23,9 @@ public:
 	//@param: The index of the returning Entity. NO ERROR DETECTION...SO DON'T BE WRONG.
 	Entity * getEntity(int index) 
 	{
-		if(m_mapOfEntities.size() != 0)
+		if(index < 0 || index > m_mapOfEntities.size())
+			return m_mapOfEntities.get(0);
+		else
 			return m_mapOfEntities.get(index);
 	}
 	//Returns the Player Character...if there is one.

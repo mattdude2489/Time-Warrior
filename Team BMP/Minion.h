@@ -20,7 +20,7 @@ public:
 		lastDirectionChange = 0;
 		m_state = WANDER;
 	}
-	void updateUnique(int a_timePassed)
+	void updateUnique(int a_timePassed, World * a_world)
 	{
 		wander(a_timePassed);
 		moveToTarget();

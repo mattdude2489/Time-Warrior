@@ -177,8 +177,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 #endif
 		//reset the mouse input. Why was this so hard to figure out?
 		ui.resetClick();
+#ifdef WITH_NETWORKING
 		s.run();
 		c.run();
+#endif
 		SDL_Flip(screen);
 		SDL_Delay(SPRITE_SPEED);
 	}
