@@ -26,15 +26,18 @@ void Entity::update(int a_timePassed, World * a_world)
 	m_hb.h = 5;
 	m_sprite->update(a_timePassed);
 	//check for world collision
-	if(a_world->getTile(m_location.x, m_location.y)->collide
-		|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->collide
-		|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->collide
-		|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->collide)
+	if(m_shouldDraw)
 	{
-		if(m_eType != CHIP)
-			move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
-		else
-			m_shouldDraw = false;
+		if(a_world->getTile(m_location.x, m_location.y)->collide
+			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->collide
+			|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->collide
+			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->collide)
+		{
+			if(m_eType != CHIP)
+				move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+			else
+				m_shouldDraw = false;
+		}
 	}
 	//update previous location & anything unique
 	m_prevLoc = m_location;
