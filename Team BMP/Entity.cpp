@@ -25,7 +25,8 @@ void Entity::update(int a_timePassed, World * a_world)
 	m_hb.w = (Uint16)(((double)getStatNumber(HEALTH_CURRENT)/(double)getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
 	m_hb.h = 5;
 	m_sprite->update(a_timePassed);
-	//check for world collision
+
+	//check for world collision/tile collision
 	if(m_shouldDraw)
 	{
 		if(a_world->getTile(m_location.x, m_location.y)->collide
@@ -37,6 +38,14 @@ void Entity::update(int a_timePassed, World * a_world)
 				move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 			else
 				m_shouldDraw = false;
+		}
+		//Search through the entities in that particular grid. If there are any, check for collision with them.
+		for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
+		{
+			if(collide(a_world->getEntity(i, m_location.x, m_location.y)))
+			{
+				move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+			}
 		}
 	}
 	//update previous location & anything unique

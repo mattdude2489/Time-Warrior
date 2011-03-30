@@ -122,6 +122,8 @@ void World::sortOnYPosition()
 void World::update(Uint32 a_timePassed)
 {
 	//static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
+
+
 	//Making sure that the entities are all in their correct grids.
 	Entity * cE = NULL;
 	for(int z = 0; z < m_mapOfEntities.size(); z++)
@@ -136,7 +138,7 @@ void World::update(Uint32 a_timePassed)
 			}
 		}
 	}
-
+	//Update all entities.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i).update(a_timePassed, this);
 	bool successPlayer;
@@ -182,7 +184,7 @@ int World::getNumEntities()
 }
 Tile * World::getTile(int a_x,int a_y)
 {
-	//if a_x or a_y are off the map, return 1st collidable tile
+	//if a_x or a_y are off the map, return 1st tile
 	if(a_x < 0 || a_x > tileX * SPRITE_SIZE
 		|| a_y < 0 || a_y > tileY * SPRITE_SIZE)
 		return getTile(0);

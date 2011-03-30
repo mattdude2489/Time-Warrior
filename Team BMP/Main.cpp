@@ -60,7 +60,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	test3.restart(2);
 	Player eTest(15,1,39,100,100,100,5,9,&test);
 	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &test2);
+	fightTest.move(100, 100);
 	Minion minion(0, 0, 0, 100, 100, 0, 0, 0, &test3);
+	minion.move(-50, -50);
 	BasicSlash chip;
 	BasicFire chip2;
 	AdvancedFire chip3;
