@@ -35,7 +35,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		printf("Server state: %s \n", s.getStateText());
 	}
 	ClientModule c("127.0.1",9999);
-	while(s.size() == 0)
+	while(s.size() == 0)//allows player to connect
 	{
 		s.run();
 		printf("Server state: %s \n", s.getStateText());
@@ -99,7 +99,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		passed = now - then;
 		then = now;
 #ifdef WITH_NETWORKING
-		if(c.getInbox()->getRawList() != NULL)
+		if(c.getInbox()->getRawList() != NULL&& (unsigned char *)old != c.getInbox()->getRawList())
 		{
 			in = (char *)c.getInbox()->getRawList();
 			c.getInbox()->clear();
@@ -109,8 +109,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//	printf(in);
 		//	printf("server state: %s\n clientState: %s\n", s.getStateText(),c.getStateText()); 
 		}
-		s.run();
-		c.run();
+
 #endif
 		//input
 		while(SDL_PollEvent(&e)) //Polls the events of SDL
@@ -178,6 +177,8 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 #endif
 		//reset the mouse input. Why was this so hard to figure out?
 		ui.resetClick();
+		s.run();
+		c.run();
 		SDL_Flip(screen);
 		SDL_Delay(SPRITE_SPEED);
 	}
