@@ -180,3 +180,12 @@ int World::getNumEntities()
 		currentCount += getNumEntities(i);
 	return currentCount;
 }
+Tile * World::getTile(int a_x,int a_y)
+{
+	//if a_x or a_y are off the map, return 1st collidable tile
+	if(a_x < 0 || a_x > tileX * SPRITE_SIZE
+		|| a_y < 0 || a_y > tileY * SPRITE_SIZE)
+		return getTile(0);
+	else
+		return getTile(a_x/SPRITE_SIZE + ((a_y/SPRITE_SIZE)*tileX));
+}

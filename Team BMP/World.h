@@ -44,5 +44,5 @@ public:
 	Grid * getGrid(int a_index) {return &m_mapOfEntities.get(a_index);}
 	Grid * getGrid(int a_x, int a_y){return &m_mapOfEntities.get(getLocationGrid(a_x, a_y));}
 	Tile * getTile(int a_tile){return &m_mapOfWorld.get(a_tile);}
-	Tile * getTile(int a_x,int a_y){return getTile(a_x/SPRITE_SIZE + ((a_y/SPRITE_SIZE)*tileX));}
+	Tile * getTile(int a_x,int a_y);
 };
