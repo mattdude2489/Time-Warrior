@@ -32,6 +32,8 @@ public:
 		m_eType = DUMMY;
 		m_shouldDraw = true;
 		m_sprite = a_sprite;
+		m_sprite->setTransparency(COLOR_TRANSPARENT);
+		m_sprite->restart(2);
 		m_sprite->start();
 	}
 	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
@@ -59,11 +61,16 @@ public:
 		setLocationUnique(a_x, a_y);
 		m_location.x = a_x;
 		m_location.y = a_y;
-	}
+		m_hb.x = m_location.x;
+		m_hb.y = m_location.y;
+		m_hb.h = 5;
 	void move(int a_deltaX, int a_deltaY)
 	{
 		moveUnique(a_deltaX, a_deltaY);
-		m_location.x += a_deltaX; m_location.y += a_deltaY;
+		m_location.x += a_deltaX;
+		m_location.y += a_deltaY;
+		m_hb.x += a_deltaX;
+		m_hb.y += a_deltaY;
 		m_timer = 0;
 		m_sprite->start();
 	}

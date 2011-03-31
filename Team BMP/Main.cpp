@@ -52,16 +52,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	SDL_Sprite test2("Sprites/greenguy.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	SDL_Sprite test3("Sprites/skeleton.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
-	test.setTransparency(COLOR_TRANSPARENT);
-	test2.setTransparency(COLOR_TRANSPARENT);
-	test3.setTransparency(COLOR_TRANSPARENT);
-	test.restart(2);
-	test2.restart(2);
-	test3.restart(2);
 	Player eTest(15,1,39,100,100,100,5,9,&test);
 	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &test2);
-	fightTest.move(100, 100);
 	Minion minion(0, 0, 0, 100, 100, 0, 0, 0, &test3);
+	fightTest.move(100, 100);
 	minion.move(-50, -50);
 	BasicSlash chip;
 	BasicFire chip2;
