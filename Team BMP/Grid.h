@@ -29,19 +29,19 @@ public:
 			return m_mapOfEntities.get(index);
 	}
 	//Returns the Player Character...if there is one.
-	//@param: True if returning entity is Player, false is not.
-	Entity * getPlayer(bool &isOneThere)
+	//@param: the entity pointer that becomes the player.
+	//@return: the boolean the tells if the player was successfully retrieved.
+	bool getPlayer(Entity * &emptyEntityPointer)
 	{
-		isOneThere = false;
 		for(int i = 0; i < m_mapOfEntities.size(); i++)
 		{
 			if(m_mapOfEntities.get(i)->getType() == PLAYER)
 			{
-				isOneThere = true;
-				return m_mapOfEntities.get(i);
+				emptyEntityPointer = m_mapOfEntities.get(i);
+				return true;
 			}
 		}
-		//return m_mapOfEntities.get(0);
+		return false;
 	}
 	//@Return: returns the size of the current vector of the Grid.
 	int getNumberOfEntities() {return m_mapOfEntities.size();}

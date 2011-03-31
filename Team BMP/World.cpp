@@ -114,8 +114,8 @@ void World::sortOnYPosition()
 		m_mapOfEntities.get(i).sortOnYPosition();
 	for(int z = 0; z < m_mapOfEntities.size(); z++)
 	{
-		bool successfulPlayer;
-		if(m_mapOfEntities.get(z).getPlayer(successfulPlayer)->getType() == PLAYER)
+		Entity * successfulPlayer;
+		if(m_mapOfEntities.get(z).getPlayer(successfulPlayer))
 			clientPlayerIndex = z; //Which grid the Player's in. once we know that, we can just use getPlayer.
 	}
 }
@@ -142,22 +142,9 @@ void World::update(Uint32 a_timePassed)
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i).update(a_timePassed, this);
 	bool successPlayer;
-	Entity * cp = m_mapOfEntities.get(clientPlayerIndex).getPlayer(successPlayer); //This pointer will be erased soon afterwards.
+	Entity * player;
+	successPlayer = m_mapOfEntities.get(clientPlayerIndex).getPlayer(player); //This pointer will be erased soon afterwards.
 	//It's merely there to take away the typing and make it easier to read.
-	/*for(int i = 0; i < m_mapOfWorld.size(); i++)
-	{
-		if(((m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x == m_mapOfWorld.get(i).pos.x) && 
-			(m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y == m_mapOfWorld.get(i).pos.y)) && 
-			m_mapOfWorld.get(i).collide)
-			m_mapOfEntities.get(clientPlayerIndex)->setLocation(0, prevLoc.x, prevLoc.y);
-		if(m_mapOfEntities.get(clientPlayerIndex)->getSprite()->rectCollide(
-			m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().x,
-			m_mapOfEntities.get(clientPlayerIndex)->getLocationWorld().y,
-			*m_mapOfWorld.get(i).currentTexture,
-			m_mapOfWorld.get(i).pos.x,
-			m_mapOfWorld.get(i).pos.y) && m_mapOfWorld.get(i).collide)
-			m_mapOfEntities.get(clientPlayerIndex)->setLocation(1, prevLoc.x, prevLoc.y);
-	}*/
 	//prevLoc = cp->getLocation();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	//Make sure for each grid's sorting.
