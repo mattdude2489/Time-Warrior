@@ -49,9 +49,9 @@ public:
 		m_stats[ENERGY_REGEN] = 1;
 		m_timeToRegen = m_timer = 0;
 		m_shouldDraw = false;
+		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
-		m_camera = NULL;
 	}
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
@@ -61,16 +61,12 @@ public:
 		setLocationUnique(a_x, a_y);
 		m_location.x = a_x;
 		m_location.y = a_y;
-		m_hb.x = m_location.x;
-		m_hb.y = m_location.y;
-		m_hb.h = 5;
+	}
 	void move(int a_deltaX, int a_deltaY)
 	{
 		moveUnique(a_deltaX, a_deltaY);
 		m_location.x += a_deltaX;
 		m_location.y += a_deltaY;
-		m_hb.x += a_deltaX;
-		m_hb.y += a_deltaY;
 		m_timer = 0;
 		m_sprite->start();
 	}
@@ -79,7 +75,9 @@ public:
 	{
 		if(m_shouldDraw && m_camera)
 		{
-			if(m_eType != CHIP)
+			m_hb.x = getLocationScreen().x;
+			m_hb.y = getLocationScreen().y;
+			if(m_eType != CHIP && getStatNumber(HEALTH_CURRENT) < getStatNumber(HEALTH_MAX))
 				SDL_FillRect(a_screen, &m_hb, COLOR_HEALTH);
 			m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y); 
 		}

@@ -28,17 +28,17 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//networking
 
 #ifdef WITH_NETWORKING
-	ServerModule s(9999);
-	while(s.getState() != NetModule::LISTENING)
+	//ServerModule s(9999);
+	//while(s.getState() != NetModule::LISTENING)
+	//{
+	//	s.run();
+	//	printf("Server state: %s \n", s.getStateText());
+	//}
+	ClientModule c("69.229.238.234",9999);
+	while(c.getState() != NetModule::WAITING_FOR_DATA)//allows player to connect
 	{
-		s.run();
-		printf("Server state: %s \n", s.getStateText());
-	}
-	ClientModule c("127.0.1",9999);
-	while(s.size() == 0)//allows player to connect
-	{
-		s.run();
-		printf("Server state: %s \n", s.getStateText());
+		//s.run();
+		//printf("Server state: %s \n", s.getStateText());
 		c.run();
 		printf("Client state: %s \n", c.getStateText());
 	}
@@ -104,7 +104,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 			in = (char *)c.getInbox()->getRawList();
 			c.getInbox()->clear();
 			aui.convertServerInfo(in);
-			printf("mouse state after server: %i\n", aui.getClick());
+	//		printf("mouse state after server: %i\n", aui.getClick());
 		//	eTest.handleServerInfo(in);
 		//	printf(in);
 		//	printf("server state: %s\n clientState: %s\n", s.getStateText(),c.getStateText()); 
@@ -120,7 +120,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 				case SDL_MOUSEBUTTONDOWN:
 					ui.setMouse(e.motion.x, e.motion.y);
 					ui.setClick(e.motion.state);
-					printf("mouse state : %i \n", e.motion.state);
+	//				printf("mouse state : %i \n", e.motion.state);
 					break;
 				case SDL_MOUSEBUTTONUP:
 					ui.setMouse(e.motion.x, e.motion.y);
@@ -131,7 +131,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 				case SDL_KEYDOWN: //This will work until we can get it without using a switch statement.
 					ui.setKey(e.key.keysym.sym);
-					printf("Key Pressed: %c \n", e.key.keysym.sym);
+	//				printf("Key Pressed: %c \n", e.key.keysym.sym);
 					ui.updateUI(false);
 					break;
 				case SDL_KEYUP:
@@ -165,7 +165,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}
 		if(changeInInfoSoSend)
 		{	
-			printf("sent: %i vs hit: %i\n", send[2], ui.getClick());
+	//		printf("sent: %i vs hit: %i\n", send[2], ui.getClick());
 			c.getOutbox()->add(send);
 			for(int i = 0; i < strlen(old); i++)
 			{
@@ -178,8 +178,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//reset the mouse input. Why was this so hard to figure out?
 		ui.resetClick();
 #ifdef WITH_NETWORKING
-		s.run();
-		c.run();
+	//	s.run();
+		for(int i = 0; i<3;i++)
+			c.run();
 #endif
 		SDL_Flip(screen);
 		SDL_Delay(SPRITE_SPEED);

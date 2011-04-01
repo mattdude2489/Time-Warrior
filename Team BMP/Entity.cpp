@@ -21,6 +21,7 @@ void Entity::update(int a_timePassed, World * a_world)
 	}
 	//update health-bar
 	m_hb.w = (Uint16)(((double)getStatNumber(HEALTH_CURRENT)/(double)getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
+	m_hb.h = 5;
 	m_sprite->update(a_timePassed);
 
 	//check for world collision/tile collision
