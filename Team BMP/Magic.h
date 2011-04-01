@@ -101,34 +101,7 @@ class Magic : public Chip
 				{
 				case BASIC:
 					{
-						int max = 10;
-						double deltaX = m_target.x - m_location.x;
-						double deltaY = m_target.y - m_location.y;
-						if(deltaX != 0 && deltaY != 0)
-						{
-							bool switchSignX = deltaX < 0;
-							bool switchSignY = deltaY < 0;
-							switchSignIf(deltaX, switchSignX);
-							switchSignIf(deltaY, switchSignY);
-							if(deltaX > max || deltaY > max)
-							{
-								double slope = deltaY / deltaX;
-								if(deltaX > max)
-								{
-									deltaX = max;
-									deltaY = slope * deltaX;
-								}
-								else if(deltaY > max)
-								{
-									deltaY = max;
-									deltaX = deltaY / slope;
-								}
-							}
-							switchSignIf(deltaX, switchSignX);
-							switchSignIf(deltaY, switchSignY);
-							move((int)deltaX,(int)deltaY);
-						}
-						else
+						if(moveToTarget(10))
 						{
 							if(m_timer >= TIME_EXPIRE)
 								deactivate();

@@ -50,10 +50,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	bool running = true;
 	//loading a sprite to see if it works with the entity
 	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
-	SDL_Sprite test2("Sprites/greenguy.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
-	SDL_Sprite test3("Sprites/skeleton.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	Player eTest(15,1,39,100,100,100,5,9,&test);
+	SDL_Sprite test2("Sprites/greenguy.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	Entity fightTest(0, 0, 0, 100, 100, 0, 0, 0, &test2);
+	SDL_Sprite test3("Sprites/skeleton.bmp", 24, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
 	Minion minion(0, 0, 0, 100, 100, 0, 0, 0, &test3);
 	fightTest.move(100, 100);
 	minion.move(-50, -50);

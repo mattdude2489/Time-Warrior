@@ -17,7 +17,6 @@ class Chip : public Entity
 		int m_level, m_cost, m_costLv, m_dmg, m_dmgLv;
 		bool m_isEquipped;
 		Entity * m_owner;
-		SPoint m_target;
 		bool m_firstIteration;
 		char m_direction;
 		SDL_Sprite * m_spriteHUD;

@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 #include "SDL_Sprite.h"
 #include "spoint.h"
 #include "UserInput.h"
@@ -21,7 +22,7 @@ protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer;
 	e_entityType m_eType;
 	bool m_shouldDraw;
-	SPoint m_location, m_prevLoc, *m_camera;
+	SPoint m_location, m_prevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 public:
@@ -132,6 +133,34 @@ public:
 	{
 		if(a_shouldChange)
 			switchSign(a_num);
+	}
+	//@return true if delta is 0, false if not
+	bool moveToTarget(int a_maxDistance)
+	{
+		double deltaX = m_target.difference(m_location).x;
+		double deltaY = m_target.difference(m_location).y;
+		if(deltaX != 0 && deltaY != 0)
+		{
+			bool switchSignX = deltaX < 0;
+			bool switchSignY = deltaY < 0;
+			switchSignIf(deltaX, switchSignX);
+			switchSignIf(deltaY, switchSignY);
+			if(deltaX > a_maxDistance || deltaY > a_maxDistance)
+			{
+				double lenSq = deltaX*deltaX + deltaY*deltaY;
+				double len = sqrt(lenSq);
+				deltaX /= len;
+				deltaY /= len;
+				deltaX *= a_maxDistance;
+				deltaY *= a_maxDistance;
+			}
+			switchSignIf(deltaX, switchSignX);
+			switchSignIf(deltaY, switchSignY);
+			move((int)deltaX, (int)deltaY);
+			return false;
+		}
+		else
+			return true;
 	}
 	virtual void setLocationUnique(int a_x, int a_y){}
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
