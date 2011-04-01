@@ -34,7 +34,6 @@ class Chip : public Entity
 		bool isEquipped(){return m_isEquipped;}
 		void toggleEquip(){m_isEquipped = !m_isEquipped;}
 		void setOwner(Entity * a_owner){m_owner = a_owner;}
-		void setTarget(int a_x, int a_y){m_target.x = a_x; m_target.y = a_y;}
 		void setDirection(char a_dir){m_direction = a_dir;}
 		int getOwnerCenterX()
 		{
@@ -85,6 +84,7 @@ class Chip : public Entity
 		virtual void activateUnique(){}
 		virtual bool shouldApplyEffect(Entity * a_entity){return false;}
 		virtual void applyEffect(Entity * a_entity){}
+		void centerTarget(){m_target.subtract(SPoint(m_sprite->getWidthOffsetCenter(), m_sprite->getHeightOffsetCenter()));}
 		void activate()
 		{
 			if(m_owner)
@@ -103,8 +103,7 @@ class Chip : public Entity
 					if(m_cType == MAGIC && m_cSubSubType == BASIC)
 					{
 						m_owner->useEnergy(m_cost);
-						m_target.x -= m_sprite->getWidthOffsetCenter();
-						m_target.y -= m_sprite->getHeightOffsetCenter();
+						centerTarget();
 					}
 				}
 			}

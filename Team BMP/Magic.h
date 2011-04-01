@@ -15,8 +15,7 @@ class Magic : public Chip
 		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
 		void activateUnique()
 		{
-			m_target.x -= m_sprite->getWidthOffsetCenter();
-			m_target.y -= m_sprite->getHeightOffsetCenter();
+			centerTarget();
 			switch(m_cSubSubType)
 			{
 			case BASIC:
@@ -24,7 +23,7 @@ class Magic : public Chip
 				setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 				break;
 			case EXPERT:
-				setLocation(m_target.x, m_target.y);
+				setLocation(m_target);
 				break;
 			}
 		}

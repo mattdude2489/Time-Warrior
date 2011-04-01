@@ -128,12 +128,8 @@ public:
 			break;
 		}
 	}
-	void switchSign(double & a_num){a_num *= -1;}
-	void switchSignIf(double & a_num, bool a_shouldChange)
-	{
-		if(a_shouldChange)
-			switchSign(a_num);
-	}
+	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
+	void setTarget(SPoint a_point){m_target.set(a_point);}
 	//@return true if delta is 0 (location @ target), false if not
 	bool moveToTarget(int a_maxDistance)
 	{
