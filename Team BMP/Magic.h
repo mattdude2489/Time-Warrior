@@ -101,7 +101,7 @@ class Magic : public Chip
 				{
 				case BASIC:
 					{
-						if(moveToTarget(SPRITE_MOVE*2))
+						if(moveToTarget(SPEED_MAGIC))
 						{
 							if(m_timer >= TIME_EXPIRE)
 								deactivate();

@@ -41,6 +41,6 @@ public:
 			lastDirectionChange = 0;
 		}
 		else
-			moveToTarget(SPRITE_MOVE);
+			moveToTarget(SPEED_MINION);
 	}
 };
