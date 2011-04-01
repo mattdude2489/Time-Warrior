@@ -80,7 +80,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	{
 		//m_sprite->setHIndex(0, 3); //BOO MAGIC NUMBERS.
 		m_sprite->setRIndex(0);
-		move(0, -5);
+		move(0, -1*SPRITE_MOVE);
 		lastKey = KEY_UP;
 	}
 	
@@ -88,7 +88,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	{
 		//m_sprite->setHIndex(1,3);
 		m_sprite->setRIndex(1);
-		move(5, 0);
+		move(SPRITE_MOVE, 0);
 		lastKey = KEY_RIGHT;
 	}
 	
@@ -96,7 +96,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	{
 		//m_sprite->setHIndex(2,3);
 		m_sprite->setRIndex(2);
-		move(0, 5);
+		move(0, SPRITE_MOVE);
 		lastKey = KEY_DOWN;
 	}
 	
@@ -104,7 +104,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	{
 		//m_sprite->setHIndex(3,3);
 		m_sprite->setRIndex(3);
-		move(-5, 0);
+		move(-1*SPRITE_MOVE, 0);
 		lastKey = KEY_LEFT;
 	}
 	switch(ui->getHKeyL())

@@ -12,8 +12,8 @@ enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REG
 enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
-enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5};
-enum e_sprite {SPRITE_SIZE = 32, SPRITE_SPEED = TIME_SECOND_MS/10, SPRITE_ROWS = 4};
+enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
+enum e_sprite {SPRITE_SIZE = 32, SPRITE_SPEED = TIME_SECOND_MS/10, SPRITE_ROWS = 4, SPRITE_MOVE = 5};
 enum e_grid {NUM_GRIDS = 16, NUM_GRIDS_PER_ROW_COL = 4};
 
 class Entity
@@ -112,19 +112,19 @@ public:
 		switch(a_in[0])
 		{
 		case KEY_LEFT:
-			move(-5, 0);
+			move(-1*SPRITE_MOVE, 0);
 			break;
 		case KEY_RIGHT:
-			move(5, 0);
+			move(SPRITE_MOVE, 0);
 			break;
 		}
 		switch(a_in[1])
 		{
 		case KEY_UP:
-			move(0,-5);	
+			move(0,-1*SPRITE_MOVE);	
 			break;
 		case KEY_DOWN:
-			move(0,5);
+			move(0,SPRITE_MOVE);
 			break;
 		}
 	}

@@ -1,9 +1,7 @@
 #pragma once
 
 #include "Entity.h"
-#define TIME_WANDER_DIRECTION		3000
-#define RAND_MAX					100
-#define WANDER_DIST					50
+enum e_wander {WANDER_MAX = 100, WANDER_DIST = 50};
 enum e_states	{WANDER};
 
 class Minion : public Entity
@@ -20,19 +18,29 @@ public:
 		m_state = WANDER;
 		m_target.set(m_location);
 	}
-	void updateUnique(int a_timePassed, World * a_world){wander(a_timePassed);}
+	void respawn()
+	{
+		heal(getStatNumber(HEALTH_MAX));
+		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+	}
+	void updateUnique(int a_timePassed, World * a_world)
+	{
+		wander(a_timePassed);
+		if(getStatNumber(HEALTH_CURRENT) <= 0)
+			respawn();
+	}
 	void wander(int a_timePassed)
 	{
 		lastDirectionChange += a_timePassed;
-		if(lastDirectionChange > TIME_WANDER_DIRECTION)
+		if(lastDirectionChange > TIME_WANDER)
 		{
 			int tX, tY;
-			tX = m_location.getX()+((rand()%RAND_MAX)-WANDER_DIST);//gives a + or - 50 change in wander
-			tY = m_location.getY()+((rand()%RAND_MAX)-WANDER_DIST);
+			tX = m_location.getX()+((rand()%WANDER_MAX)-WANDER_DIST);//gives a + or - 50 change in wander
+			tY = m_location.getY()+((rand()%WANDER_MAX)-WANDER_DIST);
 			m_target.set(tX, tY);
 			lastDirectionChange = 0;
 		}
 		else
-			moveToTarget(10);
+			moveToTarget(SPRITE_MOVE);
 	}
 };
