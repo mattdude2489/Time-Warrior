@@ -161,6 +161,15 @@ public:
 	}
 	void faceTargetDirection()
 	{
+		/*
+		+-+-+-+
+		|L|U|R|
+		+-+-+-+
+		|L| |R|
+		+-+-+-+
+		|L|D|D|
+		+-+-+-+
+		*/
 		if(m_target.x < m_location.x)
 				m_sprite->setRIndex(3);
 		else
@@ -176,7 +185,7 @@ public:
 			{
 				if(m_target.y < m_location.y)
 					m_sprite->setRIndex(0);
-				else
+				else if(m_target.y > m_location.y)
 					m_sprite->setRIndex(2);
 			}
 		}
