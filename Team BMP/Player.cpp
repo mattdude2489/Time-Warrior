@@ -5,6 +5,7 @@
 void Player::init()
 {
 	m_eType = PLAYER;
+	activation = false;
 	for(int i = 0; i < NUM_SLOTS; ++i)
 		m_gauntlet[i] = NULL;
 	for(int i = 0; i < WEAPON; ++i)
@@ -135,4 +136,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		activateGauntletAttack(SLOT_ATK1, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey);
 	if(ui->getClick() == CLICK_RIGHT && ui->getMouseY() < HUD_Y)
 		activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey);
+	if(ui->getSpace() == true)
+		activation = true;
 }

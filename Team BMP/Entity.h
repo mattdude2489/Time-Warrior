@@ -8,7 +8,7 @@ class World;
 struct Tile;
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
-enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE};
+enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE, NPC};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
@@ -22,6 +22,7 @@ protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer;
 	e_entityType m_eType;
 	bool m_shouldDraw;
+	bool activation; //This bool is pretty much there entirely for NPC dialogue at the moment.
 	SPoint m_location, m_prevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
@@ -53,6 +54,7 @@ public:
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
+		activation = false;
 	}
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
@@ -72,7 +74,8 @@ public:
 		m_sprite->start();
 	}
 	void move(SPoint a_point){move(a_point.x,a_point.y);}
-	void draw(SDL_Surface * a_screen)
+	//You guys might hate me after this.
+	virtual void draw(SDL_Surface * a_screen)
 	{
 		if(m_shouldDraw && m_camera)
 		{
@@ -130,6 +133,7 @@ public:
 	}
 	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
 	void setTarget(SPoint a_point){m_target.set(a_point);}
+	bool getActivation() {return activation;}
 	//@return true if delta is 0 (location @ target), false if not
 	bool moveToTarget(int a_maxDistance)
 	{

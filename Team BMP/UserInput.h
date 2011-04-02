@@ -1,5 +1,5 @@
 //UserInput Class.
-//Made on 3/5/11, edited on 3/10/11
+//Made on 3/5/11, edited on 4/1/11
 //Made by Matt Morrill, edited last by Matt Morrill
 #pragma once //Almost forgot this!
 
@@ -17,6 +17,7 @@ class UserInput
 		char initKey;			//The initial key. All input gets passed through this.
 		char hotKeyLeft;		//The hot key pressed for the left mouse click.
 		char hotKeyRight;		//The hot key pressed for the right mouse click.
+		bool spaceBar;			//The spaceBar. When pressed, activate NPC dialogue. 
 
 	public:
 		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE){} //Basic constructor.
@@ -37,6 +38,7 @@ class UserInput
 		char getHKeyR() {return hotKeyRight;}
 		void setKey(char key) {initKey = key;}
 		char getKey() {return initKey;}
+		bool getSpace() {return spaceBar;}
 		//Resetting the mouse. Used in order to prevent the mouse being held down.
 		void resetClick() {mouseClick = CLICK_NONE;}
 		
@@ -55,6 +57,8 @@ class UserInput
 						hotKeyLeft = KEY_NONE;
 					if(initKey == KEY_HOT_ATK2_BAS || initKey == KEY_HOT_ATK2_ADV || initKey == KEY_HOT_ATK2_EXP || initKey == KEY_HOT_ATK2_LEG)
 						hotKeyRight = KEY_NONE;
+					if(initKey == ' ')
+						spaceBar = false;
 					if(!(initKey == 'm' || initKey == 'i'))
 						initKey = KEY_NONE; //Reset the initial Key.
 				}
@@ -71,6 +75,8 @@ class UserInput
 						hotKeyLeft = initKey;
 					if(initKey == KEY_HOT_ATK2_BAS || initKey == KEY_HOT_ATK2_ADV || initKey == KEY_HOT_ATK2_EXP || initKey == KEY_HOT_ATK2_LEG)
 						hotKeyRight = initKey;
+					if(initKey == ' ')
+						spaceBar = true;
 					if(!(initKey == 'm' || initKey == 'i'))
 						initKey = KEY_NONE; //Reset the initial Key.
 				}
