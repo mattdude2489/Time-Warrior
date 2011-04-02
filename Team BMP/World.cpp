@@ -135,6 +135,8 @@ void World::update(Uint32 a_timePassed)
 			{
 				m_mapOfEntities.get(getLocationGrid(cE)).setEntity(cE);
 				m_mapOfEntities.get(z).remove(i);
+				if(cE->getType() == PLAYER)
+					printf("(%d,%d)\n", cE->getLocation().x, cE->getLocation().y);
 			}
 		}
 	}
