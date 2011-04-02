@@ -63,7 +63,7 @@ public:
 	void updateTargPlayer(Entity *a_player){m_target.set(a_player->getLocation());}
 	void isPlayerInRange(Entity *a_player)
 	{
-		double distance = getDeltaBetweenTargetAndLocation().getLength();
+		double distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
 		if(distance < ENGAGE_RANGE)
 		{
 			m_playerTargeted = true;

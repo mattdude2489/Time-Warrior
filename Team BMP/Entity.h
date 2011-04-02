@@ -134,16 +134,16 @@ public:
 	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
 	void setTarget(SPoint a_point){m_target.set(a_point);}
 	bool getActivation() {return activation;}
-	SPoint getDeltaBetweenTargetAndLocation()
+	SPoint getDeltaBetweenLocationAnd(SPoint * a_point)
 	{
 		//calculate the delta (difference) between the target & current location
-		return m_target.difference(m_location);
+		return a_point->difference(m_location);
 	}
 	//@return true if delta is 0 (location @ target), false if not
 	bool moveToTarget(int a_maxDistance)
 	{
 		//calculate the delta between the target & current location
-		SPoint delta = getDeltaBetweenTargetAndLocation();
+		SPoint delta = getDeltaBetweenLocationAnd(&m_target);
 		if(!delta.isZero())
 		{
 			//calculate the length
