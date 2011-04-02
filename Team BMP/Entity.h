@@ -74,8 +74,7 @@ public:
 		m_sprite->start();
 	}
 	void move(SPoint a_point){move(a_point.x,a_point.y);}
-	//You guys might hate me after this.
-	virtual void draw(SDL_Surface * a_screen)
+	void draw(SDL_Surface * a_screen)
 	{
 		if(m_shouldDraw && m_camera)
 		{
@@ -83,7 +82,8 @@ public:
 			m_hb.y = getLocationScreen().y;
 			if(m_eType != CHIP && getStatNumber(HEALTH_CURRENT) < getStatNumber(HEALTH_MAX))
 				SDL_FillRect(a_screen, &m_hb, COLOR_HEALTH);
-			m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y); 
+			m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y);
+			drawUnique(a_screen);
 		}
 	}
 	void hit(int a_amount)
@@ -184,6 +184,7 @@ public:
 	virtual void setLocationUnique(int a_x, int a_y){}
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
 	virtual void updateUnique(int a_timePassed, World * a_world){}
+	virtual void drawUnique(SDL_Surface *a_screen){}
 	bool getVisible() {return m_shouldDraw;}
 
 	//Due to the CPU intensive nature of the pixel Collision, this should rarely be used.

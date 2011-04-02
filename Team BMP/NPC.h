@@ -12,14 +12,14 @@ private:
 	TTtext m_Text; //The text variable.
 	bool drawText;
 public:
-	NonPlayerChar(SDL_Sprite * a_sprite) {whatTheyHaveToSay = "Hi."; this->init(0, 0, 0, 10, 0, 0, 0, 0); m_sprite = a_sprite; drawText = false; m_eType = NPC; m_Text.setMessage(whatTheyHaveToSay);}
-	NonPlayerChar(char* talk, SDL_Sprite *a_sprite) 
+	NonPlayerChar(SDL_Sprite * a_sprite)
+		:Entity(0, 0, 0, 10, 0, 0, 0, 0, a_sprite){m_eType = NPC; whatTheyHaveToSay = "Hi."; drawText = false; m_Text.setMessage(whatTheyHaveToSay);}
+	NonPlayerChar(char* talk, SDL_Sprite *a_sprite)
+		:Entity(0, 0, 0, 10, 0, 0, 0, 0, a_sprite)
 	{
-		whatTheyHaveToSay = talk;
-		m_sprite = a_sprite;
-		this->init(0, 0, 0, 1, 1, 0, 0, 0);
-		drawText = false;
 		m_eType = NPC;
+		whatTheyHaveToSay = talk;
+		drawText = false;
 		m_Text.setMessage(whatTheyHaveToSay);
 	}
 	void activateDialogue()
@@ -31,9 +31,8 @@ public:
 	{
 		drawText = false;
 	}
-	void draw(SDL_Surface *a_screen)
+	void drawUnique(SDL_Surface *a_screen)
 	{
-		m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y);
 		if(drawText)
 		{
 			SDL_FillRect(a_screen, &SRect(0, 0, 40, 40), 0);
