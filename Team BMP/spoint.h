@@ -1,5 +1,5 @@
 #pragma once
-
+#include <math.h>
 /** used to iterate around */
 struct SRect;
 
@@ -100,4 +100,5 @@ struct SPoint
 	 * }while(p.iterate(dim, area));</code>
 	 */
 	int iterate(int & i_out, const SRect & a_area);
+	double getLength(){return sqrt((double)(x*x + y*y));}
 };

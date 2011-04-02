@@ -4,10 +4,9 @@
 #include "Entity.h"
 
 
-#define RANGETOENGAGE				100
-#define SPEED						5
+#define ENGAGE_RANGE	100
 enum e_states	{WANDER, CHASE};
-enum e_wander	{WANDER_DIST = 50, WANDER_MAX = 100,WANDERDIRECTIONTIME	= 3000};
+enum e_wander	{WANDER_DIST = 50, WANDER_MAX = WANDER_DIST*2,WANDER_DIRECTION_TIME = TIME_SECOND_MS*3};
 class Minion : public Entity
 {
 private:
@@ -39,8 +38,7 @@ public:
 	void wander(int a_timePassed)
 	{
 		m_lastDirectionChange += a_timePassed;
-
-		if(m_lastDirectionChange > WANDERDIRECTIONTIME || m_location.equals(m_target))
+		if(m_lastDirectionChange > WANDER_DIRECTION_TIME || m_location.equals(m_target))
 		{
 			int tX, tY;
 			tX = m_location.getX()+((rand()%WANDER_MAX)-WANDER_DIST);//gives a + or - 50 change in wander
@@ -53,31 +51,21 @@ public:
 	{
 		Entity * t_player = a_world->getPlayer();
 		if(t_player)
-		{
-			isAplayerInRange(t_player);
-		}
+			isPlayerInRange(t_player);
 		switch(m_state)
 		{
-		case WANDER:		wander(a_timePassed);			break;
-		case CHASE:			if(t_player){updateTargPlayer(t_player);}		break;
-		
+		case WANDER:	wander(a_timePassed);						break;
+		case CHASE:		if(t_player){updateTargPlayer(t_player);}	break;
 		}
-		moveToTarget(SPEED);
+		moveToTarget(SPEED_MINION);
 	
 	}
-	void updateTargPlayer(Entity *a_player)
+	void updateTargPlayer(Entity *a_player){m_target.set(a_player->getLocation());}
+	void isPlayerInRange(Entity *a_player)
 	{
-		m_target.set(a_player->getLocation());
-	}
-	void isAplayerInRange(Entity *a_player)
-	{
-
-		double distance, diffx, diffy;
-		diffx = m_location.x - a_player->getLocation().x;
-		diffy = m_location.y - a_player->getLocation().y;
-		distance = sqrt((diffx*diffx)+(diffy*diffy));//a^2 + b^2 = c^2 re ordered
-
-		if(distance < RANGETOENGAGE){
+		double distance = getDeltaBetweenTargetAndLocation().getLength();
+		if(distance < ENGAGE_RANGE)
+		{
 			m_playerTargeted = true;
 			m_state = CHASE;
 		}

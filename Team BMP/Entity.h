@@ -1,5 +1,4 @@
 #pragma once
-#include <math.h>
 #include "SDL_Sprite.h"
 #include "spoint.h"
 #include "UserInput.h"
@@ -135,17 +134,20 @@ public:
 	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
 	void setTarget(SPoint a_point){m_target.set(a_point);}
 	bool getActivation() {return activation;}
+	SPoint getDeltaBetweenTargetAndLocation()
+	{
+		//calculate the delta (difference) between the target & current location
+		return m_target.difference(m_location);
+	}
 	//@return true if delta is 0 (location @ target), false if not
 	bool moveToTarget(int a_maxDistance)
 	{
-		//calculate the delta (difference) between the target & current location
-		SPoint delta = m_target.difference(m_location);
+		//calculate the delta between the target & current location
+		SPoint delta = getDeltaBetweenTargetAndLocation();
 		if(!delta.isZero())
 		{
-			//calculate the squared length
-			double lengthSq = delta.x*delta.x + delta.y*delta.y;
 			//calculate the length
-			double length = sqrt(lengthSq);
+			double length = delta.getLength();
 			//if the length is greater than the allowed distance
 			if(length > a_maxDistance)
 			{
