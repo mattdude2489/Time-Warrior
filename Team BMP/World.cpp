@@ -36,7 +36,7 @@ bool World::setWorld(char * fileName)
 	m_mapOfWorld.release();
 	//Screw it. I'm gonna do this Java style.
 //	SDL_Sprite * sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
-	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, NUM_ROWS+1);
+	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+1);
 	sprite->setTransparency(COLOR_TRANSPARENT);
 	//start the actual loading of the textures.
 	if(infile == NULL)
@@ -172,9 +172,9 @@ int World::getNumEntities()
 Tile * World::getTile(int a_x,int a_y)
 {
 	//if a_x or a_y are off the map, return 1st tile
-	if(a_x < 0 || a_x > tileX * SPRITE_SIZE
-		|| a_y < 0 || a_y > tileY * SPRITE_SIZE)
+	if(a_x < 0 || a_x > tileX * FRAME_SIZE
+		|| a_y < 0 || a_y > tileY * FRAME_SIZE)
 		return getTile(0);
 	else
-		return getTile(a_x/SPRITE_SIZE + ((a_y/SPRITE_SIZE)*tileX));
+		return getTile(a_x/FRAME_SIZE + ((a_y/FRAME_SIZE)*tileX));
 }

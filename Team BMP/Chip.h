@@ -54,7 +54,7 @@ class Chip : public Entity
 			if(m_spriteHUD->isSprite())
 			{
 				m_spriteHUD->start();
-				m_spriteHUD->update(m_spriteHUD->getMaxFrames()*SPRITE_SPEED);
+				m_spriteHUD->update(m_spriteHUD->getMaxFrames()*FRAME_RATE);
 				m_spriteHUD->update(1);
 				m_spriteHUD->stop();
 			}

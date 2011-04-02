@@ -145,10 +145,10 @@ class BasicSlash : public Slash
 		char * getDescription(){return "Slash attack.";}
 		void setSprite(char * a_fileName)
 		{
-			m_sprite = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE/2, SPRITE_SPEED, 1);
+			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 1);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			//m_sprite->setRIndex(m_cSubSubType);
-			m_spriteHUD = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE/2, SPRITE_SPEED, 1);
+			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 1);
 			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
 			initHudSprite();
 		}
