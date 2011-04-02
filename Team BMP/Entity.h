@@ -159,6 +159,28 @@ public:
 		else
 			return true;
 	}
+	void faceTargetDirection()
+	{
+		if(m_target.x < m_location.x)
+				m_sprite->setRIndex(3);
+		else
+		{
+			if(m_target.x > m_location.x)
+			{
+				if(m_target.y > m_location.y)
+					m_sprite->setRIndex(2);
+				else
+					m_sprite->setRIndex(1);
+			}
+			else
+			{
+				if(m_target.y < m_location.y)
+					m_sprite->setRIndex(0);
+				else
+					m_sprite->setRIndex(2);
+			}
+		}
+	}
 	virtual void setLocationUnique(int a_x, int a_y){}
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
 	virtual void updateUnique(int a_timePassed, World * a_world){}

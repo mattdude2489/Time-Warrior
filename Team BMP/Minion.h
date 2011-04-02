@@ -26,6 +26,7 @@ public:
 	void updateUnique(int a_timePassed, World * a_world)
 	{
 		wander(a_timePassed);
+		faceTargetDirection();
 		if(getStatNumber(HEALTH_CURRENT) <= 0)
 			respawn();
 	}
@@ -38,25 +39,6 @@ public:
 			//gives a + or - 50 change in wander
 			m_target.setX(m_location.getX()+((rand()%(WANDER_DIST*2+1))-WANDER_DIST));
 			m_target.setY(m_location.getY()+((rand()%(WANDER_DIST*2+1))-WANDER_DIST));
-			if(m_target.x < m_location.x)
-				m_sprite->setRIndex(3);
-			else
-			{
-				if(m_target.x > m_location.x)
-				{
-					if(m_target.y < m_location.y)
-						m_sprite->setRIndex(1);
-					else
-						m_sprite->setRIndex(2);
-				}
-				else
-				{
-					if(m_target.y < m_location.y)
-						m_sprite->setRIndex(0);
-					else
-						m_sprite->setRIndex(2);
-				}
-			}
 		}
 		else
 			moveToTarget(SPEED_MINION);
