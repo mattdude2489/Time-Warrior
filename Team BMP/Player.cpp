@@ -79,32 +79,28 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	//This is where the UI goes to get handled by the Player class. Well...it would've been world class, but we dun have one of them yet.
 	if(ui->getKeyUD() == KEY_UP)
 	{
-		//m_sprite->setHIndex(0, 3); //BOO MAGIC NUMBERS.
-		m_sprite->setRIndex(0);
+		m_sprite->setRIndex(ROW_UP);
 		move(0, -1*SPEED_PLAYER);
 		lastKey = KEY_UP;
 	}
 	
 	if(ui->getKeyLR() == KEY_RIGHT)
 	{
-		//m_sprite->setHIndex(1,3);
-		m_sprite->setRIndex(1);
+		m_sprite->setRIndex(ROW_RIGHT);
 		move(SPEED_PLAYER, 0);
 		lastKey = KEY_RIGHT;
 	}
 	
 	if(ui->getKeyUD() == KEY_DOWN)
 	{
-		//m_sprite->setHIndex(2,3);
-		m_sprite->setRIndex(2);
+		m_sprite->setRIndex(ROW_DOWN);
 		move(0, SPEED_PLAYER);
 		lastKey = KEY_DOWN;
 	}
 	
 	if(ui->getKeyLR() == KEY_LEFT)
 	{
-		//m_sprite->setHIndex(3,3);
-		m_sprite->setRIndex(3);
+		m_sprite->setRIndex(ROW_LEFT);
 		move(-1*SPEED_PLAYER, 0);
 		lastKey = KEY_LEFT;
 	}

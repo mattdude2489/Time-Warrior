@@ -36,7 +36,7 @@ bool World::setWorld(char * fileName)
 	m_mapOfWorld.release();
 	//Screw it. I'm gonna do this Java style.
 //	SDL_Sprite * sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
-	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS+1);
+	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, NUM_ROWS+1);
 	sprite->setTransparency(COLOR_TRANSPARENT);
 	//start the actual loading of the textures.
 	if(infile == NULL)

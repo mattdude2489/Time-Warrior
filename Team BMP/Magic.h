@@ -72,9 +72,9 @@ class Magic : public Chip
 		}
 		void setSprite(char * a_fileName)
 		{
-			m_sprite = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
+			m_sprite = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, NUM_ROWS);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
-			m_spriteHUD = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, SPRITE_ROWS);
+			m_spriteHUD = new SDL_Sprite(a_fileName, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SPEED, NUM_ROWS);
 			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
 			switch(m_cSubSubType)
 			{
