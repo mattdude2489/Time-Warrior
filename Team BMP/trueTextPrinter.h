@@ -39,6 +39,21 @@ public:
 		m_backColor.r = 255;
 		m_backColor.g = 255;
 	}
+	//Sets the text color, but not the background.
+	void setTextColor(Uint32 color)
+	{
+		//m_textColor = SDL_Color(color);
+		m_textColor.r = color >> 16;
+		m_textColor.g = color >> 8;
+		m_textColor.b = color;
+	}
+	//Sets background color of the text.
+	void setBackColor(Uint32 color)
+	{
+		m_backColor.r = color >> 16;
+		m_backColor.g = color >> 8;
+		m_backColor.b = color;
+	}
 	void setMessage(char * a_message)//sets the text to print, this will need to be done every message
 	{
 		m_message = TTF_RenderText(m_font, a_message, m_textColor,m_backColor);

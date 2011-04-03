@@ -10,16 +10,30 @@ class NonPlayerChar : public Entity
 private:
 	char * whatTheyHaveToSay; //Probably nothing worthwhile.
 	TTtext m_Text; //The text variable.
+	MyFont m_arialFont;
 	bool drawText;
 public:
 	NonPlayerChar(SDL_Sprite * a_sprite)
-		:Entity(0, 0, 0, 10, 0, 0, 0, 0, a_sprite){m_eType = NPC; whatTheyHaveToSay = "Hi."; drawText = false; m_Text.setMessage(whatTheyHaveToSay);}
+		:Entity(0, 0, 0, 10, 0, 0, 0, 0, a_sprite)
+	{
+			m_eType = NPC; 
+			whatTheyHaveToSay = "Hi."; 
+			drawText = false; 
+			m_Text.setBackColor(0x0000ff);
+			m_Text.setTextColor(0xffffff);
+			m_Text.setFont(m_arialFont.getFont()); 
+			m_Text.setMessage(whatTheyHaveToSay);
+	}
+
 	NonPlayerChar(char* talk, SDL_Sprite *a_sprite)
 		:Entity(0, 0, 0, 10, 0, 0, 0, 0, a_sprite)
 	{
 		m_eType = NPC;
 		whatTheyHaveToSay = talk;
 		drawText = false;
+		m_Text.setBackColor(0x0000ff);
+		m_Text.setTextColor(0xffffff);
+		m_Text.setFont(m_arialFont.getFont());
 		m_Text.setMessage(whatTheyHaveToSay);
 	}
 	void activateDialogue()
@@ -35,8 +49,8 @@ public:
 	{
 		if(drawText)
 		{
-			SDL_FillRect(a_screen, &SRect(0, 0, 40, 40), 0);
-			m_Text.printMessage(a_screen, 0, 0);
+			SDL_FillRect(a_screen, &SRect(0, 400, 800, 300), 0xffff00);
+			m_Text.printMessage(a_screen, 20, 20);
 		}
 	}
 	void updateUnique(int a_timePassed, World *a_world)
