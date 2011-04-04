@@ -180,3 +180,24 @@ Tile * World::getTile(int a_x,int a_y)
 	else
 		return getTile(a_x/FRAME_SIZE + ((a_y/FRAME_SIZE)*tileX));
 }
+char * World::sendToServer()
+{
+	char t_info[1000], t_buffer[12];
+	int t_entities;
+	Entity * t_ent;
+
+	for(int g = 0; g < NUM_GRIDS; g++)
+	{
+		t_entities = this->getGrid(g)->getNumberOfEntities();
+		if(t_entities > 0)
+		{
+			for(int e = 0; e <  t_entities; e++)
+			{
+				t_ent = this->getGrid(g)->getEntity(e);
+				sprintf(t_buffer, "%02i%02i%04i%04i", g,e,t_ent->getLocation().getX(), t_ent->getLocation().getY());
+				strcat(t_info, t_buffer);
+			}
+		}
+	}
+	return t_info;
+}

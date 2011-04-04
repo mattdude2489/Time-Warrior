@@ -6,7 +6,7 @@
 #pragma once
 #include "Entity.h"
 #include "templateVector.h"
-
+enum e_grid {NUM_GRIDS = 16, NUM_GRIDS_PER_ROW_COL = 4};
 class Grid
 {
 private:

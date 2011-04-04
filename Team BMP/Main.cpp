@@ -152,6 +152,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 #endif
 		//update
 		world.update(passed);
+	//	printf("%s\n",world.sendToServer());
 		Ghud.updateHud(&eTest, &ui);
 		
 		//draw
