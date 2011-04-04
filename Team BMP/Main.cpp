@@ -45,7 +45,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	}
 #endif
 	//Timer stuff, for updateing sprites and anything else
-	Uint32 then = SDL_GetTicks(), now, passed;
+	Uint32 then = SDL_GetTicks(), now, passed, second = 0;
 
 	//the user interface variable
 	bool running = true;
@@ -88,20 +88,32 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//music test stuff
 	
 	AudioHandler ah;
-	ah.playMusic();
+	ah.playRandom();
 #ifdef WITH_NETWORKING
-	char send[30], old[30], *in;
+	char send[1000], old[1000], *in;
 	bool changeInInfoSoSend = false;
 #endif
 	if(!world.getSuccess()){printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");}
 	UserInput aui;
-
+	MyFont hi;
+	TTtext fps;
+	fps.setFont(hi.getFont());
+	int ifps = 0;
+	char cfps[10];
 	while(running) //While loop, can be easily used for testing.
 	{
+		ifps++;
 		//update the time
 		now = SDL_GetTicks();
 		passed = now - then;
 		then = now;
+		if(now - second > 1000)
+		{
+			sprintf(cfps, "%i", ifps);
+			fps.setMessage(cfps);
+			ifps = 0;
+			second = now;
+		}
 #ifdef WITH_NETWORKING
 		if(c.getInbox()->getRawList() != NULL&& (unsigned char *)old != c.getInbox()->getRawList())
 		{
@@ -146,13 +158,13 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		}
 		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 #ifdef WITH_NETWORKING
-		eTest.handleInput(&aui, &world);
+		eTest.handleInput(&ui, &world);
 #else
 		eTest.handleInput(&ui, &world);
 #endif
 		//update
 		world.update(passed);
-	//	printf("%s\n",world.sendToServer());
+		printf("%s\n",world.convertAllEntitiesToCharBuffer());
 		Ghud.updateHud(&eTest, &ui);
 		
 		//draw
@@ -160,6 +172,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
 		Ghud.draw(screen);
+		fps.printMessage(screen, 0,0);
 	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 #ifdef WITH_NETWORKING
 		ui.sendUi2Server(send);
@@ -172,7 +185,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		{	
 	//		printf("sent: %i vs hit: %i\n", send[2], ui.getClick());
 			c.getOutbox()->add(send);
-			for(int i = 0; i < strlen(old); i++)
+			for(int i = 0; i < strlen(send); i++)
 			{
 				old[i] = send[i];
 			}

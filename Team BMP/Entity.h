@@ -11,7 +11,7 @@ enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE, NPC};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
-enum e_frame {FRAME_SIZE = 32, FRAME_RATE = TIME_SECOND_MS/10};
+enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 20};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_speed {SPEED_PLAYER = 5, SPEED_MAGIC = SPEED_PLAYER*2, SPEED_MINION = SPEED_PLAYER};
 
@@ -29,6 +29,11 @@ protected:
 public:
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
+	{
+		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite);
+
+	}
+	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
 		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes);
 		m_eType = DUMMY;

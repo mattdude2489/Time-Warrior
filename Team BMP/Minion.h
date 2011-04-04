@@ -17,6 +17,16 @@ public:
 	Minion(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
 		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite)
 	{
+
+		m_eType = MINION;
+		m_lastDirectionChange = 0;
+		m_state = WANDER;
+		m_target.set(m_location);
+		m_playerTargeted = false;
+	}
+	void mInit(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
+	{
+		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite);
 		m_eType = MINION;
 		m_lastDirectionChange = 0;
 		m_state = WANDER;
@@ -49,9 +59,20 @@ public:
 	}
 	void checkState(int a_timePassed, World * a_world)
 	{
-		Entity * t_player = a_world->getPlayer();
-		if(t_player)
-			isPlayerInRange(t_player);
+		bool playerFound = false;
+		Entity * t_player = NULL;
+		for(int i = 0; i < a_world->getGrid(m_location.getX(), m_location.getY())->getNumberOfEntities()&&playerFound == false; i++)
+		{
+			if(a_world->getGrid(m_location.getX(), m_location.getY())->getPlayer(t_player))
+			{
+				if(t_player)
+					isPlayerInRange(t_player);
+				else
+					m_state = WANDER;
+			}
+		}
+
+		
 		switch(m_state)
 		{
 		case WANDER:	wander(a_timePassed);						break;

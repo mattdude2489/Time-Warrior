@@ -1,5 +1,7 @@
+#pragma once
 #include "World.h"
-
+#include <string>
+using namespace std;
 World::World()
 {
 	m_success = setWorld("Maps/HubWorldMap.txt");
@@ -180,24 +182,47 @@ Tile * World::getTile(int a_x,int a_y)
 	else
 		return getTile(a_x/FRAME_SIZE + ((a_y/FRAME_SIZE)*tileX));
 }
-char * World::sendToServer()
+char * World::convertAllEntitiesToCharBuffer()//omg death
 {
-	char t_info[1000], t_buffer[12];
-	int t_entities;
+	string s;
+	char buffer[10000];
 	Entity * t_ent;
-
-	for(int g = 0; g < NUM_GRIDS; g++)
+	for(int g = 0;g < NUM_GRIDS; g++)
 	{
-		t_entities = this->getGrid(g)->getNumberOfEntities();
-		if(t_entities > 0)
+		if(this->getGrid(g)->getNumberOfEntities() > 0)//this is extra don't judge me =(
 		{
-			for(int e = 0; e <  t_entities; e++)
+			for(int e =0; e < this->getGrid(g)->getNumberOfEntities(); e++)
 			{
 				t_ent = this->getGrid(g)->getEntity(e);
-				sprintf(t_buffer, "%02i%02i%04i%04i", g,e,t_ent->getLocation().getX(), t_ent->getLocation().getY());
-				strcat(t_info, t_buffer);
+				sprintf(buffer, "%02i%02i%04i%04i", g, e, t_ent->getLocation().getX(), t_ent->getLocation().getY());
+				s.append(buffer);
 			}
 		}
 	}
-	return t_info;
+	strcpy(buffer, s.c_str());
+	return buffer;
+}
+void World::convertFromServer(char * omgServerInfo)
+{
+	char buffer[12], cbuff[4];
+	int b = 0, g = 0, e = 0, x = 0, y = 0;
+	bool next = false;
+	for(int i = 0; i < strlen(omgServerInfo); i++, b++)
+	{
+		
+		buffer[b] = omgServerInfo[i];
+		if(b == 11)
+		{
+			sprintf(cbuff, "%c%c", buffer[0],buffer[1]);
+			g = atoi(cbuff);
+			sprintf(cbuff, "%c%c", buffer[2],buffer[3]);
+			e = atoi(cbuff);
+			sprintf(cbuff, "%c%c%c%c", buffer[4],buffer[5],buffer[6],buffer[7]);
+			x = atoi(cbuff);
+			sprintf(cbuff, "%c%c%c%c", buffer[8],buffer[9],buffer[10],buffer[11]);
+			y = atoi(cbuff);
+			getGrid(g)->getEntity(e)->setLocation(x,y);
+			b = 0;
+		}
+	}
 }

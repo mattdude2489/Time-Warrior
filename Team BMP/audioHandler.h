@@ -27,6 +27,11 @@ public:
 	{
 		Mix_PlayMusic(m_music[currentTrack], -1);
 	}
+	void playRandom()
+	{
+		currentTrack = rand()%NUM_SONGS;
+		Mix_PlayMusic(m_music[currentTrack], -1);
+	}
 	void nextTrack()
 	{
 		Mix_HaltMusic();
