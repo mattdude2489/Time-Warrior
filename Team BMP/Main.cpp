@@ -29,17 +29,17 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//networking
 
 #ifdef WITH_NETWORKING
-	//ServerModule s(9999);
-	//while(s.getState() != NetModule::LISTENING)
-	//{
-	//	s.run();
-	//	printf("Server state: %s \n", s.getStateText());
-	//}
-	ClientModule c("69.229.238.234",9999);
+	ServerModule s(9999);
+	while(s.getState() != NetModule::LISTENING)
+	{
+		s.run();
+		printf("Server state: %s \n", s.getStateText());
+	}
+	ClientModule c("127.0.0.1",9999);
 	while(c.getState() != NetModule::WAITING_FOR_DATA)//allows player to connect
 	{
-		//s.run();
-		//printf("Server state: %s \n", s.getStateText());
+		s.run();
+		printf("Server state: %s \n", s.getStateText());
 		c.run();
 		printf("Client state: %s \n", c.getStateText());
 	}
@@ -119,11 +119,8 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		{
 			in = (char *)c.getInbox()->getRawList();
 			c.getInbox()->clear();
-			aui.convertServerInfo(in);
-	//		printf("mouse state after server: %i\n", aui.getClick());
-		//	eTest.handleServerInfo(in);
-		//	printf(in);
-		//	printf("server state: %s\n clientState: %s\n", s.getStateText(),c.getStateText()); 
+			printf("server info: %s\n",in);
+			world.convertFromServer(in);
 		}
 
 #endif
@@ -164,7 +161,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 #endif
 		//update
 		world.update(passed);
-		printf("%s\n",world.convertAllEntitiesToCharBuffer());
 		Ghud.updateHud(&eTest, &ui);
 		
 		//draw
@@ -175,7 +171,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//fps.printMessage(screen, 0,0);
 	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 #ifdef WITH_NETWORKING
-		ui.sendUi2Server(send);
+		strcpy(send, world.convertAllEntitiesToCharBuffer());
 		for(int i = 0; i < strlen(send)&& changeInInfoSoSend == false; i++)
 		{
 			if(old[i] != send[i])
@@ -196,9 +192,11 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//reset the mouse input. Why was this so hard to figure out?
 		ui.resetClick();
 #ifdef WITH_NETWORKING
-	//	s.run();
-		for(int i = 0; i<3;i++)
+		
+		for(int i = 0; i<3;i++){
+			s.run();
 			c.run();
+		}
 #endif
 		SDL_Flip(screen);
 		SDL_Delay(FRAME_RATE);

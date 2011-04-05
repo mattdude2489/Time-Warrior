@@ -51,7 +51,7 @@ public:
 	char * convertAllEntitiesToCharBuffer();
 	void convertFromServer(char * omgServerInfo);
 	//networking stuff
-	char * sendToServer();
+
 	void updateFromServer(char * a_in);
 
 };

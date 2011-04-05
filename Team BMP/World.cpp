@@ -196,23 +196,27 @@ char * World::convertAllEntitiesToCharBuffer()//omg death
 				t_ent = this->getGrid(g)->getEntity(e);
 				sprintf_s(buffer, "%02i%02i%04i%04i", g, e, t_ent->getLocation().getX(), t_ent->getLocation().getY());
 				s.append(buffer);
+			//	printf("buffer: %s\n",buffer);
+
 			}
 		}
 	}
 	strcpy_s(buffer, s.c_str());
+	printf("size of info: %i\n", strlen(buffer));
 	return buffer;
 }
 void World::convertFromServer(char * omgServerInfo)
 {
-	char buffer[12], cbuff[4];
+	char buffer[12], cbuff[12];
 	int b = 0, g = 0, e = 0, x = 0, y = 0;
-	bool next = false;
-	for(int i = 0; i < strlen(omgServerInfo); i++, b++)
-	{
-		
+	printf("server length: %i\n",strlen(omgServerInfo));
+
+	for(int i = 0; i < strlen(omgServerInfo)-16; i++, b++)
+	{			
 		buffer[b] = omgServerInfo[i];
 		if(b == 11)
 		{
+			printf("buffer: %s\n", buffer);
 			sprintf_s(cbuff, "%c%c", buffer[0],buffer[1]);
 			g = atoi(cbuff);
 			sprintf_s(cbuff, "%c%c", buffer[2],buffer[3]);
@@ -222,7 +226,7 @@ void World::convertFromServer(char * omgServerInfo)
 			sprintf_s(cbuff, "%c%c%c%c", buffer[8],buffer[9],buffer[10],buffer[11]);
 			y = atoi(cbuff);
 			getGrid(g)->getEntity(e)->setLocation(x,y);
-			b = 0;
+			b = -1;//this has to be done or it will set to 0 then be ++ right away and set the first diget to 0 and it throws it off by one = no bueno
 		}
 	}
 }
