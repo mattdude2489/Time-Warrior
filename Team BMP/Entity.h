@@ -15,6 +15,11 @@ enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 20};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_speed {SPEED_PLAYER = 5, SPEED_MAGIC = SPEED_PLAYER*2, SPEED_MINION = SPEED_PLAYER};
 
+struct v2D
+{
+	float x;
+	float y;
+};
 
 class Entity
 {
@@ -26,6 +31,7 @@ protected:
 	SPoint m_location, m_prevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
+	v2D m_vel; //The velocity.
 public:
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
@@ -42,6 +48,8 @@ public:
 		m_sprite->setTransparency(COLOR_TRANSPARENT);
 		m_sprite->restart(ROW_DOWN);
 		m_sprite->start();
+		m_vel.x = 0;
+		m_vel.y = 0;
 	}
 	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
 	{
@@ -76,7 +84,7 @@ public:
 		m_location.x += a_deltaX;
 		m_location.y += a_deltaY;
 		m_timer = 0;
-		m_sprite->start();
+//		m_sprite->start();
 	}
 	void move(SPoint a_point){move(a_point.x,a_point.y);}
 	void draw(SDL_Surface * a_screen)
@@ -280,4 +288,14 @@ public:
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
+	v2D getVelocity() {return m_vel;}
+	void setVelocity(float newVelX, float newVelY) 
+	{
+		m_vel.x = newVelX; m_vel.y = newVelY;
+		if(m_vel.x != 0 || m_vel.y != 0)
+			m_sprite->start();
+		else
+			m_sprite->stop();
+	}
+	void setVelocity(v2D newVel) {m_vel = newVel;}
 };
