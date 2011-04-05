@@ -109,7 +109,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		then = now;
 		if(now - second > 1000)
 		{
-			sprintf(cfps, "%i", ifps);
+			sprintf_s(cfps, "%i", ifps);
 			fps.setMessage(cfps);
 			ifps = 0;
 			second = now;
@@ -172,7 +172,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
 		Ghud.draw(screen);
-		fps.printMessage(screen, 0,0);
+		//fps.printMessage(screen, 0,0);
 	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 #ifdef WITH_NETWORKING
 		ui.sendUi2Server(send);

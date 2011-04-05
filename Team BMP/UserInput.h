@@ -101,9 +101,9 @@ class UserInput
 			keyPressUpDown = a_in[1];
 			buffer[0] = a_in[2];
 			mouseClick = atoi(buffer);
-			sprintf(buffer, "%c%c%c", a_in[3],a_in[4],a_in[5]);
+			sprintf_s(buffer, "%c%c%c", a_in[3],a_in[4],a_in[5]);
 			mouseX = atoi(buffer);
-			sprintf(buffer, "%c%c%c", a_in[6],a_in[7],a_in[8]);
+			sprintf_s(buffer, "%c%c%c", a_in[6],a_in[7],a_in[8]);
 			mouseY = atoi(buffer);
 		}
 };

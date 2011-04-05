@@ -194,12 +194,12 @@ char * World::convertAllEntitiesToCharBuffer()//omg death
 			for(int e =0; e < this->getGrid(g)->getNumberOfEntities(); e++)
 			{
 				t_ent = this->getGrid(g)->getEntity(e);
-				sprintf(buffer, "%02i%02i%04i%04i", g, e, t_ent->getLocation().getX(), t_ent->getLocation().getY());
+				sprintf_s(buffer, "%02i%02i%04i%04i", g, e, t_ent->getLocation().getX(), t_ent->getLocation().getY());
 				s.append(buffer);
 			}
 		}
 	}
-	strcpy(buffer, s.c_str());
+	strcpy_s(buffer, s.c_str());
 	return buffer;
 }
 void World::convertFromServer(char * omgServerInfo)
@@ -213,13 +213,13 @@ void World::convertFromServer(char * omgServerInfo)
 		buffer[b] = omgServerInfo[i];
 		if(b == 11)
 		{
-			sprintf(cbuff, "%c%c", buffer[0],buffer[1]);
+			sprintf_s(cbuff, "%c%c", buffer[0],buffer[1]);
 			g = atoi(cbuff);
-			sprintf(cbuff, "%c%c", buffer[2],buffer[3]);
+			sprintf_s(cbuff, "%c%c", buffer[2],buffer[3]);
 			e = atoi(cbuff);
-			sprintf(cbuff, "%c%c%c%c", buffer[4],buffer[5],buffer[6],buffer[7]);
+			sprintf_s(cbuff, "%c%c%c%c", buffer[4],buffer[5],buffer[6],buffer[7]);
 			x = atoi(cbuff);
-			sprintf(cbuff, "%c%c%c%c", buffer[8],buffer[9],buffer[10],buffer[11]);
+			sprintf_s(cbuff, "%c%c%c%c", buffer[8],buffer[9],buffer[10],buffer[11]);
 			y = atoi(cbuff);
 			getGrid(g)->getEntity(e)->setLocation(x,y);
 			b = 0;
