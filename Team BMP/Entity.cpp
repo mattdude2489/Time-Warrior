@@ -3,6 +3,10 @@
 
 void Entity::update(int a_timePassed, World * a_world)
 {
+	//Update position.
+	int dx = a_timePassed*m_vel.x;
+	int dy = a_timePassed*m_vel.y;
+	move(dx, dy); //Hope this works!
 	//update stats
 	m_timeToRegen += a_timePassed;
 	if(m_timeToRegen >= TIME_SECOND_MS)
@@ -23,10 +27,6 @@ void Entity::update(int a_timePassed, World * a_world)
 	m_hb.w = (Uint16)(((double)getStatNumber(HEALTH_CURRENT)/(double)getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
 	m_hb.h = 5;
 	m_sprite->update(a_timePassed);
-	//Update position.
-	int dx = a_timePassed*m_vel.x;
-	int dy = a_timePassed*m_vel.y;
-	move(dx, dy); //Hope this works!
 	//check for world collision/tile collision
 	if(m_shouldDraw)
 	{

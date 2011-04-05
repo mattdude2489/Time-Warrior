@@ -15,7 +15,7 @@ enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 20};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_speed {SPEED_PLAYER = 5, SPEED_MAGIC = SPEED_PLAYER*2, SPEED_MINION = SPEED_PLAYER};
 
-struct v2D
+struct v2D //PLEASE DONT HATE ME
 {
 	float x;
 	float y;
@@ -83,7 +83,10 @@ public:
 		moveUnique(a_deltaX, a_deltaY);
 		m_location.x += a_deltaX;
 		m_location.y += a_deltaY;
-		m_timer = 0;
+		if(!(a_deltaX == 0 || a_deltaY == 0))
+		{
+			m_timer = 0;
+		}
 //		m_sprite->start();
 	}
 	void move(SPoint a_point){move(a_point.x,a_point.y);}
@@ -157,6 +160,7 @@ public:
 	{
 		//calculate the delta between the target & current location
 		SPoint delta = getDeltaBetweenLocationAnd(&m_target);
+		static double m_maxSpeed = 0.05;
 		if(!delta.isZero())
 		{
 			//calculate the length
@@ -165,15 +169,22 @@ public:
 			if(length > a_maxDistance)
 			{
 				//normalize the vector (divide by its length), & set to max distance
-				delta.setX((int)(((double)delta.x/length) * a_maxDistance));
-				delta.setY((int)(((double)delta.y/length) * a_maxDistance));
+				//delta.setX((int)(((double)delta.x/length) * a_maxDistance));
+				//delta.setY((int)(((double)delta.y/length) * a_maxDistance));
+				setVelocity(
+					(double)delta.x/length *m_maxSpeed,
+					(double)delta.y/length *m_maxSpeed);
 			}
+			else
+				setVelocity(0,0);
 			//move the allowed distance
-			move(delta);
 			return false;
 		}
 		else
+		{
+			setVelocity(0, 0);
 			return true;
+		}
 	}
 	void faceTargetDirection()
 	{
@@ -292,7 +303,7 @@ public:
 	void setVelocity(float newVelX, float newVelY) 
 	{
 		m_vel.x = newVelX; m_vel.y = newVelY;
-		if(m_vel.x != 0 || m_vel.y != 0)
+		if(m_vel.x != 0 || m_vel.y != 0 || m_eType == CHIP)
 			m_sprite->start();
 		else
 			m_sprite->stop();

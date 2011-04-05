@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "UserInput.h"
 
+#define PLAYER_SPEED .05
+
 void Player::init()
 {
 	m_eType = PLAYER;
@@ -81,7 +83,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	{
 		m_sprite->setRIndex(ROW_UP);
 		//move(0, -1*SPEED_PLAYER);
-		setVelocity(m_vel.x, -.05);
+		setVelocity(m_vel.x, -PLAYER_SPEED);
 		lastKey = KEY_UP;
 	}
 	
@@ -89,7 +91,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	{
 		m_sprite->setRIndex(ROW_RIGHT);
 		//move(SPEED_PLAYER, 0);
-		setVelocity(.05, m_vel.y);
+		setVelocity(PLAYER_SPEED, m_vel.y);
 		lastKey = KEY_RIGHT;
 	}
 	
@@ -97,7 +99,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	{
 		m_sprite->setRIndex(ROW_DOWN);
 		//move(0, SPEED_PLAYER);
-		setVelocity(m_vel.x, .05);
+		setVelocity(m_vel.x, PLAYER_SPEED);
 		lastKey = KEY_DOWN;
 	}
 	
@@ -105,7 +107,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	{
 		m_sprite->setRIndex(ROW_LEFT);
 		//move(-1*SPEED_PLAYER, 0);
-		setVelocity(-.05, m_vel.y);
+		setVelocity(-PLAYER_SPEED, m_vel.y);
 		lastKey = KEY_LEFT;
 	}
 

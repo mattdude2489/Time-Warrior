@@ -100,6 +100,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	fps.setFont(hi.getFont());
 	int ifps = 0;
 	char cfps[10];
+	fps.setMessage("0");
 	while(running) //While loop, can be easily used for testing.
 	{
 		ifps++;
@@ -168,7 +169,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		world.draw(screen);
 		Ghud.draw(screen);
-		//fps.printMessage(screen, 0,0);
+		fps.printMessage(screen, 0,0);
 	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 #ifdef WITH_NETWORKING
 		strcpy(send, world.convertAllEntitiesToCharBuffer());
