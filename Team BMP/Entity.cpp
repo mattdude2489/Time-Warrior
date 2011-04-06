@@ -3,6 +3,7 @@
 
 void Entity::update(int a_timePassed, World * a_world)
 {
+	movePlayer(a_timePassed);
 	//update stats
 	m_timeToRegen += a_timePassed;
 	if(m_timeToRegen >= TIME_SECOND_MS)

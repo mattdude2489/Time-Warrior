@@ -31,4 +31,10 @@ public:
 	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level){setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getType()-1][m_gauntlet[a_slot]->getSubType()][a_level]);}
 	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction);
 	void handleInput(UserInput * ui, World * a_world);
+	void setVelocity(float newVelX, float newVelY){m_vel.x = newVelX; m_vel.y = newVelY;}
+	void movePlayer(int a_timePassed)
+	{
+		if(!(m_vel.x == 0 && m_vel.y == 0))
+			move((int)(a_timePassed*m_vel.x), (int)(a_timePassed*m_vel.y));
+	}
 };

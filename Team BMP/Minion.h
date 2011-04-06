@@ -78,7 +78,7 @@ public:
 		case WANDER:	wander(a_timePassed);						break;
 		case CHASE:		if(t_player){updateTargPlayer(t_player);}	break;
 		}
-		moveToTarget(SPEED_MINION*a_timePassed);
+		moveToTarget((int)(SPEED_MINION*a_timePassed));
 	
 	}
 	void updateTargPlayer(Entity *a_player){m_target.set(a_player->getLocation());}

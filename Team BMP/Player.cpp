@@ -16,6 +16,7 @@ void Player::init()
 				m_attackInventory[i][j][k] = NULL;
 		}
 	}
+	setVelocity(0,0);
 }
 void Player::addToAttackInventory(Chip * a_chip)
 {
@@ -80,30 +81,38 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	if(ui->getKeyUD() == KEY_UP)
 	{
 		m_sprite->setRIndex(ROW_UP);
-		move(0, -1*SPEED_PLAYER);
+		//move(0, -1*SPEED_PLAYER);
+		setVelocity(m_vel.x, -SPEED_PLAYER);
 		lastKey = KEY_UP;
 	}
 	
 	if(ui->getKeyLR() == KEY_RIGHT)
 	{
 		m_sprite->setRIndex(ROW_RIGHT);
-		move(SPEED_PLAYER, 0);
+		//move(SPEED_PLAYER, 0);
+		setVelocity(SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_RIGHT;
 	}
 	
 	if(ui->getKeyUD() == KEY_DOWN)
 	{
 		m_sprite->setRIndex(ROW_DOWN);
-		move(0, SPEED_PLAYER);
+		//move(0, SPEED_PLAYER);
+		setVelocity(m_vel.x, SPEED_PLAYER);
 		lastKey = KEY_DOWN;
 	}
 	
 	if(ui->getKeyLR() == KEY_LEFT)
 	{
 		m_sprite->setRIndex(ROW_LEFT);
-		move(-1*SPEED_PLAYER, 0);
+		//move(-1*SPEED_PLAYER, 0);
+		setVelocity(-SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_LEFT;
 	}
+	if(ui->getKeyLR() == KEY_NONE)
+		setVelocity(0, m_vel.y);
+	if(ui->getKeyUD() == KEY_NONE)
+		setVelocity(m_vel.x, 0);
 	switch(ui->getHKeyL())
 	{
 	case KEY_HOT_ATK2_BAS:

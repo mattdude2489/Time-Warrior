@@ -14,9 +14,9 @@ enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE =
 enum e_frame {FRAME_SIZE = 32, FRAME_RATE = TIME_SECOND_MS/30};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 
-#define	SPEED_PLAYER	3
-#define	SPEED_MAGIC		.1
-#define	SPEED_MINION	.05
+#define	SPEED_PLAYER	.05
+#define	SPEED_MAGIC		(SPEED_PLAYER*2)
+#define	SPEED_MINION	SPEED_PLAYER
 
 struct v2D //PLEASE DONT HATE ME
 {
@@ -34,12 +34,12 @@ protected:
 	SPoint m_location, m_prevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
+	v2D m_vel; //The velocity. - ONLY for player movement
 public:
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
 		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite);
-
 	}
 	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
@@ -211,6 +211,7 @@ public:
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
 	virtual void updateUnique(int a_timePassed, World * a_world){}
 	virtual void drawUnique(SDL_Surface *a_screen){}
+	virtual void movePlayer(int a_timePassed){}
 	bool getVisible() {return m_shouldDraw;}
 
 	//Due to the CPU intensive nature of the pixel Collision, this should rarely be used.
