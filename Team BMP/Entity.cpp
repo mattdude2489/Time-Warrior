@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "World.h"
+#include "Chip.h"
 
 void Entity::update(int a_timePassed, World * a_world)
 {
@@ -51,4 +52,43 @@ void Entity::update(int a_timePassed, World * a_world)
 	//update previous location & anything unique
 	m_prevLoc = m_location;
 	updateUnique(a_timePassed, a_world);
+}
+void Entity::hit(int a_amount, int a_dmgType)
+{
+	switch(a_dmgType)
+	{
+	case DIVINE:
+		//if(undead)
+		//a_amount *= 2;
+		break;
+	case LIGHTNING:
+		a_amount -= getStatNumber(RESISTANCE_LIGHTNING);
+		break;
+	case FIRE:
+		a_amount -= getStatNumber(RESISTANCE_FIRE);
+		break;
+	case ICE:
+		a_amount -= getStatNumber(RESISTANCE_ICE);
+		break;
+	default:
+		a_amount -= getStatNumber(DEFENSE);
+	}
+	if(a_amount < 0)
+		a_amount = 0;
+	m_stats[HEALTH_CURRENT] -= a_amount;
+	if(m_stats[HEALTH_CURRENT] < 0)
+		m_stats[HEALTH_CURRENT] = 0;
+}
+int Entity::getExtraChipDamageFromStats(int a_chipType)
+{
+	switch(a_chipType)
+	{
+	case MAGIC:
+		return (int)(getStatNumber(INTELLECT) * .5);
+		break;
+	case WEAPON:
+		return (int)(getStatNumber(STRENGTH) * .5);
+		break;
+	}
+	return 0;
 }

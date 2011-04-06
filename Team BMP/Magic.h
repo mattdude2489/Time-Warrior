@@ -26,6 +26,8 @@ class Magic : public Chip
 				setLocation(m_target);
 				break;
 			}
+			if(m_cSubType == DIVINE)
+				m_owner->heal(m_dmg + m_owner->getExtraChipDamageFromStats(MAGIC));
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
@@ -56,17 +58,16 @@ class Magic : public Chip
 			switch(m_cSubType)
 			{
 			case DIVINE:
-				m_owner->heal(m_dmg);
 				if(a_entity->getType() == m_owner->getType())
-					a_entity->heal(m_dmg);
+					a_entity->heal(m_dmg + m_owner->getExtraChipDamageFromStats(MAGIC));
 				else
-					a_entity->hit(m_dmg/2);
+					a_entity->hit(m_dmg/2 + m_owner->getExtraChipDamageFromStats(MAGIC), m_cSubType);
 				break;
 			case LIGHTNING:
 			case FIRE:
 			case ICE:
 				if(a_entity->getType() != m_owner->getType())
-					a_entity->hit(m_dmg);
+					a_entity->hit(m_dmg + m_owner->getExtraChipDamageFromStats(MAGIC), m_cSubType);
 				break;
 			}
 		}

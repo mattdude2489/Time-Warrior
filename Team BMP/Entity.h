@@ -31,14 +31,34 @@ protected:
 	SDL_Rect m_hb;
 	v2D m_vel; //The velocity. - ONLY for player movement
 public:
-	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
-	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
+	Entity(){init();}
+	Entity(SDL_Sprite * a_sprite){init(a_sprite);}
+	Entity(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
-		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite);
+		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);
 	}
-	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
+	void init(){init(1, 1, 0, 0, 0, 0, 0, 0);}
+	void init(SDL_Sprite * a_sprite){init();initSprite(a_sprite);}
+	void init(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes)
 	{
-		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes);
+		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX] = a_health;
+		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX] = a_energy;
+		m_stats[ENERGY_REGEN] = 1;
+		m_stats[STRENGTH] = a_str;
+		m_stats[INTELLECT] = a_int;
+		m_stats[DEFENSE] = a_def;
+		m_stats[RESISTANCE_FIRE] = a_fRes;
+		m_stats[RESISTANCE_ICE] = a_iRes;
+		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
+		m_timeToRegen = m_timer = 0;
+		m_shouldDraw = false;
+		m_camera = NULL;
+		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+		m_prevLoc = m_location;
+		m_activation = false;
+	}
+	void initSprite(SDL_Sprite * a_sprite)
+	{
 		m_eType = DUMMY;
 		m_shouldDraw = true;
 		m_sprite = a_sprite;
@@ -46,23 +66,10 @@ public:
 		m_sprite->restart(ROW_DOWN);
 		m_sprite->start();
 	}
-	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
+	void init(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
-		m_stats[DEFENSE] = a_def;
-		m_stats[INTELLECT] = a_int;
-		m_stats[STRENGTH] = a_str;
-		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX] = a_health;
-		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX] = a_energy;
-		m_stats[RESISTANCE_FIRE] = a_fRes;
-		m_stats[RESISTANCE_ICE] = a_iRes;
-		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
-		m_stats[ENERGY_REGEN] = 1;
-		m_timeToRegen = m_timer = 0;
-		m_shouldDraw = false;
-		m_camera = NULL;
-		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
-		m_prevLoc = m_location;
-		m_activation = false;
+		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes);
+		initSprite(a_sprite);
 	}
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
@@ -94,12 +101,7 @@ public:
 			drawUnique(a_screen);
 		}
 	}
-	void hit(int a_amount)
-	{
-		m_stats[HEALTH_CURRENT] -= a_amount;
-		if(m_stats[HEALTH_CURRENT] < 0)
-			m_stats[HEALTH_CURRENT] = 0;
-	}
+	void hit(int a_amount, int a_dmgType);
 	void useEnergy(int a_amount)
 	{
 		m_stats[ENERGY_CURRENT] -= a_amount;
@@ -264,4 +266,5 @@ public:
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
+	int getExtraChipDamageFromStats(int a_chipType);
 };

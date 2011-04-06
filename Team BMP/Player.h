@@ -18,10 +18,10 @@ private:
 	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON][NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
 	SPoint m_cameraP;
 public:
-	void init();
-	Player():Entity(){init();}
-	Player(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
-		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite){init();}
+	void initPlayer();
+	Player():Entity(){initPlayer();}
+	Player(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
+		:Entity(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite){initPlayer();}
 	SPoint * getCamera(){return &m_cameraP;}
 	void setLocationUnique(int a_x, int a_y){m_cameraP.set(a_x - SCREEN_CENTER_X, a_y - SCREEN_CENTER_Y);}
 	void moveUnique(int a_deltaX, int a_deltaY){m_cameraP.x += a_deltaX;m_cameraP.y += a_deltaY;}

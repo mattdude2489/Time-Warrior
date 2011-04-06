@@ -14,26 +14,22 @@ private:
 	bool drawText;
 public:
 	NonPlayerChar(SDL_Sprite * a_sprite)
-		:Entity(0, 0, 0, 10, 0, 0, 0, 0, a_sprite)
-	{
-			m_eType = NPC; 
-			whatTheyHaveToSay = "Hi."; 
-			drawText = false; 
-			m_Text.setBackColor(0x0000ff);
-			m_Text.setTextColor(0xffffff);
-			m_Text.setFont(m_arialFont.getFont()); 
-			m_Text.setMessage(whatTheyHaveToSay);
-	}
+		:Entity(a_sprite){initNPC();}
 
 	NonPlayerChar(char* talk, SDL_Sprite *a_sprite)
-		:Entity(0, 0, 0, 10, 0, 0, 0, 0, a_sprite)
+		:Entity(a_sprite)
 	{
-		m_eType = NPC;
 		whatTheyHaveToSay = talk;
-		drawText = false;
+		m_Text.setMessage(whatTheyHaveToSay);
+	}
+	void initNPC()
+	{
+		m_eType = NPC; 
+		whatTheyHaveToSay = "Hi."; 
+		drawText = false; 
 		m_Text.setBackColor(0x0000ff);
 		m_Text.setTextColor(0xffffff);
-		m_Text.setFont(m_arialFont.getFont());
+		m_Text.setFont(m_arialFont.getFont()); 
 		m_Text.setMessage(whatTheyHaveToSay);
 	}
 	void activateDialogue()

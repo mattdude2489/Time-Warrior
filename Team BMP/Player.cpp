@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "UserInput.h"
 
-void Player::init()
+void Player::initPlayer()
 {
 	m_eType = PLAYER;
 	for(int i = 0; i < NUM_SLOTS; ++i)

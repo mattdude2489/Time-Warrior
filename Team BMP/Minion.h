@@ -14,19 +14,18 @@ private:
 	bool m_playerTargeted;
 public:
 	Minion(){}
-	Minion(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
-		:Entity(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite)
+	Minion(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
+		:Entity(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite)
 	{
-
 		m_eType = MINION;
 		m_lastDirectionChange = 0;
 		m_state = WANDER;
 		m_target.set(m_location);
 		m_playerTargeted = false;
 	}
-	void mInit(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite* a_sprite)
+	void initMinion(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
-		init(a_def, a_int, a_str, a_health, a_energy, a_fRes, a_iRes, a_lRes, a_sprite);
+		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);
 		m_eType = MINION;
 		m_lastDirectionChange = 0;
 		m_state = WANDER;
