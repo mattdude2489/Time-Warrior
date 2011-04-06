@@ -2,8 +2,6 @@
 #include "Player.h"
 #include "UserInput.h"
 
-#define PLAYER_SPEED .05
-
 void Player::init()
 {
 	m_eType = PLAYER;
@@ -82,43 +80,29 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	if(ui->getKeyUD() == KEY_UP)
 	{
 		m_sprite->setRIndex(ROW_UP);
-		//move(0, -1*SPEED_PLAYER);
-		setVelocity(m_vel.x, -PLAYER_SPEED);
+		move(0, -1*SPEED_PLAYER);
 		lastKey = KEY_UP;
 	}
 	
 	if(ui->getKeyLR() == KEY_RIGHT)
 	{
 		m_sprite->setRIndex(ROW_RIGHT);
-		//move(SPEED_PLAYER, 0);
-		setVelocity(PLAYER_SPEED, m_vel.y);
+		move(SPEED_PLAYER, 0);
 		lastKey = KEY_RIGHT;
 	}
 	
 	if(ui->getKeyUD() == KEY_DOWN)
 	{
 		m_sprite->setRIndex(ROW_DOWN);
-		//move(0, SPEED_PLAYER);
-		setVelocity(m_vel.x, PLAYER_SPEED);
+		move(0, SPEED_PLAYER);
 		lastKey = KEY_DOWN;
 	}
 	
 	if(ui->getKeyLR() == KEY_LEFT)
 	{
 		m_sprite->setRIndex(ROW_LEFT);
-		//move(-1*SPEED_PLAYER, 0);
-		setVelocity(-PLAYER_SPEED, m_vel.y);
+		move(-1*SPEED_PLAYER, 0);
 		lastKey = KEY_LEFT;
-	}
-
-	if(ui->getKeyLR() == KEY_NONE)
-	{
-		setVelocity(0, m_vel.y);
-	}
-
-	if(ui->getKeyUD() == KEY_NONE)
-	{
-		setVelocity(m_vel.x, 0);
 	}
 	switch(ui->getHKeyL())
 	{

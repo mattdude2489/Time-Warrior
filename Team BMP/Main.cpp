@@ -102,6 +102,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	MyFont hi;
 	TTtext fps;
 	fps.setFont(hi.getFont());
+	fps.setMessage("0");
 	int ifps = 0;
 	char cfps[10];
 	fps.setMessage("0");

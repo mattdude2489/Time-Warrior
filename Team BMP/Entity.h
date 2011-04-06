@@ -11,9 +11,12 @@ enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE, NPC};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
-enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 20};
+enum e_frame {FRAME_SIZE = 32, FRAME_RATE = TIME_SECOND_MS/30};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
-enum e_speed {SPEED_PLAYER = 5, SPEED_MAGIC = SPEED_PLAYER*2, SPEED_MINION = SPEED_PLAYER};
+
+#define	SPEED_PLAYER	5
+#define	SPEED_MAGIC		.1
+#define	SPEED_MINION	.05
 
 struct v2D //PLEASE DONT HATE ME
 {
@@ -31,7 +34,6 @@ protected:
 	SPoint m_location, m_prevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
-	v2D m_vel; //The velocity.
 public:
 	Entity(){init(0, 0, 0, 1, 1, 0, 0, 0);}
 	Entity(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
@@ -48,8 +50,6 @@ public:
 		m_sprite->setTransparency(COLOR_TRANSPARENT);
 		m_sprite->restart(ROW_DOWN);
 		m_sprite->start();
-		m_vel.x = 0;
-		m_vel.y = 0;
 	}
 	void init(int a_def, int a_int, int a_str, int a_health, int a_energy, int a_fRes, int a_iRes, int a_lRes)
 	{
@@ -83,11 +83,8 @@ public:
 		moveUnique(a_deltaX, a_deltaY);
 		m_location.x += a_deltaX;
 		m_location.y += a_deltaY;
-		if(!(a_deltaX == 0 || a_deltaY == 0))
-		{
-			m_timer = 0;
-		}
-//		m_sprite->start();
+		m_timer = 0;
+		m_sprite->start();
 	}
 	void move(SPoint a_point){move(a_point.x,a_point.y);}
 	void draw(SDL_Surface * a_screen)
@@ -131,7 +128,7 @@ public:
 		switch(a_in[0])
 		{
 		case KEY_LEFT:
-			move(-1*SPEED_PLAYER, 0);
+			move(-SPEED_PLAYER, 0);
 			break;
 		case KEY_RIGHT:
 			move(SPEED_PLAYER, 0);
@@ -140,7 +137,7 @@ public:
 		switch(a_in[1])
 		{
 		case KEY_UP:
-			move(0,-1*SPEED_PLAYER);	
+			move(0,-SPEED_PLAYER);	
 			break;
 		case KEY_DOWN:
 			move(0,SPEED_PLAYER);
@@ -160,7 +157,6 @@ public:
 	{
 		//calculate the delta between the target & current location
 		SPoint delta = getDeltaBetweenLocationAnd(&m_target);
-		static double m_maxSpeed = 0.05;
 		if(!delta.isZero())
 		{
 			//calculate the length
@@ -169,22 +165,15 @@ public:
 			if(length > a_maxDistance)
 			{
 				//normalize the vector (divide by its length), & set to max distance
-				//delta.setX((int)(((double)delta.x/length) * a_maxDistance));
-				//delta.setY((int)(((double)delta.y/length) * a_maxDistance));
-				setVelocity(
-					(double)delta.x/length *m_maxSpeed,
-					(double)delta.y/length *m_maxSpeed);
+				delta.setX((int)(((double)delta.x/length) * a_maxDistance));
+				delta.setY((int)(((double)delta.y/length) * a_maxDistance));
 			}
-			else
-				setVelocity(0,0);
 			//move the allowed distance
+			move(delta);
 			return false;
 		}
 		else
-		{
-			setVelocity(0, 0);
 			return true;
-		}
 	}
 	void faceTargetDirection()
 	{
@@ -299,14 +288,4 @@ public:
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
-	v2D getVelocity() {return m_vel;}
-	void setVelocity(float newVelX, float newVelY) 
-	{
-		m_vel.x = newVelX; m_vel.y = newVelY;
-		if(m_vel.x != 0 || m_vel.y != 0 || m_eType == CHIP)
-			m_sprite->start();
-		else
-			m_sprite->stop();
-	}
-	void setVelocity(v2D newVel) {m_vel = newVel;}
 };
