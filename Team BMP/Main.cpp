@@ -57,7 +57,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	NonPlayerChar diaTest(&test2);
 	SDL_Sprite test3("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	Minion minion(0, 0, 0, 100, 100, 0, 0, 0, &test3);
-	SDL_Sprite slime("Sprites/slime.bmp", 31, 23, FRAME_RATE, 2);
+	SDL_Sprite slime("Sprites/slime.bmp", 31, 23, FRAME_RATE, NUM_ROWS);
 	Minion m_slime(0 ,0, 0, 100, 100, 0, 0, 0, &slime);
 	fightTest.move(100, -100);
 	minion.move(-50, -50);
@@ -101,10 +101,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	UserInput aui;
 	MyFont hi;
 	TTtext fps;
-	fps.setFont(hi.getFont());
-	fps.setMessage("0");
 	int ifps = 0;
 	char cfps[10];
+	fps.setFont(hi.getFont());
 	fps.setMessage("0");
 	while(running) //While loop, can be easily used for testing.
 	{
