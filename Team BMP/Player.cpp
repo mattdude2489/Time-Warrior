@@ -5,7 +5,6 @@
 void Player::init()
 {
 	m_eType = PLAYER;
-	activation = false;
 	for(int i = 0; i < NUM_SLOTS; ++i)
 		m_gauntlet[i] = NULL;
 	for(int i = 0; i < WEAPON; ++i)
@@ -81,7 +80,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	if(ui->getKeyUD() == KEY_UP)
 	{
 		m_sprite->setRIndex(ROW_UP);
-		//move(0, -1*SPEED_PLAYER);
 		setVelocity(m_vel.x, -SPEED_PLAYER);
 		lastKey = KEY_UP;
 	}
@@ -89,7 +87,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	if(ui->getKeyLR() == KEY_RIGHT)
 	{
 		m_sprite->setRIndex(ROW_RIGHT);
-		//move(SPEED_PLAYER, 0);
 		setVelocity(SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_RIGHT;
 	}
@@ -97,7 +94,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	if(ui->getKeyUD() == KEY_DOWN)
 	{
 		m_sprite->setRIndex(ROW_DOWN);
-		//move(0, SPEED_PLAYER);
 		setVelocity(m_vel.x, SPEED_PLAYER);
 		lastKey = KEY_DOWN;
 	}
@@ -105,7 +101,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	if(ui->getKeyLR() == KEY_LEFT)
 	{
 		m_sprite->setRIndex(ROW_LEFT);
-		//move(-1*SPEED_PLAYER, 0);
 		setVelocity(-SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_LEFT;
 	}
@@ -142,5 +137,5 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	if(ui->getClick() == CLICK_RIGHT && ui->getMouseY() < HUD_Y)
 		activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey);
 	if(ui->getSpace() == true)
-		activation = true;
+		m_activation = true;
 }

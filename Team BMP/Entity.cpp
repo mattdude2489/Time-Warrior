@@ -3,6 +3,7 @@
 
 void Entity::update(int a_timePassed, World * a_world)
 {
+	//Update position.
 	movePlayer(a_timePassed);
 	//update stats
 	m_timeToRegen += a_timePassed;
@@ -20,8 +21,7 @@ void Entity::update(int a_timePassed, World * a_world)
 		if(m_timer >= TIME_INACTIVE && m_sprite->getFrame() == 1)
 			m_sprite->stop();
 	}
-	//Update position.
-	//update health-bar
+	//update health-bar & sprite
 	m_hb.w = (Uint16)(((double)getStatNumber(HEALTH_CURRENT)/(double)getStatNumber(HEALTH_MAX))*(double)m_sprite->getWidth());
 	m_hb.h = 5;
 	m_sprite->update(a_timePassed);

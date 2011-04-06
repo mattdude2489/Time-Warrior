@@ -7,7 +7,7 @@ class World;
 struct Tile;
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
-enum e_entityType{CHIP, PLAYER, DUMMY, MINION, BOSS, OBSTACLE, NPC};
+enum e_entityType{DUMMY, CHIP, PLAYER, NPC, MINION, BOSS};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
@@ -18,19 +18,14 @@ enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 #define	SPEED_MAGIC		(SPEED_PLAYER*2)
 #define	SPEED_MINION	SPEED_PLAYER
 
-struct v2D //PLEASE DONT HATE ME
-{
-	float x;
-	float y;
-};
+struct v2D {double x, y;};//PLEASE DONT HATE ME
 
 class Entity
 {
 protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer;
 	e_entityType m_eType;
-	bool m_shouldDraw;
-	bool activation; //This bool is pretty much there entirely for NPC dialogue at the moment.
+	bool m_shouldDraw, m_activation; //This bool is pretty much there entirely for NPC dialogue at the moment.
 	SPoint m_location, m_prevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
@@ -67,7 +62,7 @@ public:
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
-		activation = false;
+		m_activation = false;
 	}
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
@@ -123,30 +118,10 @@ public:
 		if(m_stats[ENERGY_CURRENT] > m_stats[ENERGY_MAX])
 			m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
 	}
-	void handleServerInfo(char * a_in)
-	{
-		switch(a_in[0])
-		{
-		case KEY_LEFT:
-			move(-SPEED_PLAYER, 0);
-			break;
-		case KEY_RIGHT:
-			move(SPEED_PLAYER, 0);
-			break;
-		}
-		switch(a_in[1])
-		{
-		case KEY_UP:
-			move(0,-SPEED_PLAYER);	
-			break;
-		case KEY_DOWN:
-			move(0,SPEED_PLAYER);
-			break;
-		}
-	}
+	virtual void handleServerInfo(char * a_in){}
 	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
 	void setTarget(SPoint a_point){m_target.set(a_point);}
-	bool getActivation() {return activation;}
+	bool getActivation() {return m_activation;}
 	SPoint getDeltaBetweenLocationAnd(SPoint * a_point)
 	{
 		//calculate the delta (difference) between the target & current location
