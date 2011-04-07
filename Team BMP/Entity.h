@@ -101,7 +101,12 @@ public:
 			drawUnique(a_screen);
 		}
 	}
-	void hit(int a_amount, int a_dmgType);
+	void hit(int a_amount)
+	{
+		m_stats[HEALTH_CURRENT] -= a_amount;
+		if(m_stats[HEALTH_CURRENT] < 0)
+			m_stats[HEALTH_CURRENT] = 0;
+	}
 	void useEnergy(int a_amount)
 	{
 		m_stats[ENERGY_CURRENT] -= a_amount;
@@ -266,5 +271,6 @@ public:
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
-	int getExtraChipDamageFromStats(int a_chipType);
+	int getTotalDamageTaken(int a_amount, int a_type);
+	int getTotalDamageDealt(int a_amount, int a_type);
 };

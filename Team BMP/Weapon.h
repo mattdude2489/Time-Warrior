@@ -106,7 +106,7 @@ class Weapon : public Chip
 			case SLASH:
 			case PIERCE:
 				if(a_entity->getType() != PLAYER)
-					a_entity->hit(m_dmg + m_owner->getExtraChipDamageFromStats(WEAPON), m_cSubType);
+					a_entity->hit(a_entity->getTotalDamageTaken(m_owner->getTotalDamageDealt(m_dmg,WEAPON), m_cSubType));
 				break;
 			}
 		}

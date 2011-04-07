@@ -53,42 +53,38 @@ void Entity::update(int a_timePassed, World * a_world)
 	m_prevLoc = m_location;
 	updateUnique(a_timePassed, a_world);
 }
-void Entity::hit(int a_amount, int a_dmgType)
+int Entity::getTotalDamageDealt(int a_amount, int a_type)
 {
-	switch(a_dmgType)
-	{
-	case DIVINE:
-		//if(undead)
-		//a_amount *= 2;
-		break;
-	case LIGHTNING:
-		a_amount -= getStatNumber(RESISTANCE_LIGHTNING);
-		break;
-	case FIRE:
-		a_amount -= getStatNumber(RESISTANCE_FIRE);
-		break;
-	case ICE:
-		a_amount -= getStatNumber(RESISTANCE_ICE);
-		break;
-	default:
-		a_amount -= getStatNumber(DEFENSE);
-	}
-	if(a_amount < 0)
-		a_amount = 0;
-	m_stats[HEALTH_CURRENT] -= a_amount;
-	if(m_stats[HEALTH_CURRENT] < 0)
-		m_stats[HEALTH_CURRENT] = 0;
-}
-int Entity::getExtraChipDamageFromStats(int a_chipType)
-{
-	switch(a_chipType)
+	int stat = 0;
+	switch(a_type)
 	{
 	case MAGIC:
-		return (int)(getStatNumber(INTELLECT) * .5);
+		stat = getStatNumber(INTELLECT);
 		break;
 	case WEAPON:
-		return (int)(getStatNumber(STRENGTH) * .5);
+		stat = getStatNumber(STRENGTH);
 		break;
 	}
-	return 0;
+	return (int)(a_amount * ((double)(a_amount + stat) / a_amount));
+}
+int Entity::getTotalDamageTaken(int a_amount, int a_type)
+{
+	int stat = 0;
+	switch(a_type)
+	{
+	case DIVINE:
+		break;
+	case LIGHTNING:
+		stat = getStatNumber(RESISTANCE_LIGHTNING);
+		break;
+	case FIRE:
+		stat = getStatNumber(RESISTANCE_FIRE);
+		break;
+	case ICE:
+		stat = getStatNumber(RESISTANCE_ICE);
+		break;
+	default:
+		stat = getStatNumber(DEFENSE);
+	}
+	return (int)(a_amount * ((double)a_amount / (a_amount + stat)));
 }
