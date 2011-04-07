@@ -59,6 +59,7 @@ bool World::setWorld(char * fileName)
 		m_mapOfWorld.release();
 	}
 	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
+	SDL_Sprite * hudSprite = new SDL_Sprite("Sprites/hub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	sprite->setTransparency(COLOR_TRANSPARENT);
 	SDL_Sprite *portalSprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	portalSprite->setTransparency(COLOR_TRANSPARENT);
@@ -77,7 +78,12 @@ bool World::setWorld(char * fileName)
 			//Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
 			if(c != '\n')
 			{
-				hi.currentTexture = sprite;
+				if(currentWorld == 0){
+					hi.currentTexture = hudSprite;
+				}
+				else{
+					hi.currentTexture = sprite;
+				}
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
 				hi.collide = hi.animate = false;
@@ -96,26 +102,66 @@ bool World::setWorld(char * fileName)
 			switch(c)
 			{
 			case 'G':
+				if(currentWorld == 0){
+					hi.indexOfSpriteRow = 5;
+				}
+				else{
 				hi.indexOfSpriteRow = 0;
+				}
 				break;
 			case 'D':
+				if(currentWorld == 0){
+					hi.indexOfSpriteRow = 0;
+					hi.collide = true;
+				}
+				else{
 				hi.indexOfSpriteRow = 1;
+				}
 				break;
 			case 'H':
+				if(currentWorld == 0){
+					hi.indexOfSpriteRow = 2;
+					hi.collide = true;
+				}
+				else{
 				hi.indexOfSpriteRow = 2;
+				}
 				break;
 			case 'V':
+				if(currentWorld == 0){
+					hi.indexOfSpriteRow = 1;
+					hi.collide = true;
+				}
+				else{
 				hi.indexOfSpriteRow = 3;
+				}
 				break;
 			case 'M':
+				if(currentWorld == 0){
+					hi.indexOfSpriteRow = 3;
+					hi.collide = true;
+				}
+				else{
 				hi.indexOfSpriteRow = 4;
+				}
 				break;
 			case 'B':
+				if(currentWorld == 0){
+					hi.indexOfSpriteRow = 4;
+					hi.collide = true;
+				}
+				else{
 				hi.indexOfSpriteRow = 5;
 				hi.collide = true;
+				}
 				break;
 			case 'P':
-				hi.indexOfSpriteRow = 0;
+				if(currentWorld == 0){
+				hi.indexOfSpriteRow = 5;
+				}
+				else{
+					hi.indexOfSpriteRow = 0;
+				}
 				m_mapOfWorld.add(hi);
 				//Change the sprite to the Portal Sprite, which can be used to update.
 				hi.currentTexture = portalSprite;

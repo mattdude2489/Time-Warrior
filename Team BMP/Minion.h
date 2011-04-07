@@ -36,6 +36,7 @@ public:
 	{
 		heal(getStatNumber(HEALTH_MAX));
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+		m_state = WANDER;
 	}
 	void updateUnique(int a_timePassed, World * a_world)
 	{

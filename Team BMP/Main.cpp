@@ -62,7 +62,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	fightTest.move(100, -100);
 	minion.move(-50, -50);
 	m_slime.move(-100,-100);
-	diaTest.move(100, 100);
+	diaTest.move(200, 200);
 	BasicSlash chip;
 	BasicFire chip2;
 	AdvancedFire chip3;
@@ -158,7 +158,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 			}
 		}
-		//printf("%d, %d, Button is: %d, Key is: %c \n", ui.getMouseX(), ui.getMouseY(), ui.getClick(), ui.getKey());
 #ifdef WITH_NETWORKING
 		eTest.handleInput(&ui, &world);
 #else
@@ -174,7 +173,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		world.draw(screen);
 		Ghud.draw(screen);
 		fps.printMessage(screen, 0,0);
-	//	printf("user in: %c %c\n", ui.getKeyLR(), ui.getKeyUD());
 #ifdef WITH_NETWORKING
 		strcpy(send, world.convertAllEntitiesToCharBuffer());
 		for(int i = 0; i < strlen(send)&& changeInInfoSoSend == false; i++)
@@ -206,7 +204,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		SDL_Flip(screen);
 		SDL_Delay(FRAME_RATE);
 	}
-
 	SDL_FreeSurface(screen);
 	SDL_Quit();//must do to free the memory that was used for init	
 	return 0;
