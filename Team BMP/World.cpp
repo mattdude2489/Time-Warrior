@@ -59,7 +59,7 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = sprite;
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = false;
+				hi.collide = hi.animate = false;
 				x++;
 			}
 			else
@@ -98,12 +98,15 @@ bool World::setWorld(char * fileName)
 				//Change the sprite to the Portal Sprite, which can be used to update.
 				hi.currentTexture = portalSprite;
 				hi.indexOfSpriteRow = 6;
+				hi.animate = true;
 				break;
 			}
 			if(c != '\n')
 			{
 				m_mapOfWorld.add(hi);
 			}
+			if(hi.animate)
+				hi.currentTexture->start();
 			c = fgetc(infile);
 		}
 		m_success = true;
@@ -157,12 +160,11 @@ void World::update(Uint32 a_timePassed)
 		m_mapOfEntities.get(i).update(a_timePassed, this);
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
-		if(m_mapOfWorld.get(i).indexOfSpriteRow == 6)
+		if(m_mapOfWorld.get(i).animate)
 		{
 			m_mapOfWorld.get(i).currentTexture->update(a_timePassed);
-			m_mapOfWorld.get(i).currentTexture->start();
-			if(m_mapOfWorld.get(i).currentTexture->getFrame() >= m_mapOfWorld.get(i).currentTexture->getMaxFrames())
-				m_mapOfWorld.get(i).currentTexture->restart(6);
+			if(m_mapOfWorld.get(i).currentTexture->getFrame() > m_mapOfWorld.get(i).currentTexture->getMaxFrames()-1)
+				m_mapOfWorld.get(i).currentTexture->restart(m_mapOfWorld.get(i).indexOfSpriteRow);
 		}
 	}
 	bool successPlayer;

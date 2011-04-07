@@ -7,7 +7,7 @@
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide;
+	bool collide, animate;
 	SPoint pos, *cam;
 	int indexOfSpriteRow;
 	SPoint getLocationScreen(){return pos.difference(*cam);}
