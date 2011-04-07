@@ -21,7 +21,18 @@ World::~World()
 			delete m_mapOfWorld.get(i).currentTexture;*/
 	//because ALL of the tiles only hold ONE texture, it only needs to be deleted ONCE.
 	delete m_mapOfWorld.get(0).currentTexture;// Hooray for trying to delete memory that's ALREADY GONE!?
+	for(int i = 0; i < m_mapOfWorld.size(); i++)
+	{
+		if(m_mapOfWorld.get(i).portal)
+		{
+			delete m_mapOfWorld.get(i).currentTexture;
+			break;
+		}
+	}
 }
+
+int Tile::portalIndexNumber = 0; //I have to use global scope on this in order to use a static. That's just SAD.
+
 bool World::setWorld(char * fileName)
 {
 	FILE * infile;
@@ -32,16 +43,26 @@ bool World::setWorld(char * fileName)
 		currentWorld = 1;
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
+	{
 		if(m_mapOfWorld.get(0).currentTexture->isSprite())
 		{
+			delete m_mapOfWorld.get(0).currentTexture;
 			for(int i = 0; i < m_mapOfWorld.size(); i++)
-				delete m_mapOfWorld.get(i).currentTexture;
+			{
+				if(m_mapOfWorld.get(i).portal)
+				{
+					delete m_mapOfWorld.get(i).currentTexture; //Delete this texture ONLY ONCE. It gets recreated soon anyways.
+					break;
+				}
+			}
 		}
-	m_mapOfWorld.release();
+		m_mapOfWorld.release();
+	}
 	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	sprite->setTransparency(COLOR_TRANSPARENT);
 	SDL_Sprite *portalSprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	portalSprite->setTransparency(COLOR_TRANSPARENT);
+	Tile::portalIndexNumber = 0; //EPIC. THIS FARKING WORKS.
 	//The sprite used for the portal.
 	//start the actual loading of the textures.
 	if(infile == NULL)
@@ -60,6 +81,7 @@ bool World::setWorld(char * fileName)
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
 				hi.collide = hi.animate = false;
+				hi.portal = false;
 				x++;
 			}
 			else
@@ -98,7 +120,8 @@ bool World::setWorld(char * fileName)
 				//Change the sprite to the Portal Sprite, which can be used to update.
 				hi.currentTexture = portalSprite;
 				hi.indexOfSpriteRow = 6;
-				hi.animate = true;
+				hi.animate = hi.portal = true;
+				hi.portalIndexNumber++;
 				break;
 			}
 			if(c != '\n')

@@ -7,9 +7,10 @@
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide, animate;
+	bool collide, animate, portal;
 	SPoint pos, *cam;
 	int indexOfSpriteRow;
+	static int portalIndexNumber;
 	SPoint getLocationScreen(){return pos.difference(*cam);}
 };
 class World
@@ -23,7 +24,6 @@ private:
 	int currentWorld;
 	int maxWorldX, maxWorldY; //how big the world is...maximally. Used for Grids.
 	int tileX, tileY;
-	int portalValueIndex;
 	//Entity * m_player;
 public:
 	World();

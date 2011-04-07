@@ -39,6 +39,17 @@ void Entity::update(int a_timePassed, World * a_world)
 			else
 				m_shouldDraw = false;
 		}
+		if(a_world->getTile(m_location.x, m_location.y)->portal
+			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->portal
+			|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->portal
+			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->portal)
+		{
+			if(m_eType == PLAYER)
+			{
+				a_world->setWorld("Maps/MedEngMap.txt");
+				a_world->setCamera(this->m_camera);
+			}
+		}
 		//Search through the entities in that particular grid. If there are any, check for collision with them.
 		for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
 		{
