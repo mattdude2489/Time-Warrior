@@ -23,6 +23,7 @@ private:
 	int currentWorld;
 	int maxWorldX, maxWorldY; //how big the world is...maximally. Used for Grids.
 	int tileX, tileY;
+	int portalValueIndex;
 	//Entity * m_player;
 public:
 	World();

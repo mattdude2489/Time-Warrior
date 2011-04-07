@@ -28,6 +28,8 @@ bool World::setWorld(char * fileName)
 	fopen_s(&infile, fileName, "r");
 	if(fileName == "Maps/HubWorldMap.txt")
 		currentWorld = 0;
+	if(fileName == "Maps/MedEngMap.txt")
+		currentWorld = 1;
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
 		if(m_mapOfWorld.get(0).currentTexture->isSprite())
@@ -38,8 +40,11 @@ bool World::setWorld(char * fileName)
 	m_mapOfWorld.release();
 	//Screw it. I'm gonna do this Java style.
 //	SDL_Sprite * sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
-	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+1);
+	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	sprite->setTransparency(COLOR_TRANSPARENT);
+	SDL_Sprite *portalSprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
+	portalSprite->setTransparency(COLOR_TRANSPARENT);
+	//The sprite used for the portal.
 	//start the actual loading of the textures.
 	if(infile == NULL)
 		m_success = false;
@@ -89,9 +94,18 @@ bool World::setWorld(char * fileName)
 				hi.indexOfSpriteRow = 5;
 				hi.collide = true;
 				break;
+			case 'P':
+				hi.indexOfSpriteRow = 0;
+				m_mapOfWorld.add(hi);
+				//Change the sprite to the Portal Sprite, which can be used to update.
+				hi.currentTexture = portalSprite;
+				hi.indexOfSpriteRow = 6;
+				break;
 			}
 			if(c != '\n')
+			{
 				m_mapOfWorld.add(hi);
+			}
 			c = fgetc(infile);
 		}
 		m_success = true;
