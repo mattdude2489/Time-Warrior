@@ -135,6 +135,8 @@ bool World::setWorld(char * fileName)
 		m_success = true;
 		fclose(infile);
 	}
+	maxWorldX = tileX * 32;
+	maxWorldY = tileY * 32;
 	return m_success;
 }
 //sets up a camera for each entity & tile, so they correctly move relative to the player
