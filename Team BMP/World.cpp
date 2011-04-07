@@ -38,8 +38,6 @@ bool World::setWorld(char * fileName)
 				delete m_mapOfWorld.get(i).currentTexture;
 		}
 	m_mapOfWorld.release();
-	//Screw it. I'm gonna do this Java style.
-//	SDL_Sprite * sprite("Sprites/textureSetHub.bmp", 32, 32, 1, 5);
 	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	sprite->setTransparency(COLOR_TRANSPARENT);
 	SDL_Sprite *portalSprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
@@ -157,6 +155,16 @@ void World::update(Uint32 a_timePassed)
 	//Update all entities.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 		m_mapOfEntities.get(i).update(a_timePassed, this);
+	for(int i = 0; i < m_mapOfWorld.size(); ++i)
+	{
+		if(m_mapOfWorld.get(i).indexOfSpriteRow == 6)
+		{
+			m_mapOfWorld.get(i).currentTexture->update(a_timePassed);
+			m_mapOfWorld.get(i).currentTexture->start();
+			if(m_mapOfWorld.get(i).currentTexture->getFrame() >= m_mapOfWorld.get(i).currentTexture->getMaxFrames())
+				m_mapOfWorld.get(i).currentTexture->restart(6);
+		}
+	}
 	bool successPlayer;
 	Entity * player;
 	successPlayer = m_mapOfEntities.get(clientPlayerIndex).getPlayer(player); //This pointer will be erased soon afterwards.
