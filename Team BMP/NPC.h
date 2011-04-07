@@ -45,8 +45,8 @@ public:
 	{
 		if(drawText)
 		{
-			SDL_FillRect(a_screen, &SRect(0, 400, 800, 300), 0xffff00);
-			m_Text.printMessage(a_screen, 20, 20);
+			SDL_FillRect(a_screen, &SRect(0, 400, 800, 168), 0x0000ff);
+			m_Text.printMessage(a_screen, 20, 420);
 		}
 	}
 	void updateUnique(int a_timePassed, World *a_world)

@@ -82,6 +82,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		m_sprite->setRIndex(ROW_UP);
 		setVelocity(m_vel.x, -SPEED_PLAYER);
 		lastKey = KEY_UP;
+		m_activation = false;
 	}
 	
 	if(ui->getKeyLR() == KEY_RIGHT)
@@ -89,6 +90,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		m_sprite->setRIndex(ROW_RIGHT);
 		setVelocity(SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_RIGHT;
+		m_activation = false;
 	}
 	
 	if(ui->getKeyUD() == KEY_DOWN)
@@ -96,6 +98,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		m_sprite->setRIndex(ROW_DOWN);
 		setVelocity(m_vel.x, SPEED_PLAYER);
 		lastKey = KEY_DOWN;
+		m_activation = false;
 	}
 	
 	if(ui->getKeyLR() == KEY_LEFT)
@@ -103,11 +106,14 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		m_sprite->setRIndex(ROW_LEFT);
 		setVelocity(-SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_LEFT;
+		m_activation = false;
 	}
+
 	if(ui->getKeyLR() == KEY_NONE)
 		setVelocity(0, m_vel.y);
 	if(ui->getKeyUD() == KEY_NONE)
 		setVelocity(m_vel.x, 0);
+
 	switch(ui->getHKeyL())
 	{
 	case KEY_HOT_ATK2_BAS:
