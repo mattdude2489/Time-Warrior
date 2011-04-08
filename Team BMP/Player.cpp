@@ -7,13 +7,10 @@ void Player::initPlayer()
 	m_eType = PLAYER;
 	for(int i = 0; i < NUM_SLOTS; ++i)
 		m_gauntlet[i] = NULL;
-	for(int i = 0; i < WEAPON; ++i)
+	for(int j = 0; j < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++j)
 	{
-		for(int j = 0; j < NUM_CHIP_SUBS_PER_TYPE; ++j)
-		{
-			for(int k = 0; k < NUM_CHIP_LEVELS; ++k)
-				m_attackInventory[i][j][k] = NULL;
-		}
+		for(int k = 0; k < NUM_CHIP_LEVELS; ++k)
+			m_attackInventory[j][k] = NULL;
 	}
 	setVelocity(0,0);
 }
@@ -24,8 +21,58 @@ void Player::addToAttackInventory(Chip * a_chip)
 	case MAGIC:
 	case WEAPON:
 		a_chip->setOwner(this);
-		m_attackInventory[a_chip->getType()-1][a_chip->getSubType()][a_chip->getSubSubType()] = a_chip;
+		m_attackInventory[a_chip->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_chip->getSubSubType()] = a_chip;
 		break;
+	}
+	/*for(int i = 0; i < WEAPON; ++i)
+	{
+		for(int j = 0; j < NUM_CHIP_SUBS_PER_TYPE; ++j)
+		{
+			for(int k = 0; k < NUM_CHIP_LEVELS; ++k)
+				printf("%d, ", m_attackInventory[i][j][k]);
+		}
+		printf("\n");
+	}
+	printf("\n\n");*/
+}
+void Player::setGauntletSlot(e_gauntletSlots a_slot)
+{
+	if(a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2)
+	{
+		static int sub1 = m_gauntlet[SLOT_ATK1]->getSubType();
+		static int sub2 = m_gauntlet[SLOT_ATK2]->getSubType();
+		if(a_slot == SLOT_ATK1)
+		{
+			sub1++;
+			if(sub1 > PIERCE)
+				sub1 = DIVINE;
+			if(m_gauntlet[SLOT_ATK2] != m_attackInventory[sub1-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()])
+				setGauntletSlot(a_slot, m_attackInventory[sub1-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()]);
+		}
+		else
+		{
+			sub2++;
+			if(sub2 > PIERCE)
+				sub2 = DIVINE;
+			if(m_gauntlet[SLOT_ATK2] != m_attackInventory[sub2-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()])
+				setGauntletSlot(a_slot, m_attackInventory[sub2-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()]);
+		}
+	}
+}
+void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
+{
+	if(a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2)
+	{
+		if(a_slot == SLOT_ATK1)
+		{
+			if(m_gauntlet[SLOT_ATK2] != m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level])
+				setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level]);
+		}
+		else
+		{
+			if(m_gauntlet[SLOT_ATK1] != m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level])
+				setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level]);
+		}
 	}
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
@@ -75,7 +122,7 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 }
 void Player::handleInput(UserInput * ui, World * a_world)
 {
-	static char lastKey = KEY_NONE; 
+	static char lastKey = KEY_NONE;
 	//This is where the UI goes to get handled by the Player class. Well...it would've been world class, but we dun have one of them yet.
 	if(ui->getKeyUD() == KEY_UP)
 	{
@@ -84,7 +131,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		lastKey = KEY_UP;
 		m_activation = false;
 	}
-	
 	if(ui->getKeyLR() == KEY_RIGHT)
 	{
 		m_sprite->setRIndex(ROW_RIGHT);
@@ -92,7 +138,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		lastKey = KEY_RIGHT;
 		m_activation = false;
 	}
-	
 	if(ui->getKeyUD() == KEY_DOWN)
 	{
 		m_sprite->setRIndex(ROW_DOWN);
@@ -100,7 +145,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		lastKey = KEY_DOWN;
 		m_activation = false;
 	}
-	
 	if(ui->getKeyLR() == KEY_LEFT)
 	{
 		m_sprite->setRIndex(ROW_LEFT);
@@ -108,7 +152,6 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		lastKey = KEY_LEFT;
 		m_activation = false;
 	}
-
 	if(ui->getKeyLR() == KEY_NONE)
 		setVelocity(0, m_vel.y);
 	if(ui->getKeyUD() == KEY_NONE)
@@ -116,14 +159,17 @@ void Player::handleInput(UserInput * ui, World * a_world)
 
 	switch(ui->getHKeyL())
 	{
-	case KEY_HOT_ATK2_BAS:
+	case KEY_HOT_ATK1_BAS:
 		setGauntletSlot(SLOT_ATK1, BASIC);
 		break;
-	case KEY_HOT_ATK2_ADV:
+	case KEY_HOT_ATK1_ADV:
 		setGauntletSlot(SLOT_ATK1, ADVANCED);
 		break;
-	case KEY_HOT_ATK2_EXP:
+	case KEY_HOT_ATK1_EXP:
 		setGauntletSlot(SLOT_ATK1, EXPERT);
+		break;
+	case KEY_HOT_ATK1_LEG:
+		setGauntletSlot(SLOT_ATK1);
 		break;
 	}
 	switch(ui->getHKeyR())
@@ -136,6 +182,9 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		break;
 	case KEY_HOT_ATK2_EXP:
 		setGauntletSlot(SLOT_ATK2, EXPERT);
+		break;
+	case KEY_HOT_ATK2_LEG:
+		//setGauntletSlot(SLOT_ATK2);
 		break;
 	}
 	if(ui->getClick() == CLICK_LEFT && ui->getMouseY() < HUD_Y)

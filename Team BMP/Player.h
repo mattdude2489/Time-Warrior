@@ -15,7 +15,7 @@ enum e_hud {HUD_WIDTH = SCREEN_WIDTH, HUD_HEIGHT = FRAME_SIZE, HUD_X = 0, HUD_Y 
 class Player : public Entity
 {
 private:
-	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON][NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
+	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
 	SPoint m_cameraP;
 public:
 	void initPlayer();
@@ -27,8 +27,9 @@ public:
 	void moveUnique(int a_deltaX, int a_deltaY){m_cameraP.x += a_deltaX;m_cameraP.y += a_deltaY;}
 	void drawSlot(e_gauntletSlots a_slot, SDL_Surface * a_screen, int a_x, int a_y){m_gauntlet[a_slot]->drawHUD(a_screen, a_x, a_y);}
 	void addToAttackInventory(Chip * a_chip);
+	void setGauntletSlot(e_gauntletSlots a_slot);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);
-	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level){setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getType()-1][m_gauntlet[a_slot]->getSubType()][a_level]);}
+	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level);
 	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction);
 	void handleInput(UserInput * ui, World * a_world);
 	void setVelocity(double newVelX, double newVelY){m_vel.x = newVelX; m_vel.y = newVelY;}
