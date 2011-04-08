@@ -20,6 +20,18 @@ public:
 	//The public functions. Constructors, sets, gets, and modifiers.
 	Grid() {}
 	Grid(Entity * newEntity) {m_mapOfEntities.add(newEntity);} //Starting off with an original entity.
+	~Grid()
+	{
+		if(m_mapOfEntities.size() > 0)
+		{
+			for(int i = 0; i < m_mapOfEntities.size(); i++)
+			{
+				if(m_mapOfEntities.get(i)->getNewed())
+					delete m_mapOfEntities.get(i);
+			}
+		}
+		m_mapOfEntities.release();
+	}
 	//Sets and gets.
 	//@param: The entity to add to the grid.
 	void setEntity(Entity * newEntity) {m_mapOfEntities.add(newEntity);}

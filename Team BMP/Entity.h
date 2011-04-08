@@ -171,6 +171,7 @@ public:
 		else
 			return true;
 	}
+	bool getNewed() {return nude;}
 	void faceTargetDirection()
 	{
 		/*
