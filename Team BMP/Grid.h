@@ -6,6 +6,7 @@
 #pragma once
 #include "Entity.h"
 #include "templateVector.h"
+#include <time.h>
 enum e_grid {NUM_GRIDS = 16, NUM_GRIDS_PER_ROW_COL = 4, NUM_SPRITE_SHEETS_TO_CHOOSE_FROM = 2};
 enum e_world {WORLD_HUB, WORLD_ENGLAND};
 

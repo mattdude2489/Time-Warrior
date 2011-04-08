@@ -14,7 +14,7 @@ void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
 	if(currentWorld == WORLD_ENGLAND)
 	{
 		//TODO: CHANGE THIS TO BE PSUEDO RANDOM.
-		srand(0); //I hope this doesn't come around to kill me!
+		srand(time(NULL)); //I hope this doesn't come around to kill me!
 		int numberOfMonsters = rand()%10;
 		int gridX, gridY;
 		gridY = currentGrid/NUM_GRIDS_PER_ROW_COL;
@@ -36,8 +36,7 @@ void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
 			int enX, enY;
 			enX = rand()%pixelBaseX;
 			enY = rand()%pixelBaseY;
-			newEntity->setLocation(enX + (pixelBaseX*gridX), enY + (pixelBaseY*gridY));
-
+			newEntity->setLocation(FRAME_SIZE + enX + (pixelBaseX*gridX), FRAME_SIZE + enY + (pixelBaseY*gridY));
 			m_mapOfEntities.add(newEntity);
 		}
 	}

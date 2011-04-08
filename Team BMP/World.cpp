@@ -181,8 +181,10 @@ bool World::setWorld(char * fileName)
 		m_success = true;
 		fclose(infile);
 	}
-	maxWorldX = tileX * FRAME_SIZE;
-	maxWorldY = tileY * FRAME_SIZE;
+	//take into account that the outmost tiles are borders for entity containment,
+	//so the valid movable world space is decreased by up/left/down/right tiles
+	maxWorldX = (tileX-2) * FRAME_SIZE;
+	maxWorldY = (tileY-2) * FRAME_SIZE;
 	setMonsters();
 	return m_success;
 }
