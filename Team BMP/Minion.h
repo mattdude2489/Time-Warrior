@@ -3,7 +3,6 @@
 #include <math.h>
 #include "Entity.h"
 
-
 #define ENGAGE_RANGE	100
 enum e_states	{WANDER, CHASE};
 enum e_wander	{WANDER_DIST = 50, WANDER_MAX = WANDER_DIST*2,WANDER_DIRECTION_TIME = TIME_SECOND_MS*3};
@@ -23,6 +22,7 @@ public:
 		m_target.set(m_location);
 		m_playerTargeted = false;
 	}
+	void checkState(int a_timePassed, World * a_world);
 	void initMinion(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);
@@ -56,30 +56,6 @@ public:
 			m_target.set(tX, tY);
 			m_lastDirectionChange = 0;
 		}
-	}
-	void checkState(int a_timePassed, World * a_world)
-	{
-		bool playerFound = false;
-		Entity * t_player = NULL;
-		for(int i = 0; i < a_world->getGrid(m_location.getX(), m_location.getY())->getNumberOfEntities()&&playerFound == false; i++)
-		{
-			if(a_world->getGrid(m_location.getX(), m_location.getY())->getPlayer(t_player))
-			{
-				if(t_player)
-					isPlayerInRange(t_player);
-				else
-					m_state = WANDER;
-			}
-		}
-
-		
-		switch(m_state)
-		{
-		case WANDER:	wander(a_timePassed);						break;
-		case CHASE:		if(t_player){updateTargPlayer(t_player);}	break;
-		}
-		moveToTarget((int)(SPEED_MINION*a_timePassed));
-	
 	}
 	void updateTargPlayer(Entity *a_player){m_target.set(a_player->getLocation());}
 	void isPlayerInRange(Entity *a_player)

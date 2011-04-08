@@ -84,10 +84,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.add(&chip2);
 	world.add(&chip3);
 	world.add(&chip4);
-	world.add(&fightTest);
-	world.add(&minion);
-	world.add(&diaTest);
-	world.add(&m_slime);
+	//world.add(&fightTest);
+	//world.add(&minion);
+	//world.add(&diaTest);
+	//world.add(&m_slime);
 	world.setCamera(eTest.getCamera());
 	//music test stuff
 	

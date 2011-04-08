@@ -31,6 +31,7 @@ public:
 	void add(Entity * newEntity){m_mapOfEntities.get(getLocationGrid(newEntity)).setEntity(newEntity);}//if(newEntity->getType() == PLAYER) m_player = newEntity;}
 	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
+	void setMonsters();
 	void update(Uint32 timePassed);
 	void draw(SDL_Surface * a_screen);
 	bool setWorld(char * fileName);

@@ -183,6 +183,7 @@ bool World::setWorld(char * fileName)
 	}
 	maxWorldX = tileX * 32;
 	maxWorldY = tileY * 32;
+	setMonsters();
 	return m_success;
 }
 //sets up a camera for each entity & tile, so they correctly move relative to the player
@@ -207,6 +208,18 @@ void World::sortOnYPosition()
 			clientPlayerIndex = z; //Which grid the Player's in. once we know that, we can just use getPlayer.
 	}
 }
+
+/**
+	The function that sets the world to have monsters and updates the Entity list of the grid to add them into.
+**/
+void World::setMonsters()
+{
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	{
+		m_mapOfEntities.get(i).setMonsters(currentWorld, i, maxWorldX, maxWorldY);
+	}
+}
+
 void World::update(Uint32 a_timePassed)
 {
 	//static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();

@@ -30,12 +30,21 @@ protected:
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 	v2D m_vel; //The velocity. - ONLY for player movement
+	//I don't apologize for your vulgarity, or my own.
+	bool nude; //Lolz. Keeps track of whether or not it needs to delete it's own Sprite pointer when this is destroyed.
 public:
 	Entity(){init();}
 	Entity(SDL_Sprite * a_sprite){init(a_sprite);}
 	Entity(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);
+	}
+	~Entity()
+	{
+		if(nude)
+		{
+			delete m_sprite;
+		}
 	}
 	void init(){init(1, 1, 0, 0, 0, 0, 0, 0);}
 	void init(SDL_Sprite * a_sprite){init();initSprite(a_sprite);}
@@ -56,6 +65,7 @@ public:
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
 		m_activation = false;
+		nude = false;
 	}
 	void initSprite(SDL_Sprite * a_sprite)
 	{
@@ -79,6 +89,10 @@ public:
 		setLocationUnique(a_x, a_y);
 		m_location.x = a_x;
 		m_location.y = a_y;
+	}
+	void setNewed(bool newed)
+	{
+		nude = newed; //Set the newed variable to whatever it needs to be.
 	}
 	void move(int a_deltaX, int a_deltaY)
 	{

@@ -176,7 +176,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Grid.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Minion.cpp"
 				>
 			</File>
 			<File

@@ -6,7 +6,10 @@
 #pragma once
 #include "Entity.h"
 #include "templateVector.h"
-enum e_grid {NUM_GRIDS = 16, NUM_GRIDS_PER_ROW_COL = 4};
+enum e_grid {NUM_GRIDS = 16, NUM_GRIDS_PER_ROW_COL = 4, NUM_SPRITE_SHEETS_TO_CHOOSE_FROM = 2};
+
+class Minion;
+
 class Grid
 {
 private:
@@ -20,6 +23,8 @@ public:
 	//Sets and gets.
 	//@param: The entity to add to the grid.
 	void setEntity(Entity * newEntity) {m_mapOfEntities.add(newEntity);}
+	//Will randomly assign monsters in there. WHEN WORLD CHANGES, THIS WILL OVERWRITE ANY MONSTERS.
+	void setMonsters(int currentWorld, int currentGrid, int maxX, int maxY);
 	//@param: The index of the returning Entity. NO ERROR DETECTION...SO DON'T BE WRONG.
 	Entity * getEntity(int index) 
 	{
