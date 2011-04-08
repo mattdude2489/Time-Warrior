@@ -5,6 +5,8 @@
 
 class World;
 struct Tile;
+enum e_chipType;
+enum e_chipSubType;
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 enum e_entityType{DUMMY, CHIP, PLAYER, NPC, MINION, BOSS};
@@ -83,7 +85,7 @@ public:
 	}
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
-	void update(int a_timePassed, World * a_world);
+	void update(int, World*);
 	void setLocation(int a_x, int a_y)
 	{
 		setLocationUnique(a_x, a_y);
@@ -121,6 +123,7 @@ public:
 		if(m_stats[HEALTH_CURRENT] < 0)
 			m_stats[HEALTH_CURRENT] = 0;
 	}
+	void hit(int a_amount, e_chipSubType a_type){hit(getTotalDamageTaken(a_amount, a_type));}
 	void useEnergy(int a_amount)
 	{
 		m_stats[ENERGY_CURRENT] -= a_amount;
@@ -286,6 +289,6 @@ public:
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
-	int getTotalDamageTaken(int a_amount, int a_type);
-	int getTotalDamageDealt(int a_amount, int a_type);
+	int getTotalDamageTaken(int, e_chipSubType);
+	int getTotalDamageDealt(int, e_chipType);
 };

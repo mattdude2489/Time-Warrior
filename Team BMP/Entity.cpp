@@ -64,7 +64,7 @@ void Entity::update(int a_timePassed, World * a_world)
 	m_prevLoc = m_location;
 	updateUnique(a_timePassed, a_world);
 }
-int Entity::getTotalDamageDealt(int a_amount, int a_type)
+int Entity::getTotalDamageDealt(int a_amount, e_chipType a_type)
 {
 	int stat = 0;
 	switch(a_type)
@@ -76,9 +76,12 @@ int Entity::getTotalDamageDealt(int a_amount, int a_type)
 		stat = getStatNumber(STRENGTH);
 		break;
 	}
-	return (int)(a_amount * ((double)(a_amount + stat) / a_amount));
+	if(a_amount > 0)
+		return (int)(a_amount * ((double)(a_amount + stat) / a_amount));
+	else
+		return 0;
 }
-int Entity::getTotalDamageTaken(int a_amount, int a_type)
+int Entity::getTotalDamageTaken(int a_amount, e_chipSubType a_type)
 {
 	int stat = 0;
 	switch(a_type)
@@ -97,5 +100,8 @@ int Entity::getTotalDamageTaken(int a_amount, int a_type)
 	default:
 		stat = getStatNumber(DEFENSE);
 	}
-	return (int)(a_amount * ((double)a_amount / (a_amount + stat)));
+	if(a_amount > 0)
+		return (int)(a_amount * ((double)a_amount / (a_amount + stat)));
+	else
+		return 0;
 }

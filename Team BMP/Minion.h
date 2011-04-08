@@ -24,7 +24,7 @@ public:
 		m_target.set(m_location);
 		m_playerTargeted = false;
 	}
-	void checkState(int a_timePassed, World * a_world);
+	void checkState(int, World*);
 	void initMinion(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);

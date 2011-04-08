@@ -26,11 +26,11 @@ public:
 	void setLocationUnique(int a_x, int a_y){m_cameraP.set(a_x - SCREEN_CENTER_X, a_y - SCREEN_CENTER_Y);}
 	void moveUnique(int a_deltaX, int a_deltaY){m_cameraP.x += a_deltaX;m_cameraP.y += a_deltaY;}
 	void drawSlot(e_gauntletSlots a_slot, SDL_Surface * a_screen, int a_x, int a_y){m_gauntlet[a_slot]->drawHUD(a_screen, a_x, a_y);}
-	void addToAttackInventory(Chip * a_chip);
-	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);
+	void addToAttackInventory(Chip*);
+	void setGauntletSlot(e_gauntletSlots, Chip*);
 	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level){setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getType()-1][m_gauntlet[a_slot]->getSubType()][a_level]);}
-	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction);
-	void handleInput(UserInput * ui, World * a_world);
+	void activateGauntletAttack(e_gauntletSlots, int, int, char);
+	void handleInput(UserInput*, World*);
 	void setVelocity(double newVelX, double newVelY){m_vel.x = newVelX; m_vel.y = newVelY;}
 	void movePlayer(int a_timePassed)
 	{

@@ -181,8 +181,8 @@ bool World::setWorld(char * fileName)
 		m_success = true;
 		fclose(infile);
 	}
-	maxWorldX = tileX * 32;
-	maxWorldY = tileY * 32;
+	maxWorldX = tileX * FRAME_SIZE;
+	maxWorldY = tileY * FRAME_SIZE;
 	setMonsters();
 	return m_success;
 }

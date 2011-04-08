@@ -61,13 +61,13 @@ class Magic : public Chip
 				if(a_entity->getType() == m_owner->getType())
 					a_entity->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));
 				else
-					a_entity->hit(a_entity->getTotalDamageTaken(m_owner->getTotalDamageDealt(m_dmg/2,MAGIC), m_cSubType));
+					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg/2,MAGIC), m_cSubType);
 				break;
 			case LIGHTNING:
 			case FIRE:
 			case ICE:
 				if(a_entity->getType() != m_owner->getType())
-					a_entity->hit(a_entity->getTotalDamageTaken(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType));
+					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
 				break;
 			}
 		}

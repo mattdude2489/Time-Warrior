@@ -39,7 +39,7 @@ public:
 	bool getSuccess() {return m_success;}
 	int getGridWidth(){return maxWorldX/NUM_GRIDS_PER_ROW_COL;}
 	int getGridHeight(){return maxWorldY/NUM_GRIDS_PER_ROW_COL;}
-	int getLocationGrid(int a_x, int a_y){return ((a_x-FRAME_SIZE) / getGridWidth()) + (4 * ((a_y-FRAME_SIZE) / getGridHeight()));}
+	int getLocationGrid(int a_x, int a_y){return (a_x / getGridWidth()) + (4 * (a_y / getGridHeight()));}
 	int getLocationGrid(Entity * a_entity){return getLocationGrid(a_entity->getLocation().x, a_entity->getLocation().y);}
 	int getNumEntities(int i) {return m_mapOfEntities.get(i).getNumberOfEntities();}
 	int getNumEntities();
