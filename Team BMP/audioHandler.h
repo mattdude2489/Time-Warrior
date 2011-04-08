@@ -3,6 +3,7 @@
 #include "sdl/sdl.h"
 #include "sdl/SDL_mixer.h"
 #include "stdio.h"
+#include <time.h>
 
 #define NUM_SONGS				9
 
@@ -29,6 +30,7 @@ public:
 	}
 	void playRandom()
 	{
+		srand(time(0));
 		currentTrack = rand()%NUM_SONGS;
 		Mix_PlayMusic(m_music[currentTrack], -1);
 	}

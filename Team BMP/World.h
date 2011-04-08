@@ -12,6 +12,7 @@ struct Tile
 	int indexOfSpriteRow;
 	static int portalIndexNumber;
 	SPoint getLocationScreen(){return pos.difference(*cam);}
+	Entity * m_player;
 };
 class World
 {
@@ -24,11 +25,11 @@ private:
 	int currentWorld;
 	int maxWorldX, maxWorldY; //how big the world is...maximally. Used for Grids.
 	int tileX, tileY;
-	//Entity * m_player;
+	Entity * m_player;
 public:
 	World();
 	~World();
-	void add(Entity * newEntity){m_mapOfEntities.get(getLocationGrid(newEntity)).setEntity(newEntity);}//if(newEntity->getType() == PLAYER) m_player = newEntity;}
+	void add(Entity * newEntity){m_mapOfEntities.get(getLocationGrid(newEntity)).setEntity(newEntity);if(newEntity->getType() == PLAYER) m_player = newEntity;}
 	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void setMonsters();
@@ -44,7 +45,7 @@ public:
 	int getNumEntities();
 	Entity * getEntity(int a_entity, int a_grid){return m_mapOfEntities.get(a_grid).getEntity(a_entity);}
 	Entity * getEntity(int a_entity, int a_x, int a_y){return m_mapOfEntities.get(getLocationGrid(a_x, a_y)).getEntity(a_entity);} //So that each entity does NOT need to know which grid it's in!
-	//Entity * getPlayer(){return m_player;}
+	Entity * getPlayer(){return m_player;}
 	Grid * getGrid(int a_index) {return &m_mapOfEntities.get(a_index);}
 	Grid * getGrid(int a_x, int a_y){return &m_mapOfEntities.get(getLocationGrid(a_x, a_y));}
 	Tile * getTile(int a_tile){return &m_mapOfWorld.get(a_tile);}

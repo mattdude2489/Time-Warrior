@@ -3,13 +3,14 @@
 #include <math.h>
 #include "Entity.h"
 
+enum e_range	{ENGAGE_RANGE = 100, HIT_DELAY = 1000};
 #define ENGAGE_RANGE	100
 enum e_states	{WANDER, CHASE};
 enum e_wander	{WANDER_DIST = 50, WANDER_MAX = WANDER_DIST*2,WANDER_DIRECTION_TIME = TIME_SECOND_MS*3};
 class Minion : public Entity
 {
 private:
-	int m_lastDirectionChange, m_state;
+	int m_lastDirectionChange, m_state, m_hitLast;
 	bool m_playerTargeted;
 public:
 	Minion(){}
@@ -18,6 +19,7 @@ public:
 	{
 		m_eType = MINION;
 		m_lastDirectionChange = 0;
+		m_hitLast = 0;
 		m_state = WANDER;
 		m_target.set(m_location);
 		m_playerTargeted = false;
@@ -28,6 +30,7 @@ public:
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);
 		m_eType = MINION;
 		m_lastDirectionChange = 0;
+		m_hitLast = 0;
 		m_state = WANDER;
 		m_target.set(m_location);
 		m_playerTargeted = false;
@@ -63,13 +66,12 @@ public:
 		double distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
 		if(distance < ENGAGE_RANGE)
 		{
-			m_playerTargeted = true;
 			m_state = CHASE;
 		}
 		else
 		{
-			m_playerTargeted = false;
 			m_state = WANDER;
 		}
+
 	}
 };

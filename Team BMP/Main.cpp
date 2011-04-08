@@ -51,14 +51,18 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	bool running = true;
 	//loading a sprite to see if it works with the entity
 	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	Player eTest(100,100,0,0,0,0,0,0,&test);
-	SDL_Sprite test2("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	Player eTest(100,100,0,0,9,0,0,0,&test);
+	SDL_Sprite test2("Sprites/dummy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
+	SDL_Sprite green("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	Entity fightTest(100,100,0,0,0,0,0,0,&test2);
-	NonPlayerChar diaTest(&test2);
+	NonPlayerChar diaTest(&green);
 	SDL_Sprite test3("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	Minion minion(100,100,0,0,0,0,0,0,&test3);
+	Minion minion(100,100,10,0,0,0,0,0,&test3);
 	SDL_Sprite slime("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
-	Minion m_slime(100,100,0,0,0,0,0,0,&slime);
+	Minion m_slime(100,100,10,0,0,0,0,0,&slime);
+	SDL_Sprite ghost("Sprites/ghost.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	Minion m_ghost(100,100,10,0,0,0,0,0,&ghost);
+	m_ghost.move(-200,200);
 	fightTest.move(100, -100);
 	minion.move(-50, -50);
 	m_slime.move(-100,-100);
@@ -88,6 +92,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//world.add(&minion);
 	//world.add(&diaTest);
 	//world.add(&m_slime);
+	//world.add(&m_ghost);
 	world.setCamera(eTest.getCamera());
 	//music test stuff
 	
@@ -166,7 +171,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		//update
 		world.update(passed);
 		Ghud.updateHud(&eTest, &ui);
-		
 		//draw
 		//reset the screen.
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
