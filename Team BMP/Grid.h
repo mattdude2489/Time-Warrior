@@ -37,7 +37,7 @@ public:
 	//@param: The entity to add to the grid.
 	void setEntity(Entity * newEntity) {m_mapOfEntities.add(newEntity);}
 	//Will randomly assign monsters in there. WHEN WORLD CHANGES, THIS WILL OVERWRITE ANY MONSTERS.
-	void setMonsters(int, int, int, int);
+	void setMonsters(int currentWorld, int currentGrid, int maxX, int maxY);
 	//@param: The index of the returning Entity. NO ERROR DETECTION...SO DON'T BE WRONG.
 	Entity * getEntity(int index) 
 	{

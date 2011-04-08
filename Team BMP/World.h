@@ -31,16 +31,16 @@ public:
 	World();
 	~World();
 	void add(Entity * newEntity){m_mapOfEntities.get(getLocationGrid(newEntity)).setEntity(newEntity);if(newEntity->getType() == PLAYER) m_player = newEntity;}
-	void setCamera(SPoint*);
+	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void setMonsters();
-	void update(Uint32);
-	void draw(SDL_Surface*);
-	bool setWorld(char*);
+	void update(Uint32 a_timePassed);
+	void draw(SDL_Surface * a_screen);
+	bool setWorld(char * fileName);
 	bool getSuccess() {return m_success;}
 	int getGridWidth(){return maxWorldX/NUM_GRIDS_PER_ROW_COL;}
 	int getGridHeight(){return maxWorldY/NUM_GRIDS_PER_ROW_COL;}
-	int getLocationGrid(int a_x, int a_y){return ((a_x - 0) / getGridWidth()) + (NUM_GRIDS_PER_ROW_COL * ((a_y - 0) / getGridHeight()));}
+	int getLocationGrid(int a_x, int a_y){return ((a_x - FRAME_SIZE) / getGridWidth()) + (NUM_GRIDS_PER_ROW_COL * ((a_y - FRAME_SIZE) / getGridHeight()));}
 	int getLocationGrid(Entity * a_entity){return getLocationGrid(a_entity->getLocation().x, a_entity->getLocation().y);}
 	int getNumEntities(int i) {return m_mapOfEntities.get(i).getNumberOfEntities();}
 	int getNumEntities();
@@ -50,11 +50,11 @@ public:
 	Grid * getGrid(int a_index) {return &m_mapOfEntities.get(a_index);}
 	Grid * getGrid(int a_x, int a_y){return &m_mapOfEntities.get(getLocationGrid(a_x, a_y));}
 	Tile * getTile(int a_tile){return &m_mapOfWorld.get(a_tile);}
-	Tile * getTile(int, int);
+	Tile * getTile(int a_x,int a_y)
 	//my networking disastor
 	char * convertAllEntitiesToCharBuffer();
-	void convertFromServer(char*);
+	void convertFromServer(char * omgServerInfo);
 	//networking stuff
-	void updateFromServer(char*);
+	void updateFromServer(char * a_in);
 
 };

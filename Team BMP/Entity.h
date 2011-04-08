@@ -85,7 +85,7 @@ public:
 	}
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
-	void update(int, World*);
+	void update(int a_timePassed, World * a_world);
 	void setLocation(int a_x, int a_y)
 	{
 		setLocationUnique(a_x, a_y);
@@ -289,6 +289,6 @@ public:
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
-	int getTotalDamageTaken(int, e_chipSubType);
-	int getTotalDamageDealt(int, e_chipType);
+	int getTotalDamageTaken(int a_amount, e_chipSubType a_type);
+	int getTotalDamageDealt(int a_amount, e_chipType a_type);
 };
