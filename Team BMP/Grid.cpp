@@ -11,7 +11,7 @@ void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
 				delete m_mapOfEntities.get(i); //GET RID OF IT. NAO.
 		}
 	}
-	if(currentWorld == 1)
+	if(currentWorld == WORLD_ENGLAND)
 	{
 		//TODO: CHANGE THIS TO BE PSUEDO RANDOM.
 		srand(0); //I hope this doesn't come around to kill me!
@@ -28,15 +28,15 @@ void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
 			SDL_Sprite * sprite;
 			spriteSheet = rand()%NUM_SPRITE_SHEETS_TO_CHOOSE_FROM;
 			if(spriteSheet == 0)
-				sprite = new SDL_Sprite("Sprites/slime.bmp", 32, 32, 32, 4);
+				sprite = new SDL_Sprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
 			if(spriteSheet == 1)
-				sprite = new SDL_Sprite("Sprites/skeleton.bmp", 24, 32, 32, 4);
+				sprite = new SDL_Sprite("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 			Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
 			newEntity->setNewed(true);
 			int enX, enY;
 			enX = rand()%pixelBaseX;
 			enY = rand()%pixelBaseY;
-			newEntity->move(enX + (pixelBaseX*gridX), enY + (pixelBaseY*gridY));
+			newEntity->setLocation(enX + (pixelBaseX*gridX), enY + (pixelBaseY*gridY));
 
 			m_mapOfEntities.add(newEntity);
 		}

@@ -38,9 +38,9 @@ bool World::setWorld(char * fileName)
 	FILE * infile;
 	fopen_s(&infile, fileName, "r");
 	if(fileName == "Maps/HubWorldMap.txt")
-		currentWorld = 0;
+		currentWorld = WORLD_HUB;
 	if(fileName == "Maps/MedEngMap.txt")
-		currentWorld = 1;
+		currentWorld = WORLD_ENGLAND;
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
 	{
@@ -78,7 +78,7 @@ bool World::setWorld(char * fileName)
 			//Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
 			if(c != '\n')
 			{
-				if(currentWorld == 0){
+				if(currentWorld == WORLD_HUB){
 					hi.currentTexture = hudSprite;
 				}
 				else{
@@ -102,15 +102,15 @@ bool World::setWorld(char * fileName)
 			switch(c)
 			{
 			case 'G':
-				if(currentWorld == 0){
+				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 5;
 				}
 				else{
-				hi.indexOfSpriteRow = 0;
+				hi.indexOfSpriteRow = WORLD_HUB;
 				}
 				break;
 			case 'D':
-				if(currentWorld == 0){
+				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 0;
 					hi.collide = true;
 				}
@@ -119,7 +119,7 @@ bool World::setWorld(char * fileName)
 				}
 				break;
 			case 'H':
-				if(currentWorld == 0){
+				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 2;
 					hi.collide = true;
 				}
@@ -128,7 +128,7 @@ bool World::setWorld(char * fileName)
 				}
 				break;
 			case 'V':
-				if(currentWorld == 0){
+				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 1;
 					hi.collide = true;
 				}
@@ -137,7 +137,7 @@ bool World::setWorld(char * fileName)
 				}
 				break;
 			case 'M':
-				if(currentWorld == 0){
+				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 3;
 					hi.collide = true;
 				}
@@ -146,7 +146,7 @@ bool World::setWorld(char * fileName)
 				}
 				break;
 			case 'B':
-				if(currentWorld == 0){
+				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 4;
 					hi.collide = true;
 				}
@@ -156,13 +156,13 @@ bool World::setWorld(char * fileName)
 				}
 				break;
 			case 'P':
-				if(currentWorld == 0){
+				if(currentWorld == WORLD_HUB){
 				hi.indexOfSpriteRow = 5;
 				}
 				else{
 					hi.indexOfSpriteRow = 0;
 				}
-				m_mapOfWorld.add(hi);
+				//m_mapOfWorld.add(hi);
 				//Change the sprite to the Portal Sprite, which can be used to update.
 				hi.currentTexture = portalSprite;
 				hi.indexOfSpriteRow = 6;
@@ -236,8 +236,8 @@ void World::update(Uint32 a_timePassed)
 			{
 				m_mapOfEntities.get(getLocationGrid(cE)).setEntity(cE);
 				m_mapOfEntities.get(z).remove(i);
-				if(cE->getType() == PLAYER)
-					printf("(%d,%d) %d->%d\n", cE->getLocation().x, cE->getLocation().y, z, getLocationGrid(cE));
+				//if(cE->getType()== PLAYER)
+				//	printf("(%d,%d) %d->%d\n", cE->getLocation().x, cE->getLocation().y, z, getLocationGrid(cE));
 			}
 		}
 	}
