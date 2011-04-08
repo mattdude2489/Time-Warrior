@@ -153,3 +153,24 @@ class BasicSlash : public Slash
 			initHudSprite();
 		}
 };
+class Blunt : public Weapon
+{
+	public:
+		Blunt(e_chipSubSubType a_subSubType):Weapon(BLUNT, a_subSubType){}
+};
+class BasicBlunt : public Blunt
+{
+	public:
+		BasicBlunt():Blunt(BASIC){setSprite("Sprites/blunt.bmp");}
+		char * getName(){return "Blunt Swing";}
+		char * getDescription(){return "Blunt attack.";}
+		void setSprite(char * a_fileName)
+		{
+			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 1);
+			m_sprite->setTransparency(COLOR_TRANSPARENT);
+			//m_sprite->setRIndex(m_cSubSubType);
+			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 1);
+			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
+			initHudSprite();
+		}
+};

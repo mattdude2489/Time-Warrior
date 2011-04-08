@@ -86,8 +86,7 @@ bool World::setWorld(char * fileName)
 				}
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.animate = false;
-				hi.portal = false;
+				hi.collide = hi.animate = hi.portal = false;
 				x++;
 			}
 			else

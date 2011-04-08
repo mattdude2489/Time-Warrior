@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include "Entity.h"
+#include "Chip.h"
 
 enum e_range	{ENGAGE_RANGE = 100, HIT_DELAY = 1000};
 #define ENGAGE_RANGE	100
@@ -77,7 +78,7 @@ public:
 		m_hitLast += a_time;
 		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)
 		{
-			a_player->hit(this->getStatNumber(STRENGTH));
+			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
 		}
 	}
