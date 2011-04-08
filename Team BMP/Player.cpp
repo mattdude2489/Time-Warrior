@@ -37,10 +37,10 @@ void Player::addToAttackInventory(Chip * a_chip)
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot)
 {
+	static int sub1 = m_gauntlet[SLOT_ATK1]->getSubType();
+	static int sub2 = m_gauntlet[SLOT_ATK2]->getSubType();
 	if(a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2)
 	{
-		static int sub1 = m_gauntlet[SLOT_ATK1]->getSubType();
-		static int sub2 = m_gauntlet[SLOT_ATK2]->getSubType();
 		if(a_slot == SLOT_ATK1)
 		{
 			sub1++;
@@ -54,7 +54,7 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot)
 			sub2++;
 			if(sub2 > PIERCE)
 				sub2 = DIVINE;
-			if(m_gauntlet[SLOT_ATK2] != m_attackInventory[sub2-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()])
+			if(m_gauntlet[SLOT_ATK1] != m_attackInventory[sub2-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()])
 				setGauntletSlot(a_slot, m_attackInventory[sub2-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()]);
 		}
 	}
@@ -184,7 +184,7 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		setGauntletSlot(SLOT_ATK2, EXPERT);
 		break;
 	case KEY_HOT_ATK2_LEG:
-		//setGauntletSlot(SLOT_ATK2);
+		setGauntletSlot(SLOT_ATK2);
 		break;
 	}
 	if(ui->getClick() == CLICK_LEFT && ui->getMouseY() < HUD_Y)
