@@ -4,18 +4,8 @@
 
 void Minion::checkState(int a_timePassed, World * a_world)
 {
-	bool playerFound = false;
-	Entity * t_player = NULL;
-	for(int i = 0; i < a_world->getGrid(m_location.getX(), m_location.getY())->getNumberOfEntities()&&playerFound == false; i++)
-	{
-		if(a_world->getGrid(m_location.getX(), m_location.getY())->getPlayer(t_player))
-		{
-			if(t_player)
-				isPlayerInRange(t_player);
-			else
-				m_state = WANDER;
-		}
-	}
+	Entity * t_player = a_world->getPlayer();
+	isPlayerInRange(t_player, a_timePassed);
 	
 	switch(m_state)
 	{

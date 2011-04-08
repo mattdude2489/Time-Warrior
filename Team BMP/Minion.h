@@ -12,6 +12,7 @@ class Minion : public Entity
 private:
 	int m_lastDirectionChange, m_state, m_hitLast;
 	bool m_playerTargeted;
+
 public:
 	Minion(){}
 	Minion(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
@@ -28,6 +29,7 @@ public:
 	void initMinion(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
 	{
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);
+		
 		m_eType = MINION;
 		m_lastDirectionChange = 0;
 		m_hitLast = 0;
@@ -61,7 +63,7 @@ public:
 		}
 	}
 	void updateTargPlayer(Entity *a_player){m_target.set(a_player->getLocation());}
-	void isPlayerInRange(Entity *a_player)
+	void isPlayerInRange(Entity *a_player, int a_time)
 	{
 		double distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
 		if(distance < ENGAGE_RANGE)
@@ -72,6 +74,11 @@ public:
 		{
 			m_state = WANDER;
 		}
-
+		m_hitLast += a_time;
+		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)
+		{
+			a_player->hit(this->getStatNumber(STRENGTH));
+			m_hitLast = 0;
+		}
 	}
 };
