@@ -21,7 +21,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 {
 	//INIT
 
-
+	srand(time(NULL));
 	SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_Surface * screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 	SDL_Event e;
@@ -52,15 +52,12 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//loading a sprite to see if it works with the entity
 	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	Player eTest(100,100,0,0,0,0,0,0,&test);
-	SDL_Sprite test2("Sprites/dummy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
+	/*SDL_Sprite test2("Sprites/dummy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
 	Entity fightTest(100,100,0,0,0,0,0,0,&test2);
 	SDL_Sprite green("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	NonPlayerChar diaTest(&green);
-	SDL_Sprite ghost("Sprites/ghost.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	Minion m_ghost(100,100,0,0,0,0,0,0,&ghost);
-	m_ghost.move(-200,200);
 	fightTest.move(100, -100);
-	diaTest.move(200, 200);
+	diaTest.move(200, 200);*/
 	BasicBlunt b1;
 	BasicSlash s1;
 	BasicDivine d1;
@@ -98,10 +95,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.add(&f1);
 	world.add(&f2);
 	world.add(&f3);
-	eTest.lvlUp();
+	eTest.levelUp();
 	//world.add(&fightTest);
 	//world.add(&diaTest);
-	//world.add(&m_ghost);
 	world.setCamera(eTest.getCamera());
 	//music test stuff
 	

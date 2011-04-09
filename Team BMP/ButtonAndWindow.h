@@ -104,7 +104,7 @@ public:
 			sprintf_s(c_temp, m_player->getStatName(i), m_player->getStatNumber(i));
 			m_text[i].setMessage(c_temp);
 		}
-		sprintf_s(c_temp, "Level: %i", m_player->getLvl());
+		sprintf_s(c_temp, "Level: %i", m_player->getLevel());
 		m_lvlPts[0].setMessage(c_temp);
 		sprintf_s(c_temp, "Points to spend: %i", m_player->getPoints());
 		m_lvlPts[1].setMessage(c_temp);

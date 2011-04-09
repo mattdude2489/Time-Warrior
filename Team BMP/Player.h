@@ -18,7 +18,7 @@ class Player : public Entity
 private:
 	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
 	SPoint m_cameraP;
-	int m_lvl, m_statPoints;
+	int m_statPoints;
 public:
 	void initPlayer();
 	Player():Entity(){initPlayer();}
@@ -61,14 +61,14 @@ public:
 			break;
 		}
 	}
-	void lvlUp()
+	void levelUp()
 	{
-		m_lvl++;
+		m_level++;
 		m_statPoints += POINTS_GIVEN;
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
 	}
-	int getLvl(){return m_lvl;}
+	int getLevel(){return m_level;}
 	int getPoints(){return m_statPoints;}
 	void incStr(){m_stats[STRENGTH]++;m_statPoints--;}
 	void incInt(){m_stats[INTELLECT]++;m_statPoints--;}

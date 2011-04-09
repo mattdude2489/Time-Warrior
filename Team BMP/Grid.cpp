@@ -13,9 +13,7 @@ void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
 	}
 	if(currentWorld == WORLD_ENGLAND)
 	{
-		//TODO: CHANGE THIS TO BE PSUEDO RANDOM.
-		srand(time(NULL)); //I hope this doesn't come around to kill me!
-		int numberOfMonsters = rand()%10;
+		int numberOfMonsters = rand()%1+1;
 		int gridX, gridY;
 		gridY = currentGrid/NUM_GRIDS_PER_ROW_COL;
 		gridX = currentGrid-(NUM_GRIDS_PER_ROW_COL * gridY);
@@ -31,11 +29,13 @@ void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
 				sprite = new SDL_Sprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
 			if(spriteSheet == 1)
 				sprite = new SDL_Sprite("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+			if(spriteSheet == 2)
+				sprite = new SDL_Sprite("Sprites/ghost.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 			Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
 			newEntity->setNewed(true);
 			int enX, enY;
-			enX = rand()%pixelBaseX;
-			enY = rand()%pixelBaseY;
+			enX = rand()%(pixelBaseX-FRAME_SIZE);
+			enY = rand()%(pixelBaseY-FRAME_SIZE);
 			newEntity->setLocation(FRAME_SIZE + enX + (pixelBaseX*gridX), FRAME_SIZE + enY + (pixelBaseY*gridY));
 			m_mapOfEntities.add(newEntity);
 		}

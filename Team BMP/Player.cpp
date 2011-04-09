@@ -7,12 +7,11 @@ void Player::initPlayer()
 	m_eType = PLAYER;
 	for(int i = 0; i < NUM_SLOTS; ++i)
 		m_gauntlet[i] = NULL;
-	for(int j = 0; j < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++j)
+	for(int s = 0; s < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++s)
 	{
-		for(int k = 0; k < NUM_CHIP_LEVELS; ++k)
-			m_attackInventory[j][k] = NULL;
+		for(int l = 0; l < NUM_CHIP_LEVELS; ++l)
+			m_attackInventory[s][l] = NULL;
 	}
-	m_lvl = 1;
 	m_statPoints = 0;
 	setVelocity(0,0);
 }
@@ -26,16 +25,6 @@ void Player::addToAttackInventory(Chip * a_chip)
 		m_attackInventory[a_chip->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_chip->getSubSubType()] = a_chip;
 		break;
 	}
-	/*for(int i = 0; i < WEAPON; ++i)
-	{
-		for(int j = 0; j < NUM_CHIP_SUBS_PER_TYPE; ++j)
-		{
-			for(int k = 0; k < NUM_CHIP_LEVELS; ++k)
-				printf("%d, ", m_attackInventory[i][j][k]);
-		}
-		printf("\n");
-	}
-	printf("\n\n");*/
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot)
 {
@@ -124,7 +113,7 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 }
 void Player::handleInput(UserInput * ui, World * a_world)
 {
-	static char lastKey = KEY_NONE;
+	static char lastKey = KEY_DOWN;
 	//This is where the UI goes to get handled by the Player class. Well...it would've been world class, but we dun have one of them yet.
 	if(ui->getKeyUD() == KEY_UP)
 	{

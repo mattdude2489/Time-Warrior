@@ -25,7 +25,7 @@ struct v2D {double x, y;};//PLEASE DONT HATE ME
 class Entity
 {
 protected:
-	int m_stats[NUM_STATS], m_timeToRegen, m_timer;
+	int m_stats[NUM_STATS], m_timeToRegen, m_timer, m_level;
 	e_entityType m_eType;
 	bool m_shouldDraw, m_activation; //This bool is pretty much there entirely for NPC dialogue at the moment.
 	SPoint m_location, m_prevLoc, *m_camera, m_target;
@@ -62,6 +62,7 @@ public:
 		m_stats[RESISTANCE_ICE] = a_iRes;
 		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
 		m_timeToRegen = m_timer = 0;
+		m_level = 1;
 		m_shouldDraw = false;
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
