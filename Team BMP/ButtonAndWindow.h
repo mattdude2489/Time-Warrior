@@ -113,7 +113,7 @@ public:
 	{
 		for(int i = 0; i <  STATINC; i++)
 		{
-			if(m_addStat[i].wasClicked(ui))
+			if(m_addStat[i].wasClicked(ui) && m_player->getPoints() > 0)
 			{
 				switch(i)
 				{
