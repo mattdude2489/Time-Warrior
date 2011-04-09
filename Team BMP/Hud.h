@@ -61,6 +61,8 @@ public:
 			m_showStats = true;
 		else if(m_statButton.wasClicked(ui) && m_showStats)
 			m_showStats = false;
+		if(m_showStats)
+			m_statWin.handleInput(ui);
 	}
 	void updateHud(Player * p, UserInput * ui)
 	{

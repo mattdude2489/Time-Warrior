@@ -30,7 +30,7 @@ public:
 	}
 	void playRandom()
 	{
-		srand(time(0));
+		srand(time_t(0));
 		currentTrack = rand()%NUM_SONGS;
 		Mix_PlayMusic(m_music[currentTrack], -1);
 	}

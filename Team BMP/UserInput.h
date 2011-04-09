@@ -81,10 +81,10 @@ class UserInput
 						initKey = KEY_NONE; //Reset the initial Key.
 				}
 		}
-		void sendUi2Server(char a_str[])
+	/*	void sendUi2Server(char a_str[])
 		{
 			sprintf(a_str, "%c%c%i%03i%03i", keyPressLeftRight, keyPressUpDown, mouseClick, mouseX, mouseY );
-		}
+		}*/
 		bool keysChanged(char a_in[])
 		{
 			if(keyPressLeftRight == a_in[0]){
@@ -94,16 +94,16 @@ class UserInput
 
 			return false;
 		}
-		void convertServerInfo(char * a_in)
-		{
-			char buffer[10];
-			keyPressLeftRight = a_in[0];
-			keyPressUpDown = a_in[1];
-			buffer[0] = a_in[2];
-			mouseClick = atoi(buffer);
-			sprintf_s(buffer, "%c%c%c", a_in[3],a_in[4],a_in[5]);
-			mouseX = atoi(buffer);
-			sprintf_s(buffer, "%c%c%c", a_in[6],a_in[7],a_in[8]);
-			mouseY = atoi(buffer);
-		}
+		//void convertServerInfo(char * a_in)
+		//{
+		//	char buffer[10];
+		//	keyPressLeftRight = a_in[0];
+		//	keyPressUpDown = a_in[1];
+		//	buffer[0] = a_in[2];
+		//	mouseClick = atoi(buffer);
+		//	sprintf_s(buffer, "%c%c%c", a_in[3],a_in[4],a_in[5]);
+		//	mouseX = atoi(buffer);
+		//	sprintf_s(buffer, "%c%c%c", a_in[6],a_in[7],a_in[8]);
+		//	mouseY = atoi(buffer);
+		//}
 };

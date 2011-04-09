@@ -98,6 +98,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.add(&f1);
 	world.add(&f2);
 	world.add(&f3);
+	eTest.lvlUp();
 	//world.add(&fightTest);
 	//world.add(&diaTest);
 	//world.add(&m_ghost);

@@ -11,12 +11,14 @@
 
 enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
 enum e_hud {HUD_WIDTH = SCREEN_WIDTH, HUD_HEIGHT = FRAME_SIZE, HUD_X = 0, HUD_Y = SCREEN_HEIGHT-HUD_HEIGHT};
+enum e_exp {POINTS_GIVEN = 5, INC_HEALTH = 10, INC_ENERGY = 5};
 
 class Player : public Entity
 {
 private:
 	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
 	SPoint m_cameraP;
+	int m_lvl, m_statPoints;
 public:
 	void initPlayer();
 	Player():Entity(){initPlayer();}
@@ -59,4 +61,17 @@ public:
 			break;
 		}
 	}
+	void lvlUp()
+	{
+		m_lvl++;
+		m_statPoints += POINTS_GIVEN;
+		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
+		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
+	}
+	int getLvl(){return m_lvl;}
+	int getPoints(){return m_statPoints;}
+	void incStr(){m_stats[STRENGTH]++;m_statPoints--;}
+	void incInt(){m_stats[INTELLECT]++;m_statPoints--;}
+	void incHealth(){m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX] = m_stats[HEALTH_MAX]+INC_HEALTH ;m_statPoints--;}
+	void incEnergy(){m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX] = m_stats[ENERGY_MAX]+INC_ENERGY ;m_statPoints--;}
 };
