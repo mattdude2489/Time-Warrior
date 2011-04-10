@@ -261,7 +261,7 @@ public:
 	{
 		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works
 		{
-			case HEALTH_CURRENT:		return "Health :%i";		break;
+			case HEALTH_CURRENT:		return "Health:%i";			break;
 			case HEALTH_MAX:			return "/%i";				break;
 			case ENERGY_CURRENT:		return "Energy: %i";		break;
 			case ENERGY_MAX:			return "/%i";				break;
@@ -292,4 +292,9 @@ public:
 	SDL_Sprite * getSprite() {return m_sprite;}
 	int getTotalDamageTaken(int a_amount, e_chipSubType a_type);
 	int getTotalDamageDealt(int a_amount, e_chipType a_type);
+	virtual void gainExperience(int a_amount){}
+	int getExperienceFromDefeat(Entity * a_defeater)
+	{
+		return 1;
+	}
 };

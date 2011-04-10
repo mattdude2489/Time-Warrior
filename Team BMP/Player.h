@@ -18,7 +18,7 @@ class Player : public Entity
 private:
 	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
 	SPoint m_cameraP;
-	int m_statPoints;
+	int m_statPoints, m_experience, m_expLvReq;
 public:
 	void initPlayer();
 	Player():Entity(){initPlayer();}
@@ -64,9 +64,19 @@ public:
 	void levelUp()
 	{
 		m_level++;
+		m_expLvReq += m_level;
 		m_statPoints += POINTS_GIVEN;
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
+	}
+	void gainExperience(int a_amount)
+	{
+		m_experience += a_amount;
+		if(m_experience >= m_expLvReq)
+		{
+			m_experience -= m_expLvReq;
+			levelUp();
+		}
 	}
 	int getLevel(){return m_level;}
 	int getPoints(){return m_statPoints;}

@@ -70,6 +70,8 @@ class Magic : public Chip
 					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
 				break;
 			}
+			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
+				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
 		}
 		void setSprite(char * a_fileName)
 		{

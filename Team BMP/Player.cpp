@@ -12,7 +12,8 @@ void Player::initPlayer()
 		for(int l = 0; l < NUM_CHIP_LEVELS; ++l)
 			m_attackInventory[s][l] = NULL;
 	}
-	m_statPoints = 0;
+	m_statPoints = m_experience = 0;
+	m_expLvReq = 1;
 	setVelocity(0,0);
 }
 void Player::addToAttackInventory(Chip * a_chip)
