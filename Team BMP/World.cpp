@@ -185,6 +185,7 @@ bool World::setWorld(char * fileName)
 	maxWorldX = (tileX-2) * FRAME_SIZE;
 	maxWorldY = (tileY-2) * FRAME_SIZE;
 	setMonsters();
+	setNPC();
 	return m_success;
 }
 //sets up a camera for each entity & tile, so they correctly move relative to the player
@@ -208,6 +209,45 @@ void World::sortOnYPosition()
 		if(m_mapOfEntities.get(z).getPlayer(successfulPlayer))
 			clientPlayerIndex = z; //Which grid the Player's in. once we know that, we can just use getPlayer.
 	}
+}
+
+/**
+	The function that calls of the NPC's based on the current world, gets rid of the previous ones, and sets new ones.
+**/
+void World::setNPC()
+{
+	////If there are already NPC's in the World, remove them and clean up the memory.
+	//for(int i = 0; i < m_mapOfEntities.size(); i++)
+	//{
+	//	for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
+	//	{
+	//		if(m_mapOfEntities.get(i).getEntity(k)->getType() == NPC &&
+	//			m_mapOfEntities.get(i).getEntity(k)->getNewed())
+	//		{
+	//			delete m_mapOfEntities.get(i).getEntity(k);
+	//			m_mapOfEntities.get(i).remove(k);
+	//		}
+	//	}
+	//}
+	////Now to open the file *, and abuse the atoi system.
+	//FILE * infile;
+	//fopen_s(&infile, "Maps/NPC Placements.txt", "r");
+	//int c = 0, x = 0, y = 0;
+	//c = fgetc(infile);
+	////This system may work for the first few things...but then it'll blow up.
+	//while(c != currentWorld)
+	//{
+	//	while(c != '#')
+	//		c = fgetc(infile);
+	//	fscanf(infile,%i,&x);
+	//	fscanf(infile,%i,&y);
+	//	c = fgetc(infile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
+	//}
+	//
+	//while(c != '#')
+	//{
+	//	c = fgetc(infile);
+	//}
 }
 
 /**

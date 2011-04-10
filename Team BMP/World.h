@@ -34,6 +34,7 @@ public:
 	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void setMonsters();
+	void setNPC();
 	void update(Uint32 a_timePassed);
 	void draw(SDL_Surface * a_screen);
 	bool setWorld(char * fileName);
