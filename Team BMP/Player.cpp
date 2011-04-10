@@ -13,7 +13,7 @@ void Player::initPlayer()
 			m_attackInventory[s][l] = NULL;
 	}
 	m_statPoints = m_experience = 0;
-	m_expLvReq = 1;
+	m_expLvReq = m_level;
 	setVelocity(0,0);
 }
 void Player::addToAttackInventory(Chip * a_chip)

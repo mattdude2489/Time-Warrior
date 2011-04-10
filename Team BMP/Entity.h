@@ -292,9 +292,7 @@ public:
 	SDL_Sprite * getSprite() {return m_sprite;}
 	int getTotalDamageTaken(int a_amount, e_chipSubType a_type);
 	int getTotalDamageDealt(int a_amount, e_chipType a_type);
-	virtual void gainExperience(int a_amount){}
-	int getExperienceFromDefeat(Entity * a_defeater)
-	{
-		return 1;
-	}
+	int getLevel(){return m_level;}
+	virtual void gainExperience(double a_amount){}
+	double getExperienceFromDefeat(Entity * a_defeater){return m_level * ((double)m_level / a_defeater->getLevel());}
 };
