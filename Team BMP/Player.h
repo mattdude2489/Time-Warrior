@@ -79,6 +79,8 @@ public:
 			levelUp();
 		}
 	}
+	int getExpReq(){return m_expLvReq;}
+	double getCurExp(){return m_experience;}
 	int getPoints(){return m_statPoints;}
 	void incStr(){m_stats[STRENGTH]++;m_statPoints--;}
 	void incInt(){m_stats[INTELLECT]++;m_statPoints--;}
