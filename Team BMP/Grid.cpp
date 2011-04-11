@@ -8,7 +8,13 @@ void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
 		for(int i = 0; i < m_mapOfEntities.size(); i++)
 		{
 			if(!(m_mapOfEntities.get(i)->getType() == PLAYER || m_mapOfEntities.get(i)->getType() == CHIP))
-				delete m_mapOfEntities.get(i); //GET RID OF IT. NAO.
+			{
+				if(m_mapOfEntities.get(i)->getNewed())
+				{
+					delete m_mapOfEntities.get(i); //GET RID OF IT. NAO.
+					m_mapOfEntities.remove(i);
+				}
+			}
 		}
 	}
 	if(currentWorld == WORLD_ENGLAND)

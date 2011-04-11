@@ -200,6 +200,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\surfaceFunctions.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\World.cpp"
 				>
 			</File>

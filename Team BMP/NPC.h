@@ -4,6 +4,7 @@
 #pragma once
 #include "trueTextPrinter.h"
 #include "Entity.h"
+#include "srect.h"
 
 class NonPlayerChar : public Entity
 {
@@ -19,8 +20,7 @@ public:
 	NonPlayerChar(char* talk, SDL_Sprite *a_sprite)
 		:Entity(a_sprite)
 	{
-		whatTheyHaveToSay = talk;
-		m_Text.setMessage(whatTheyHaveToSay);
+		initNPC(talk);
 	}
 	void initNPC()
 	{
@@ -30,6 +30,16 @@ public:
 		m_Text.setBackColor(0x0000ff);
 		m_Text.setTextColor(0xffffff);
 		m_Text.setFont(m_arialFont.getFont()); 
+		m_Text.setMessage(whatTheyHaveToSay);
+	}
+	void initNPC(char * talk)
+	{
+		m_eType = NPC;
+		whatTheyHaveToSay = talk;
+		drawText = false;
+		m_Text.setBackColor(0x0000ff);
+		m_Text.setTextColor(0xffffff);
+		m_Text.setFont(m_arialFont.getFont());
 		m_Text.setMessage(whatTheyHaveToSay);
 	}
 	void activateDialogue()
@@ -45,7 +55,9 @@ public:
 	{
 		if(drawText)
 		{
-			SDL_FillRect(a_screen, &SRect(0, 400, 800, 168), 0x0000ff);
+			SRect rect;
+			rect.x = 0; rect.y = 400; rect.w = 800; rect.h = 168;
+			SDL_FillRect(a_screen, &rect, 0x0000ff);
 			m_Text.printMessage(a_screen, 20, 420);
 		}
 	}

@@ -2,9 +2,10 @@
 #include "World.h"
 #include <string>
 using namespace std;
+#include "NPC.h"
+
 World::World()
 {
-	m_success = setWorld("Maps/HubWorldMap.txt");
 	clientPlayerIndex = 0; 
 	maxWorldX = SCREEN_WIDTH;
 	maxWorldY = SCREEN_HEIGHT;
@@ -14,6 +15,7 @@ World::World()
 		Grid gridSys;
 		m_mapOfEntities.add(gridSys);	
 	}
+	m_success = setWorld("Maps/HubWorldMap.txt");
 }
 World::~World()
 {
@@ -248,6 +250,33 @@ void World::setNPC()
 	//{
 	//	c = fgetc(infile);
 	//}
+	//char * charpoint = NULL;
+	//c = fgetc(infile2);
+	//c = fgetc(infile2); //This SHOULD make it get an integer.
+	//for(int i = 0; i < c; i++)
+	//{
+	//	while(c != '#')
+	//	{
+	//		c = fgetc(infile2);
+	//		itoa(c, charpoint, 10); //Convert it to a char*.
+	//	}
+	//	fscanf(infile2, "%i", &x);
+	//	fscanf(infile2, "%i", &y);
+	//	SDL_Sprite * newSprite;
+	//	newSprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	//	NonPlayerChar * newNPC;
+	//	newNPC = new NonPlayerChar(charpoint, newSprite);
+	//	//newNPC->initSprite(newSprite); //Inits the entity first
+	//	//newNPC->initNPC(charpoint); //Then inits the NPC portions.
+	//	newNPC->setNewed(true);
+	//	newNPC->setLocation(x, y);
+	//	add(newNPC);
+	//}
+	//fclose(infile2);
+	SDL_Sprite * sdlsprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	NonPlayerChar * nonPlayer = new NonPlayerChar("Hi. Go through the portal NAO.", sdlsprite);
+	nonPlayer->setNewed(true);
+	add(nonPlayer);
 }
 
 /**
