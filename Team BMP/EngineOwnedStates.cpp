@@ -35,15 +35,23 @@ void Splash_State::enter(SDL_GameEngine * a_pvEngine) {
 	m_uiCurrentSplash = 0;
 	m_uiSplashAmount = a_pvEngine->getResAmount(RESOURCE_SPLASH);
 	m_pvSplashScreen = (SDL_SplashScreen *)a_pvEngine->getRes(RESOURCE_SPLASH, m_uiCurrentSplash);
-	assert(m_pvSplashScreen != NULL);
-	m_uiSpeed = m_pvSplashScreen->getSpeed();
-	m_pvSplashScreen->setActive(true);
+	if(m_pvSplashScreen != NULL) {
+		m_uiSpeed = m_pvSplashScreen->getSpeed();
+		m_pvSplashScreen->setActive(true);
+	}
+	else
+		m_uiSpeed = 0;
 }
 
 /** execute - executes during normal operation of splash state */
 void Splash_State::execute(SDL_GameEngine * a_pvEngine) {
 	//record boolean for changing the splash screen
 	bool bSplashChange = false;
+	
+	//get the user input
+	UserInput vUI = a_pvEngine->getInput();
+	//change the splash screen if a key was pressed
+	bSplashChange |= (vUI.getKey() != KEY_NONE);
 
 	//change the splash screen if the timer exceeds the speed of the transition
 	bSplashChange |= ( (m_uiTimer+=a_pvEngine->getMSDelay()) >= m_uiSpeed );

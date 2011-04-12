@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="main">
+      <UniqueIdentifier>{cb5b9494-c596-47ae-a4e4-c02c3cfe3940}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{44aa66d6-4869-4b11-880f-baa68e8c47c7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDL_GUI.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDL_Sprite.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\function.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Global.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDL_Sprite.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\function.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDL_GUI.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

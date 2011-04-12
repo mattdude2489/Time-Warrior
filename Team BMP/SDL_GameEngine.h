@@ -20,10 +20,11 @@
 //==========================
 //Engine libraries
 //==========================
+#include "SDL_Resource.h"
+#include "SDL_SplashScreen.h"
 #include "userinput.h"
 #include "State.h"
 #include "EngineOwnedStates.h"
-#include "SDL_Resource.h"
 #include "Chip.h"
 #include "Entity.h"
 #include "Player.h"
@@ -31,7 +32,7 @@
 //==========================
 //Misc libraries
 //==========================
-#include "templatevector.h"
+#include "templatevector2.h"
 #include <assert.h>
 
 /*
@@ -52,16 +53,16 @@ private:
 	Uint16 m_usScreenHeight;
 	/** MS delay */
 	Uint32 m_uiMS;
-	/** list of loaded resources */
-	TemplateVector<SDL_Resource *> m_vResources;
-	/** screen rect */
-	SDL_Rect m_vScreenRect;
-	/** user input */
-	UserInput m_vUI;
 	/** screen surface */
 	SDL_Surface * m_pvScreen;
 	/** current state of the engine */
 	State<SDL_GameEngine> * m_pvCurrentState;
+	/** screen rect */
+	SDL_Rect m_vScreenRect;
+	/** user input */
+	UserInput m_vUI;
+	/** list of loaded resources */
+	TemplateVector<SDL_Resource *> m_vResources;
 	
 public:
 
@@ -73,11 +74,11 @@ public:
 	~SDL_GameEngine();
 
 	/** loadAll - loads all resources from a file according to the given resource ID */
-	bool loadAll(const Uint32 & a_uiID);
+	bool loadAll(const Uint32 & a_kruiID);
 	/** unloadAll (1) - removes all resources from memory */
 	void unloadAll();
 	/** unloadAll (2) - removes all resources with the specified resource type from memory */
-	void unloadAll(const Uint32 & a_uiID);
+	void unloadAll(const Uint32 & a_kruiID);
 	/** setScreenSurface - sets the screen surface the engine will use */
 	void setScreenSurface(SDL_Surface * a_pvScreen);
 	/** setScreenDimensions - sets the screen width and height to the specified */
@@ -103,19 +104,25 @@ public:
 	const Uint16 & getScreenHeight() const;
 	/** getScreenRect - returns a rect the size of the screen */
 	const SDL_Rect & getScreenRect() const;
+	/** getInput - returns user input */
+	const UserInput & getInput() const;
 	/** getRes - returns resource with given resource ID and index */
-	const SDL_Resource * getRes(const Uint32 & a_uiID, const Uint32 & a_uiIndex) const;
+	const SDL_Resource * getRes(const Uint32 & a_kruiID, const Uint32 & a_kruiIndex) const;
 	/** getResAmount (1) - returns the amount of overall resources loaded into memory */
 	const Uint32 getResAmount() const;
 	/** getResAmount (2) - returns the amount of resources of a specified resource type */
-	const Uint32 getResAmount(const Uint32 & a_uiID) const;
+	const Uint32 getResAmount(const Uint32 & a_kruiID) const;
 	
 	/** init - sets up all engine pre-requisites and prepares the engine to begin running */
 	bool init();
+	/** handleInput - handles input from an SDL_Event */
+	void handleInput(const SDL_Event & a_krvE);
 	/** update - updates the game */
 	void update(const Uint32 & a_kruiMS);
 	/** draw - draws to the screen */
 	void draw();
+	/** run - runs the main game loop for the game engine */
+	void run();
 
 };
 

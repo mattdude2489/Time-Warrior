@@ -9,37 +9,34 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Resource headers\Networking shit">
+      <UniqueIdentifier>{8b99a1dc-90f2-49e6-975c-865ca5d76d6a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
     <Filter Include="Resource Files\Fonts">
-      <UniqueIdentifier>{38e4c2c1-5b48-4ddc-b681-87bd7ed3ad04}</UniqueIdentifier>
+      <UniqueIdentifier>{77c3efed-3e2b-4a2d-b873-58c669ca5f0b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\Music">
-      <UniqueIdentifier>{d83060d7-80a7-46ec-83db-97afeac4144e}</UniqueIdentifier>
+      <UniqueIdentifier>{07fa5ce4-c387-47bd-8b7f-92666914df97}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game Headers">
-      <UniqueIdentifier>{24809611-a907-4ad8-9b53-dada41b69508}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{2feb1d30-b242-4543-9f58-1cd8ebe2c367}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Headers">
-      <UniqueIdentifier>{bef3c922-6324-4277-a2d5-51319b5f853b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\State Machine">
-      <UniqueIdentifier>{3cf8308c-8455-4e0a-8056-addedaaa27a8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\State Machine\States">
-      <UniqueIdentifier>{1b4c2d89-d675-4875-aaa1-f6c24c47a216}</UniqueIdentifier>
+      <UniqueIdentifier>{b1718cda-5e37-44a3-95de-18468c04b572}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL_Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="spoint.cpp">
@@ -48,26 +45,20 @@
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SDL_GameEngine.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="bytebuffer.cpp">
+      <Filter>Resource headers\Networking shit</Filter>
     </ClCompile>
-    <ClCompile Include="SDL_Resource.cpp">
-      <Filter>Resource Files\Headers</Filter>
+    <ClCompile Include="clientmodule.cpp">
+      <Filter>Resource headers\Networking shit</Filter>
     </ClCompile>
-    <ClCompile Include="EngineOwnedStates.cpp">
-      <Filter>Engine\State Machine\States</Filter>
+    <ClCompile Include="netmodule.cpp">
+      <Filter>Resource headers\Networking shit</Filter>
     </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Resource Files\Headers</Filter>
+    <ClCompile Include="servermodule.cpp">
+      <Filter>Resource headers\Networking shit</Filter>
     </ClCompile>
-    <ClCompile Include="GameOwnedStates.cpp">
-      <Filter>Engine\State Machine\States</Filter>
-    </ClCompile>
-    <ClCompile Include="SDL_SplashScreen.cpp">
-      <Filter>Resource Files\Headers</Filter>
-    </ClCompile>
-    <ClCompile Include="SDL_Sprite.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="winsockerrorhelp.cpp">
+      <Filter>Resource headers\Networking shit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,11 +80,35 @@
     <ClInclude Include="surfaceFunctions.h">
       <Filter>Resource headers</Filter>
     </ClInclude>
+    <ClInclude Include="templateVector.h">
+      <Filter>Resource headers</Filter>
+    </ClInclude>
     <ClInclude Include="trueTextPrinter.h">
       <Filter>Resource headers</Filter>
     </ClInclude>
     <ClInclude Include="UserInput.h">
       <Filter>Resource headers</Filter>
+    </ClInclude>
+    <ClInclude Include="bytebuffer.h">
+      <Filter>Resource headers\Networking shit</Filter>
+    </ClInclude>
+    <ClInclude Include="clientmodule.h">
+      <Filter>Resource headers\Networking shit</Filter>
+    </ClInclude>
+    <ClInclude Include="netmodule.h">
+      <Filter>Resource headers\Networking shit</Filter>
+    </ClInclude>
+    <ClInclude Include="servermodule.h">
+      <Filter>Resource headers\Networking shit</Filter>
+    </ClInclude>
+    <ClInclude Include="templatearray.h">
+      <Filter>Resource headers\Networking shit</Filter>
+    </ClInclude>
+    <ClInclude Include="templatevector2.h">
+      <Filter>Resource headers\Networking shit</Filter>
+    </ClInclude>
+    <ClInclude Include="winsockerrorhelp.h">
+      <Filter>Resource headers\Networking shit</Filter>
     </ClInclude>
     <ClInclude Include="Armor.h">
       <Filter>Game Headers</Filter>
@@ -104,13 +119,22 @@
     <ClInclude Include="Entity.h">
       <Filter>Game Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
     <ClInclude Include="Hud.h">
       <Filter>Game Headers</Filter>
     </ClInclude>
     <ClInclude Include="Magic.h">
       <Filter>Game Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Minion.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL_Sprite.h">
       <Filter>Game Headers</Filter>
     </ClInclude>
     <ClInclude Include="Weapon.h">
@@ -118,42 +142,6 @@
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Game Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SDL_GameEngine.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="SDL_Resource.h">
-      <Filter>Resource Files\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Global.h">
-      <Filter>Game Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>Engine\State Machine</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineOwnedStates.h">
-      <Filter>Engine\State Machine\States</Filter>
-    </ClInclude>
-    <ClInclude Include="templatearray.h">
-      <Filter>Resource headers</Filter>
-    </ClInclude>
-    <ClInclude Include="templatevector.h">
-      <Filter>Resource headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Resource Files\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu_Button.h">
-      <Filter>Resource Files\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOwnedStates.h">
-      <Filter>Engine\State Machine\States</Filter>
-    </ClInclude>
-    <ClInclude Include="SDL_SplashScreen.h">
-      <Filter>Resource Files\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SDL_Sprite.h">
-      <Filter>Resource headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

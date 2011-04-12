@@ -31,15 +31,15 @@ public:
 
 	/** setSprite - sets the splash sprite to the given reference */
 	void setSprite(SDL_Sprite * a_pvSprite);
+	/** setSpeed - sets the speed of the splash screen transition to the specified */
+	void setSpeed(const Uint32 & a_kruiSpeed);
 	/** setScreen - sets the screen to draw to the specified screen surface */
 	void setScreen(SDL_Surface * a_pvScreen);
-	/** setSpeed - sets the speed of the splash screen transition to the specified */
-	void setSpeed(const Uint32 & a_uiSpeed);
-	/** getSpeed - returns amount of time splash screen will be shown */
-	const Uint32 & getSpeed() const;
 	/** getSprite - returns a constant reference of the sprite the splash screen uses */
 	const SDL_Sprite * getSprite() const;
-	/** activate - draws splash screen to the screen */
+	/** getSpeed - returns amount of time splash screen will be shown */
+	const Uint32 & getSpeed() const;
+	/** activate - draws splash screen to the screen, and sets as unchanged */
 	virtual void activate();
 
 };

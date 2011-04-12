@@ -90,45 +90,44 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EngineOwnedStates.cpp" />
-    <ClCompile Include="GameOwnedStates.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SDL_GameEngine.cpp" />
-    <ClCompile Include="SDL_Resource.cpp" />
-    <ClCompile Include="SDL_SplashScreen.cpp" />
     <ClCompile Include="SDL_Sprite.cpp" />
     <ClCompile Include="spoint.cpp" />
     <ClCompile Include="World.cpp" />
+    <ClCompile Include="bytebuffer.cpp" />
+    <ClCompile Include="clientmodule.cpp" />
+    <ClCompile Include="netmodule.cpp" />
+    <ClCompile Include="servermodule.cpp" />
+    <ClCompile Include="winsockerrorhelp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audioHandler.h" />
     <ClInclude Include="ButtonAndWindow.h" />
-    <ClInclude Include="EngineOwnedStates.h" />
-    <ClInclude Include="GameOwnedStates.h" />
-    <ClInclude Include="Global.h" />
     <ClInclude Include="graphics_constants.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="Menu_Button.h" />
-    <ClInclude Include="SDL_GameEngine.h" />
-    <ClInclude Include="SDL_Resource.h" />
-    <ClInclude Include="SDL_SplashScreen.h" />
-    <ClInclude Include="SDL_Sprite.h" />
     <ClInclude Include="spoint.h" />
     <ClInclude Include="srect.h" />
-    <ClInclude Include="State.h" />
     <ClInclude Include="surfaceFunctions.h" />
-    <ClInclude Include="templatearray.h" />
-    <ClInclude Include="templatevector.h" />
+    <ClInclude Include="templateVector.h" />
     <ClInclude Include="trueTextPrinter.h" />
     <ClInclude Include="UserInput.h" />
+    <ClInclude Include="bytebuffer.h" />
+    <ClInclude Include="clientmodule.h" />
+    <ClInclude Include="netmodule.h" />
+    <ClInclude Include="servermodule.h" />
+    <ClInclude Include="templatearray.h" />
+    <ClInclude Include="templatevector2.h" />
+    <ClInclude Include="winsockerrorhelp.h" />
     <ClInclude Include="Armor.h" />
     <ClInclude Include="Chip.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="Magic.h" />
+    <ClInclude Include="Minion.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="SDL_Sprite.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>

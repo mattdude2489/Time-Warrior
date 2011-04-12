@@ -3,7 +3,7 @@
 
 #include "Global.h"
 #include "SDL_Resource.h"
-#include "templatevector.h"
+#include "templatevector2.h"
 #include "sdl\SDL.h"
 
 class Menu_Button;
