@@ -66,6 +66,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	BasicFire f1;
 	AdvancedFire f2;
 	ExpertFire f3;
+	Armor gear(HEAD, BASIC);
+	gear.setOwner(&eTest);
+	gear.activateUnique();
 	eTest.addToAttackInventory(&b1);
 	eTest.addToAttackInventory(&s1);
 	eTest.addToAttackInventory(&d1);

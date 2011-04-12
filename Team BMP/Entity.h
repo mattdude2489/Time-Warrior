@@ -295,4 +295,31 @@ public:
 	int getLevel(){return m_level;}
 	virtual void gainExperience(double a_amount){}
 	double getExperienceFromDefeat(Entity * a_defeater){return m_level * ((double)m_level / a_defeater->getLevel());}
+	void buffDefenseOrResistance(int a_amount, e_stats a_type)
+	{
+		switch(a_type)
+		{
+		case DEFENSE:
+		case RESISTANCE_FIRE:
+		case RESISTANCE_ICE:
+		case RESISTANCE_LIGHTNING:
+			m_stats[a_type] += a_amount;
+			break;
+		}
+	}
+	void debuffDefenseOrResistance(int a_amount, e_stats a_type)
+	{
+		switch(a_type)
+		{
+		case DEFENSE:
+		case RESISTANCE_FIRE:
+		case RESISTANCE_ICE:
+		case RESISTANCE_LIGHTNING:
+			m_stats[a_type] -= a_amount;
+			if(m_stats[a_type] < 0)
+				m_stats[a_type] = 0;
+			break;
+		}
+	}
+
 };

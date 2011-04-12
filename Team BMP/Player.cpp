@@ -13,7 +13,7 @@ void Player::initPlayer()
 			m_attackInventory[s][l] = NULL;
 	}
 	m_statPoints = m_experience = 0;
-	m_expLvReq = m_level;
+	m_expLvReq = m_level+1;
 	setVelocity(0,0);
 }
 void Player::addToAttackInventory(Chip * a_chip)
@@ -98,7 +98,15 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 		}
 	}
 	if(isValid)
+	{
+		//debuff stats gained from armor
+		if(a_chip->getType() == ARMOR && m_gauntlet[a_slot])
+			m_gauntlet[a_slot]->deactivate();
 		m_gauntlet[a_slot] = a_chip;
+		//buff stats gained from armor
+		if(a_chip->getType() == ARMOR)
+			m_gauntlet[a_slot]->activate();
+	}
 }
 void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction)
 {

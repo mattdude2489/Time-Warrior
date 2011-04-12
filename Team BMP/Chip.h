@@ -82,6 +82,7 @@ class Chip : public Entity
 			levelUpUnique();
 		}
 		virtual void activateUnique(){}
+		virtual void deactivateUnique(){}
 		virtual bool shouldApplyEffect(Entity * a_entity){return false;}
 		virtual void applyEffect(Entity * a_entity){}
 		void centerTarget(){m_target.subtract(SPoint(m_sprite->getWidthOffsetCenter(), m_sprite->getHeightOffsetCenter()));}
@@ -111,7 +112,7 @@ class Chip : public Entity
 		virtual void updateUniqueTwo(int a_timePassed){}
 		void updateUnique(int a_timePassed, World * a_world)
 		{
-			if(m_shouldDraw && m_owner)
+			if(m_shouldDraw && m_owner && m_cType != ARMOR)
 			{
 				updateUniqueTwo(a_timePassed);
 				bool collisionMade = false;
@@ -138,7 +139,7 @@ class Chip : public Entity
 				}
 			}
 		}
-		void deactivate(){m_shouldDraw = false;}
+		void deactivate(){m_shouldDraw = false;deactivateUnique();}
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
 		virtual void setSprite(char * a_fileName){}

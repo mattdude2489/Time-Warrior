@@ -5,38 +5,32 @@
 
 class Armor : public Chip
 {
+	protected:
+		int m_defense, m_resistance, m_resisType;
 	public:
 		Armor(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
-			:Chip(ARMOR, a_subType, a_subSubType){}
-		bool shouldApplyEffect()
+			:Chip(ARMOR, a_subType, a_subSubType)
 		{
-			switch(m_cSubSubType)
-			{
-			case BASIC:
-				return false;
-				break;
-			case ADVANCED:
-				return false;
-				break;
-			case EXPERT:
-				return false;
-				break;
-			default:
-				return false;
-			}
+			int interval = 33;
+			/*
+			m_defense & m_resistance range (based on m_cSubSubType)
+			bas: 1				- interval
+			adv: (interval+1)	- (2*interval)
+			exp: (2*interval+1)	- (3*interval)
+			*/
+			m_defense = (rand()%interval + 1) + (interval*m_cSubSubType);
+			m_resistance = (rand()%interval + 1) + (interval*m_cSubSubType);
+			//RESISTANCE_FIRE, RESISTANCE_ICE, or RESISTANCE_LIGHTNING
+			m_resisType = rand()%3 + RESISTANCE_FIRE;
 		}
-		void applyEffect()
+		void activateUnique()
 		{
-			switch(m_cSubType)
-			{
-			case HEAD:
-				break;
-			case TRUNK:
-				break;
-			case LIMB_UPPER:
-				break;
-			case LIMB_LOWER:
-				break;
-			}
+			m_owner->buffDefenseOrResistance(m_defense, DEFENSE);
+			m_owner->buffDefenseOrResistance(m_resistance, (e_stats)m_resisType);
+		}
+		void deactivateUnique()
+		{
+			m_owner->debuffDefenseOrResistance(m_defense, DEFENSE);
+			m_owner->debuffDefenseOrResistance(m_resistance, (e_stats)m_resisType);
 		}
 };
