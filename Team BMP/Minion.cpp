@@ -5,7 +5,8 @@
 void Minion::checkState(int a_timePassed, World * a_world)
 {
 	Entity * t_player = a_world->getPlayer();
-	isPlayerInRange(t_player, a_timePassed);
+	if(!m_playerTargeted){
+		isPlayerInRange(t_player, a_timePassed);}
 	
 	switch(m_state)
 	{

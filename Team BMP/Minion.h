@@ -48,8 +48,8 @@ public:
 	{
 		checkState(a_timePassed, a_world);
 		faceTargetDirection();
-		if(getStatNumber(HEALTH_CURRENT) <= 0)
-			respawn();
+		/*if(getStatNumber(HEALTH_CURRENT) <= 0)
+			respawn();*/
 	}
 	void wander(int a_timePassed)
 	{
@@ -81,5 +81,10 @@ public:
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
 		}
+	}
+	void hitFromPlayer()
+	{
+		m_playerTargeted = true;
+		m_state = CHASE;
 	}
 };

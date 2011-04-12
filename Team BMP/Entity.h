@@ -295,6 +295,7 @@ public:
 	int getLevel(){return m_level;}
 	virtual void gainExperience(double a_amount){}
 	double getExperienceFromDefeat(Entity * a_defeater){return m_level * ((double)m_level / a_defeater->getLevel());}
+	virtual void hitFromPlayer(){}
 	void buffDefenseOrResistance(int a_amount, e_stats a_type)
 	{
 		switch(a_type)
