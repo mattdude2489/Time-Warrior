@@ -10,27 +10,33 @@
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Resource headers\Networking shit">
-      <UniqueIdentifier>{8b99a1dc-90f2-49e6-975c-865ca5d76d6a}</UniqueIdentifier>
+      <UniqueIdentifier>{c435c38a-8651-401e-93b6-cbe1a4e998ee}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
     <Filter Include="Resource Files\Fonts">
-      <UniqueIdentifier>{77c3efed-3e2b-4a2d-b873-58c669ca5f0b}</UniqueIdentifier>
+      <UniqueIdentifier>{2329b388-7027-41bc-8cab-5fbab4000901}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\Music">
-      <UniqueIdentifier>{07fa5ce4-c387-47bd-8b7f-92666914df97}</UniqueIdentifier>
+      <UniqueIdentifier>{e6db1bcd-ca95-4994-8bd9-6bfa57de0ccb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game Headers">
-      <UniqueIdentifier>{b1718cda-5e37-44a3-95de-18468c04b572}</UniqueIdentifier>
+      <UniqueIdentifier>{dea871d2-f8e6-406e-9386-5e98664e170b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -40,6 +46,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="spoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="surfaceFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
@@ -95,6 +104,9 @@
     <ClInclude Include="clientmodule.h">
       <Filter>Resource headers\Networking shit</Filter>
     </ClInclude>
+    <ClInclude Include="myPacket.h">
+      <Filter>Resource headers\Networking shit</Filter>
+    </ClInclude>
     <ClInclude Include="netmodule.h">
       <Filter>Resource headers\Networking shit</Filter>
     </ClInclude>
@@ -129,6 +141,9 @@
       <Filter>Game Headers</Filter>
     </ClInclude>
     <ClInclude Include="Minion.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
       <Filter>Game Headers</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">

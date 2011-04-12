@@ -88,7 +88,16 @@ public:
 	
 	void update(Uint32 timePassed, World * a_world) 
 	{
+		Entity * t_ent;
 		for(int i = 0; i < m_mapOfEntities.size(); i++) 
-			m_mapOfEntities.get(i)->update(timePassed, a_world);
+		{
+			t_ent = m_mapOfEntities.get(i);
+			t_ent->update(timePassed, a_world);
+			//checks to see if it is alive if not remove the damm thing
+			if(t_ent->getType() != CHIP && t_ent->getStatNumber(HEALTH_CURRENT)<=0)
+			{
+				m_mapOfEntities.remove(i);
+			}
+		}
 	}
 };

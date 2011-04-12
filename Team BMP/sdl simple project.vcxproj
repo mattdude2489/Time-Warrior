@@ -43,12 +43,6 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -91,10 +85,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Minion.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SDL_Sprite.cpp" />
     <ClCompile Include="spoint.cpp" />
+    <ClCompile Include="surfaceFunctions.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="bytebuffer.cpp" />
     <ClCompile Include="clientmodule.cpp" />
@@ -114,6 +111,7 @@
     <ClInclude Include="UserInput.h" />
     <ClInclude Include="bytebuffer.h" />
     <ClInclude Include="clientmodule.h" />
+    <ClInclude Include="myPacket.h" />
     <ClInclude Include="netmodule.h" />
     <ClInclude Include="servermodule.h" />
     <ClInclude Include="templatearray.h" />
@@ -126,6 +124,7 @@
     <ClInclude Include="Hud.h" />
     <ClInclude Include="Magic.h" />
     <ClInclude Include="Minion.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SDL_Sprite.h" />
     <ClInclude Include="Weapon.h" />
