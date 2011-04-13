@@ -19,7 +19,7 @@ private:
 	Uint32 colors[NUM_BARS];
 
 	MyFont m_myFont;
-	//TTtext m_text;
+	TTtext m_text[NUM_STAT_BARS];
 	StatWindow m_statWin;
 	bool m_showStats;
 	Button m_statButton;
@@ -56,7 +56,13 @@ public:
 		m_statWin.InitText(m_myFont.getFont());
 		m_statButton.setUpButton(STAT_BUTTON_SETTINGS);
 		m_showStats = false;
-		//m_text.setMessage("testing");
+		for(int i = 0; i < NUM_STAT_BARS; i++)
+		{
+			m_text[i].setFont(m_myFont.getFont());
+		}
+		m_text[0].setMessage("Helth");
+		m_text[1].setMessage("Energy");
+		m_text[2].setMessage("Experience");
 	}
 	void handleInput(UserInput * ui)
 	{
@@ -77,13 +83,17 @@ public:
 	}
 	void draw(SDL_Surface * screen)
 	{
-		//m_text.printMessage(screen, 0,0);
 		for(int i = 0; i < NUM_BARS; i++){
 			SDL_FillRect(screen, &bars[i], colors[i]);}
 		m_statButton.draw(screen);
 		for(int i = 0; i < 2; ++i)
 			m_statWin.getPlayer()->drawSlot((e_gauntletSlots)i, screen, (HUD_X + HUD_WIDTH) - ((2-(i-1)) * HUD_HEIGHT), HUD_Y);
+		for(int i = 0; i < NUM_STAT_BARS; i++)
+		{	
+			m_text[i].printMessage(screen, bars[BAR_HEALTH].getWidth(), bars[BAR_HEALTH].getY()+(i*BAR_HEIGHT)-1);
+		}
 		if(m_showStats)
 			m_statWin.draw(screen);
+		
 	}
 };

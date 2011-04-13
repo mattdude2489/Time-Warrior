@@ -1,7 +1,7 @@
 #pragma once
 #include "sdl/SDL_ttf.h"
 #include "surfaceFunctions.h"
-#define FONTSIZE		15
+#define FONTSIZE		10
 
 class MyFont
 {
@@ -56,7 +56,7 @@ public:
 	}
 	void setMessage(char * a_message)//sets the text to print, this will need to be done every message
 	{
-		m_message = TTF_RenderText(m_font, a_message, m_textColor,m_backColor);
+		m_message = TTF_RenderText_Blended(m_font, a_message, m_textColor);
 	}
 
 	void printMessage(SDL_Surface * a_screen, int a_x, int a_y)//pritns it to the screen with the location passed by x and y
@@ -65,6 +65,10 @@ public:
 	}
 	int getMesageWidth(){return m_message->w;}
 	void setFont(TTF_Font * a_font){m_font = a_font;}
+	void setFontSize(int a_size)
+	{
+		
+	}
 	~TTtext()
 	{
 		SDL_FreeSurface(m_message);
