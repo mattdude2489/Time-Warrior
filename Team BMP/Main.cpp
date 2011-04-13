@@ -68,7 +68,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	ExpertFire f3;
 	Armor gear(HEAD, BASIC);
 	gear.setOwner(&eTest);
-	gear.activateUnique();
 	eTest.addToAttackInventory(&b1);
 	eTest.addToAttackInventory(&s1);
 	eTest.addToAttackInventory(&d1);
@@ -87,8 +86,10 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	f1.levelUp();
 	f2.levelUp();
 	f3.levelUp();
+	gear.levelUp();
 	eTest.setGauntletSlot(SLOT_ATK1, &s1);
 	eTest.setGauntletSlot(SLOT_ATK2, &f1);
+	eTest.setGauntletSlot(SLOT_ARMOR_HEAD, &gear);
 	world.add(&eTest);
 	world.add(&b1);
 	world.add(&s1);

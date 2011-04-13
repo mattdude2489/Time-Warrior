@@ -93,10 +93,13 @@ class Chip : public Entity
 				if(!m_shouldDraw)
 				{
 					m_owner->useEnergy(m_cost);
-					m_firstIteration = true;
-					m_shouldDraw = true;
-					m_sprite->start();
-					m_sprite->setLoopToBegin(true);
+					if(m_cType != ARMOR)
+					{
+						m_firstIteration = true;
+						m_shouldDraw = true;
+						m_sprite->start();
+						m_sprite->setLoopToBegin(true);
+					}
 					activateUnique();
 				}
 				else
