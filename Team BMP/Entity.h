@@ -2,6 +2,7 @@
 #include "SDL_Sprite.h"
 #include "spoint.h"
 #include "UserInput.h"
+#include "srect.h"
 
 class World;
 struct Tile;
@@ -322,5 +323,5 @@ public:
 			break;
 		}
 	}
-
+	bool colideWithTile(Tile * a_tile);
 };

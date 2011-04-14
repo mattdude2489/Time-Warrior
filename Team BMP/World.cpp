@@ -43,6 +43,8 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_HUB;
 	if(fileName == "Maps/MedEngMap.txt")
 		currentWorld = WORLD_ENGLAND;
+	if(fileName == "Maps/Dungeon1.txt")
+		currentWorld = WORLD_D1;
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
 	{
@@ -66,6 +68,8 @@ bool World::setWorld(char * fileName)
 	SDL_Sprite *portalSprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	portalSprite->setTransparency(COLOR_TRANSPARENT);
 	Tile::portalIndexNumber = 0; //EPIC. THIS FARKING WORKS.
+	SDL_Sprite * dungeon = new SDL_Sprite("Sprites/Dungeon1.bmp",FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
+	dungeon->setTransparency(COLOR_TRANSPARENT);
 	//The sprite used for the portal.
 	//start the actual loading of the textures.
 	if(infile == NULL)
@@ -80,12 +84,13 @@ bool World::setWorld(char * fileName)
 			//Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
 			if(c != '\n')
 			{
-				if(currentWorld == WORLD_HUB){
-					hi.currentTexture = hudSprite;
+				switch(currentWorld)
+				{
+				case WORLD_HUB: hi.currentTexture = hudSprite;break;
+				case WORLD_ENGLAND:hi.currentTexture = sprite;break;
+				case WORLD_D1:hi.currentTexture = dungeon;break;
 				}
-				else{
-					hi.currentTexture = sprite;
-				}
+
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
 				hi.collide = hi.animate = hi.portal = false;
@@ -151,9 +156,13 @@ bool World::setWorld(char * fileName)
 					hi.indexOfSpriteRow = 4;
 					hi.collide = true;
 				}
-				else{
+				else if(currentWorld == WORLD_ENGLAND){
 				hi.indexOfSpriteRow = 5;
 				hi.collide = true;
+				}
+				else if(currentWorld == WORLD_D1){
+					hi.indexOfSpriteRow = 2;
+					hi.collide = true;
 				}
 				break;
 			case 'P':
@@ -169,6 +178,11 @@ bool World::setWorld(char * fileName)
 				hi.indexOfSpriteRow = 6;
 				hi.animate = hi.portal = true;
 				hi.portalIndexNumber++;
+				break;
+			case 'd':
+				hi.currentTexture = dungeon;
+				hi.indexOfSpriteRow = 6;
+				hi.animate = hi.dungeon = true;
 				break;
 			}
 			if(c != '\n')

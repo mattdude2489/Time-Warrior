@@ -3,16 +3,18 @@
 #pragma once
 #include "Grid.h"
 #include "templatevector.h"
+#include "srect.h"
 
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide, animate, portal;
+	bool collide, animate, portal, dungeon;
 	SPoint pos, *cam;
 	int indexOfSpriteRow;
 	static int portalIndexNumber;
 	SPoint getLocationScreen(){return pos.difference(*cam);}
 	Entity * m_player;
+	SRect colideBox;
 };
 
 class World

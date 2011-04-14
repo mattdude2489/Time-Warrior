@@ -50,6 +50,17 @@ void Entity::update(int a_timePassed, World * a_world)
 				a_world->setCamera(this->m_camera);
 			}
 		}
+		/*if(a_world->getTile(m_location.x, m_location.y)->dungeon
+			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->dungeon
+			|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->dungeon
+			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->dungeon)
+		{
+			if(m_eType == PLAYER)
+			{
+				a_world->setWorld("Maps/Dungeon1.txt");
+				a_world->setCamera(this->m_camera);
+			}
+		}*/
 		//Search through the entities in that particular grid. If there are any, check for collision with them.
 	/*	for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
 		{
