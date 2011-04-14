@@ -71,7 +71,7 @@ bool World::setWorld(char * fileName)
 	portalSprite->setTransparency(COLOR_TRANSPARENT);
 	Tile::portalIndexNumber = 0; //EPIC. THIS FARKING WORKS.
 	SDL_Sprite * dungeon = new SDL_Sprite("Sprites/Dungeon1.bmp",FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
-	dungeon->setTransparency(COLOR_TRANSPARENT);
+	dungeon->setTransparency(COLOR_TRANSPARENT); //SO MANY MEMORY LEAKS!?
 	//The sprite used for the portal.
 	//start the actual loading of the textures.
 	if(infile == NULL)
