@@ -69,7 +69,7 @@ class Chip : public Entity
 			{
 			case MAGIC:
 			case WEAPON:
-				m_dmgLv = 5;
+				m_dmgLv = 5 + m_cSubSubType;
 				if(m_cType == MAGIC)
 					m_costLv = 5 * (m_cSubSubType + 1);
 				else

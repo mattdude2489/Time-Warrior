@@ -59,7 +59,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	fightTest.move(100, -100);
 	diaTest.move(200, 200);*/
 	BasicBlunt b1;
+	AdvancedBlunt b2;
 	BasicSlash s1;
+	AdvancedSlash s2;
 	BasicDivine d1;
 	AdvancedDivine d2;
 	ExpertDivine d3;
@@ -69,7 +71,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Armor gear(HEAD, BASIC);
 	gear.setOwner(&eTest);
 	eTest.addToAttackInventory(&b1);
+	eTest.addToAttackInventory(&b2);
 	eTest.addToAttackInventory(&s1);
+	eTest.addToAttackInventory(&s2);
 	eTest.addToAttackInventory(&d1);
 	eTest.addToAttackInventory(&d2);
 	eTest.addToAttackInventory(&d3);
@@ -79,7 +83,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Hud Ghud;
 	World world;
 	b1.levelUp();
+	b2.levelUp();
 	s1.levelUp();
+	s2.levelUp();
 	d1.levelUp();
 	d2.levelUp();
 	d3.levelUp();
@@ -92,7 +98,9 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	eTest.setGauntletSlot(SLOT_ARMOR_HEAD, &gear);
 	world.add(&eTest);
 	world.add(&b1);
+	world.add(&b2);
 	world.add(&s1);
+	world.add(&s2);
 	world.add(&d1);
 	world.add(&d2);
 	world.add(&d3);

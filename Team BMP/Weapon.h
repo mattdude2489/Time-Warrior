@@ -68,6 +68,7 @@ class Weapon : public Chip
 					m_sprite->flipVertical();
 					break;
 				}
+				m_sprite->setRIndex(m_cSubSubType);
 				setLocationUsingDirection();
 				break;
 			}
@@ -81,16 +82,12 @@ class Weapon : public Chip
 				switch(m_cSubSubType)
 				{
 				case BASIC:
+				case ADVANCED:
+				case EXPERT:
 					if(a_entity->getType() != PLAYER)
 						return collideSimple(a_entity);
 					else
 						return false;
-					break;
-				case ADVANCED:
-					return false;
-					break;
-				case EXPERT:
-					return false;
 					break;
 				default:
 					return false;
@@ -126,6 +123,15 @@ class Weapon : public Chip
 				}
 			}
 		}
+		void setSprite(char * a_fileName)
+		{
+			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 2);
+			m_sprite->setTransparency(COLOR_TRANSPARENT);
+			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 2);
+			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
+			m_spriteHUD->setRIndex(m_cSubSubType);
+			initHudSprite();
+		}
 		~Weapon()
 		{
 			if(m_sprite->isSprite())
@@ -137,42 +143,38 @@ class Weapon : public Chip
 class Slash : public Weapon
 {
 	public:
-		Slash(e_chipSubSubType a_subSubType):Weapon(SLASH, a_subSubType){}
+		Slash(e_chipSubSubType a_subSubType):Weapon(SLASH, a_subSubType){setSprite("Sprites/weapon_slash.bmp");}
 };
 class BasicSlash : public Slash
 {
 	public:
-		BasicSlash():Slash(BASIC){setSprite("Sprites/slash.bmp");}
+		BasicSlash():Slash(BASIC){}
 		char * getName(){return "Slash Swing";}
 		char * getDescription(){return "Slash attack.";}
-		void setSprite(char * a_fileName)
-		{
-			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 1);
-			m_sprite->setTransparency(COLOR_TRANSPARENT);
-			//m_sprite->setRIndex(m_cSubSubType);
-			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 1);
-			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
-			initHudSprite();
-		}
+};
+class AdvancedSlash : public Slash
+{
+	public:
+		AdvancedSlash():Slash(ADVANCED){}
+		char * getName(){return "X-Slash";}
+		char * getDescription(){return "Double Slash attack.";}
 };
 class Blunt : public Weapon
 {
 	public:
-		Blunt(e_chipSubSubType a_subSubType):Weapon(BLUNT, a_subSubType){}
+		Blunt(e_chipSubSubType a_subSubType):Weapon(BLUNT, a_subSubType){setSprite("Sprites/weapon_blunt.bmp");}
 };
 class BasicBlunt : public Blunt
 {
 	public:
-		BasicBlunt():Blunt(BASIC){setSprite("Sprites/blunt.bmp");}
+		BasicBlunt():Blunt(BASIC){}
 		char * getName(){return "Blunt Swing";}
 		char * getDescription(){return "Blunt attack.";}
-		void setSprite(char * a_fileName)
-		{
-			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 1);
-			m_sprite->setTransparency(COLOR_TRANSPARENT);
-			//m_sprite->setRIndex(m_cSubSubType);
-			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 1);
-			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
-			initHudSprite();
-		}
+};
+class AdvancedBlunt : public Blunt
+{
+	public:
+		AdvancedBlunt():Blunt(ADVANCED){}
+		char * getName(){return "X-Blunt";}
+		char * getDescription(){return "Double Blunt attack.";}
 };
