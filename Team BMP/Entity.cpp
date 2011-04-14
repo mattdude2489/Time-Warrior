@@ -46,30 +46,34 @@ void Entity::update(int a_timePassed, World * a_world)
 		{
 			if(m_eType == PLAYER)
 			{
+				if(a_world->getCurrentWorld() == WORLD_D1)
+					this->setLocation(1248, 128);
 				a_world->setWorld("Maps/MedEngMap.txt");
+				
 				a_world->setCamera(this->m_camera);
 			}
 		}
-		/*if(a_world->getTile(m_location.x, m_location.y)->dungeon
+		if(a_world->getTile(m_location.x, m_location.y)->dungeon
 			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->dungeon
 			|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->dungeon
 			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->dungeon)
 		{
 			if(m_eType == PLAYER)
 			{
+				this->setLocation(640, 414);
 				a_world->setWorld("Maps/Dungeon1.txt");
 				a_world->setCamera(this->m_camera);
 			}
-		}*/
+		}
 		//Search through the entities in that particular grid. If there are any, check for collision with them.
-	/*	for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
+		for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
 		{
 			if(collide(a_world->getEntity(i, m_location.x, m_location.y)))
 			{
 				if(epicCollide(a_world->getEntity(i, m_location.x, m_location.y)))
 					move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 			}
-		}*/
+		}
 	}
 	//update previous location & anything unique
 	if(!m_prevLoc.equals(m_location))

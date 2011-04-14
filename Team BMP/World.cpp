@@ -95,7 +95,7 @@ bool World::setWorld(char * fileName)
 
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.animate = hi.portal = false;
+				hi.collide = hi.animate = hi.portal = hi.dungeon = false;
 				x++;
 			}
 			else
@@ -332,8 +332,6 @@ void World::update(Uint32 a_timePassed)
 			{
 				m_mapOfEntities.get(getLocationGrid(cE)).setEntity(cE);
 				m_mapOfEntities.get(z).remove(i);
-				//if(cE->getType() == PLAYER)
-				//	printf("(%d,%d) %d->%d\n", cE->getLocation().x, cE->getLocation().y, z, getLocationGrid(cE));
 			}
 		}
 	}
