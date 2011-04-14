@@ -4,6 +4,8 @@
 using namespace std;
 #include "NPC.h"
 
+//#define NPC_ADD
+
 World::World()
 {
 	clientPlayerIndex = 0; 
@@ -201,7 +203,9 @@ bool World::setWorld(char * fileName)
 	maxWorldX = (tileX-2) * FRAME_SIZE;
 	maxWorldY = (tileY-2) * FRAME_SIZE;
 	setMonsters();
+#ifdef NPC_ADD
 	setNPC();
+#endif
 	return m_success;
 }
 //sets up a camera for each entity & tile, so they correctly move relative to the player
@@ -232,65 +236,73 @@ void World::sortOnYPosition()
 **/
 void World::setNPC()
 {
-	////If there are already NPC's in the World, remove them and clean up the memory.
-	//for(int i = 0; i < m_mapOfEntities.size(); i++)
-	//{
-	//	for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
-	//	{
-	//		if(m_mapOfEntities.get(i).getEntity(k)->getType() == NPC &&
-	//			m_mapOfEntities.get(i).getEntity(k)->getNewed())
-	//		{
-	//			delete m_mapOfEntities.get(i).getEntity(k);
-	//			m_mapOfEntities.get(i).remove(k);
-	//		}
-	//	}
-	//}
-	////Now to open the file *, and abuse the atoi system.
-	//FILE * infile;
-	//fopen_s(&infile, "Maps/NPC Placements.txt", "r");
-	//int c = 0, x = 0, y = 0;
-	//c = fgetc(infile);
-	////This system may work for the first few things...but then it'll blow up.
-	//while(c != currentWorld)
-	//{
-	//	while(c != '#')
-	//		c = fgetc(infile);
-	//	fscanf(infile,%i,&x);
-	//	fscanf(infile,%i,&y);
-	//	c = fgetc(infile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
-	//}
-	//
-	//while(c != '#')
-	//{
-	//	c = fgetc(infile);
-	//}
-	//char * charpoint = NULL;
-	//c = fgetc(infile2);
-	//c = fgetc(infile2); //This SHOULD make it get an integer.
-	//for(int i = 0; i < c; i++)
-	//{
-	//	while(c != '#')
-	//	{
-	//		c = fgetc(infile2);
-	//		itoa(c, charpoint, 10); //Convert it to a char*.
-	//	}
-	//	fscanf(infile2, "%i", &x);
-	//	fscanf(infile2, "%i", &y);
-	//	SDL_Sprite * newSprite;
-	//	newSprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	//	NonPlayerChar * newNPC;
-	//	newNPC = new NonPlayerChar(charpoint, newSprite);
-	//	//newNPC->initSprite(newSprite); //Inits the entity first
-	//	//newNPC->initNPC(charpoint); //Then inits the NPC portions.
-	//	newNPC->setNewed(true);
-	//	newNPC->setLocation(x, y);
-	//	add(newNPC);
-	//}
-	//fclose(infile2);
-	SDL_Sprite * sdlsprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	//If there are already NPC's in the World, remove them and clean up the memory.
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	{
+		for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
+		{
+			if(m_mapOfEntities.get(i).getEntity(k)->getType() == NPC &&
+				m_mapOfEntities.get(i).getEntity(k)->getNewed())
+			{
+				delete m_mapOfEntities.get(i).getEntity(k);
+				m_mapOfEntities.get(i).remove(k);
+			}
+		}
+	}
+	//Now to open the file *, and abuse the atoi system.
+	FILE * infile;
+	fopen_s(&infile, "Maps/NPC Placements.txt", "r");
+	int c = 0, x = 0, y = 0;
+	c = fgetc(infile);
+	c -= 48; //48 is the range between 0 ASCII and NULL.
+	//This system may work for the first few things...but then it'll blow up.
+	while(c != currentWorld)
+	{
+		while(c != '#')
+			c = fgetc(infile);
+		fscanf(infile,"%i",&x);
+		fscanf(infile,"%i",&y);
+		c = fgetc(infile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
+	}
+
+	char * charpoint = " ";
+	//char * buff; //I ONLY NEED ONE CHARACTER...but I needed a *...and it wouldn't let me just use char *.
+	string s;
+	c = fgetc(infile);
+	c = fgetc(infile); //This SHOULD make it get an integer.
+	int forLoopNum = c-48;
+	for(int i = 0; i < forLoopNum; i++)
+	{
+		while(c != '#')
+		{
+			c = fgetc(infile);
+			if(c == '\n') //IGNORING.
+				c = fgetc(infile);
+//			charpoint = (char)c;
+			//itoa(c, charpoint, 10); //Convert it to a char*.
+			char buff = (char)c;
+			s.append(1, buff);
+		}
+		fscanf(infile, "%i", &x);
+		fscanf(infile, "%i", &y);
+		//charpoint = &s;
+		//strcpy_s(charpoint, strlen(s.c_str()) ,s.c_str());
+		SDL_Sprite * newSprite;
+		newSprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+		NonPlayerChar * newNPC;
+		const char * buf = s.c_str();
+		newNPC = new NonPlayerChar(const_cast<char*>(buf), newSprite);
+		//newNPC->initSprite(newSprite); //Inits the entity first
+		//newNPC->initNPC(charpoint); //Then inits the NPC portions.
+		newNPC->setNewed(true);
+		newNPC->setLocation(x, y);
+		add(newNPC);
+	}
+	fclose(infile);
+	/*SDL_Sprite * sdlsprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	NonPlayerChar * nonPlayer = new NonPlayerChar("Hi. Go through the portal NAO.", sdlsprite);
 	nonPlayer->setNewed(true);
-	add(nonPlayer);
+	add(nonPlayer);*/
 }
 
 /**
