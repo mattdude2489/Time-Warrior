@@ -86,7 +86,7 @@ class Chip : public Entity
 		virtual void activateUnique(){}
 		virtual void deactivateUnique(){}
 		virtual bool shouldApplyEffect(Entity * a_entity){return false;}
-		virtual void applyEffect(Entity * a_entity){}
+		virtual void applyEffect(Entity * a_entity, int a_timePassed){}
 		void centerTarget(){m_target.subtract(SPoint(m_sprite->getWidthOffsetCenter(), m_sprite->getHeightOffsetCenter()));}
 		void activate()
 		{
@@ -127,7 +127,7 @@ class Chip : public Entity
 					{
 						if(shouldApplyEffect(a_world->getEntity(i, g)))
 						{
-							applyEffect(a_world->getEntity(i, g));
+							applyEffect(a_world->getEntity(i, g), a_timePassed);
 							collisionMade = true;
 						}
 					}

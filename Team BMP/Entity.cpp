@@ -72,8 +72,11 @@ void Entity::update(int a_timePassed, World * a_world)
 		}*/
 	}
 	//update previous location & anything unique
-	if(m_prevLoc.equals(m_location))
+	if(!m_prevLoc.equals(m_location))
+	{
+		m_prevPrevLoc = m_prevLoc;
 		m_prevLoc = m_location;
+	}
 	updateUnique(a_timePassed, a_world);
 }
 int Entity::getTotalDamageDealt(int a_amount, e_chipType a_type)

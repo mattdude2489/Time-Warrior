@@ -29,7 +29,7 @@ protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer, m_level;
 	e_entityType m_eType;
 	bool m_shouldDraw, m_activation; //This bool is pretty much there entirely for NPC dialogue at the moment.
-	SPoint m_location, m_prevLoc, *m_camera, m_target;
+	SPoint m_location, m_prevLoc, m_prevPrevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 	v2D m_vel; //The velocity. - ONLY for player movement
@@ -68,6 +68,7 @@ public:
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
+		m_prevPrevLoc = m_prevLoc;
 		m_activation = false;
 		nude = false;
 	}
@@ -288,6 +289,7 @@ public:
 			return m_stats[a_stat];
 	}
 	SPoint getLocation(){return m_location;}
+	SPoint getPreviousPreviousLocation() {return m_prevPrevLoc;}
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
