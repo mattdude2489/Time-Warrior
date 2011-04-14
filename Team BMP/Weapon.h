@@ -99,6 +99,15 @@ class Weapon : public Chip
 			switch(m_cSubType)
 			{
 			case BLUNT:
+				if(a_entity->getType() != PLAYER)
+				{
+					int maxDistance = FRAME_SIZE/3;
+					SPoint delta = a_entity->getDeltaBetweenLocationAnd(&a_entity->getPreviousLocation());
+					//TODO: put normalize code into a func (used here & moveToTarget)
+					delta.setX((int)(((double)delta.x/delta.getLength()) * maxDistance));
+					delta.setY((int)(((double)delta.y/delta.getLength()) * maxDistance));
+					a_entity->move(delta);
+				}
 			case RANGE:
 			case SLASH:
 			case PIERCE:

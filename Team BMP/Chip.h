@@ -79,6 +79,8 @@ class Chip : public Entity
 			m_level++;
 			m_cost += m_costLv;
 			m_dmg += m_dmgLv;
+			if(m_cSubType == BLUNT)
+				m_dmg = (int)((double)m_dmg *.75);
 			levelUpUnique();
 		}
 		virtual void activateUnique(){}
