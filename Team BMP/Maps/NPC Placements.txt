@@ -2,3 +2,4 @@
 Hi. Welcome to the first step in the Colosseum of Time. Go over \n to the portal to start your way. Welcome to the rest of your \n life.#40 60
 1 1
 WE ARE DOOMED.#50 100
+2 0

@@ -263,6 +263,8 @@ void World::setNPC()
 		fscanf(infile,"%i",&x);
 		fscanf(infile,"%i",&y);
 		c = fgetc(infile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
+		c = fgetc(infile);
+		c -= 48;
 	}
 
 	char * charpoint = " ";

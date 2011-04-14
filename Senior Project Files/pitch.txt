@@ -48,30 +48,14 @@ Features:
 	expansive variety in worlds
 	challenging puzzles or fights to progress
 
-Goals : (to be filled in)
-
-
-Team roles/duties
-
-Project Mgr
--schedule
--updater
--project binder
--watching milestones
--motivator
-
-Lead Programmer (Jared)
--Repository
--Lead tech designer
--TDD
--Game Engine
--primary coder
--bug tracker
-
-other programmers
--other core areas... so detailed
--collision
--ai
--audio
--player
--enemy/boss 
+Goals : 
+1. Make a Kickass game
+2. Make a kickass game
+3. Make a kickass game
+4. Make a kickass game
+5. Learn how to program networking
+6. Make a kickass game
+7. To have good documents
+8. Make a kickass game
+9. Make a kickass game
+10. Make a kickass game
