@@ -7,11 +7,11 @@ class Weapon : public Chip
 {
 	protected:
 		bool m_isFlipH, m_isFlipV;
-		int m_rotateDeg;
+		int m_rotateDeg, m_timeSinceLastAttack;
 	public:
 		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(WEAPON, a_subType, a_subSubType),
-			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0){}
+			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0),m_timeSinceLastAttack(0){}
 		void setLocationUsingDirection()
 		{
 			switch(m_direction)
@@ -101,12 +101,17 @@ class Weapon : public Chip
 			case BLUNT:
 				if(a_entity->getType() != PLAYER)
 				{
-					int maxDistance = 1;
+					int limit = TIME_SECOND_MS*(m_cSubSubType+1);
+					if(m_timeSinceLastAttack > limit)
+						m_timeSinceLastAttack = limit;
+					double maxDistance = FRAME_SIZE;
+					maxDistance += maxDistance * ((double)m_timeSinceLastAttack/TIME_SECOND_MS);
 					SPoint delta = a_entity->getDeltaBetweenLocationAnd(&a_entity->getPreviousPreviousLocation());
 					//TODO: put normalize code into a func (used here & moveToTarget)
 					delta.setX((int)(((double)delta.x/delta.getLength()) * maxDistance));
 					delta.setY((int)(((double)delta.y/delta.getLength()) * maxDistance));
-					a_entity->move(delta.product(a_timePassed));
+					a_entity->move(delta);
+					m_timeSinceLastAttack = 0;
 				}
 			case RANGE:
 			case SLASH:
@@ -120,6 +125,7 @@ class Weapon : public Chip
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
+			m_timeSinceLastAttack += a_timePassed;
 			if(m_shouldDraw)
 			{
 				switch(m_cSubSubType)

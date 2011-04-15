@@ -117,9 +117,9 @@ class Chip : public Entity
 		virtual void updateUniqueTwo(int a_timePassed){}
 		void updateUnique(int a_timePassed, World * a_world)
 		{
+			updateUniqueTwo(a_timePassed);
 			if(m_shouldDraw && m_owner && m_cType != ARMOR)
 			{
-				updateUniqueTwo(a_timePassed);
 				bool collisionMade = false;
 				for(int g = 0; g < NUM_GRIDS; ++g)
 				{
