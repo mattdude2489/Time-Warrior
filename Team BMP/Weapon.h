@@ -94,7 +94,7 @@ class Weapon : public Chip
 				}
 			}
 		}
-		void applyEffect(Entity * a_entity, int a_timePassed)
+		void applyEffect(Entity * a_entity)
 		{
 			switch(m_cSubType)
 			{
@@ -126,6 +126,8 @@ class Weapon : public Chip
 		void updateUniqueTwo(int a_timePassed)
 		{
 			m_timeSinceLastAttack += a_timePassed;
+			if(m_cSubSubType == BASIC && m_cSubType == BLUNT)
+				printf("%d\n", m_timeSinceLastAttack);
 			if(m_shouldDraw)
 			{
 				switch(m_cSubSubType)

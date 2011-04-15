@@ -86,7 +86,7 @@ class Chip : public Entity
 		virtual void activateUnique(){}
 		virtual void deactivateUnique(){}
 		virtual bool shouldApplyEffect(Entity * a_entity){return false;}
-		virtual void applyEffect(Entity * a_entity, int a_timePassed){}
+		virtual void applyEffect(Entity * a_entity){}
 		void centerTarget(){m_target.subtract(SPoint(m_sprite->getWidthOffsetCenter(), m_sprite->getHeightOffsetCenter()));}
 		void activate()
 		{
@@ -117,30 +117,33 @@ class Chip : public Entity
 		virtual void updateUniqueTwo(int a_timePassed){}
 		void updateUnique(int a_timePassed, World * a_world)
 		{
-			updateUniqueTwo(a_timePassed);
-			if(m_shouldDraw && m_owner && m_cType != ARMOR)
+			if(m_owner && m_cType != ARMOR)
 			{
-				bool collisionMade = false;
-				for(int g = 0; g < NUM_GRIDS; ++g)
+				updateUniqueTwo(a_timePassed);
+				if(m_shouldDraw)
 				{
-					for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
+					bool collisionMade = false;
+					for(int g = 0; g < NUM_GRIDS; ++g)
 					{
-						if(shouldApplyEffect(a_world->getEntity(i, g)))
+						for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
 						{
-							applyEffect(a_world->getEntity(i, g), a_timePassed);
-							collisionMade = true;
+							if(shouldApplyEffect(a_world->getEntity(i, g)))
+							{
+								applyEffect(a_world->getEntity(i, g));
+								collisionMade = true;
+							}
 						}
 					}
-				}
-				if((((m_cType == MAGIC && m_cSubSubType == BASIC)
-					|| (m_cType == WEAPON && m_cSubType == RANGE))
-					&& collisionMade) || (!m_firstIteration && m_sprite->getFrame() == 0))
-					deactivate();
-				else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
-				{
-					if((m_cType == MAGIC && m_cSubSubType != BASIC)
-						|| (m_cType == WEAPON && m_cSubType != RANGE))
-						m_firstIteration = false;
+					if((((m_cType == MAGIC && m_cSubSubType == BASIC)
+						|| (m_cType == WEAPON && m_cSubType == RANGE))
+						&& collisionMade) || (!m_firstIteration && m_sprite->getFrame() == 0))
+						deactivate();
+					else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
+					{
+						if((m_cType == MAGIC && m_cSubSubType != BASIC)
+							|| (m_cType == WEAPON && m_cSubType != RANGE))
+							m_firstIteration = false;
+					}
 				}
 			}
 		}

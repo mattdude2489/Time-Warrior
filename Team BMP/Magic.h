@@ -53,7 +53,7 @@ class Magic : public Chip
 				}
 			}
 		}
-		void applyEffect(Entity * a_entity, int a_timePassed)
+		void applyEffect(Entity * a_entity)
 		{
 			switch(m_cSubType)
 			{
