@@ -46,4 +46,5 @@ void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
 			m_mapOfEntities.add(newEntity);
 		}
 	}
+
 }

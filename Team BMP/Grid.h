@@ -17,6 +17,7 @@ class Grid
 private:
 	//Private variables...aka the templateVector of Entities. Although perhaps a Linked List would be better in this case.
 	//For now, let's try template Vector.
+
 	TemplateVector2<Entity*> m_mapOfEntities;
 public:
 	//The public functions. Constructors, sets, gets, and modifiers.

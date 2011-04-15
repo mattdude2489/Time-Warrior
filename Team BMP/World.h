@@ -5,10 +5,12 @@
 #include "templatevector.h"
 #include "srect.h"
 
+enum m_sprites {SLIME, SKELETON, GHOST};
+
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide, animate, portal, dungeon;
+	bool collide, animate, portal, dungeon, spawnLocation;
 	SPoint pos, *cam;
 	int indexOfSpriteRow;
 	static int portalIndexNumber;
@@ -23,6 +25,8 @@ private:
 	//TemplateVector2<Entity*> m_mapOfEntities;
 	TemplateVector2<Grid> m_mapOfEntities;
 	TemplateVector2<Tile> m_mapOfWorld;
+	SDL_Sprite m_sprites[10];
+
 	bool m_success;
 	int clientPlayerIndex;
 	int currentWorld;
@@ -48,6 +52,9 @@ public:
 	int getNumEntities(int i) {return m_mapOfEntities.get(i).getNumberOfEntities();}
 	int getNumEntities();
 	int getCurrentWorld(){return currentWorld;}
+	int getWorldWidth(){return maxWorldX;}
+	int getWorldHeight(){return maxWorldY;}
+	int getNumTiles(){return m_mapOfWorld.size();}
 	Entity * getEntity(int a_entity, int a_grid){return m_mapOfEntities.get(a_grid).getEntity(a_entity);}
 	Entity * getEntity(int a_entity, int a_x, int a_y){return m_mapOfEntities.get(getLocationGrid(a_x, a_y)).getEntity(a_entity);} //So that each entity does NOT need to know which grid it's in!
 	Entity * getPlayer(){return m_player;}

@@ -1,5 +1,6 @@
 #pragma once
 #include "World.h"
+#include "Minion.h"
 #include <string>
 using namespace std;
 #include "NPC.h"
@@ -17,7 +18,15 @@ World::World()
 		Grid gridSys;
 		m_mapOfEntities.add(gridSys);	
 	}
+	m_sprites[SLIME].setSprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
+	m_sprites[SKELETON].setSprite("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[GHOST].setSprite("Sprites/ghost.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	for(int i =0; i < 3; i++)
+	{
+		m_sprites[i].setTransparency(COLOR_TRANSPARENT);
+	}
 	m_success = setWorld("Maps/HubWorldMap.txt");
+
 }
 World::~World()
 {
@@ -95,7 +104,7 @@ bool World::setWorld(char * fileName)
 
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.animate = hi.portal = hi.dungeon = false;
+				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = false;
 				x++;
 			}
 			else
@@ -105,6 +114,7 @@ bool World::setWorld(char * fileName)
 				x = 0;
 			}
 			tileY = y+1;
+			int r_tile = 0;
 			//"Anything else in particular" switch
 			//Creations of entities & any particulars of the map
 			switch(c)
@@ -113,8 +123,12 @@ bool World::setWorld(char * fileName)
 				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 5;
 				}
-				else{
-				hi.indexOfSpriteRow = WORLD_HUB;
+				else if(currentWorld == WORLD_ENGLAND){
+					hi.indexOfSpriteRow = 0;
+				}
+				else if(currentWorld == WORLD_D1){
+					r_tile = rand()%2;
+					hi.indexOfSpriteRow = r_tile;
 				}
 				break;
 			case 'D':
@@ -163,7 +177,8 @@ bool World::setWorld(char * fileName)
 				hi.collide = true;
 				}
 				else if(currentWorld == WORLD_D1){
-					hi.indexOfSpriteRow = 2;
+					r_tile = (rand()%3) + 2;
+					hi.indexOfSpriteRow = r_tile;
 					hi.collide = true;
 				}
 				break;
@@ -185,6 +200,16 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = dungeon;
 				hi.indexOfSpriteRow = 6;
 				hi.animate = hi.dungeon = true;
+				break;
+			case'S':
+					if(currentWorld == WORLD_D1){
+						r_tile = rand()%2;
+						hi.indexOfSpriteRow = r_tile;
+						hi.spawnLocation = true;
+					 }
+			default:
+				hi.currentTexture = dungeon;
+				hi.indexOfSpriteRow = 5; 
 				break;
 			}
 			if(c != '\n')
@@ -312,9 +337,29 @@ void World::setNPC()
 **/
 void World::setMonsters()
 {
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
-	{
-		m_mapOfEntities.get(i).setMonsters(currentWorld, i, maxWorldX, maxWorldY);
+	int numMinions = 0;
+	if(currentWorld == WORLD_ENGLAND){
+		for(int i = 0; i < m_mapOfEntities.size(); i++)
+		{
+			m_mapOfEntities.get(i).setMonsters(currentWorld, i, maxWorldX, maxWorldY);
+		}
+	}
+	else if(currentWorld == WORLD_D1){
+		for(int i = 0; i < m_mapOfWorld.size(); i++)
+		{
+			if(m_mapOfWorld.get(i).spawnLocation)
+			{
+				numMinions = (rand()%3)+3;
+				for(int m = 0; m < numMinions; m++)
+				{
+					int spriteSheet = 0;
+					spriteSheet = rand()%NUM_SPRITE_SHEETS_TO_CHOOSE_FROM;
+					Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, &m_sprites[spriteSheet]);
+					newEntity->setLocation(m_mapOfWorld.get(i).pos);
+					this->add(newEntity);
+				}
+			}
+		}
 	}
 }
 
