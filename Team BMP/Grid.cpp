@@ -1,22 +1,26 @@
 #include "Grid.h"
 #include "Minion.h"
 
-void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
+void Grid::clearAllEntities()
 {
 	if(m_mapOfEntities.size() > 0) //There's SOMETHING in the grid.
-	{
-		for(int i = 0; i < m_mapOfEntities.size(); i++)
 		{
-			if(!(m_mapOfEntities.get(i)->getType() == PLAYER || m_mapOfEntities.get(i)->getType() == CHIP))
+			for(int i = 0; i < m_mapOfEntities.size(); i++)
 			{
-				if(m_mapOfEntities.get(i)->getNewed())
+				if(!(m_mapOfEntities.get(i)->getType() == PLAYER || m_mapOfEntities.get(i)->getType() == CHIP))
 				{
-					delete m_mapOfEntities.get(i); //GET RID OF IT. NAO.
-					m_mapOfEntities.remove(i);
+					if(m_mapOfEntities.get(i)->getNewed())
+					{
+						delete m_mapOfEntities.get(i); //GET RID OF IT. NAO.
+						m_mapOfEntities.remove(i);
+					}
 				}
 			}
 		}
-	}
+}
+void Grid::setMonsters(int currentWorld, int currentGrid, int maxX, int maxY)
+{
+	clearAllEntities();
 	if(currentWorld == WORLD_ENGLAND)
 	{
 		int numberOfMonsters = rand()%1+1;

@@ -48,6 +48,7 @@ int Tile::portalIndexNumber = 0; //I have to use global scope on this in order t
 
 bool World::setWorld(char * fileName)
 {
+	
 	FILE * infile;
 	fopen_s(&infile, fileName, "r");
 	if(fileName == "Maps/HubWorldMap.txt")
@@ -345,6 +346,10 @@ void World::setMonsters()
 		}
 	}
 	else if(currentWorld == WORLD_D1){
+		for(int g = 0; g< m_mapOfEntities.size(); g++)
+		{
+			m_mapOfEntities.get(g).clearAllEntities();
+		}
 		for(int i = 0; i < m_mapOfWorld.size(); i++)
 		{
 			if(m_mapOfWorld.get(i).spawnLocation)

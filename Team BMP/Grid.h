@@ -101,4 +101,5 @@ public:
 			}
 		}
 	}
+	void clearAllEntities();
 };
