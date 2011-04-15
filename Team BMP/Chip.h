@@ -14,7 +14,7 @@ class Chip : public Entity
 		e_chipType m_cType;
 		e_chipSubType m_cSubType;
 		e_chipSubSubType m_cSubSubType;
-		int m_cost, m_costLv, m_dmg, m_dmgLv;
+		int m_cost, m_costLv, m_dmg, m_dmgLv, m_timeSinceLastAttack;
 		bool m_isEquipped;
 		Entity * m_owner;
 		bool m_firstIteration;
@@ -23,7 +23,7 @@ class Chip : public Entity
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
-			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),
+			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_timeSinceLastAttack(0),
 			m_isEquipped(false), m_owner(NULL){m_eType = CHIP;m_level = 0;}
 		e_chipType getType(){return m_cType;}
 		e_chipSubType getSubType(){return m_cSubType;}
@@ -117,33 +117,31 @@ class Chip : public Entity
 		virtual void updateUniqueTwo(int a_timePassed){}
 		void updateUnique(int a_timePassed, World * a_world)
 		{
-			if(m_owner && m_cType != ARMOR)
+			m_timeSinceLastAttack += a_timePassed;
+			if(m_shouldDraw && m_owner && m_cType != ARMOR)
 			{
 				updateUniqueTwo(a_timePassed);
-				if(m_shouldDraw)
+				bool collisionMade = false;
+				for(int g = 0; g < NUM_GRIDS; ++g)
 				{
-					bool collisionMade = false;
-					for(int g = 0; g < NUM_GRIDS; ++g)
+					for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
 					{
-						for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
+						if(shouldApplyEffect(a_world->getEntity(i, g)))
 						{
-							if(shouldApplyEffect(a_world->getEntity(i, g)))
-							{
-								applyEffect(a_world->getEntity(i, g));
-								collisionMade = true;
-							}
+							applyEffect(a_world->getEntity(i, g));
+							collisionMade = true;
 						}
 					}
-					if((((m_cType == MAGIC && m_cSubSubType == BASIC)
-						|| (m_cType == WEAPON && m_cSubType == RANGE))
-						&& collisionMade) || (!m_firstIteration && m_sprite->getFrame() == 0))
-						deactivate();
-					else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
-					{
-						if((m_cType == MAGIC && m_cSubSubType != BASIC)
-							|| (m_cType == WEAPON && m_cSubType != RANGE))
-							m_firstIteration = false;
-					}
+				}
+				if((((m_cType == MAGIC && m_cSubSubType == BASIC)
+					|| (m_cType == WEAPON && m_cSubType == RANGE))
+					&& collisionMade) || (!m_firstIteration && m_sprite->getFrame() == 0))
+					deactivate();
+				else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
+				{
+					if((m_cType == MAGIC && m_cSubSubType != BASIC)
+						|| (m_cType == WEAPON && m_cSubType != RANGE))
+						m_firstIteration = false;
 				}
 			}
 		}

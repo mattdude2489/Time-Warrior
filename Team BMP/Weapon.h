@@ -7,11 +7,11 @@ class Weapon : public Chip
 {
 	protected:
 		bool m_isFlipH, m_isFlipV;
-		int m_rotateDeg, m_timeSinceLastAttack;
+		int m_rotateDeg;
 	public:
 		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(WEAPON, a_subType, a_subSubType),
-			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0),m_timeSinceLastAttack(0){}
+			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0){}
 		void setLocationUsingDirection()
 		{
 			switch(m_direction)
@@ -101,7 +101,7 @@ class Weapon : public Chip
 			case BLUNT:
 				if(a_entity->getType() != PLAYER)
 				{
-					int limit = TIME_SECOND_MS*(m_cSubSubType+1);
+					int limit = TIME_SECOND_MS*(m_cSubSubType+10);
 					if(m_timeSinceLastAttack > limit)
 						m_timeSinceLastAttack = limit;
 					double maxDistance = FRAME_SIZE;
@@ -125,9 +125,6 @@ class Weapon : public Chip
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
-			m_timeSinceLastAttack += a_timePassed;
-			if(m_cSubSubType == BASIC && m_cSubType == BLUNT)
-				printf("%d\n", m_timeSinceLastAttack);
 			if(m_shouldDraw)
 			{
 				switch(m_cSubSubType)
