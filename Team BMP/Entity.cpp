@@ -82,6 +82,7 @@ void Entity::update(int a_timePassed, World * a_world)
 		m_prevLoc = m_location;
 	}
 	updateUnique(a_timePassed, a_world);
+	useEffects(a_timePassed);
 }
 int Entity::getTotalDamageDealt(int a_amount, e_chipType a_type)
 {
