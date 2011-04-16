@@ -1,7 +1,6 @@
 #pragma once
 #include "World.h"
-//#include "Boss.h"
-#include "Minion.h"
+#include "Boss.h"
 #include <string>
 using namespace std;
 #include "NPC.h"
@@ -378,11 +377,10 @@ void World::setMonsters()
 			}
 			if(m_mapOfWorld.get(i).bossLoc)
 			{
-				/*Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,&m_sprites[BOSS1]);
+				Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,&m_sprites[BOSS1]);
 				newBoss->setLocation(m_mapOfWorld.get(i).pos);
-				BasicFire * f1 = new BasicFire();
-				newBoss->setChip(f1);
-				this->add(newBoss);*/
+				this->add(newBoss);
+				newBoss->setChip(FIRE, BASIC, this);
 			}
 		}
 	}

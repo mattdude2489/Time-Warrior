@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Minion.h"
+#include "Magic.h"
 
 
 
@@ -27,17 +28,37 @@ public:
 		m_target.set(m_location);
 		m_playerTargeted = false;
 		m_lastCast = 0;
+		m_attack = NULL;
 	}
 	void setBossLoc(SPoint a_point)
 	{
 		setLocation(a_point);
 		m_start = a_point;
 	}
-	void setChip(Chip * a_chip)
+	void setChip(e_chipSubType a_subType, e_chipSubSubType a_subSubType, World * a_world)
 	{
-		m_attack = new Chip(a_chip->getType(), a_chip->getSubType(),a_chip->getSubSubType() );
+		if(m_attack)
+			delete m_attack;
+		switch(a_subType)
+		{
+		case FIRE:
+			switch(a_subSubType)
+			{
+			case BASIC:
+				m_attack = new BasicFire();
+				break;
+			case ADVANCED:
+				m_attack = new AdvancedFire();
+				break;
+			case EXPERT:
+				m_attack = new ExpertFire();
+				break;
+			}
+			break;
+		}
 		m_attack->setOwner(this);
 		m_attack->levelUp();
+		a_world->add(m_attack);
 	}
 	void isPlayerInRange(Entity *a_player, int a_time)
 	{
@@ -57,16 +78,16 @@ public:
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
 		}
-		/*if(distance < BOSS_ATK_RANGE && m_lastCast > HIT_DELAY)
+		if(distance < BOSS_ATK_RANGE && m_lastCast > HIT_DELAY && m_attack)
 		{
 			m_attack->setTarget(a_player->getLocation());
 			m_attack->activate();
-
 			m_lastCast = 0;
-		}*/
+		}
 	}
 	~Boss()
 	{
-		delete m_attack;
+		if(m_attack)
+			delete m_attack;
 	}
 };
