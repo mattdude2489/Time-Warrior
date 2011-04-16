@@ -84,7 +84,7 @@ class Weapon : public Chip
 				case BASIC:
 				case ADVANCED:
 				case EXPERT:
-					if(a_entity->getType() != PLAYER)
+					if(a_entity->getType() != m_owner->getType())
 						return collideSimple(a_entity);
 					else
 						return false;
@@ -99,7 +99,7 @@ class Weapon : public Chip
 			switch(m_cSubType)
 			{
 			case BLUNT:
-				if(a_entity->getType() != PLAYER)
+				if(a_entity->getType() != m_owner->getType())
 				{
 					int limit = TIME_SECOND_MS*(m_cSubSubType+1);
 					if(m_timeSinceLastAttack > limit)
@@ -112,7 +112,7 @@ class Weapon : public Chip
 			case RANGE:
 			case SLASH:
 			case PIERCE:
-				if(a_entity->getType() != PLAYER)
+				if(a_entity->getType() != m_owner->getType())
 					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,WEAPON), m_cSubType);
 				break;
 			}
