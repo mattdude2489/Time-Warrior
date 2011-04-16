@@ -368,6 +368,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Boss.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Chip.h"
 				>
 			</File>

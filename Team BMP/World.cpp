@@ -1,9 +1,10 @@
 #pragma once
 #include "World.h"
-#include "Minion.h"
+#include "Boss.h"
 #include <string>
 using namespace std;
 #include "NPC.h"
+#include "Magic.h"
 
 //#define NPC_ADD
 
@@ -21,6 +22,7 @@ World::World()
 	m_sprites[SLIME].setSprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
 	m_sprites[SKELETON].setSprite("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[GHOST].setSprite("Sprites/ghost.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[BOSS1].setSprite("Sprites/demon0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	for(int i =0; i < 3; i++)
 	{
 		m_sprites[i].setTransparency(COLOR_TRANSPARENT);
@@ -105,7 +107,7 @@ bool World::setWorld(char * fileName)
 
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = false;
+				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc= false;
 				x++;
 			}
 			else
@@ -208,6 +210,15 @@ bool World::setWorld(char * fileName)
 						hi.indexOfSpriteRow = r_tile;
 						hi.spawnLocation = true;
 					 }
+					break;
+			case 'b':
+				if(currentWorld == WORLD_D1){
+						r_tile = rand()%2;
+						hi.indexOfSpriteRow = r_tile;
+						hi.bossLoc = true;
+				}
+				break;
+
 			default:
 				hi.currentTexture = dungeon;
 				hi.indexOfSpriteRow = 5; 
@@ -363,6 +374,14 @@ void World::setMonsters()
 					newEntity->setLocation(m_mapOfWorld.get(i).pos);
 					this->add(newEntity);
 				}
+			}
+			if(m_mapOfWorld.get(i).bossLoc)
+			{
+				Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,&m_sprites[BOSS1]);
+				newBoss->setLocation(m_mapOfWorld.get(i).pos);
+				BasicFire * f1 = new BasicFire();
+				newBoss->setChip(f1);
+				this->add(newBoss);
 			}
 		}
 	}

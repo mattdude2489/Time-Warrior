@@ -5,12 +5,12 @@
 #include "templatevector.h"
 #include "srect.h"
 
-enum m_sprites {SLIME, SKELETON, GHOST};
+enum m_sprites {SLIME, SKELETON, GHOST, BOSS1};
 
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide, animate, portal, dungeon, spawnLocation;
+	bool collide, animate, portal, dungeon, spawnLocation, bossLoc;
 	SPoint pos, *cam;
 	int indexOfSpriteRow;
 	static int portalIndexNumber;

@@ -146,6 +146,7 @@ public:
 			m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
 	}
 	virtual void handleServerInfo(char * a_in){}
+	virtual void isPlayerInRange(Entity *a_player, int a_time){}
 	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
 	void setTarget(SPoint a_point){m_target.set(a_point);}
 	bool getActivation() {return m_activation;}
