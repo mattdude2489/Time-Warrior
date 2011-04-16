@@ -45,7 +45,10 @@ public:
 	}
 	void updateUnique(int a_timePassed, World * a_world)
 	{
-		checkState(a_timePassed, a_world);
+		if(m_knockback.active)
+			useEffects(a_timePassed);
+		else
+			checkState(a_timePassed, a_world);
 		faceTargetDirection();
 		/*if(getStatNumber(HEALTH_CURRENT) <= 0)
 			respawn();*/

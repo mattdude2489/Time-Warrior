@@ -101,16 +101,12 @@ class Weapon : public Chip
 			case BLUNT:
 				if(a_entity->getType() != PLAYER)
 				{
-					int limit = TIME_SECOND_MS*(m_cSubSubType+10);
+					int limit = TIME_SECOND_MS*(m_cSubSubType+1);
 					if(m_timeSinceLastAttack > limit)
 						m_timeSinceLastAttack = limit;
-					double maxDistance = FRAME_SIZE;
-					maxDistance += maxDistance * ((double)m_timeSinceLastAttack/TIME_SECOND_MS);
-					SPoint delta = a_entity->getDeltaBetweenLocationAnd(&a_entity->getPreviousPreviousLocation());
-					//TODO: put normalize code into a func (used here & moveToTarget)
-					delta.setX((int)(((double)delta.x/delta.getLength()) * maxDistance));
-					delta.setY((int)(((double)delta.y/delta.getLength()) * maxDistance));
-					a_entity->move(delta);
+					int maxDistance = FRAME_SIZE;
+					maxDistance += maxDistance * (m_timeSinceLastAttack / TIME_SECOND_MS);
+					a_entity->activateEffect(KNOCKBACK, maxDistance);
 					m_timeSinceLastAttack = 0;
 				}
 			case RANGE:

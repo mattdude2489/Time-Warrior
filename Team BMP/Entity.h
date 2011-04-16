@@ -16,12 +16,14 @@ enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
 enum e_frame {FRAME_SIZE = 32, FRAME_RATE = TIME_SECOND_MS/30};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
+enum e_effect {KNOCKBACK};
 
 #define	SPEED_PLAYER	.1
 #define	SPEED_MAGIC		(SPEED_PLAYER*2)
 #define	SPEED_MINION	SPEED_PLAYER
 
 struct v2D {double x, y;};//PLEASE DONT HATE ME
+struct effect {bool active; SPoint target; int timer, timeLimit;};
 
 class Entity
 {
@@ -35,6 +37,7 @@ protected:
 	v2D m_vel; //The velocity. - ONLY for player movement
 	//I don't apologize for your vulgarity, or my own.
 	bool nude; //Lolz. Keeps track of whether or not it needs to delete it's own Sprite pointer when this is destroyed.
+	effect m_knockback;
 public:
 	Entity(){init();}
 	Entity(SDL_Sprite * a_sprite){init(a_sprite);}
@@ -64,13 +67,12 @@ public:
 		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
 		m_timeToRegen = m_timer = 0;
 		m_level = 1;
-		m_shouldDraw = false;
+		m_shouldDraw = m_activation = nude = false;
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
 		m_prevPrevLoc = m_prevLoc;
-		m_activation = false;
-		nude = false;
+		m_knockback.active = false;
 	}
 	void initSprite(SDL_Sprite * a_sprite)
 	{
@@ -156,10 +158,10 @@ public:
 		return a_point->difference(m_location);
 	}
 	//@return true if delta is 0 (location @ target), false if not
-	bool moveToTarget(int a_maxDistance)
+	bool moveTo(SPoint * a_target, int a_maxDistance)
 	{
 		//calculate the delta between the target & current location
-		SPoint delta = getDeltaBetweenLocationAnd(&m_target);
+		SPoint delta = getDeltaBetweenLocationAnd(a_target);
 		if(!delta.isZero())
 		{
 			//calculate the length
@@ -178,6 +180,7 @@ public:
 		else
 			return true;
 	}
+	bool moveToTarget(int a_maxDistance){return moveTo(&m_target, a_maxDistance);};
 	bool getNewed() {return nude;}
 	void faceTargetDirection()
 	{
@@ -327,4 +330,30 @@ public:
 		}
 	}
 	bool colideWithTile(Tile * a_tile);
+	void activateEffect(e_effect a_effect, int a_maxDistance)
+	{
+		if(a_effect == KNOCKBACK && !m_knockback.active)
+		{
+			m_knockback.active = true;
+			m_knockback.timer = 0;
+			m_knockback.timeLimit = (int)(a_maxDistance / SPEED_MAGIC);
+			m_knockback.target = getDeltaBetweenLocationAnd(&getPreviousPreviousLocation());
+
+			//TODO: put this code in func (used here & moveTo(SPoint*))
+			m_knockback.target.setX((int)(((double)m_knockback.target.x/m_knockback.target.getLength()) * a_maxDistance));
+			m_knockback.target.setY((int)(((double)m_knockback.target.y/m_knockback.target.getLength()) * a_maxDistance));
+
+			m_knockback.target.add(m_location);
+		}
+	}
+	void useEffects(int a_timePassed)
+	{
+		if(m_knockback.active)
+		{
+			m_knockback.timer += a_timePassed;
+			if(moveTo(&m_knockback.target, (int)(SPEED_MAGIC*a_timePassed))
+			|| m_knockback.timer > m_knockback.timeLimit)
+				m_knockback.active = false;
+		}
+	}
 };
