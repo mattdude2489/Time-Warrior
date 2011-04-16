@@ -106,7 +106,7 @@ class Weapon : public Chip
 						m_timeSinceLastAttack = limit;
 					int maxDistance = FRAME_SIZE;
 					maxDistance += maxDistance * (m_timeSinceLastAttack / TIME_SECOND_MS);
-					a_entity->activateEffect(KNOCKBACK, maxDistance);
+					a_entity->activateEffect(KNOCKBACK, maxDistance, &m_owner->getDeltaBetweenLocationAnd(&a_entity->getLocation()));
 					m_timeSinceLastAttack = 0;
 				}
 			case RANGE:

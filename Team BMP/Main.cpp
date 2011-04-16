@@ -21,7 +21,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 {
 	//INIT
 
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_Surface * screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 	SDL_Event e;

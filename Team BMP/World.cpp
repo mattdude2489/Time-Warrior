@@ -298,8 +298,8 @@ void World::setNPC()
 	{
 		while(c != '#')
 			c = fgetc(infile);
-		fscanf(infile,"%i",&x);
-		fscanf(infile,"%i",&y);
+		fscanf_s(infile,"%i",&x);
+		fscanf_s(infile,"%i",&y);
 		c = fgetc(infile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
 		c = fgetc(infile);
 		c -= 48;
@@ -323,8 +323,8 @@ void World::setNPC()
 			char buff = (char)c;
 			s.append(1, buff);
 		}
-		fscanf(infile, "%i", &x);
-		fscanf(infile, "%i", &y);
+		fscanf_s(infile, "%i", &x);
+		fscanf_s(infile, "%i", &y);
 		//charpoint = &s;
 		//strcpy_s(charpoint, strlen(s.c_str()) ,s.c_str());
 		SDL_Sprite * newSprite;

@@ -31,7 +31,7 @@ protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer, m_level;
 	e_entityType m_eType;
 	bool m_shouldDraw, m_activation; //This bool is pretty much there entirely for NPC dialogue at the moment.
-	SPoint m_location, m_prevLoc, m_prevPrevLoc, *m_camera, m_target;
+	SPoint m_location, m_prevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 	v2D m_vel; //The velocity. - ONLY for player movement
@@ -71,7 +71,6 @@ public:
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
-		m_prevPrevLoc = m_prevLoc;
 		for(int i = 0; i < NUM_EFFECTS; ++i)
 			m_effects[i].active = false;
 	}
@@ -294,7 +293,6 @@ public:
 			return m_stats[a_stat];
 	}
 	SPoint getLocation(){return m_location;}
-	SPoint getPreviousPreviousLocation() {return m_prevPrevLoc;}
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
@@ -331,14 +329,14 @@ public:
 		}
 	}
 	bool colideWithTile(Tile * a_tile);
-	void activateEffect(e_effect a_effect, int a_maxDistance)
+	void activateEffect(e_effect a_effect, int a_maxDistance, SPoint * a_direction)
 	{
 		if(a_effect == KNOCKBACK && !m_effects[KNOCKBACK].active)
 		{
 			m_effects[KNOCKBACK].active = true;
 			m_effects[KNOCKBACK].timer = 0;
 			m_effects[KNOCKBACK].timeLimit = (int)(a_maxDistance / SPEED_MAGIC);
-			m_effects[KNOCKBACK].target = getDeltaBetweenLocationAnd(&getPreviousPreviousLocation());
+			m_effects[KNOCKBACK].target = *a_direction;
 
 			//TODO: put this code in func (used here & moveTo(SPoint*))
 			m_effects[KNOCKBACK].target.setX((int)(((double)m_effects[KNOCKBACK].target.x/m_effects[KNOCKBACK].target.getLength()) * a_maxDistance));
