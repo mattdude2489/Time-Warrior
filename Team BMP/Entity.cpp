@@ -60,8 +60,14 @@ void Entity::update(int a_timePassed, World * a_world)
 		{
 			if(m_eType == PLAYER)
 			{
-				this->setLocation(640, 414);
-				a_world->setWorld("Maps/Dungeon1.txt");
+				int dungeon = rand()%2;//picks a random dungeon 
+				switch(dungeon){
+					case 0:
+						a_world->setWorld("Maps/Dungeon1.txt");
+						break;
+					case 1:
+						a_world->setWorld("Maps/Dungeon0.txt");
+				}
 				a_world->setCamera(this->m_camera);
 			}
 		}

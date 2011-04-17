@@ -7,6 +7,8 @@
 enum e_range	{ENGAGE_RANGE = 100, HIT_DELAY = 1000, BOSS_ENGAGE = 150, BOSS_ATK_RANGE = 50};
 enum e_states	{WANDER, CHASE, GUARD};
 enum e_wander	{WANDER_DIST = 50, WANDER_MAX = WANDER_DIST*2,WANDER_DIRECTION_TIME = TIME_SECOND_MS*3};
+#define		SCALE_MIN		.75
+#define		SCALE_BOSS		1.75
 class Minion : public Entity
 {
 protected:
@@ -85,5 +87,16 @@ public:
 	{
 		m_playerTargeted = true;
 		m_state = CHASE;
+	}
+	void scaleToPlayer(Entity * a_player)
+	{
+		for(int i = 0; i < NUM_STATS; i++)
+		{
+			if(m_eType == MINION)//scale the minions slightly weeker then player but close
+				m_stats[i] = a_player->getStatNumber(i) * SCALE_MIN;
+			else if( m_eType == BOSS)
+				m_stats[i] = a_player->getStatNumber(i) * SCALE_BOSS;
+		}
+		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];//incase the players health is low this will set the minion/boss to full
 	}
 };

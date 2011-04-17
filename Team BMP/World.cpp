@@ -57,7 +57,7 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_HUB;
 	if(fileName == "Maps/MedEngMap.txt")
 		currentWorld = WORLD_ENGLAND;
-	if(fileName == "Maps/Dungeon1.txt")
+	if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" )
 		currentWorld = WORLD_D1;
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
@@ -107,7 +107,7 @@ bool World::setWorld(char * fileName)
 
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc= false;
+				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = false;
 				x++;
 			}
 			else
@@ -198,6 +198,10 @@ bool World::setWorld(char * fileName)
 				hi.indexOfSpriteRow = 6;
 				hi.animate = hi.portal = true;
 				hi.portalIndexNumber++;
+				break;
+			case'p':
+				hi.indexOfSpriteRow = 0;
+				hi.playerSpawn = true;
 				break;
 			case 'd':
 				hi.currentTexture = dungeon;
@@ -391,6 +395,7 @@ void World::setMonsters()
 				Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
 				newEntity->setNewed(true);
 				newEntity->setLocation(m_mapOfWorld.get(i).pos);
+				newEntity->scaleToPlayer(m_player);
 				this->add(newEntity);
 			}
 		}
@@ -399,9 +404,14 @@ void World::setMonsters()
 			sprite = new SDL_Sprite("Sprites/demon0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 			Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,sprite);
 			newBoss->setNewed(true);
-			newBoss->setLocation(m_mapOfWorld.get(i).pos);
+			newBoss->scaleToPlayer(m_player);
+			newBoss->setBossLoc(m_mapOfWorld.get(i).pos);
 			this->add(newBoss);
 			newBoss->setChip(FIRE, BASIC, this);
+		}
+		if(m_mapOfWorld.get(i).playerSpawn)
+		{
+			m_player->setLocation(m_mapOfWorld.get(i).pos);
 		}
 	}
 }

@@ -72,16 +72,19 @@ public:
 		}
 		else
 		{
+			//if the player runs too far away the boss will reset to its original position and guard
+			m_location = m_start;
 			m_state = GUARD;
 		}
+		//updates the time till they can attack and cast again
 		m_hitLast += a_time;
 		m_lastCast += a_time;
-		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)
+		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)//if coliding and the time to hit is up hit
 		{
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
 		}
-		if(distance < BOSS_ATK_RANGE && m_lastCast > HIT_DELAY && m_attack)
+		if(distance < BOSS_ATK_RANGE && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
 		{
 			m_attack->setTarget(a_player->getLocation());
 			m_attack->activate();
