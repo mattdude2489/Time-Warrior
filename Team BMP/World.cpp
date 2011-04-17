@@ -210,6 +210,10 @@ bool World::setWorld(char * fileName)
 						hi.indexOfSpriteRow = r_tile;
 						hi.spawnLocation = true;
 					 }
+					else if(currentWorld == WORLD_ENGLAND){
+						hi.indexOfSpriteRow = 0;
+						hi.spawnLocation = true;
+					 }
 					break;
 			case 'b':
 				if(currentWorld == WORLD_D1){
@@ -350,54 +354,53 @@ void World::setNPC()
 void World::setMonsters()
 {
 	int numMinions = 0;
-	if(currentWorld == WORLD_ENGLAND){
-		for(int i = 0; i < m_mapOfEntities.size(); i++)
-		{
-			m_mapOfEntities.get(i).setMonsters(currentWorld, i, maxWorldX, maxWorldY);
-		}
-	}
-	else if(currentWorld == WORLD_D1){
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	{
 		for(int g = 0; g< m_mapOfEntities.size(); g++)
-		{
 			m_mapOfEntities.get(g).clearAllEntities();
-		}
-		for(int i = 0; i < m_mapOfWorld.size(); i++)
+	}
+	for(int i = 0; i < m_mapOfWorld.size(); i++)
+	{
+		SDL_Sprite * sprite;
+		if(m_mapOfWorld.get(i).spawnLocation)
 		{
-			SDL_Sprite * sprite;
-			if(m_mapOfWorld.get(i).spawnLocation)
+			numMinions = (rand()%3)+3;
+			for(int m = 0; m < numMinions; m++)
 			{
-				numMinions = (rand()%3)+3;
-				for(int m = 0; m < numMinions; m++)
+				int spriteSheet = 0;
+				//spriteSheet = rand()%NUM_SPRITE_SHEETS_TO_CHOOSE_FROM;
+				spriteSheet = rand()%(NUM_SPRITE_SHEETS_TO_CHOOSE_FROM-1);
+				if(currentWorld == WORLD_D1)
 				{
-					int spriteSheet = 0;
-					spriteSheet = rand()%NUM_SPRITE_SHEETS_TO_CHOOSE_FROM;
 					switch(spriteSheet)
 					{
-					case 0:
+					/*case 0:
 						sprite = new SDL_Sprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
-						break;
-					case 1:
+						break;*/
+					case 0://1:
 						sprite = new SDL_Sprite("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 						break;
-					case 2:
+					case 1://2:
 						sprite = new SDL_Sprite("Sprites/ghost.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 						break;
 					}
-					Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
-					newEntity->setNewed(true);
-					newEntity->setLocation(m_mapOfWorld.get(i).pos);
-					this->add(newEntity);
 				}
+				else
+					sprite = new SDL_Sprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
+				Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
+				newEntity->setNewed(true);
+				newEntity->setLocation(m_mapOfWorld.get(i).pos);
+				this->add(newEntity);
 			}
-			if(m_mapOfWorld.get(i).bossLoc)
-			{
-				sprite = new SDL_Sprite("Sprites/demon0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-				Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,sprite);
-				newBoss->setNewed(true);
-				newBoss->setLocation(m_mapOfWorld.get(i).pos);
-				this->add(newBoss);
-				newBoss->setChip(FIRE, BASIC, this);
-			}
+		}
+		if(m_mapOfWorld.get(i).bossLoc)
+		{
+			sprite = new SDL_Sprite("Sprites/demon0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+			Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,sprite);
+			newBoss->setNewed(true);
+			newBoss->setLocation(m_mapOfWorld.get(i).pos);
+			this->add(newBoss);
+			newBoss->setChip(FIRE, BASIC, this);
 		}
 	}
 }
