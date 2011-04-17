@@ -6,7 +6,7 @@ using namespace std;
 #include "NPC.h"
 #include "Magic.h"
 
-//#define NPC_ADD
+#define NPC_ADD
 
 World::World()
 {
@@ -310,12 +310,12 @@ void World::setNPC()
 
 	char * charpoint = " ";
 	//char * buff; //I ONLY NEED ONE CHARACTER...but I needed a *...and it wouldn't let me just use char *.
-	string s;
 	c = fgetc(infile);
 	c = fgetc(infile); //This SHOULD make it get an integer.
 	int forLoopNum = c-48;
 	for(int i = 0; i < forLoopNum; i++)
 	{
+		string s;
 		while(c != '#')
 		{
 			c = fgetc(infile);
@@ -340,6 +340,7 @@ void World::setNPC()
 		newNPC->setNewed(true);
 		newNPC->setLocation(x, y);
 		add(newNPC);
+		c = fgetc(infile);
 	}
 	fclose(infile);
 	/*SDL_Sprite * sdlsprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);

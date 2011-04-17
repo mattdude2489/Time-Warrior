@@ -1,6 +1,7 @@
 //Basic Player Class Extensions.
 #include "Player.h"
 #include "UserInput.h"
+#include <stdio.h>
 
 void Player::initPlayer()
 {
@@ -52,6 +53,12 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot)
 		}
 	}
 }
+
+Player::~Player()
+{
+	save();
+}
+
 void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
 {
 	if(a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2)
@@ -67,6 +74,44 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
 				setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level]);
 		}
 	}
+}
+//Saves the current Player to a .txt file.
+//Saves the current experience, experience required for next level, stat points, max Hp, max Energy, str and int.
+//SAVES CURRENT INVENTORY, INCLUDING ARMOR AND CHIPS.
+void Player::save()
+{
+	//File will go like this: P#(Level)#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
+	//							A#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(level)#/
+	//							C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#(Level)#/
+	//Fire, Ice, Lightning, Bludgeoning, Slashing, Divine, Ranged, Piercing, Armor
+
+	FILE * outfile;
+	outfile = fopen("playerSave.txt", "w");
+	fprintf(outfile, "P#%i#%i#%i#%i#%i#%i#%i#%i#/", m_level, m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	//The Armor
+//	for(int i = SLOT_ARMOR_HEAD; i < NUM_SLOTS; i++)
+//	{
+	fprintf(outfile, "A#%i#%i#%i#%i#%i#/", m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(DEFENSE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_ICE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[SLOT_ARMOR_HEAD]->getLevel());
+	//}
+	//The Chips/Attack Inventory.
+	//Yes, I know magic number are evil, but as these are debug, we're ok to leave them in there for now.
+	//once this works, we can change them easily enough.
+	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++)
+	{
+		for(int k = 0; k < NUM_CHIP_LEVELS; k++)
+		{
+			if(m_attackInventory[i][k] != NULL)
+				fprintf(outfile, "C#%i#%i#%i#%i#%i#%i#/", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getLevel());
+		}
+	}
+	fclose(outfile);
+}
+bool Player::loadPlayer()
+{
+	//File will go like this: P#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
+	//							A#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#/
+	//							C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#/
+	return false;
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 {
