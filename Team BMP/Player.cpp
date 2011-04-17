@@ -17,6 +17,7 @@ void Player::initPlayer()
 	m_experience = 0;
 	m_expLvReq = m_level+1;
 	setVelocity(0,0);
+	if(loadedPlayer = loadPlayer());
 }
 void Player::addToAttackInventory(Chip * a_chip)
 {
@@ -57,6 +58,14 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot)
 Player::~Player()
 {
 	save();
+	for(int i = 0; i < NUM_SLOTS; i++)
+	{
+		if(loadedPlayer == true)
+		{
+			if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
+				delete m_gauntlet[i];
+		}
+	}
 }
 
 void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
@@ -81,18 +90,20 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
 void Player::save()
 {
 	//File will go like this: P#(Level)#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
-	//							A#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(level)#/
+	//							A#(SubType)#(SubSubType)#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(level)#/
 	//							C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#(Level)#/
 	//Fire, Ice, Lightning, Bludgeoning, Slashing, Divine, Ranged, Piercing, Armor
+	//#'s are spaces, for use of fscanf.
 
 	FILE * outfile;
 	outfile = fopen("playerSave.txt", "w");
-	fprintf(outfile, "P#%i#%i#%i#%i#%i#%i#%i#%i#/", m_level, m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	fprintf(outfile, "P %i %i %i %i %i %f %i %i /", m_level, m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
-//	for(int i = SLOT_ARMOR_HEAD; i < NUM_SLOTS; i++)
-//	{
-	fprintf(outfile, "A#%i#%i#%i#%i#%i#/", m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(DEFENSE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_ICE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[SLOT_ARMOR_HEAD]->getLevel());
-	//}
+	for(int i = SLOT_ARMOR_HEAD; i < NUM_SLOTS; i++)
+	{
+		if(m_gauntlet[i] != NULL)
+			fprintf(outfile, "A %i %i %i %i %i %i %i /", m_gauntlet[SLOT_ARMOR_HEAD]->getSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getSubSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(DEFENSE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_ICE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[SLOT_ARMOR_HEAD]->getLevel());
+	}
 	//The Chips/Attack Inventory.
 	//Yes, I know magic number are evil, but as these are debug, we're ok to leave them in there for now.
 	//once this works, we can change them easily enough.
@@ -101,17 +112,99 @@ void Player::save()
 		for(int k = 0; k < NUM_CHIP_LEVELS; k++)
 		{
 			if(m_attackInventory[i][k] != NULL)
-				fprintf(outfile, "C#%i#%i#%i#%i#%i#%i#/", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getLevel());
+				fprintf(outfile, "C %i %i %i %i %i %i /", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getLevel());
 		}
 	}
 	fclose(outfile);
+
 }
 bool Player::loadPlayer()
 {
 	//File will go like this: P#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
 	//							A#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#/
 	//							C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#/
-	return false;
+	
+	FILE * infile;
+	infile = fopen("playerSave.txt", "r");
+	//check to see if playerSave.txt exists, if it doesn't, break out.
+	if(infile == NULL)
+		return false;
+
+	int hpenstrintexpsta; //The various Player stats.
+	int chipAndArmorHelper;
+	double exp;
+	char charget;
+	charget = fgetc(infile);
+	while(charget != EOF)
+	{
+		//if it's reading the Player...
+		if(charget == 'P')
+		{
+			//Level
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_level = hpenstrintexpsta;
+			//HP
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_stats[HEALTH_MAX] = hpenstrintexpsta;
+			//Energy
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_stats[ENERGY_MAX] = hpenstrintexpsta;
+			//Strength
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_stats[STRENGTH] = hpenstrintexpsta;
+			//Intelligence
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_stats[INTELLECT] = hpenstrintexpsta;
+			//Current Exp.
+			fscanf(infile, "%f", &exp);
+			this->m_experience = exp;
+			//Current Level Requirement
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_expLvReq = hpenstrintexpsta;
+			//Stat Points.
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_statPoints = hpenstrintexpsta;
+		}
+		//If it's reading the Armor...
+		else if(charget == 'A')
+		{
+			//Armor goes like this: Subtype, SubSubType, Def, Resist Fire, resist ice, resist light, level.
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf(infile, "%i", &chipAndArmorHelper);
+			//Set the new armor.
+			Armor * gear = new Armor((e_chipSubType)hpenstrintexpsta, (e_chipSubSubType)chipAndArmorHelper);
+			//Defense.
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			gear->setDefense(hpenstrintexpsta);
+			//ResistFire & resistIce
+			for(int i = 0; i < 3; i++)
+			{
+				fscanf(infile, "%i", &hpenstrintexpsta);
+				gear->setResist(i, hpenstrintexpsta);
+			}
+			fscanf(infile, "%i", &exp);
+			for(int k = 0; k < exp; k++)
+			{
+				gear->levelUp();
+			}
+			
+			gear->setOwner(this);
+			//replace the old one...whatever it was...with the new one loaded from a file.
+			m_gauntlet[SLOT_ARMOR_HEAD]->deactivate();
+			setGauntletSlot(SLOT_ARMOR_HEAD, gear);
+			m_gauntlet[SLOT_ARMOR_HEAD]->activate();
+		}
+		//If it's reading the Chips...
+		else if(charget == 'C')
+		{
+			
+		}
+		//To get rid of the slash
+		charget = fgetc(infile);
+		//To continue or discontinue with the while loop.
+		charget = fgetc(infile);
+	}
+	return true;
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 {

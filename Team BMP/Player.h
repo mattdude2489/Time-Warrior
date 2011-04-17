@@ -20,6 +20,8 @@ private:
 	SPoint m_cameraP;
 	int m_statPoints, m_expLvReq;
 	double m_experience;
+	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
+	bool loadedPlayer; 
 public:
 	void initPlayer();
 	Player():Entity(){initPlayer();}

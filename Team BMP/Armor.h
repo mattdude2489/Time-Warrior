@@ -33,4 +33,13 @@ class Armor : public Chip
 			m_owner->debuffDefenseOrResistance(m_stats[DEFENSE], DEFENSE);
 			m_owner->debuffDefenseOrResistance(m_stats[m_resisType], (e_stats)m_resisType);
 		}
+		void setDefense(int def)
+		{
+			m_stats[DEFENSE] = def;
+		}
+		void setResist(int resistType, int resistAmount)
+		{
+			resistType += RESISTANCE_FIRE;
+			m_stats[resistType] = resistAmount;
+		}
 };
