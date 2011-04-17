@@ -118,13 +118,6 @@ class Magic : public Chip
 				}
 			}
 		}
-		~Magic()
-		{
-			if(m_sprite->isSprite())
-				delete m_sprite;
-			if(m_spriteHUD->isSprite())
-				delete m_spriteHUD;
-		}
 };
 class Divine : public Magic
 {

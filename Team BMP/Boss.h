@@ -88,9 +88,4 @@ public:
 			m_lastCast = 0;
 		}
 	}
-	~Boss()
-	{
-		if(m_attack)
-			delete m_attack;
-	}
 };

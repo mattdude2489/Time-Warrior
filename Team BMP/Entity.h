@@ -45,12 +45,10 @@ public:
 	{
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);
 	}
-	~Entity()
+	virtual~Entity()
 	{
 		if(nude)
-		{
 			delete m_sprite;
-		}
 	}
 	void init(){init(1, 1, 0, 0, 0, 0, 0, 0);}
 	void init(SDL_Sprite * a_sprite){init();initSprite(a_sprite);}
@@ -71,6 +69,7 @@ public:
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
+		m_sprite = NULL;
 		for(int i = 0; i < NUM_EFFECTS; ++i)
 			m_effects[i].active = false;
 	}

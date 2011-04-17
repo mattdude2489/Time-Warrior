@@ -142,13 +142,6 @@ class Weapon : public Chip
 			m_spriteHUD->setRIndex(m_cSubSubType);
 			initHudSprite();
 		}
-		~Weapon()
-		{
-			if(m_sprite->isSprite())
-				delete m_sprite;
-			if(m_spriteHUD->isSprite())
-				delete m_spriteHUD;
-		}
 };
 class Slash : public Weapon
 {
