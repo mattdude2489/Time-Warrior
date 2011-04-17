@@ -46,12 +46,15 @@ public:
 			{
 			case BASIC:
 				m_attack = new BasicFire();
+				m_attack->setNewed(true);
 				break;
 			case ADVANCED:
 				m_attack = new AdvancedFire();
+				m_attack->setNewed(true);
 				break;
 			case EXPERT:
 				m_attack = new ExpertFire();
+				m_attack->setNewed(true);
 				break;
 			}
 			break;

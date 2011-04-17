@@ -30,7 +30,7 @@ class Entity
 protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer, m_level;
 	e_entityType m_eType;
-	bool m_shouldDraw, m_activation; //This bool is pretty much there entirely for NPC dialogue at the moment.
+	bool m_shouldDraw, m_activation, m_chipOwnerPlayer; //This bool is pretty much there entirely for NPC dialogue at the moment.
 	SPoint m_location, m_prevLoc, *m_camera, m_target;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
@@ -67,7 +67,7 @@ public:
 		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
 		m_timeToRegen = m_timer = 0;
 		m_level = 1;
-		m_shouldDraw = m_activation = nude = false;
+		m_shouldDraw = m_activation = nude = m_chipOwnerPlayer = false;
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
@@ -355,4 +355,5 @@ public:
 				m_effects[KNOCKBACK].active = false;
 		}
 	}
+	bool isChipOwnerPlayer(){return m_chipOwnerPlayer;}
 };

@@ -33,7 +33,12 @@ class Chip : public Entity
 		int getDamage(){return m_dmg;}
 		bool isEquipped(){return m_isEquipped;}
 		void toggleEquip(){m_isEquipped = !m_isEquipped;}
-		void setOwner(Entity * a_owner){m_owner = a_owner;}
+		void setOwner(Entity * a_owner)
+		{
+			m_owner = a_owner;
+			if(m_owner->getType() == PLAYER)
+				m_chipOwnerPlayer = true;
+		}
 		void setDirection(char a_dir){m_direction = a_dir;}
 		int getOwnerCenterX()
 		{

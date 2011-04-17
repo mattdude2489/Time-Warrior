@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include "Minion.h"
+#include "World.h"
 
 void Grid::clearAllEntities()
 {
@@ -7,7 +8,7 @@ void Grid::clearAllEntities()
 		{
 			for(int i = 0; i < m_mapOfEntities.size(); i++)
 			{
-				if(!(m_mapOfEntities.get(i)->getType() == PLAYER || m_mapOfEntities.get(i)->getType() == CHIP))
+				if(!(m_mapOfEntities.get(i)->getType() == PLAYER || (m_mapOfEntities.get(i)->getType() == CHIP && m_mapOfEntities.get(i)->isChipOwnerPlayer())))
 				{
 					if(m_mapOfEntities.get(i)->getNewed())
 					{
