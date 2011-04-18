@@ -17,7 +17,7 @@ void Player::initPlayer()
 	m_experience = 0;
 	m_expLvReq = m_level+1;
 	setVelocity(0,0);
-	if(loadedPlayer = loadPlayer());
+	loadedPlayer = loadPlayer();
 }
 void Player::addToAttackInventory(Chip * a_chip)
 {
@@ -63,7 +63,9 @@ Player::~Player()
 		if(loadedPlayer == true)
 		{
 			if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
-				delete m_gauntlet[i];
+			{
+				//delete m_gauntlet[i];
+			}
 		}
 	}
 }
@@ -101,7 +103,7 @@ void Player::save()
 	//The Armor
 	for(int i = SLOT_ARMOR_HEAD; i < NUM_SLOTS; i++)
 	{
-		if(m_gauntlet[i] != NULL)
+		if(m_gauntlet[i])
 			fprintf(outfile, "A %i %i %i %i %i %i %i /", m_gauntlet[SLOT_ARMOR_HEAD]->getSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getSubSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(DEFENSE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_ICE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[SLOT_ARMOR_HEAD]->getLevel());
 	}
 	//The Chips/Attack Inventory.
@@ -145,9 +147,11 @@ bool Player::loadPlayer()
 			this->m_level = hpenstrintexpsta;
 			//HP
 			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_stats[HEALTH_CURRENT] = hpenstrintexpsta;
 			this->m_stats[HEALTH_MAX] = hpenstrintexpsta;
 			//Energy
 			fscanf(infile, "%i", &hpenstrintexpsta);
+			this->m_stats[ENERGY_CURRENT] = hpenstrintexpsta;
 			this->m_stats[ENERGY_MAX] = hpenstrintexpsta;
 			//Strength
 			fscanf(infile, "%i", &hpenstrintexpsta);
@@ -190,9 +194,7 @@ bool Player::loadPlayer()
 			
 			gear->setOwner(this);
 			//replace the old one...whatever it was...with the new one loaded from a file.
-			m_gauntlet[SLOT_ARMOR_HEAD]->deactivate();
 			setGauntletSlot(SLOT_ARMOR_HEAD, gear);
-			m_gauntlet[SLOT_ARMOR_HEAD]->activate();
 		}
 		//If it's reading the Chips...
 		else if(charget == 'C')
