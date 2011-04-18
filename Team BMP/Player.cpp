@@ -99,12 +99,12 @@ void Player::save()
 
 	FILE * outfile;
 	outfile = fopen("playerSave.txt", "w");
-	fprintf(outfile, "P %i %i %i %i %i %f %i %i /", m_level, m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	fprintf(outfile, "P %i %i %i %i %i %f %i %i / ", m_level, m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
 	for(int i = SLOT_ARMOR_HEAD; i < NUM_SLOTS; i++)
 	{
 		if(m_gauntlet[i])
-			fprintf(outfile, "A %i %i %i %i %i %i %i /", m_gauntlet[SLOT_ARMOR_HEAD]->getSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getSubSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(DEFENSE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_ICE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[SLOT_ARMOR_HEAD]->getLevel());
+			fprintf(outfile, "A %i %i %i %i %i %i %i / ", m_gauntlet[SLOT_ARMOR_HEAD]->getSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getSubSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(DEFENSE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_ICE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[SLOT_ARMOR_HEAD]->getLevel());
 	}
 	//The Chips/Attack Inventory.
 	//Yes, I know magic number are evil, but as these are debug, we're ok to leave them in there for now.
@@ -114,7 +114,7 @@ void Player::save()
 		for(int k = 0; k < NUM_CHIP_LEVELS; k++)
 		{
 			if(m_attackInventory[i][k] != NULL)
-				fprintf(outfile, "C %i %i %i %i %i %i /", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getLevel());
+				fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getLevel());
 		}
 	}
 	fclose(outfile);
@@ -186,15 +186,17 @@ bool Player::loadPlayer()
 				fscanf(infile, "%i", &hpenstrintexpsta);
 				gear->setResist(i, hpenstrintexpsta);
 			}
-			fscanf(infile, "%i", &exp);
-			for(int k = 0; k < exp; k++)
+			fscanf(infile, "%i", &chipAndArmorHelper);
+			for(int k = 0; k < chipAndArmorHelper; k++)
 			{
 				gear->levelUp();
 			}
 			
 			gear->setOwner(this);
 			//replace the old one...whatever it was...with the new one loaded from a file.
+//			m_gauntlet[SLOT_ARMOR_HEAD]->deactivate();
 			setGauntletSlot(SLOT_ARMOR_HEAD, gear);
+			m_gauntlet[SLOT_ARMOR_HEAD]->activate();
 		}
 		//If it's reading the Chips...
 		else if(charget == 'C')
