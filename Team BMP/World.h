@@ -5,7 +5,8 @@
 #include "templatevector.h"
 #include "srect.h"
 
-enum m_sprites {SLIME, SKELETON, GHOST, BOSS1};
+enum m_sprites			{SLIME, SKELETON, GHOST, BOSS1};
+enum m_worldsprites		{HUB, EUROPEAN, DUNGEON, WATER};
 
 struct Tile
 {
@@ -26,6 +27,7 @@ private:
 	TemplateVector2<Grid> m_mapOfEntities;
 	TemplateVector2<Tile> m_mapOfWorld;
 	SDL_Sprite m_sprites[10];
+	SDL_Sprite m_worldSprites[10];
 
 	bool m_success;
 	int clientPlayerIndex;

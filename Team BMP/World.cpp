@@ -76,14 +76,15 @@ bool World::setWorld(char * fileName)
 		}
 		m_mapOfWorld.release();
 	}
-	SDL_Sprite * sprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
-	SDL_Sprite * hudSprite = new SDL_Sprite("Sprites/hub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
+	SDL_Sprite * sprite = new SDL_Sprite("Sprites/world1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
+	SDL_Sprite * hudSprite = new SDL_Sprite("Sprites/world0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	sprite->setTransparency(COLOR_TRANSPARENT);
-	SDL_Sprite *portalSprite = new SDL_Sprite("Sprites/textureSetHub.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
+	SDL_Sprite *portalSprite = new SDL_Sprite("Sprites/world1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	portalSprite->setTransparency(COLOR_TRANSPARENT);
 	Tile::portalIndexNumber = 0; //EPIC. THIS FARKING WORKS.
-	SDL_Sprite * dungeon = new SDL_Sprite("Sprites/Dungeon1.bmp",FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
+	SDL_Sprite * dungeon = new SDL_Sprite("Sprites/world2.bmp",FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	dungeon->setTransparency(COLOR_TRANSPARENT); //SO MANY MEMORY LEAKS!?
+	SDL_Sprite * water = new SDL_Sprite("Sprites/world3.bmp",FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+3);
 	//The sprite used for the portal.
 	//start the actual loading of the textures.
 	if(infile == NULL)
@@ -226,7 +227,41 @@ bool World::setWorld(char * fileName)
 						hi.bossLoc = true;
 				}
 				break;
-
+			case 'W':
+				hi.currentTexture = water;
+				hi.indexOfSpriteRow = 0;
+				hi.collide = hi.animate =  true;
+				break;
+			case 'U':
+				hi.currentTexture = water;
+				hi.indexOfSpriteRow = 1;
+				hi.animate =  true;
+				break;
+			case 'u':
+				hi.currentTexture = water;
+				hi.indexOfSpriteRow = 2;
+				hi.animate =  true;
+				break;
+			case 'L':
+				hi.currentTexture = water;
+				hi.indexOfSpriteRow = 3;
+				hi.animate =  true;
+				break;
+			case 'l':
+				hi.currentTexture = water;
+				hi.indexOfSpriteRow = 4;
+				hi.animate =  true;
+				break;
+			case '+':
+				hi.currentTexture = water;
+				hi.indexOfSpriteRow = 5;
+				hi.animate =  true;
+				break;
+			case '=':
+				hi.currentTexture = water;
+				hi.indexOfSpriteRow = 6;
+				hi.animate =  true;
+				break;
 			default:
 				hi.currentTexture = dungeon;
 				hi.indexOfSpriteRow = 5; 
