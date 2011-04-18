@@ -132,7 +132,7 @@ bool Player::loadPlayer()
 
 	int hpenstrintexpsta; //The various Player stats.
 	int chipAndArmorHelper;
-	double exp;
+	float exp;
 	char charget;
 	charget = fgetc(infile);
 	while(charget != EOF)
