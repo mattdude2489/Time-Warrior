@@ -184,7 +184,9 @@ bool Player::loadPlayer()
 			for(int i = 0; i < 3; i++)
 			{
 				fscanf(infile, "%i", &hpenstrintexpsta);
-				gear->setResist(i, hpenstrintexpsta);
+				if(hpenstrintexpsta != 0)
+					gear->setResist(i, hpenstrintexpsta);
+
 			}
 			fscanf(infile, "%i", &chipAndArmorHelper);
 			for(int k = 0; k < chipAndArmorHelper; k++)
