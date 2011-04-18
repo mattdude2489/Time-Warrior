@@ -64,7 +64,7 @@ Player::~Player()
 		{
 			if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
 			{
-				//delete m_gauntlet[i];
+				delete m_gauntlet[i];
 			}
 		}
 	}
