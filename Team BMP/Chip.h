@@ -134,13 +134,49 @@ class Chip : public Entity
 			{
 				updateUniqueTwo(a_timePassed);
 				bool collisionMade = false;
-				for(int g = 0; g < NUM_GRIDS; ++g)
+				int ul, ur, dl, dr;
+				ul = a_world->getLocationGrid(m_location.x, m_location.y);
+				ur = a_world->getLocationGrid(m_location.x, m_location.y+m_sprite->getHeight());
+				dl = a_world->getLocationGrid(m_location.x+m_sprite->getWidth(), m_location.y);
+				dr = a_world->getLocationGrid(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight());
+
+				for(int i = 0; i < a_world->getGrid(ul)->getNumberOfEntities(); ++i)
 				{
-					for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
+					if(shouldApplyEffect(a_world->getEntity(i, ul)))
 					{
-						if(shouldApplyEffect(a_world->getEntity(i, g)))
+						applyEffect(a_world->getEntity(i, ul));
+						collisionMade = true;
+					}
+				}
+				if(ur != ul)
+				{
+					for(int i = 0; i < a_world->getGrid(ur)->getNumberOfEntities(); ++i)
+					{
+						if(shouldApplyEffect(a_world->getEntity(i, ur)))
 						{
-							applyEffect(a_world->getEntity(i, g));
+							applyEffect(a_world->getEntity(i, ur));
+							collisionMade = true;
+						}
+					}
+				}
+				if(dl != ul && dl != ur)
+				{
+					for(int i = 0; i < a_world->getGrid(dl)->getNumberOfEntities(); ++i)
+					{
+						if(shouldApplyEffect(a_world->getEntity(i, dl)))
+						{
+							applyEffect(a_world->getEntity(i, dl));
+							collisionMade = true;
+						}
+					}
+				}
+				if(dr != ul && dr != ur && dr != dl)
+				{
+					for(int i = 0; i < a_world->getGrid(dr)->getNumberOfEntities(); ++i)
+					{
+						if(shouldApplyEffect(a_world->getEntity(i, dr)))
+						{
+							applyEffect(a_world->getEntity(i, dr));
 							collisionMade = true;
 						}
 					}
