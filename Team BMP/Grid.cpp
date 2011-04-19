@@ -19,5 +19,4 @@ void Grid::clearAllEntities()
 			}
 			
 		}
-	printf("Grid allocated: %i\n", m_mapOfEntities.size());
 }

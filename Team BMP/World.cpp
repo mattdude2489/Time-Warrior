@@ -57,7 +57,7 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_HUB;
 	if(fileName == "Maps/MedEngMap.txt")
 		currentWorld = WORLD_ENGLAND;
-	if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" )
+	if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" ||fileName == "Maps/Dungeon2.txt" )
 		currentWorld = WORLD_D1;
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
