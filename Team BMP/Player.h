@@ -21,7 +21,8 @@ private:
 	int m_statPoints, m_expLvReq;
 	double m_experience;
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
-	bool loadedPlayer; 
+	bool loadedPlayer;
+	World * thisWorld;
 public:
 	void initPlayer();
 	Player():Entity(){initPlayer();}
@@ -34,6 +35,7 @@ public:
 	void drawSlot(e_gauntletSlots a_slot, SDL_Surface * a_screen, int a_x, int a_y){m_gauntlet[a_slot]->drawHUD(a_screen, a_x, a_y);}
 	void addToAttackInventory(Chip * a_chip);
 	void save();
+	void setWorld(World * currWorld) {thisWorld = currWorld;}
 	bool loadPlayer();
 	void setGauntletSlot(e_gauntletSlots a_slot);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);
