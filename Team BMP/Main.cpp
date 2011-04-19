@@ -58,16 +58,16 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	NonPlayerChar diaTest(&green);
 	fightTest.move(100, -100);
 	diaTest.move(200, 200);*/
-	BasicBlunt b1;
-	AdvancedBlunt b2;
-	BasicSlash s1;
-	AdvancedSlash s2;
-	BasicDivine d1;
-	AdvancedDivine d2;
-	ExpertDivine d3;
-	BasicFire f1;
-	AdvancedFire f2;
-	ExpertFire f3;
+	Blunt b1(BASIC);
+	Blunt b2(ADVANCED);
+	Slash s1(BASIC);
+	Slash s2(ADVANCED);
+	Divine d1(BASIC);
+	Divine d2(ADVANCED);
+	Divine d3(EXPERT);
+	Fire f1(BASIC);
+	Fire f2(ADVANCED);
+	Fire f3(EXPERT);
 	Armor gear(HEAD, BASIC);
 	//gear.setOwner(&eTest);
 	eTest.addToAttackInventory(&b1);

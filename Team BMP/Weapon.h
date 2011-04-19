@@ -147,37 +147,53 @@ class Slash : public Weapon
 {
 	public:
 		Slash(e_chipSubSubType a_subSubType):Weapon(SLASH, a_subSubType){setSprite("Sprites/weapon_slash.bmp");}
-};
-class BasicSlash : public Slash
-{
-	public:
-		BasicSlash():Slash(BASIC){}
-		char * getName(){return "Slash Swing";}
-		char * getDescription(){return "Slash attack.";}
-};
-class AdvancedSlash : public Slash
-{
-	public:
-		AdvancedSlash():Slash(ADVANCED){}
-		char * getName(){return "X-Slash";}
-		char * getDescription(){return "Double Slash attack.";}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Slash Swing";
+				break;
+			case ADVANCED:
+				return "X-Slash";
+				break;
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Slash attack.";
+				break;
+			case ADVANCED:
+				return "Double Slash attack.";
+				break;
+			}
+		}
 };
 class Blunt : public Weapon
 {
 	public:
 		Blunt(e_chipSubSubType a_subSubType):Weapon(BLUNT, a_subSubType){setSprite("Sprites/weapon_blunt.bmp");}
-};
-class BasicBlunt : public Blunt
-{
-	public:
-		BasicBlunt():Blunt(BASIC){}
-		char * getName(){return "Blunt Swing";}
-		char * getDescription(){return "Blunt attack.";}
-};
-class AdvancedBlunt : public Blunt
-{
-	public:
-		AdvancedBlunt():Blunt(ADVANCED){}
-		char * getName(){return "X-Blunt";}
-		char * getDescription(){return "Double Blunt attack.";}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Blunt Swing";
+				break;
+			case ADVANCED:
+				return "X-Blunt";
+				break;
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Blunt attack.";
+				break;
+			case ADVANCED:
+				return "Double Blunt attack.";
+				break;
+			}
+		}
 };

@@ -42,21 +42,8 @@ public:
 		switch(a_subType)
 		{
 		case FIRE:
-			switch(a_subSubType)
-			{
-			case BASIC:
-				m_attack = new BasicFire();
-				m_attack->setNewed(true);
-				break;
-			case ADVANCED:
-				m_attack = new AdvancedFire();
-				m_attack->setNewed(true);
-				break;
-			case EXPERT:
-				m_attack = new ExpertFire();
-				m_attack->setNewed(true);
-				break;
-			}
+			m_attack = new Fire(a_subSubType);
+			m_attack->setNewed(true);
 			break;
 		}
 		m_attack->setOwner(this);

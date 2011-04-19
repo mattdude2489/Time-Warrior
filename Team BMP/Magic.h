@@ -123,131 +123,131 @@ class Divine : public Magic
 {
 	public:
 		Divine(e_chipSubSubType a_subSubType):Magic(DIVINE, a_subSubType){setSprite("Sprites/magic_divine.bmp");}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Divine Heal";
+				break;
+			case ADVANCED:
+				return "Divine Barrier";
+				break;
+			case EXPERT:
+				return "Sanctuary";
+				break;
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Divine projectile.";
+				break;
+			case ADVANCED:
+				return "Divine explosion.";
+				break;
+			case EXPERT:
+				return "Divine area-of-effect.";
+				break;
+			}
+		}
 };
-class BasicDivine : public Divine
-{
-	public:
-		BasicDivine():Divine(BASIC){}
-		char * getName(){return "Divine Heal";}
-		char * getDescription(){return "Divine projectile.";}
-};
-class AdvancedDivine : public Divine
-{
-	public:
-		AdvancedDivine():Divine(ADVANCED){}
-		char * getName(){return "Divine Barrier";}
-		char * getDescription(){return "Divine explosion.";}
-};
-class ExpertDivine : public Divine
-{
-	public:
-		ExpertDivine():Divine(EXPERT){}
-		char * getName(){return "Sanctuary";}
-		char * getDescription(){return "Divine area-of-effect.";}
-};
-/*class LegendDivine : public Divine
-{
-	public:
-		LegendDivine():Divine(LEGEND){}
-		char * getName(){return "Angel";}
-		char * getDescription(){return "Divine guardian.";}
-};*/
 class Lightning : public Magic
 {
 	public:
 		Lightning(e_chipSubSubType a_subSubType):Magic(LIGHTNING, a_subSubType){setSprite("Sprites/magic_lightning.bmp");}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Lightning Bolt";
+				break;
+			case ADVANCED:
+				return "Chain Lightning";
+				break;
+			case EXPERT:
+				return "Thunderstorm";
+				break;
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Lightning projectile.";
+				break;
+			case ADVANCED:
+				return "Lightning explosion.";
+				break;
+			case EXPERT:
+				return "Lightning area-of-effect.";
+				break;
+			}
+		}
 };
-class BasicLightning : public Lightning
-{
-	public:
-		BasicLightning():Lightning(BASIC){}
-		char * getName(){return "Lightning Bolt";}
-		char * getDescription(){return "Lightning projectile.";}
-};
-class AdvancedLightning : public Lightning
-{
-	public:
-		AdvancedLightning():Lightning(ADVANCED){}
-		char * getName(){return "Chain Lightning";}
-		char * getDescription(){return "Lightning explosion.";}
-};
-class ExpertLightning : public Lightning
-{
-	public:
-		ExpertLightning():Lightning(EXPERT){}
-		char * getName(){return "Thunderstorm";}
-		char * getDescription(){return "Lightning area-of-effect.";}
-};
-/*class LegendLightning : public Lightning
-{
-	public:
-		LegendLightning():Lightning(LEGEND){}
-		char * getName(){return "Thunderbird";}
-		char * getDescription(){return "Lightning guardian.";}
-};*/
 class Fire : public Magic
 {
 	public:
 		Fire(e_chipSubSubType a_subSubType):Magic(FIRE, a_subSubType){setSprite("Sprites/magic_fire.bmp");}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Fireball";
+				break;
+			case ADVANCED:
+				return "Fire Blast";
+				break;
+			case EXPERT:
+				return "Armageddon";
+				break;
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Fire projectile.";
+				break;
+			case ADVANCED:
+				return "Fire explosion.";
+				break;
+			case EXPERT:
+				return "Fire area-of-effect.";
+				break;
+			}
+		}
 };
-class BasicFire : public Fire
-{
-	public:
-		BasicFire():Fire(BASIC){}
-		char * getName(){return "Fireball";}
-		char * getDescription(){return "Fire projectile.";}
-};
-class AdvancedFire : public Fire
-{
-	public:
-		AdvancedFire():Fire(ADVANCED){}
-		char * getName(){return "Fire Blast";}
-		char * getDescription(){return "Fire explosion.";}
-};
-class ExpertFire : public Fire
-{
-	public:
-		ExpertFire():Fire(EXPERT){}
-		char * getName(){return "Armageddon";}
-		char * getDescription(){return "Fire area-of-effect.";}
-};
-/*class LegendFire : public Fire
-{
-	public:
-		LegendFire():Fire(LEGEND){}
-		char * getName(){return "Phoenix";}
-		char * getDescription(){return "Fire guardian.";}
-};*/
 class Ice : public Magic
 {
 	public:
 		Ice(e_chipSubSubType a_subSubType):Magic(ICE, a_subSubType){setSprite("Sprites/magic_ice.bmp");}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Ice Shard";
+				break;
+			case ADVANCED:
+				return "Ice Frost";
+				break;
+			case EXPERT:
+				return "Blizzard";
+				break;
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:
+				return "Ice projectile.";
+				break;
+			case ADVANCED:
+				return "Ice explosion.";
+				break;
+			case EXPERT:
+				return "Ice area-of-effect.";
+				break;
+			}
+		}
 };
-class BasicIce : public Ice
-{
-	public:
-		BasicIce():Ice(BASIC){}
-		char * getName(){return "Ice Shard";}
-		char * getDescription(){return "Ice projectile.";}
-};
-class AdvancedIce : public Ice
-{
-	public:
-		AdvancedIce():Ice(ADVANCED){}
-		char * getName(){return "Ice Frost";}
-		char * getDescription(){return "Ice explosion.";}
-};
-class ExpertIce : public Ice
-{
-	public:
-		ExpertIce():Ice(EXPERT){}
-		char * getName(){return "Blizzard";}
-		char * getDescription(){return "Ice area-of-effect.";}
-};
-/*class LegendIce : public Ice
-{
-	public:
-		LegendIce():Ice(LEGEND){}
-		char * getName(){return "Roc";}
-		char * getDescription(){return "Ice guardian.";}
-};*/
