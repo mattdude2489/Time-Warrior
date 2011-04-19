@@ -48,9 +48,22 @@ public:
 	void updateUnique(int a_timePassed, World * a_world)
 	{
 		checkState(a_timePassed, a_world);
-		faceTargetDirection();
+		//faceTargetDirection();
 		/*if(getStatNumber(HEALTH_CURRENT) <= 0)
 			respawn();*/
+	}
+	void draw(SDL_Surface * a_screen)
+	{
+		if(m_shouldDraw && m_camera)
+			{
+				m_hb.x = getLocationScreen().x;
+				m_hb.y = getLocationScreen().y;
+				if(m_eType != CHIP && getStatNumber(HEALTH_CURRENT) < getStatNumber(HEALTH_MAX))
+					SDL_FillRect(a_screen, &m_hb, COLOR_HEALTH);
+				faceTargetDirection();
+				m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y);
+				drawUnique(a_screen);
+			}
 	}
 	void wander(int a_timePassed)
 	{

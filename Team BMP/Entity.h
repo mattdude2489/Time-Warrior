@@ -9,7 +9,7 @@ struct Tile;
 enum e_chipType;
 enum e_chipSubType;
 
-enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN, STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
+enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN , STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 enum e_entityType{DUMMY, CHIP, PLAYER, NPC, MINION, BOSS};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff, COLOR_EXP = 0x00ffff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
@@ -47,8 +47,8 @@ public:
 	}
 	virtual~Entity()
 	{
-		if(nude)
-			delete m_sprite;
+		/*if(nude)
+			delete m_sprite;*/
 	}
 	void init(){init(1, 1, 0, 0, 0, 0, 0, 0);}
 	void init(SDL_Sprite * a_sprite){init();initSprite(a_sprite);}
@@ -56,7 +56,7 @@ public:
 	{
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX] = a_health;
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX] = a_energy;
-		m_stats[ENERGY_REGEN] = 1;
+		m_stats[ENERGY_REGEN] = 100;
 		m_stats[STRENGTH] = a_str;
 		m_stats[INTELLECT] = a_int;
 		m_stats[DEFENSE] = a_def;
@@ -109,7 +109,7 @@ public:
 		m_sprite->start();
 	}
 	void move(SPoint a_point){move(a_point.x,a_point.y);}
-	void draw(SDL_Surface * a_screen)
+	virtual void draw(SDL_Surface * a_screen)
 	{
 		if(m_shouldDraw && m_camera)
 		{

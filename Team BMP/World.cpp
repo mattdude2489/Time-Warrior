@@ -76,6 +76,8 @@ bool World::setWorld(char * fileName)
 		}
 		m_mapOfWorld.release();
 	}
+
+
 	SDL_Sprite * sprite = new SDL_Sprite("Sprites/world1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	SDL_Sprite * hudSprite = new SDL_Sprite("Sprites/world0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
 	sprite->setTransparency(COLOR_TRANSPARENT);
@@ -280,8 +282,8 @@ bool World::setWorld(char * fileName)
 	}
 	//take into account that the outmost tiles are borders for entity containment,
 	//so the valid movable world space is decreased by up/left/down/right tiles
-	maxWorldX = (tileX-2) * FRAME_SIZE;
-	maxWorldY = (tileY-2) * FRAME_SIZE;
+	maxWorldX = (tileX) * FRAME_SIZE;
+	maxWorldY = (tileY) * FRAME_SIZE;
 	setMonsters();
 #ifdef NPC_ADD
 	setNPC();
@@ -418,25 +420,25 @@ void World::setMonsters()
 						sprite = new SDL_Sprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
 						break;*/
 					case 0://1:
-						sprite = new SDL_Sprite("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+						sprite = &m_sprites[SKELETON];
 						break;
 					case 1://2:
-						sprite = new SDL_Sprite("Sprites/ghost.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+						sprite = &m_sprites[GHOST];
 						break;
 					}
 				}
 				else
-					sprite = new SDL_Sprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
+					sprite = &m_sprites[SLIME];
 				Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
 				newEntity->setNewed(true);
-				newEntity->setLocation(m_mapOfWorld.get(i).pos);
 				newEntity->scaleToPlayer(m_player);
+				newEntity->setLocation(m_mapOfWorld.get(i).pos);
 				this->add(newEntity);
 			}
 		}
 		if(m_mapOfWorld.get(i).bossLoc)
 		{
-			sprite = new SDL_Sprite("Sprites/demon0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+			sprite = &m_sprites[BOSS1];
 			Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,sprite);
 			newBoss->setNewed(true);
 			newBoss->scaleToPlayer(m_player);
