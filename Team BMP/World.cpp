@@ -465,7 +465,7 @@ void World::update(Uint32 a_timePassed)
 		for(int i = 0; i < m_mapOfEntities.get(z).getNumberOfEntities(); i++)
 		{
 			cE = m_mapOfEntities.get(z).getEntity(i);
-			if(getLocationGrid(cE) != z)
+			if(getLocationGrid(cE) != z && cE->getVisible())
 			{
 				m_mapOfEntities.get(getLocationGrid(cE)).setEntity(cE);
 				m_mapOfEntities.get(z).remove(i);
