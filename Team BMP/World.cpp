@@ -267,6 +267,7 @@ bool World::setWorld(char * fileName)
 			default:
 				hi.currentTexture = dungeon;
 				hi.indexOfSpriteRow = 5; 
+				hi.collide = true;
 				break;
 			}
 			if(c != '\n')
@@ -465,10 +466,13 @@ void World::update(Uint32 a_timePassed)
 		for(int i = 0; i < m_mapOfEntities.get(z).getNumberOfEntities(); i++)
 		{
 			cE = m_mapOfEntities.get(z).getEntity(i);
-			if(getLocationGrid(cE) != z && cE->getVisible())
+			if(getLocationGrid(cE) != ERROR_CODE)
 			{
-				m_mapOfEntities.get(getLocationGrid(cE)).setEntity(cE);
-				m_mapOfEntities.get(z).remove(i);
+				if(getLocationGrid(cE) != z && cE->getVisible())
+				{
+					m_mapOfEntities.get(getLocationGrid(cE)).setEntity(cE);
+					m_mapOfEntities.get(z).remove(i);
+				}
 			}
 		}
 	}

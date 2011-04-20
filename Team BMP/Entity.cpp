@@ -73,13 +73,16 @@ void Entity::update(int a_timePassed, World * a_world)
 				a_world->setCamera(this->m_camera);
 			}
 		}
-		//Search through the entities in that particular grid. If there are any, check for collision with them.
-		for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
+		if(m_eType != CHIP)
 		{
-			if(collide(a_world->getEntity(i, m_location.x, m_location.y)))
+			//Search through the entities in that particular grid. If there are any, check for collision with them.
+			for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
 			{
-				if(epicCollide(a_world->getEntity(i, m_location.x, m_location.y)))
-					move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+				if(collide(a_world->getEntity(i, m_location.x, m_location.y)))
+				{
+					if(epicCollide(a_world->getEntity(i, m_location.x, m_location.y)))
+						move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+				}
 			}
 		}
 	}

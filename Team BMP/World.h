@@ -7,6 +7,7 @@
 
 enum m_sprites			{SLIME, SKELETON, GHOST, BOSS1};
 enum m_worldsprites		{HUB, EUROPEAN, DUNGEON, WATER};
+#define ERROR_CODE	-1
 
 struct Tile
 {
@@ -49,7 +50,17 @@ public:
 	bool getSuccess() {return m_success;}
 	int getGridWidth(){return maxWorldX/NUM_GRIDS_PER_ROW_COL;}
 	int getGridHeight(){return maxWorldY/NUM_GRIDS_PER_ROW_COL;}
-	int getLocationGrid(int a_x, int a_y){return ((a_x - FRAME_SIZE) / getGridWidth()) + (NUM_GRIDS_PER_ROW_COL * ((a_y - FRAME_SIZE) / getGridHeight()));}
+	int getLocationGrid(int a_x, int a_y)
+	{
+		int x = (a_x - FRAME_SIZE) / getGridWidth();
+		int y = (a_y - FRAME_SIZE) / getGridHeight();
+		int temp = (x + (NUM_GRIDS_PER_ROW_COL * y));
+		if(x < 0 || y < 0
+		|| x > (NUM_GRIDS_PER_ROW_COL-1) || y > (NUM_GRIDS_PER_ROW_COL-1))
+			return	ERROR_CODE;
+		else
+			return temp;
+	}
 	int getLocationGrid(Entity * a_entity){return getLocationGrid(a_entity->getLocation().x, a_entity->getLocation().y);}
 	int getNumEntities(int i) {return m_mapOfEntities.get(i).getNumberOfEntities();}
 	int getNumEntities();
