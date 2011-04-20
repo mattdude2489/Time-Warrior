@@ -5,7 +5,7 @@
 #include "templatevector.h"
 #include "srect.h"
 
-enum m_sprites			{SLIME, SKELETON, GHOST, BOSS1};
+enum m_sprites			{SLIME, SKELETON, GHOST, BOSS1, NPC1, NUM_SPRITES};
 enum m_worldsprites		{HUB, EUROPEAN, DUNGEON, WATER};
 #define ERROR_CODE	-1
 
@@ -21,14 +21,20 @@ struct Tile
 	SRect colideBox;
 };
 
+struct SpriteInfo
+{
+	char * fileName;
+	int frameWidth, frameHeight, animSpeed, rows;
+};
+
 class World
 {
 private:
 	//TemplateVector2<Entity*> m_mapOfEntities;
 	TemplateVector2<Grid> m_mapOfEntities;
 	TemplateVector2<Tile> m_mapOfWorld;
-	SDL_Sprite m_sprites[10];
-	SDL_Sprite m_worldSprites[10];
+	SpriteInfo m_sprites[NUM_SPRITES];
+	//SpriteInfo m_worldSprites[10];
 
 	bool m_success;
 	int clientPlayerIndex;

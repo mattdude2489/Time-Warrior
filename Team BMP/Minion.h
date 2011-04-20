@@ -106,9 +106,9 @@ public:
 		for(int i = 0; i < NUM_STATS; i++)
 		{
 			if(m_eType == MINION)//scale the minions slightly weeker then player but close
-				m_stats[i] = a_player->getStatNumber(i) * SCALE_MIN;
+				m_stats[i] = (int)(a_player->getStatNumber(i) * SCALE_MIN);
 			else if( m_eType == BOSS)
-				m_stats[i] = a_player->getStatNumber(i) * SCALE_BOSS;
+				m_stats[i] = (int)(a_player->getStatNumber(i) * SCALE_BOSS);
 		}
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];//incase the players health is low this will set the minion/boss to full
 	}

@@ -19,14 +19,23 @@ World::World()
 		Grid gridSys;
 		m_mapOfEntities.add(gridSys);	
 	}
-	m_sprites[SLIME].setSprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
-	m_sprites[SKELETON].setSprite("Sprites/skeleton.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	m_sprites[GHOST].setSprite("Sprites/ghost.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	m_sprites[BOSS1].setSprite("Sprites/demon0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	for(int i =0; i < 3; i++)
+	for(int i =0; i < NUM_SPRITES; i++)
 	{
-		m_sprites[i].setTransparency(COLOR_TRANSPARENT);
+		//m_sprites[i].setTransparency(COLOR_TRANSPARENT);
+		m_sprites[i].fileName = NULL;
+		m_sprites[i].frameWidth = m_sprites[i].frameHeight = FRAME_SIZE;
+		m_sprites[i].animSpeed = FRAME_RATE;
+		m_sprites[i].rows = NUM_ROWS;
 	}
+	m_sprites[SLIME].fileName = "Sprites/slime.bmp";
+	m_sprites[SLIME].frameWidth -= 1;
+	m_sprites[SLIME].frameHeight -= 9;
+	m_sprites[SKELETON].fileName = "Sprites/skeleton.bmp";
+	m_sprites[SKELETON].frameWidth -= 8;
+	m_sprites[GHOST].fileName = "Sprites/ghost.bmp";
+	m_sprites[BOSS1].fileName = "Sprites/demon0.bmp";
+	m_sprites[NPC1].fileName = "Sprites/greenguy.bmp";
+
 	m_success = setWorld("Maps/HubWorldMap.txt");
 
 }
@@ -372,23 +381,15 @@ void World::setNPC()
 		fscanf_s(infile, "%i", &y);
 		//charpoint = &s;
 		//strcpy_s(charpoint, strlen(s.c_str()) ,s.c_str());
-		SDL_Sprite * newSprite;
-		newSprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-		NonPlayerChar * newNPC;
 		const char * buf = s.c_str();
-		newNPC = new NonPlayerChar(const_cast<char*>(buf), newSprite);
-		//newNPC->initSprite(newSprite); //Inits the entity first
-		//newNPC->initNPC(charpoint); //Then inits the NPC portions.
+		SDL_Sprite * newSprite = new SDL_Sprite(m_sprites[NPC1].fileName, m_sprites[NPC1].frameWidth, m_sprites[NPC1].frameHeight, m_sprites[NPC1].animSpeed, m_sprites[NPC1].rows);
+		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), newSprite);
 		newNPC->setNewed(true);
 		newNPC->setLocation(x, y);
 		add(newNPC);
 		c = fgetc(infile);
 	}
 	fclose(infile);
-	/*SDL_Sprite * sdlsprite = new SDL_Sprite("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	NonPlayerChar * nonPlayer = new NonPlayerChar("Hi. Go through the portal NAO.", sdlsprite);
-	nonPlayer->setNewed(true);
-	add(nonPlayer);*/
 }
 
 /**
@@ -404,7 +405,7 @@ void World::setMonsters()
 	}
 	for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{
-		SDL_Sprite * sprite;
+		SDL_Sprite * sprite = NULL;
 		if(m_mapOfWorld.get(i).spawnLocation)
 		{
 			numMinions = (rand()%3)+3;
@@ -417,19 +418,16 @@ void World::setMonsters()
 				{
 					switch(spriteSheet)
 					{
-					/*case 0:
-						sprite = new SDL_Sprite("Sprites/slime.bmp", FRAME_SIZE-1, 23, FRAME_RATE, NUM_ROWS);
-						break;*/
-					case 0://1:
-						sprite = &m_sprites[SKELETON];
+					case 0:
+						sprite = new SDL_Sprite(m_sprites[SKELETON].fileName, m_sprites[SKELETON].frameWidth, m_sprites[SKELETON].frameHeight, m_sprites[SKELETON].animSpeed, m_sprites[SKELETON].rows);
 						break;
-					case 1://2:
-						sprite = &m_sprites[GHOST];
+					case 1:
+						sprite = new SDL_Sprite(m_sprites[GHOST].fileName, m_sprites[GHOST].frameWidth, m_sprites[GHOST].frameHeight, m_sprites[GHOST].animSpeed, m_sprites[GHOST].rows);
 						break;
 					}
 				}
 				else
-					sprite = &m_sprites[SLIME];
+					sprite = new SDL_Sprite(m_sprites[SLIME].fileName, m_sprites[SLIME].frameWidth, m_sprites[SLIME].frameHeight, m_sprites[SLIME].animSpeed, m_sprites[SLIME].rows);
 				Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
 				newEntity->setNewed(true);
 				newEntity->scaleToPlayer(m_player);
@@ -439,7 +437,7 @@ void World::setMonsters()
 		}
 		if(m_mapOfWorld.get(i).bossLoc)
 		{
-			sprite = &m_sprites[BOSS1];
+			sprite = new SDL_Sprite(m_sprites[BOSS1].fileName, m_sprites[BOSS1].frameWidth, m_sprites[BOSS1].frameHeight, m_sprites[BOSS1].animSpeed, m_sprites[BOSS1].rows);
 			Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,sprite);
 			newBoss->setNewed(true);
 			newBoss->scaleToPlayer(m_player);

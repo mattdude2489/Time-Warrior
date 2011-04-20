@@ -52,12 +52,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//loading a sprite to see if it works with the entity
 	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	Player eTest(100,100,0,0,0,0,0,0,&test);
-	/*SDL_Sprite test2("Sprites/dummy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
-	Entity fightTest(100,100,0,0,0,0,0,0,&test2);
-	SDL_Sprite green("Sprites/greenguy.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	NonPlayerChar diaTest(&green);
-	fightTest.move(100, -100);
-	diaTest.move(200, 200);*/
 	Blunt b1(BASIC);
 	Blunt b2(ADVANCED);
 	Slash s1(BASIC);
@@ -107,8 +101,6 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	world.add(&f1);
 	world.add(&f2);
 	world.add(&f3);
-	//world.add(&fightTest);
-	//world.add(&diaTest);
 	world.setCamera(eTest.getCamera());
 	//music test stuff
 	

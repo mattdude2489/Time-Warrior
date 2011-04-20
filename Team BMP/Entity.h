@@ -47,8 +47,8 @@ public:
 	}
 	virtual~Entity()
 	{
-		/*if(nude)
-			delete m_sprite;*/
+		if(nude)
+			delete m_sprite;
 	}
 	void init(){init(1, 1, 0, 0, 0, 0, 0, 0);}
 	void init(SDL_Sprite * a_sprite){init();initSprite(a_sprite);}
