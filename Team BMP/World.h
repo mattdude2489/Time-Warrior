@@ -18,7 +18,7 @@ struct Tile
 	static int portalIndexNumber;
 	SPoint getLocationScreen(){return pos.difference(*cam);}
 	Entity * m_player;
-	SRect colideBox;
+	SRect collideBox;
 };
 
 struct SpriteInfo
@@ -42,6 +42,7 @@ private:
 	int maxWorldX, maxWorldY; //how big the world is...maximally. Used for Grids.
 	int tileX, tileY;
 	Entity * m_player;
+	SRect m_cCamera; //The client's camera.
 public:
 	World();
 	~World();

@@ -13,11 +13,13 @@ World::World()
 	clientPlayerIndex = 0; 
 	maxWorldX = SCREEN_WIDTH;
 	maxWorldY = SCREEN_HEIGHT;
+	m_cCamera.w = SCREEN_WIDTH*2;
+	m_cCamera.h = SCREEN_HEIGHT*2;
 	//Setting up the 16 grids. The number can easily be changed.
 	for(int i = 0; i < NUM_GRIDS; i++)
 	{
 		Grid gridSys;
-		m_mapOfEntities.add(gridSys);	
+		m_mapOfEntities.add(gridSys);
 	}
 	for(int i =0; i < NUM_SPRITES; i++)
 	{
@@ -38,6 +40,20 @@ World::World()
 
 	m_success = setWorld("Maps/HubWorldMap.txt");
 
+	int x = 0, y = 0;
+	int w = 0, h = 0;
+	w = maxWorldX/NUM_GRIDS_PER_ROW_COL;
+	h = maxWorldY/NUM_GRIDS_PER_ROW_COL;
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	{
+		m_mapOfEntities.get(i).setLoc(x*w, y*h, w, h);
+		x++;
+		if(x == NUM_GRIDS_PER_ROW_COL)
+		{
+			y++;
+			x = 0;
+		}
+	}
 }
 World::~World()
 {
@@ -121,6 +137,10 @@ bool World::setWorld(char * fileName)
 				hi.pos.y = y * hi.currentTexture->getHeight();
 				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = false;
 				x++;
+				hi.collideBox.x = hi.pos.x;
+				hi.collideBox.y = hi.pos.y;
+				hi.collideBox.w = hi.currentTexture->getWidth();
+				hi.collideBox.h = hi.currentTexture->getHeight();
 			}
 			else
 			{
@@ -456,7 +476,6 @@ void World::update(Uint32 a_timePassed)
 {
 	//static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
 
-
 	//Making sure that the entities are all in their correct grids.
 	Entity * cE = NULL;
 	for(int z = 0; z < m_mapOfEntities.size(); z++)
@@ -474,23 +493,29 @@ void World::update(Uint32 a_timePassed)
 			}
 		}
 	}
-	//Update all entities.
+	if(m_mapOfEntities.get(clientPlayerIndex).getPlayer(cE))
+	{
+		//Change the camera stuffs.
+		m_cCamera.x = cE->getLocation().x - SCREEN_CENTER_X;
+		m_cCamera.y = cE->getLocation().y - SCREEN_CENTER_Y;
+	}
+	//Update entities based on where the current Camera is.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
-		m_mapOfEntities.get(i).update(a_timePassed, this);
+	{
+		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc()))
+			m_mapOfEntities.get(i).update(a_timePassed, this);
+	}
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
-		if(m_mapOfWorld.get(i).animate)
+		if(m_mapOfWorld.get(i).animate && 
+			(m_cCamera.intersects(m_mapOfWorld.get(i).collideBox) || 
+			m_cCamera.contains(m_mapOfWorld.get(i).getLocationScreen())))
 		{
 			m_mapOfWorld.get(i).currentTexture->update(a_timePassed);
 			if(m_mapOfWorld.get(i).currentTexture->getFrame() > m_mapOfWorld.get(i).currentTexture->getMaxFrames()-1)
 				m_mapOfWorld.get(i).currentTexture->restart(m_mapOfWorld.get(i).indexOfSpriteRow);
 		}
 	}
-	bool successPlayer;
-	Entity * player;
-	successPlayer = m_mapOfEntities.get(clientPlayerIndex).getPlayer(player); //This pointer will be erased soon afterwards.
-	//It's merely there to take away the typing and make it easier to read.
-	//prevLoc = cp->getLocation();
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	//Make sure for each grid's sorting.
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
@@ -501,11 +526,16 @@ void World::draw(SDL_Surface * a_screen)
 	//Entities draw.
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
-		m_mapOfWorld.get(i).currentTexture->setRIndex(m_mapOfWorld.get(i).indexOfSpriteRow);
-		m_mapOfWorld.get(i).currentTexture->draw(a_screen, m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y);
+		if(m_cCamera.intersects(m_mapOfWorld.get(i).collideBox) || m_cCamera.contains(m_mapOfWorld.get(i).getLocationScreen()))
+		{
+			m_mapOfWorld.get(i).currentTexture->setRIndex(m_mapOfWorld.get(i).indexOfSpriteRow);
+			m_mapOfWorld.get(i).currentTexture->draw(a_screen, m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y);
+		}
 	}
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
+	{
 		m_mapOfEntities.get(i).draw(a_screen); //Why does it seem like the Entities are getting further and further away from direct access?
+	}
 }
 int World::getNumEntities()
 {

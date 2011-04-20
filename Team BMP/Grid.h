@@ -19,6 +19,7 @@ private:
 	//For now, let's try template Vector.
 
 	TemplateVector2<Entity*> m_mapOfEntities;
+	SRect m_rectLoc;
 public:
 	//The public functions. Constructors, sets, gets, and modifiers.
 	Grid() {}
@@ -34,6 +35,11 @@ public:
 			}
 		}
 		m_mapOfEntities.release();
+	}
+	SRect getLoc() {return m_rectLoc;}
+	void setLoc(int x, int y, int h, int w)
+	{
+		m_rectLoc.x = x; m_rectLoc.y = y; m_rectLoc.h = h; m_rectLoc.w = w;
 	}
 	//Sets and gets.
 	//@param: The entity to add to the grid.
