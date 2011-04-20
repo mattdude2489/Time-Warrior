@@ -56,7 +56,7 @@ public:
 	{
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX] = a_health;
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX] = a_energy;
-		m_stats[ENERGY_REGEN] = 100;
+		m_stats[ENERGY_REGEN] = 5;
 		m_stats[STRENGTH] = a_str;
 		m_stats[INTELLECT] = a_int;
 		m_stats[DEFENSE] = a_def;
@@ -151,6 +151,7 @@ public:
 	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
 	void setTarget(SPoint a_point){m_target.set(a_point);}
 	bool getActivation() {return m_activation;}
+	void setDrawOff(){m_shouldDraw = false;}
 	SPoint getDeltaBetweenLocationAnd(SPoint * a_point)
 	{
 		//calculate the delta (difference) between the target & current location

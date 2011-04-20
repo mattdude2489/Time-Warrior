@@ -11,7 +11,7 @@ class AudioHandler
 {
 private:
 	Mix_Music * m_music[NUM_SONGS];
-	int currentTrack;
+	int currentTrack, m_currentWorld;;
 public:
 	AudioHandler()
 	{
@@ -53,6 +53,14 @@ public:
 		Mix_HaltMusic();
 		currentTrack = a_index;
 		playMusic();
+	}
+	void update(int a_currentWorld)
+	{
+		if(m_currentWorld!= a_currentWorld)
+		{
+			playRandom();
+			m_currentWorld = a_currentWorld;
+		}
 	}
 	~AudioHandler()
 	{

@@ -16,6 +16,10 @@ void Grid::clearAllEntities()
 						m_mapOfEntities.remove(i);
 					}
 				}
+				else if(m_mapOfEntities.get(i)->getType() == CHIP)//stops the crash
+				{
+					m_mapOfEntities.get(i)->setDrawOff();
+				}
 			}
 			
 		}

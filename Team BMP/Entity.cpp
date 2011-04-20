@@ -67,8 +67,10 @@ void Entity::update(int a_timePassed, World * a_world)
 						break;
 					case 1:
 						a_world->setWorld("Maps/Dungeon0.txt");
+						break;
 					case 2:
 						a_world->setWorld("Maps/Dungeon2.txt");
+						break;
 				}
 				a_world->setCamera(this->m_camera);
 			}
