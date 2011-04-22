@@ -133,53 +133,33 @@ class Chip : public Entity
 			if(m_shouldDraw && m_owner && m_cType != ARMOR)
 			{
 				updateUniqueTwo(a_timePassed);
-				bool collisionMade = false;
-				int ul, ur, dl, dr;
+				bool collisionMade = false, check = false;
+				int ul, ur, dl, dr, grid;
 				ul = a_world->getLocationGrid(m_location.x, m_location.y);
-				ur = a_world->getLocationGrid(m_location.x, m_location.y+m_sprite->getHeight());
-				dl = a_world->getLocationGrid(m_location.x+m_sprite->getWidth(), m_location.y);
+				ur = a_world->getLocationGrid(m_location.x+m_sprite->getWidth(), m_location.y);
+				dl = a_world->getLocationGrid(m_location.x, m_location.y+m_sprite->getHeight());
 				dr = a_world->getLocationGrid(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight());
-
-				for(int i = 0; i < a_world->getGrid(ul)->getNumberOfEntities(); ++i)
+				for(int g = 0; g < 4; ++g)
 				{
-					if(shouldApplyEffect(a_world->getEntity(i, ul)))
+					switch(g)
 					{
-						applyEffect(a_world->getEntity(i, ul));
-						collisionMade = true;
+					case 0:	grid = ul;	check = true;									break;
+					case 1:	grid = ur;	check = ur != ul;								break;
+					case 2:	grid = dl;	check = dl != ul && dl != ur;					break;
+					case 3:	grid = dr;	check = dr != ul && dr != ur && dr != dl;		break;
 					}
-				}
-				if(ur != ul)
-				{
-					for(int i = 0; i < a_world->getGrid(ur)->getNumberOfEntities(); ++i)
+					if(check)
 					{
-						if(shouldApplyEffect(a_world->getEntity(i, ur)))
+						for(int i = 0; i < a_world->getGrid(grid)->getNumberOfEntities(); ++i)
 						{
-							applyEffect(a_world->getEntity(i, ur));
-							collisionMade = true;
+							if(shouldApplyEffect(a_world->getEntity(i, grid)))
+							{
+								applyEffect(a_world->getEntity(i, grid));
+								collisionMade = true;
+							}
 						}
 					}
-				}
-				if(dl != ul && dl != ur)
-				{
-					for(int i = 0; i < a_world->getGrid(dl)->getNumberOfEntities(); ++i)
-					{
-						if(shouldApplyEffect(a_world->getEntity(i, dl)))
-						{
-							applyEffect(a_world->getEntity(i, dl));
-							collisionMade = true;
-						}
-					}
-				}
-				if(dr != ul && dr != ur && dr != dl)
-				{
-					for(int i = 0; i < a_world->getGrid(dr)->getNumberOfEntities(); ++i)
-					{
-						if(shouldApplyEffect(a_world->getEntity(i, dr)))
-						{
-							applyEffect(a_world->getEntity(i, dr));
-							collisionMade = true;
-						}
-					}
+					check = false;
 				}
 				if((((m_cType == MAGIC && m_cSubSubType == BASIC)
 					|| (m_cType == WEAPON && m_cSubType == RANGE))
