@@ -3,7 +3,7 @@
 #include "UserInput.h"
 #include <stdio.h>
 
-void Player::initPlayer()
+void Player::initPlayer(World * newWorld)
 {
 	m_eType = PLAYER;
 	for(int i = 0; i < NUM_SLOTS; ++i)
@@ -17,6 +17,7 @@ void Player::initPlayer()
 	m_experience = 0;
 	m_expLvReq = m_level+1;
 	setVelocity(0,0);
+	thisWorld = newWorld;
 	loadedPlayer = loadPlayer();
 }
 void Player::addToAttackInventory(Chip * a_chip)
@@ -58,16 +59,27 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot)
 Player::~Player()
 {
 	save();
-	for(int i = 0; i < NUM_SLOTS; i++)
+	for(int i = 0; i < NUM_SLOTS; i++) //Deletes the Armor from memory.
 	{
 		if(loadedPlayer == true)
 		{
-			if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
+			//if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
+			if(m_gauntlet[i] != NULL) 
 			{
-				delete m_gauntlet[i];
+				if(m_gauntlet[i]->getNewed() && m_gauntlet[i]->getType() == ARMOR)
+					delete m_gauntlet[i];
 			}
 		}
 	}
+	//for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++) //Deletes the chips from memory.
+	//{
+	//	for(int k = 0; k < NUM_CHIP_LEVELS; k++)
+	//	{
+	//		if(m_attackInventory[i][k] != NULL)
+	//			if(m_attackInventory[i][k]->getNewed())
+	//				delete m_attackInventory[i][k];
+	//	}
+	//}
 }
 
 void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
@@ -104,7 +116,7 @@ void Player::save()
 	for(int i = SLOT_ARMOR_HEAD; i < NUM_SLOTS; i++)
 	{
 		if(m_gauntlet[i])
-			fprintf(outfile, "A %i %i %i %i %i %i %i / ", m_gauntlet[SLOT_ARMOR_HEAD]->getSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getSubSubType() ,m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(DEFENSE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_ICE), m_gauntlet[SLOT_ARMOR_HEAD]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[SLOT_ARMOR_HEAD]->getLevel());
+			fprintf(outfile, "A %i %i %i %i %i %i %i / ", m_gauntlet[i]->getSubType() ,m_gauntlet[i]->getSubSubType() ,m_gauntlet[i]->getStatNumber(DEFENSE), m_gauntlet[i]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[i]->getStatNumber(RESISTANCE_ICE), m_gauntlet[i]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[i]->getLevel());
 	}
 	//The Chips/Attack Inventory.
 	//Yes, I know magic number are evil, but as these are debug, we're ok to leave them in there for now.
@@ -124,7 +136,7 @@ bool Player::loadPlayer()
 {
 	//File will go like this: P#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
 	//							A#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#/
-	//							C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#/
+	//							C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#(Level)#/
 	
 	FILE * infile;
 	infile = fopen("playerSave.txt", "r");
@@ -135,6 +147,7 @@ bool Player::loadPlayer()
 	int hpenstrintexpsta; //The various Player stats.
 	int chipAndArmorHelper;
 	float exp;
+	static int gauntletSlotSetter = 0;
 	char charget;
 	charget = fgetc(infile);
 	while(charget != EOF)
@@ -203,7 +216,73 @@ bool Player::loadPlayer()
 		//If it's reading the Chips...
 		else if(charget == 'C')
 		{
-			
+			//C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#(Level)#/
+			//Minus the #'s.
+			//For example C 1 4 0 is Type MAGIC, Subtype DIVINE, SubSubType BASIC.
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf(infile, "%i", &chipAndArmorHelper);
+			Chip * iHopeThisWorks;
+			switch(hpenstrintexpsta)
+			{
+			case 0:
+				break;
+			case 1:
+				//Magic.
+				fscanf(infile, "%i", &hpenstrintexpsta);
+				switch(chipAndArmorHelper)
+				{
+				case 4:
+					//Divine.
+					iHopeThisWorks = new Divine((e_chipSubSubType)hpenstrintexpsta);
+					break;
+				case 5:
+					iHopeThisWorks = new Lightning((e_chipSubSubType)hpenstrintexpsta);
+					break;
+				case 6:
+					iHopeThisWorks = new Fire((e_chipSubSubType)hpenstrintexpsta);
+					break;
+				case 7:
+					iHopeThisWorks = new Ice((e_chipSubSubType)hpenstrintexpsta);
+					break;
+				}
+				break;
+			case 2:
+				//Weapons
+				fscanf(infile, "%i", &hpenstrintexpsta);
+				switch(chipAndArmorHelper)
+				{
+				case 8:
+					//Blunt
+					iHopeThisWorks = new Blunt((e_chipSubSubType)hpenstrintexpsta);
+					break;
+				case 9:
+					//Range
+					//iHopeThisWorks = new Ranged((e_chipSubSubType)hpenstrintexpsta);
+					break;
+				case 10:
+					//Slash
+					iHopeThisWorks = new Slash((e_chipSubSubType)hpenstrintexpsta);
+					break;
+				case 11:
+					//pierce
+					//iHopeThisWorks = new Pierce((e_chipSubSubType)hpenstrintexpsta);
+					break;
+				}
+			}
+			iHopeThisWorks->setCamera(this->getCamera());
+			iHopeThisWorks->setNewed(true);
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf(infile, "%i", &chipAndArmorHelper);
+			fscanf(infile, "%i", &hpenstrintexpsta);
+			//To get it to where the level is.
+			for(int i = 0; i < hpenstrintexpsta; i++)
+			{
+				iHopeThisWorks->levelUp();
+			}
+			this->addToAttackInventory(iHopeThisWorks);
+			thisWorld->add(iHopeThisWorks);
+			this->setGauntletSlot((e_gauntletSlots)gauntletSlotSetter, iHopeThisWorks);
+			gauntletSlotSetter++;
 		}
 		//To get rid of the slash
 		charget = fgetc(infile);

@@ -24,10 +24,10 @@ private:
 	bool loadedPlayer;
 	World * thisWorld;
 public:
-	void initPlayer();
-	Player():Entity(){initPlayer();}
-	Player(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
-		:Entity(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite){initPlayer();}
+	void initPlayer(World * newWorld);
+	Player():Entity(){initPlayer(NULL);}//OMG DON'T USE THIS DON'T USE THIS OMGWTF DON'T USE THIS
+	Player(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite, World * newWorld)
+		:Entity(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite){initPlayer(newWorld);}
 	SPoint * getCamera(){return &m_cameraP;}
 	~Player();
 	void setLocationUnique(int a_x, int a_y){m_cameraP.set(a_x - SCREEN_CENTER_X, a_y - SCREEN_CENTER_Y);}
