@@ -53,8 +53,7 @@ World::World()
 			x = 0;
 		}
 	}
-	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
-		m_animFlags[i] = false;
+	m_animFlag = false;
 }
 World::~World()
 {
@@ -104,16 +103,11 @@ bool World::setWorld(char * fileName)
 	}
 
 
-	SDL_Sprite * sprite = new SDL_Sprite("Sprites/world1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
-	SDL_Sprite * hudSprite = new SDL_Sprite("Sprites/world0.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
-	sprite->setTransparency(COLOR_TRANSPARENT);
-	SDL_Sprite *portalSprite = new SDL_Sprite("Sprites/world1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
-	portalSprite->setTransparency(COLOR_TRANSPARENT);
+	SDL_Sprite * single = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+13);
+	SDL_Sprite * animate = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+5);
+	single->setTransparency(COLOR_TRANSPARENT);
+	animate->setTransparency(COLOR_TRANSPARENT);
 	Tile::portalIndexNumber = 0; //EPIC. THIS FARKING WORKS.
-	SDL_Sprite * dungeon = new SDL_Sprite("Sprites/world2.bmp",FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+2);
-	dungeon->setTransparency(COLOR_TRANSPARENT); //SO MANY MEMORY LEAKS!?
-	SDL_Sprite * water = new SDL_Sprite("Sprites/world3.bmp",FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+3);
-	//The sprite used for the portal.
 	//start the actual loading of the textures.
 	if(infile == NULL)
 		m_success = false;
@@ -127,13 +121,7 @@ bool World::setWorld(char * fileName)
 			//Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
 			if(c != '\n')
 			{
-				switch(currentWorld)
-				{
-				case WORLD_HUB: hi.currentTexture = hudSprite;break;
-				case WORLD_ENGLAND:hi.currentTexture = sprite;break;
-				case WORLD_D1:hi.currentTexture = dungeon;break;
-				}
-
+				hi.currentTexture = single;
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
 				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = false;
@@ -157,146 +145,150 @@ bool World::setWorld(char * fileName)
 			{
 			case 'G':
 				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 5;
+					hi.indexOfSpriteRow = 6;
 				}
 				else if(currentWorld == WORLD_ENGLAND){
-					hi.indexOfSpriteRow = 0;
+					hi.indexOfSpriteRow = 7;
 				}
 				else if(currentWorld == WORLD_D1){
-					r_tile = rand()%2;
+					r_tile = rand()%2 + 12;
 					hi.indexOfSpriteRow = r_tile;
 				}
 				break;
 			case 'D':
 				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 0;
-					hi.collide = true;
-				}
-				else{
-				hi.indexOfSpriteRow = 1;
-				}
-				break;
-			case 'H':
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 2;
-					hi.collide = true;
-				}
-				else{
-				hi.indexOfSpriteRow = 2;
-				}
-				break;
-			case 'V':
-				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 1;
 					hi.collide = true;
 				}
 				else{
-				hi.indexOfSpriteRow = 3;
+				hi.indexOfSpriteRow = 8;
 				}
 				break;
-			case 'M':
+			case 'H':
 				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 3;
 					hi.collide = true;
 				}
 				else{
-				hi.indexOfSpriteRow = 4;
+				hi.indexOfSpriteRow = 9;
 				}
 				break;
-			case 'B':
+			case 'V':
+				if(currentWorld == WORLD_HUB){
+					hi.indexOfSpriteRow = 2;
+					hi.collide = true;
+				}
+				else{
+				hi.indexOfSpriteRow = 10;
+				}
+				break;
+			case 'M':
 				if(currentWorld == WORLD_HUB){
 					hi.indexOfSpriteRow = 4;
 					hi.collide = true;
 				}
+				else{
+				hi.indexOfSpriteRow = 11;
+				}
+				break;
+			case 'B':
+				if(currentWorld == WORLD_HUB){
+					hi.indexOfSpriteRow = 5;
+					hi.collide = true;
+				}
 				else if(currentWorld == WORLD_ENGLAND){
-				hi.indexOfSpriteRow = 5;
+				hi.indexOfSpriteRow = 0;
 				hi.collide = true;
 				}
 				else if(currentWorld == WORLD_D1){
-					r_tile = (rand()%3) + 2;
+					r_tile = (rand()%3) + 14;
 					hi.indexOfSpriteRow = r_tile;
 					hi.collide = true;
 				}
 				break;
 			case 'P':
-				if(currentWorld == WORLD_HUB){
+				/*if(currentWorld == WORLD_HUB){
 				hi.indexOfSpriteRow = 5;
 				}
 				else{
 					hi.indexOfSpriteRow = 0;
 				}
-				//m_mapOfWorld.add(hi);
+				m_mapOfWorld.add(hi);*/
 				//Change the sprite to the Portal Sprite, which can be used to update.
-				hi.currentTexture = portalSprite;
-				hi.indexOfSpriteRow = 6;
+				hi.currentTexture = animate;
+				hi.indexOfSpriteRow = 0;
 				hi.animate = hi.portal = true;
 				hi.portalIndexNumber++;
 				break;
 			case'p':
-				hi.indexOfSpriteRow = 0;
+				if(currentWorld == WORLD_D1){
+					r_tile = rand()%2 + 12;
+					hi.indexOfSpriteRow = r_tile;
+				}
+				else
+					hi.indexOfSpriteRow = 7;
 				hi.playerSpawn = true;
 				break;
 			case 'd':
-				hi.currentTexture = dungeon;
-				hi.indexOfSpriteRow = 6;
+				hi.currentTexture = animate;
+				hi.indexOfSpriteRow = 1;
 				hi.animate = hi.dungeon = true;
 				break;
 			case'S':
 					if(currentWorld == WORLD_D1){
-						r_tile = rand()%2;
+						r_tile = rand()%2 + 12;
 						hi.indexOfSpriteRow = r_tile;
 						hi.spawnLocation = true;
 					 }
 					else if(currentWorld == WORLD_ENGLAND){
-						hi.indexOfSpriteRow = 0;
+						hi.indexOfSpriteRow = 7;
 						hi.spawnLocation = true;
 					 }
 					break;
 			case 'b':
 				if(currentWorld == WORLD_D1){
-						r_tile = rand()%2;
+						r_tile = rand()%2 + 12;
 						hi.indexOfSpriteRow = r_tile;
 						hi.bossLoc = true;
 				}
 				break;
 			case 'W':
-				hi.currentTexture = water;
-				hi.indexOfSpriteRow = 0;
+				hi.currentTexture = animate;
+				hi.indexOfSpriteRow = 2;
 				hi.collide = hi.animate =  true;
 				break;
 			case 'U':
-				hi.currentTexture = water;
-				hi.indexOfSpriteRow = 1;
-				hi.animate =  true;
-				break;
-			case 'u':
-				hi.currentTexture = water;
-				hi.indexOfSpriteRow = 2;
-				hi.animate =  true;
-				break;
-			case 'L':
-				hi.currentTexture = water;
+				hi.currentTexture = animate;
 				hi.indexOfSpriteRow = 3;
 				hi.animate =  true;
 				break;
-			case 'l':
-				hi.currentTexture = water;
+			case 'u':
+				hi.currentTexture = animate;
 				hi.indexOfSpriteRow = 4;
 				hi.animate =  true;
 				break;
-			case '+':
-				hi.currentTexture = water;
+			case 'L':
+				hi.currentTexture = animate;
 				hi.indexOfSpriteRow = 5;
 				hi.animate =  true;
 				break;
-			case '=':
-				hi.currentTexture = water;
+			case 'l':
+				hi.currentTexture = animate;
 				hi.indexOfSpriteRow = 6;
 				hi.animate =  true;
 				break;
+			case '+':
+				hi.currentTexture = animate;
+				hi.indexOfSpriteRow = 7;
+				hi.animate =  true;
+				break;
+			case '=':
+				hi.currentTexture = animate;
+				hi.indexOfSpriteRow = 8;
+				hi.animate =  true;
+				break;
 			default:
-				hi.currentTexture = dungeon;
-				hi.indexOfSpriteRow = 5; 
+				hi.indexOfSpriteRow = 0;
 				hi.collide = true;
 				break;
 			}
@@ -505,27 +497,16 @@ void World::update(Uint32 a_timePassed)
 		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc()))
 			m_mapOfEntities.get(i).update(a_timePassed, this);
 	}
-	int worldSprite;
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
-		if(m_mapOfWorld.get(i).portal)
-			worldSprite = EUROPEAN;
-		else if(m_mapOfWorld.get(i).dungeon)
-			worldSprite = DUNGEON;
-		else if(m_mapOfWorld.get(i).animate)
-			worldSprite = WATER;
-		else
-			worldSprite = HUB;
 		//don't update if another tile has already updated/animated this world sprite
-		if(m_mapOfWorld.get(i).animate && !m_animFlags[worldSprite])
+		if(m_mapOfWorld.get(i).animate && !m_animFlag)
 		{
 			if(m_cCamera.intersects(SRect(m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y, m_mapOfWorld.get(i).collideBox.w, m_mapOfWorld.get(i).collideBox.h)))
 			{
 				m_mapOfWorld.get(i).currentTexture->update(a_timePassed);
 				//whatever sprite sheet the world uses, note that it has already been updated
-				m_animFlags[worldSprite] = true;
-				if(m_mapOfWorld.get(i).currentTexture->getFrame() > m_mapOfWorld.get(i).currentTexture->getMaxFrames()-1)
-					m_mapOfWorld.get(i).currentTexture->restart(m_mapOfWorld.get(i).indexOfSpriteRow);
+				m_animFlag = true;
 			}
 		}
 	}
@@ -535,8 +516,7 @@ void World::update(Uint32 a_timePassed)
 		m_mapOfEntities.get(i).sortOnYPosition();
 	//reset animation to false,
 	//stating that these sprite sheets have not yet been animated (for next update cycle)
-	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
-		m_animFlags[i] = false;
+	m_animFlag = false;
 }
 void World::draw(SDL_Surface * a_screen)
 {
