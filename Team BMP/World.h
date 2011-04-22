@@ -6,7 +6,7 @@
 #include "srect.h"
 
 enum m_sprites			{SLIME, SKELETON, GHOST, BOSS1, NPC1, NUM_SPRITES};
-enum m_worldsprites		{HUB, EUROPEAN, DUNGEON, WATER};
+enum m_worldsprites		{HUB, EUROPEAN, DUNGEON, WATER, NUM_SPRITES_WORLD};
 #define ERROR_CODE	-1
 
 struct Tile
@@ -35,6 +35,7 @@ private:
 	TemplateVector2<Tile> m_mapOfWorld;
 	SpriteInfo m_sprites[NUM_SPRITES];
 	//SpriteInfo m_worldSprites[10];
+	bool m_animFlags[NUM_SPRITES_WORLD];
 
 	bool m_success;
 	int clientPlayerIndex;

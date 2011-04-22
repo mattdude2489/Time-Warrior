@@ -53,6 +53,8 @@ World::World()
 			x = 0;
 		}
 	}
+	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
+		m_animFlags[i] = false;
 }
 World::~World()
 {
@@ -503,20 +505,38 @@ void World::update(Uint32 a_timePassed)
 		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc()))
 			m_mapOfEntities.get(i).update(a_timePassed, this);
 	}
+	int worldSprite;
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
-		if(m_mapOfWorld.get(i).animate && 
-		m_cCamera.intersects(SRect(m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y, m_mapOfWorld.get(i).collideBox.w, m_mapOfWorld.get(i).collideBox.h)))
+		if(m_mapOfWorld.get(i).portal)
+			worldSprite = EUROPEAN;
+		else if(m_mapOfWorld.get(i).dungeon)
+			worldSprite = DUNGEON;
+		else if(m_mapOfWorld.get(i).animate)
+			worldSprite = WATER;
+		else
+			worldSprite = HUB;
+		//don't update if another tile has already updated/animated this world sprite
+		if(m_mapOfWorld.get(i).animate && !m_animFlags[worldSprite])
 		{
-			m_mapOfWorld.get(i).currentTexture->update(a_timePassed);
-			if(m_mapOfWorld.get(i).currentTexture->getFrame() > m_mapOfWorld.get(i).currentTexture->getMaxFrames()-1)
-				m_mapOfWorld.get(i).currentTexture->restart(m_mapOfWorld.get(i).indexOfSpriteRow);
+			if(m_cCamera.intersects(SRect(m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y, m_mapOfWorld.get(i).collideBox.w, m_mapOfWorld.get(i).collideBox.h)))
+			{
+				m_mapOfWorld.get(i).currentTexture->update(a_timePassed);
+				//whatever sprite sheet the world uses, note that it has already been updated
+				m_animFlags[worldSprite] = true;
+				if(m_mapOfWorld.get(i).currentTexture->getFrame() > m_mapOfWorld.get(i).currentTexture->getMaxFrames()-1)
+					m_mapOfWorld.get(i).currentTexture->restart(m_mapOfWorld.get(i).indexOfSpriteRow);
+			}
 		}
 	}
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	//Make sure for each grid's sorting.
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 		m_mapOfEntities.get(i).sortOnYPosition();
+	//reset animation to false,
+	//stating that these sprite sheets have not yet been animated (for next update cycle)
+	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
+		m_animFlags[i] = false;
 }
 void World::draw(SDL_Surface * a_screen)
 {
