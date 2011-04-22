@@ -496,7 +496,7 @@ void World::update(Uint32 a_timePassed)
 		m_cCamera.x = m_player->getLocation().x - SCREEN_CENTER_X;
 		m_cCamera.y = m_player->getLocation().y - SCREEN_CENTER_Y;
 	}*/
-	printf("(%d,%d) with (%d,%d)\n", m_cCamera.x, m_cCamera.y, m_cCamera.w, m_cCamera.h);
+	//printf("(%d,%d) with (%d,%d)\n", m_cCamera.x, m_cCamera.y, m_cCamera.w, m_cCamera.h);
 	//Update entities based on where the current Camera is.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
@@ -506,8 +506,7 @@ void World::update(Uint32 a_timePassed)
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
 		if(m_mapOfWorld.get(i).animate && 
-			(m_cCamera.intersects(m_mapOfWorld.get(i).collideBox) || 
-			m_cCamera.contains(m_mapOfWorld.get(i).getLocationScreen())))
+		m_cCamera.intersects(SRect(m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y, m_mapOfWorld.get(i).collideBox.w, m_mapOfWorld.get(i).collideBox.h)))
 		{
 			m_mapOfWorld.get(i).currentTexture->update(a_timePassed);
 			if(m_mapOfWorld.get(i).currentTexture->getFrame() > m_mapOfWorld.get(i).currentTexture->getMaxFrames()-1)
@@ -524,7 +523,7 @@ void World::draw(SDL_Surface * a_screen)
 	//Entities draw.
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
-		if(m_cCamera.intersects(m_mapOfWorld.get(i).collideBox) || m_cCamera.contains(m_mapOfWorld.get(i).getLocationScreen()))
+		if(m_cCamera.intersects(SRect(m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y, m_mapOfWorld.get(i).collideBox.w, m_mapOfWorld.get(i).collideBox.h)))
 		{
 			m_mapOfWorld.get(i).currentTexture->setRIndex(m_mapOfWorld.get(i).indexOfSpriteRow);
 			m_mapOfWorld.get(i).currentTexture->draw(a_screen, m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y);
