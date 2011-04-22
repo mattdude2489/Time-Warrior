@@ -38,6 +38,12 @@ World::World()
 	m_sprites[BOSS1].fileName = "Sprites/demon0.bmp";
 	m_sprites[NPC1].fileName = "Sprites/greenguy.bmp";
 
+	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+13);
+	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+5);
+	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
+		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
+	m_worldSprites[ANIMATION]->setLoopToBegin(true);
+	m_worldSprites[ANIMATION]->start();
 	m_success = setWorld("Maps/HubWorldMap.txt");
 
 	int x = 0, y = 0, w = 0, h = 0;
@@ -57,18 +63,8 @@ World::World()
 }
 World::~World()
 {
-		/*for(int i = 0; i < m_mapOfWorld.size(); i++)
-			delete m_mapOfWorld.get(i).currentTexture;*/
-	//because ALL of the tiles only hold ONE texture, it only needs to be deleted ONCE.
-	delete m_mapOfWorld.get(0).currentTexture;// Hooray for trying to delete memory that's ALREADY GONE!?
-	for(int i = 0; i < m_mapOfWorld.size(); i++)
-	{
-		if(m_mapOfWorld.get(i).portal)
-		{
-			delete m_mapOfWorld.get(i).currentTexture;
-			break;
-		}
-	}
+	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
+			delete m_worldSprites[i];
 }
 
 int Tile::portalIndexNumber = 0; //I have to use global scope on this in order to use a static. That's just SAD.
@@ -86,27 +82,8 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_D1;
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
-	{
-		if(m_mapOfWorld.get(0).currentTexture->isSprite())
-		{
-			delete m_mapOfWorld.get(0).currentTexture;
-			for(int i = 0; i < m_mapOfWorld.size(); i++)
-			{
-				if(m_mapOfWorld.get(i).portal)
-				{
-					delete m_mapOfWorld.get(i).currentTexture; //Delete this texture ONLY ONCE. It gets recreated soon anyways.
-					break;
-				}
-			}
-		}
 		m_mapOfWorld.release();
-	}
 
-
-	SDL_Sprite * single = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+13);
-	SDL_Sprite * animate = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+5);
-	single->setTransparency(COLOR_TRANSPARENT);
-	animate->setTransparency(COLOR_TRANSPARENT);
 	Tile::portalIndexNumber = 0; //EPIC. THIS FARKING WORKS.
 	//start the actual loading of the textures.
 	if(infile == NULL)
@@ -121,7 +98,7 @@ bool World::setWorld(char * fileName)
 			//Initializes ALL of the tiles. All of them. Dear god that's a lot of memory.
 			if(c != '\n')
 			{
-				hi.currentTexture = single;
+				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
 				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = false;
@@ -215,7 +192,7 @@ bool World::setWorld(char * fileName)
 				}
 				m_mapOfWorld.add(hi);*/
 				//Change the sprite to the Portal Sprite, which can be used to update.
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 0;
 				hi.animate = hi.portal = true;
 				hi.portalIndexNumber++;
@@ -230,7 +207,7 @@ bool World::setWorld(char * fileName)
 				hi.playerSpawn = true;
 				break;
 			case 'd':
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 1;
 				hi.animate = hi.dungeon = true;
 				break;
@@ -253,37 +230,37 @@ bool World::setWorld(char * fileName)
 				}
 				break;
 			case 'W':
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 2;
 				hi.collide = hi.animate =  true;
 				break;
 			case 'U':
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 3;
 				hi.animate =  true;
 				break;
 			case 'u':
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 4;
 				hi.animate =  true;
 				break;
 			case 'L':
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 5;
 				hi.animate =  true;
 				break;
 			case 'l':
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 6;
 				hi.animate =  true;
 				break;
 			case '+':
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 7;
 				hi.animate =  true;
 				break;
 			case '=':
-				hi.currentTexture = animate;
+				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 8;
 				hi.animate =  true;
 				break;
@@ -296,8 +273,6 @@ bool World::setWorld(char * fileName)
 			{
 				m_mapOfWorld.add(hi);
 			}
-			if(hi.animate)
-				hi.currentTexture->start();
 			c = fgetc(infile);
 		}
 		m_success = true;
@@ -497,19 +472,7 @@ void World::update(Uint32 a_timePassed)
 		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc()))
 			m_mapOfEntities.get(i).update(a_timePassed, this);
 	}
-	for(int i = 0; i < m_mapOfWorld.size(); ++i)
-	{
-		//don't update if another tile has already updated/animated this world sprite
-		if(m_mapOfWorld.get(i).animate && !m_animFlag)
-		{
-			if(m_cCamera.intersects(SRect(m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y, m_mapOfWorld.get(i).collideBox.w, m_mapOfWorld.get(i).collideBox.h)))
-			{
-				m_mapOfWorld.get(i).currentTexture->update(a_timePassed);
-				//whatever sprite sheet the world uses, note that it has already been updated
-				m_animFlag = true;
-			}
-		}
-	}
+	m_worldSprites[ANIMATION]->update(a_timePassed);
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	//Make sure for each grid's sorting.
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
