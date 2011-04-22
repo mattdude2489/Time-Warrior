@@ -12,7 +12,7 @@ enum e_worldsprites		{SINGLE, ANIMATION, NUM_SPRITES_WORLD};
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide, animate, portal, dungeon, spawnLocation, bossLoc, playerSpawn;
+	bool collide, portal, dungeon, spawnLocation, bossLoc, playerSpawn;
 	SPoint pos, *cam;
 	int indexOfSpriteRow;
 	static int portalIndexNumber;
@@ -30,18 +30,13 @@ struct SpriteInfo
 class World
 {
 private:
-	//TemplateVector2<Entity*> m_mapOfEntities;
 	TemplateVector2<Grid> m_mapOfEntities;
 	TemplateVector2<Tile> m_mapOfWorld;
 	SpriteInfo m_sprites[NUM_SPRITES];
 	SDL_Sprite * m_worldSprites[NUM_SPRITES_WORLD];
-	bool m_animFlag;
 
 	bool m_success;
-	int clientPlayerIndex;
-	int currentWorld;
-	int maxWorldX, maxWorldY; //how big the world is...maximally. Used for Grids.
-	int tileX, tileY;
+	int clientPlayerIndex, currentWorld, maxWorldX, maxWorldY, tileX, tileY;
 	Entity * m_player;
 	SRect m_cCamera; //The client's camera.
 public:

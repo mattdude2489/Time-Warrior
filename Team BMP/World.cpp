@@ -11,10 +11,8 @@ using namespace std;
 World::World()
 {
 	clientPlayerIndex = 0; 
-	maxWorldX = SCREEN_WIDTH;
-	maxWorldY = SCREEN_HEIGHT;
-	m_cCamera.w = SCREEN_WIDTH;
-	m_cCamera.h = SCREEN_HEIGHT;
+	maxWorldX = m_cCamera.w = SCREEN_WIDTH;
+	maxWorldY = m_cCamera.h = SCREEN_HEIGHT;
 	//Setting up the 16 grids. The number can easily be changed.
 	for(int i = 0; i < NUM_GRIDS; i++)
 	{
@@ -23,7 +21,6 @@ World::World()
 	}
 	for(int i =0; i < NUM_SPRITES; i++)
 	{
-		//m_sprites[i].setTransparency(COLOR_TRANSPARENT);
 		m_sprites[i].fileName = NULL;
 		m_sprites[i].frameWidth = m_sprites[i].frameHeight = FRAME_SIZE;
 		m_sprites[i].animSpeed = FRAME_RATE;
@@ -44,6 +41,7 @@ World::World()
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
 	m_worldSprites[ANIMATION]->start();
+
 	m_success = setWorld("Maps/HubWorldMap.txt");
 
 	int x = 0, y = 0, w = 0, h = 0;
@@ -59,7 +57,6 @@ World::World()
 			x = 0;
 		}
 	}
-	m_animFlag = false;
 }
 World::~World()
 {
@@ -101,7 +98,7 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.animate = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = false;
+				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = false;
 				x++;
 				hi.collideBox.x = hi.pos.x;
 				hi.collideBox.y = hi.pos.y;
@@ -194,7 +191,7 @@ bool World::setWorld(char * fileName)
 				//Change the sprite to the Portal Sprite, which can be used to update.
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 0;
-				hi.animate = hi.portal = true;
+				hi.portal = true;
 				hi.portalIndexNumber++;
 				break;
 			case'p':
@@ -209,7 +206,7 @@ bool World::setWorld(char * fileName)
 			case 'd':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 1;
-				hi.animate = hi.dungeon = true;
+				hi.dungeon = true;
 				break;
 			case'S':
 					if(currentWorld == WORLD_D1){
@@ -232,37 +229,31 @@ bool World::setWorld(char * fileName)
 			case 'W':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 2;
-				hi.collide = hi.animate =  true;
+				hi.collide = true;
 				break;
 			case 'U':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 3;
-				hi.animate =  true;
 				break;
 			case 'u':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 4;
-				hi.animate =  true;
 				break;
 			case 'L':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 5;
-				hi.animate =  true;
 				break;
 			case 'l':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 6;
-				hi.animate =  true;
 				break;
 			case '+':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 7;
-				hi.animate =  true;
 				break;
 			case '=':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = 8;
-				hi.animate =  true;
 				break;
 			default:
 				hi.indexOfSpriteRow = 0;
@@ -440,8 +431,6 @@ void World::setMonsters()
 
 void World::update(Uint32 a_timePassed)
 {
-	//static SPoint prevLoc = m_mapOfEntities.get(clientPlayerIndex)->getLocation();
-
 	//Making sure that the entities are all in their correct grids.
 	Entity * cE = NULL;
 	for(int z = 0; z < m_mapOfEntities.size(); z++)
@@ -477,9 +466,6 @@ void World::update(Uint32 a_timePassed)
 	//Make sure for each grid's sorting.
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 		m_mapOfEntities.get(i).sortOnYPosition();
-	//reset animation to false,
-	//stating that these sprite sheets have not yet been animated (for next update cycle)
-	m_animFlag = false;
 }
 void World::draw(SDL_Surface * a_screen)
 {
