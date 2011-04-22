@@ -37,6 +37,7 @@ public:
 	void save();
 	void setWorld(World * currWorld) {thisWorld = currWorld;}
 	bool loadPlayer();
+	void newGame();
 	void setGauntletSlot(e_gauntletSlots a_slot);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);
 	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level);

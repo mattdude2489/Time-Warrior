@@ -18,7 +18,10 @@ void Player::initPlayer(World * newWorld)
 	m_expLvReq = m_level+1;
 	setVelocity(0,0);
 	thisWorld = newWorld;
-	loadedPlayer = loadPlayer();
+	if(!loadPlayer())
+	{
+		newGame();
+	}
 }
 void Player::addToAttackInventory(Chip * a_chip)
 {
@@ -61,14 +64,11 @@ Player::~Player()
 	save();
 	for(int i = 0; i < NUM_SLOTS; i++) //Deletes the Armor from memory.
 	{
-		if(loadedPlayer == true)
+		//if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
+		if(m_gauntlet[i] != NULL) 
 		{
-			//if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
-			if(m_gauntlet[i] != NULL) 
-			{
-				if(m_gauntlet[i]->getNewed() && m_gauntlet[i]->getType() == ARMOR)
-					delete m_gauntlet[i];
-			}
+			if(m_gauntlet[i]->getNewed() && m_gauntlet[i]->getType() == ARMOR)
+				delete m_gauntlet[i];
 		}
 	}
 	//for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++) //Deletes the chips from memory.
@@ -290,6 +290,65 @@ bool Player::loadPlayer()
 		charget = fgetc(infile);
 	}
 	return true;
+}
+void Player::newGame()
+{
+	Blunt* b1 = new Blunt(BASIC);
+	Blunt *b2 = new Blunt(ADVANCED);
+	Slash* s1 = new Slash(BASIC);
+	Slash *s2 = new Slash(ADVANCED);
+	Divine* d1 = new Divine(BASIC);
+	Divine *d2 = new Divine(ADVANCED);
+	Divine* d3 = new Divine(EXPERT);
+	Fire* f1 = new Fire(BASIC);
+	Fire *f2 = new Fire(ADVANCED);
+	Fire* f3 = new Fire(EXPERT);
+	Armor* gear = new Armor(HEAD, BASIC);
+	b1->levelUp();
+	b2->levelUp();
+	s1->levelUp();
+	s2->levelUp();
+	d1->levelUp();
+	d2->levelUp();
+	d3->levelUp();
+	f1->levelUp();
+	f2->levelUp();
+	f3->levelUp();
+	gear->levelUp();
+	this->addToAttackInventory(b1);
+	this->addToAttackInventory(b2);
+	this->addToAttackInventory(s1);
+	this->addToAttackInventory(s2);
+	this->addToAttackInventory(d1);
+	this->addToAttackInventory(d2);
+	this->addToAttackInventory(d3);
+	this->addToAttackInventory(f1);
+	this->addToAttackInventory(f2);
+	this->addToAttackInventory(f3);
+	b1->setNewed(true);
+	b2->setNewed(true);
+	s1->setNewed(true);
+	s2->setNewed(true);
+	d1->setNewed(true);
+	d2->setNewed(true);
+	d3->setNewed(true);
+	f1->setNewed(true);
+	f2->setNewed(true);
+	f3->setNewed(true);
+	gear->setNewed(true);
+	thisWorld->add(b1);
+	thisWorld->add(b2);
+	thisWorld->add(s1);
+	thisWorld->add(s2);
+	thisWorld->add(d1);
+	thisWorld->add(d2);
+	thisWorld->add(d3);
+	thisWorld->add(f1);
+	thisWorld->add(f2);
+	thisWorld->add(f3);
+	this->setGauntletSlot(SLOT_ATK1, s1);
+	this->setGauntletSlot(SLOT_ATK2, f1);
+	this->setGauntletSlot(SLOT_ARMOR_HEAD, gear);
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 {
