@@ -127,7 +127,7 @@ class Divine : public Magic
 			switch(m_cSubSubType)
 			{
 			case BASIC:
-				return "Divine Heal";
+				return "Divine Light";
 				break;
 			case ADVANCED:
 				return "Divine Barrier";
@@ -135,6 +135,8 @@ class Divine : public Magic
 			case EXPERT:
 				return "Sanctuary";
 				break;
+			default:
+				return "Divine";
 			}
 		}
 		char * getDescription(){
@@ -149,6 +151,8 @@ class Divine : public Magic
 			case EXPERT:
 				return "Divine area-of-effect.";
 				break;
+			default:
+				return getName();
 			}
 		}
 };
@@ -168,6 +172,8 @@ class Lightning : public Magic
 			case EXPERT:
 				return "Thunderstorm";
 				break;
+			default:
+				return "Lightning";
 			}
 		}
 		char * getDescription(){
@@ -182,6 +188,8 @@ class Lightning : public Magic
 			case EXPERT:
 				return "Lightning area-of-effect.";
 				break;
+			default:
+				return getName();
 			}
 		}
 };
@@ -201,6 +209,8 @@ class Fire : public Magic
 			case EXPERT:
 				return "Armageddon";
 				break;
+			default:
+				return "Fire";
 			}
 		}
 		char * getDescription(){
@@ -215,6 +225,8 @@ class Fire : public Magic
 			case EXPERT:
 				return "Fire area-of-effect.";
 				break;
+			default:
+				return getName();
 			}
 		}
 };
@@ -234,6 +246,8 @@ class Ice : public Magic
 			case EXPERT:
 				return "Blizzard";
 				break;
+			default:
+				return "Ice";
 			}
 		}
 		char * getDescription(){
@@ -248,6 +262,8 @@ class Ice : public Magic
 			case EXPERT:
 				return "Ice area-of-effect.";
 				break;
+			default:
+				return getName();
 			}
 		}
 };

@@ -143,52 +143,52 @@ bool Player::loadPlayer()
 		if(charget == 'P')
 		{
 			//Level
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_level = hpenstrintexpsta;
 			//HP
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_stats[HEALTH_CURRENT] = hpenstrintexpsta;
 			this->m_stats[HEALTH_MAX] = hpenstrintexpsta;
 			//Energy
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_stats[ENERGY_CURRENT] = hpenstrintexpsta;
 			this->m_stats[ENERGY_MAX] = hpenstrintexpsta;
 			//Strength
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_stats[STRENGTH] = hpenstrintexpsta;
 			//Intelligence
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_stats[INTELLECT] = hpenstrintexpsta;
 			//Current Exp.
-			fscanf(infile, "%f", &exp);
+			fscanf_s(infile, "%f", &exp);
 			this->m_experience = exp;
 			//Current Level Requirement
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_expLvReq = hpenstrintexpsta;
 			//Stat Points.
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_statPoints = hpenstrintexpsta;
 		}
 		//If it's reading the Armor...
 		else if(charget == 'A')
 		{
 			//Armor goes like this: Subtype, SubSubType, Def, Resist Fire, resist ice, resist light, level.
-			fscanf(infile, "%i", &hpenstrintexpsta);
-			fscanf(infile, "%i", &chipAndArmorHelper);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &chipAndArmorHelper);
 			//Set the new armor.
 			Armor * gear = new Armor((e_chipSubType)hpenstrintexpsta, (e_chipSubSubType)chipAndArmorHelper);
 			//Defense.
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			gear->setDefense(hpenstrintexpsta);
 			//ResistFire & resistIce
 			for(int i = 0; i < 3; i++)
 			{
-				fscanf(infile, "%i", &hpenstrintexpsta);
+				fscanf_s(infile, "%i", &hpenstrintexpsta);
 				if(hpenstrintexpsta != 0)
 					gear->setResist(i, hpenstrintexpsta);
 
 			}
-			fscanf(infile, "%i", &chipAndArmorHelper);
+			fscanf_s(infile, "%i", &chipAndArmorHelper);
 			for(int k = 0; k < chipAndArmorHelper; k++)
 			{
 				gear->levelUp();

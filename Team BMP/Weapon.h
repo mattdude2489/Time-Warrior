@@ -156,6 +156,8 @@ class Slash : public Weapon
 			case ADVANCED:
 				return "X-Slash";
 				break;
+			default:
+				return "Slash";
 			}
 		}
 		char * getDescription(){
@@ -167,6 +169,8 @@ class Slash : public Weapon
 			case ADVANCED:
 				return "Double Slash attack.";
 				break;
+			default:
+				return getName();
 			}
 		}
 };
@@ -183,6 +187,8 @@ class Blunt : public Weapon
 			case ADVANCED:
 				return "X-Blunt";
 				break;
+			default:
+				return "Blunt";
 			}
 		}
 		char * getDescription(){
@@ -194,6 +200,8 @@ class Blunt : public Weapon
 			case ADVANCED:
 				return "Double Blunt attack.";
 				break;
+			default:
+				return getName();
 			}
 		}
 };

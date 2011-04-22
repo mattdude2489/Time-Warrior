@@ -144,9 +144,9 @@ class Chip : public Entity
 					switch(g)
 					{
 					case 0:	grid = ul;	check = true;									break;
-					case 1:	grid = ur;	check = ur != ul;								break;
-					case 2:	grid = dl;	check = dl != ul && dl != ur;					break;
-					case 3:	grid = dr;	check = dr != ul && dr != ur && dr != dl;		break;
+					case 1:	grid = ur;	check = grid != ul;								break;
+					case 2:	grid = dl;	check = grid != ul && grid != ur;				break;
+					case 3:	grid = dr;	check = grid != ul && grid != ur && grid != dl;	break;
 					}
 					if(check)
 					{
