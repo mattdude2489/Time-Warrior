@@ -59,8 +59,8 @@ public:
 	int getGridHeight(){return maxWorldY/NUM_GRIDS_PER_ROW_COL;}
 	int getLocationGrid(int a_x, int a_y)
 	{
-		int x = (a_x - FRAME_SIZE) / getGridWidth();
-		int y = (a_y - FRAME_SIZE) / getGridHeight();
+		int x = a_x / getGridWidth();
+		int y = a_y / getGridHeight();
 		int temp = (x + (NUM_GRIDS_PER_ROW_COL * y));
 		if(x < 0 || y < 0
 		|| x > (NUM_GRIDS_PER_ROW_COL-1) || y > (NUM_GRIDS_PER_ROW_COL-1))

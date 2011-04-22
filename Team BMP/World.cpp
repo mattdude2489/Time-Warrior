@@ -13,8 +13,8 @@ World::World()
 	clientPlayerIndex = 0; 
 	maxWorldX = SCREEN_WIDTH;
 	maxWorldY = SCREEN_HEIGHT;
-	m_cCamera.w = SCREEN_WIDTH*2;
-	m_cCamera.h = SCREEN_HEIGHT*2;
+	m_cCamera.w = SCREEN_WIDTH;
+	m_cCamera.h = SCREEN_HEIGHT;
 	//Setting up the 16 grids. The number can easily be changed.
 	for(int i = 0; i < NUM_GRIDS; i++)
 	{
@@ -40,10 +40,9 @@ World::World()
 
 	m_success = setWorld("Maps/HubWorldMap.txt");
 
-	int x = 0, y = 0;
-	int w = 0, h = 0;
-	w = maxWorldX/NUM_GRIDS_PER_ROW_COL;
-	h = maxWorldY/NUM_GRIDS_PER_ROW_COL;
+	int x = 0, y = 0, w = 0, h = 0;
+	w = getGridWidth();
+	h = getGridHeight();
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
 		m_mapOfEntities.get(i).setLoc(x*w, y*h, w, h);
@@ -310,10 +309,8 @@ bool World::setWorld(char * fileName)
 		m_success = true;
 		fclose(infile);
 	}
-	//take into account that the outmost tiles are borders for entity containment,
-	//so the valid movable world space is decreased by up/left/down/right tiles
-	maxWorldX = (tileX) * FRAME_SIZE;
-	maxWorldY = (tileY) * FRAME_SIZE;
+	maxWorldX = tileX * FRAME_SIZE;
+	maxWorldY = tileY * FRAME_SIZE;
 	setMonsters();
 #ifdef NPC_ADD
 	setNPC();
@@ -493,12 +490,13 @@ void World::update(Uint32 a_timePassed)
 			}
 		}
 	}
-	if(m_mapOfEntities.get(clientPlayerIndex).getPlayer(cE))
+	/*if(m_mapOfEntities.get(clientPlayerIndex).getPlayer(cE))
 	{
 		//Change the camera stuffs.
-		m_cCamera.x = cE->getLocation().x - SCREEN_CENTER_X;
-		m_cCamera.y = cE->getLocation().y - SCREEN_CENTER_Y;
-	}
+		m_cCamera.x = m_player->getLocation().x - SCREEN_CENTER_X;
+		m_cCamera.y = m_player->getLocation().y - SCREEN_CENTER_Y;
+	}*/
+	printf("(%d,%d) with (%d,%d)\n", m_cCamera.x, m_cCamera.y, m_cCamera.w, m_cCamera.h);
 	//Update entities based on where the current Camera is.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
