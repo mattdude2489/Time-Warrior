@@ -424,7 +424,13 @@ void World::setMonsters()
 		}
 		if(m_mapOfWorld.get(i).playerSpawn)
 		{
-			m_player->setLocation(m_mapOfWorld.get(i).pos);
+			if(m_player->isLastWSet()&&currentWorld == WORLD_ENGLAND)
+			{
+				m_player->setCurrentLocToLast(this);
+			}
+			else{
+				m_player->setLocation(m_mapOfWorld.get(i).pos);
+			}
 		}
 	}
 }

@@ -72,7 +72,9 @@ void Entity::update(int a_timePassed, World * a_world)
 						a_world->setWorld("Maps/Dungeon2.txt");
 						break;
 				}
+				this->setLastW();
 				a_world->setCamera(this->m_camera);
+				
 			}
 		}
 		if(m_eType != CHIP)
@@ -134,4 +136,9 @@ int Entity::getTotalDamageTaken(int a_amount, e_chipSubType a_type)
 		return (int)(a_amount * ((double)a_amount / (a_amount + stat)));
 	else
 		return 0;
+}
+void Entity::setCurrentLocToLast(World * a_world)
+{
+	m_location.set(m_lastWLoc);
+	a_world->setCamera(this->m_camera);
 }

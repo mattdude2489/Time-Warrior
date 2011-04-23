@@ -31,7 +31,7 @@ protected:
 	int m_stats[NUM_STATS], m_timeToRegen, m_timer, m_level;
 	e_entityType m_eType;
 	bool m_shouldDraw, m_activation, m_chipOwnerPlayer; //This bool is pretty much there entirely for NPC dialogue at the moment.
-	SPoint m_location, m_prevLoc, *m_camera, m_target;
+	SPoint m_location, m_prevLoc, *m_camera, m_target, m_lastWLoc;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 	v2D m_vel; //The velocity. - ONLY for player movement
@@ -72,6 +72,7 @@ public:
 		m_sprite = NULL;
 		for(int i = 0; i < NUM_EFFECTS; ++i)
 			m_effects[i].active = false;
+		m_lastWLoc.set(0,0);//using the 00 to say there is none yet
 	}
 	void initSprite(SDL_Sprite * a_sprite)
 	{
@@ -356,4 +357,18 @@ public:
 		}
 	}
 	bool isChipOwnerPlayer(){return m_chipOwnerPlayer;}
+	bool isLastWSet()
+	{
+		if(m_lastWLoc.equals(SPoint(0,0)))
+		{
+			return false;
+		}
+		return true;
+	}
+	void setLastW()
+	{
+		m_lastWLoc.setX(m_location.getX());
+		m_lastWLoc.setY(m_location.getY()+FRAME_SIZE);//set to frame size so when you go back it doesnt send you into the dungeon again
+	}
+	void setCurrentLocToLast(World * a_world);
 };
