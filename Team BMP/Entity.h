@@ -357,18 +357,12 @@ public:
 		}
 	}
 	bool isChipOwnerPlayer(){return m_chipOwnerPlayer;}
-	bool isLastWSet()
-	{
-		if(m_lastWLoc.equals(SPoint(0,0)))
-		{
-			return false;
-		}
-		return true;
-	}
+	bool isLastWSet(){return !m_lastWLoc.isZero();}
 	void setLastW()
 	{
 		m_lastWLoc.setX(m_location.getX());
-		m_lastWLoc.setY(m_location.getY()+FRAME_SIZE);//set to frame size so when you go back it doesnt send you into the dungeon again
+		//set with offset so when you go back it doesnt send you into the dungeon again
+		m_lastWLoc.setY(m_location.getY()+(2*FRAME_SIZE));
 	}
 	void setCurrentLocToLast(World * a_world);
 };
