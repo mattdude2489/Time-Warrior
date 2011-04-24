@@ -121,12 +121,23 @@ void Player::save()
 	//The Chips/Attack Inventory.
 	//Yes, I know magic number are evil, but as these are debug, we're ok to leave them in there for now.
 	//once this works, we can change them easily enough.
+	//Before the double for loops, put the stuff into here.
+	bool slotChipsIn = false;
+	fprintf(outfile, "S %i %i %i %i %i %i / ", m_gauntlet[slotChipsIn]->getType(), m_gauntlet[slotChipsIn]->getSubType(), m_gauntlet[slotChipsIn]->getSubSubType(), m_gauntlet[slotChipsIn]->getDamage(), m_gauntlet[slotChipsIn]->getCost(), m_gauntlet[slotChipsIn]->getLevel());
+	slotChipsIn = true;
+	fprintf(outfile, "S %i %i %i %i %i %i / ", m_gauntlet[slotChipsIn]->getType(), m_gauntlet[slotChipsIn]->getSubType(), m_gauntlet[slotChipsIn]->getSubSubType(), m_gauntlet[slotChipsIn]->getDamage(), m_gauntlet[slotChipsIn]->getCost(), m_gauntlet[slotChipsIn]->getLevel());
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++)
 	{
 		for(int k = 0; k < NUM_CHIP_LEVELS; k++)
 		{
 			if(m_attackInventory[i][k] != NULL)
-				fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getLevel());
+			{
+				if(!((m_attackInventory[i][k]->getType() == m_gauntlet[0]->getType() && m_attackInventory[i][k]->getSubType() == m_gauntlet[0]->getSubType() && m_attackInventory[i][k]->getSubSubType() == m_gauntlet[0]->getSubSubType())
+					|| (m_attackInventory[i][k]->getType() == m_gauntlet[1]->getType() && m_attackInventory[i][k]->getSubType() == m_gauntlet[1]->getSubType() && m_attackInventory[i][k]->getSubSubType() == m_gauntlet[1]->getSubSubType())))
+				{
+					fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getLevel());
+				}
+			}
 		}
 	}
 	fclose(outfile);
@@ -214,7 +225,7 @@ bool Player::loadPlayer()
 			m_gauntlet[SLOT_ARMOR_HEAD]->activate();
 		}
 		//If it's reading the Chips...
-		else if(charget == 'C')
+		else if(charget == 'C' || charget == 'S')
 		{
 			//C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#(Level)#/
 			//Minus the #'s.
@@ -257,8 +268,11 @@ bool Player::loadPlayer()
 			}
 			this->addToAttackInventory(iHopeThisWorks);
 			thisWorld->add(iHopeThisWorks);
-			this->setGauntletSlot((e_gauntletSlots)gauntletSlotSetter, iHopeThisWorks);
-			gauntletSlotSetter++;
+			if(charget == 'S')
+			{
+				this->setGauntletSlot((e_gauntletSlots)gauntletSlotSetter, iHopeThisWorks);
+				gauntletSlotSetter++;
+			}
 		}
 		//To get rid of the slash
 		charget = fgetc(infile);
@@ -362,6 +376,7 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 		if(a_chip->getType() == ARMOR && m_gauntlet[a_slot])
 			m_gauntlet[a_slot]->deactivate();
 		m_gauntlet[a_slot] = a_chip;
+		m_gauntlet[a_slot]->toggleEquip();
 		//buff stats gained from armor
 		if(a_chip->getType() == ARMOR)
 			m_gauntlet[a_slot]->activate();
