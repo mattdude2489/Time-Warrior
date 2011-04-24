@@ -35,15 +35,19 @@ class Armor : public Chip
 			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
 				m_owner->debuffDefenseOrResistance(m_stats[i], (e_stats)i);
 		}
-		void setDefense(int def)
-		{
-			m_stats[DEFENSE] = def;
-		}
+		void setDefense(int def){m_stats[DEFENSE] = def;}
 		void setResist(int resistType, int resistAmount)
 		{
+			//set the correct resistance
 			resistType += RESISTANCE_FIRE;
-			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
-				m_stats[i] = 0;
+			//if the amt is not 0
+			if(resistAmount)
+			{
+				//clear any previous resistances
+				for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+					m_stats[i] = 0;
+			}
+			//set the desired resistance
 			m_stats[resistType] = resistAmount;
 		}
 };

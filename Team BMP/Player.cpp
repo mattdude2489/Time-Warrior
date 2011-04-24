@@ -19,9 +19,7 @@ void Player::initPlayer(World * newWorld)
 	setVelocity(0,0);
 	thisWorld = newWorld;
 	if(!loadPlayer())
-	{
 		newGame();
-	}
 }
 void Player::addToAttackInventory(Chip * a_chip)
 {
@@ -208,9 +206,7 @@ bool Player::loadPlayer()
 			for(int i = 0; i < 3; i++)
 			{
 				fscanf_s(infile, "%i", &hpenstrintexpsta);
-				if(hpenstrintexpsta != 0)
-					gear->setResist(i, hpenstrintexpsta);
-
+				gear->setResist(i, hpenstrintexpsta);
 			}
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
 			for(int k = 0; k < chipAndArmorHelper; k++)
@@ -313,6 +309,7 @@ void Player::newGame()
 	this->addToAttackInventory(f1);
 	this->addToAttackInventory(f2);
 	this->addToAttackInventory(f3);
+	gear->setOwner(this);
 	b1->setNewed(true);
 	b2->setNewed(true);
 	s1->setNewed(true);
