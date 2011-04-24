@@ -220,9 +220,7 @@ bool Player::loadPlayer()
 			
 			gear->setOwner(this);
 			//replace the old one...whatever it was...with the new one loaded from a file.
-//			m_gauntlet[SLOT_ARMOR_HEAD]->deactivate();
 			setGauntletSlot(SLOT_ARMOR_HEAD, gear);
-			m_gauntlet[SLOT_ARMOR_HEAD]->activate();
 		}
 		//If it's reading the Chips...
 		else if(charget == 'C' || charget == 'S')
