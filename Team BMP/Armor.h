@@ -26,12 +26,14 @@ class Armor : public Chip
 		void activateUnique()
 		{
 			m_owner->buffDefenseOrResistance(m_stats[DEFENSE], DEFENSE);
-			m_owner->buffDefenseOrResistance(m_stats[m_resisType], (e_stats)m_resisType);
+			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+				m_owner->buffDefenseOrResistance(m_stats[i], (e_stats)i);
 		}
 		void deactivateUnique()
 		{
 			m_owner->debuffDefenseOrResistance(m_stats[DEFENSE], DEFENSE);
-			m_owner->debuffDefenseOrResistance(m_stats[m_resisType], (e_stats)m_resisType);
+			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+				m_owner->debuffDefenseOrResistance(m_stats[i], (e_stats)i);
 		}
 		void setDefense(int def)
 		{
@@ -40,6 +42,8 @@ class Armor : public Chip
 		void setResist(int resistType, int resistAmount)
 		{
 			resistType += RESISTANCE_FIRE;
+			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+				m_stats[i] = 0;
 			m_stats[resistType] = resistAmount;
 		}
 };
