@@ -5,8 +5,6 @@
 
 class Armor : public Chip
 {
-	protected:
-		int m_resisType;
 	public:
 		Armor(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(ARMOR, a_subType, a_subSubType)
@@ -19,20 +17,21 @@ class Armor : public Chip
 			exp: (2*interval+1)	- (3*interval)
 			*/
 			//RESISTANCE_FIRE, RESISTANCE_ICE, or RESISTANCE_LIGHTNING
-			m_resisType = rand()%3 + RESISTANCE_FIRE;
-			m_stats[DEFENSE] = (rand()%interval + 1) + (interval*m_cSubSubType);
-			m_stats[m_resisType] = (rand()%interval + 1) + (interval*m_cSubSubType);
+			int m_resisType = rand()%3 + RESISTANCE_FIRE;
+			for(int i = DEFENSE; i < NUM_STATS; ++i)
+			{
+				if(i == DEFENSE || i == m_resisType)
+					m_stats[i] = (rand()%interval + 1) + (interval*m_cSubSubType);
+			}
 		}
 		void activateUnique()
 		{
-			m_owner->buffDefenseOrResistance(m_stats[DEFENSE], DEFENSE);
-			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+			for(int i = DEFENSE; i < NUM_STATS; ++i)
 				m_owner->buffDefenseOrResistance(m_stats[i], (e_stats)i);
 		}
 		void deactivateUnique()
 		{
-			m_owner->debuffDefenseOrResistance(m_stats[DEFENSE], DEFENSE);
-			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+			for(int i = DEFENSE; i < NUM_STATS; ++i)
 				m_owner->debuffDefenseOrResistance(m_stats[i], (e_stats)i);
 		}
 		void setDefense(int def){m_stats[DEFENSE] = def;}
@@ -44,7 +43,7 @@ class Armor : public Chip
 			if(resistAmount)
 			{
 				//clear any previous resistances
-				for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+				for(int i = RESISTANCE_FIRE; i < NUM_STATS; ++i)
 					m_stats[i] = 0;
 			}
 			//set the desired resistance

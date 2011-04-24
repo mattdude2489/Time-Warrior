@@ -35,8 +35,8 @@ World::World()
 	m_sprites[BOSS1].fileName = "Sprites/demon0.bmp";
 	m_sprites[NPC1].fileName = "Sprites/greenguy.bmp";
 
-	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+13);
-	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS+5);
+	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);//17
+	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);//9
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
@@ -119,63 +119,63 @@ bool World::setWorld(char * fileName)
 			{
 			case 'G':
 				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 6;
+					hi.indexOfSpriteRow = TILE_METAL_QUAD;
 				}
 				else if(currentWorld == WORLD_ENGLAND){
-					hi.indexOfSpriteRow = 7;
+					hi.indexOfSpriteRow = TILE_GRASS;
 				}
 				else if(currentWorld == WORLD_D1){
-					r_tile = rand()%2 + 12;
+					r_tile = rand()%2 + TILE_DIRT1;
 					hi.indexOfSpriteRow = r_tile;
 				}
 				break;
 			case 'D':
 				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 1;
+					hi.indexOfSpriteRow = TILE_METAL_L;
 					hi.collide = true;
 				}
 				else{
-				hi.indexOfSpriteRow = 8;
+				hi.indexOfSpriteRow = TILE_DUST;
 				}
 				break;
 			case 'H':
 				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 3;
+					hi.indexOfSpriteRow = TILE_METAL_R;
 					hi.collide = true;
 				}
 				else{
-				hi.indexOfSpriteRow = 9;
+				hi.indexOfSpriteRow = TILE_DUST_D;
 				}
 				break;
 			case 'V':
 				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 2;
+					hi.indexOfSpriteRow = TILE_METAL_QUAD_L;
 					hi.collide = true;
 				}
 				else{
-				hi.indexOfSpriteRow = 10;
+				hi.indexOfSpriteRow = TILE_DUST_R;
 				}
 				break;
 			case 'M':
 				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 4;
+					hi.indexOfSpriteRow = TILE_METAL_QUAD_R;
 					hi.collide = true;
 				}
 				else{
-				hi.indexOfSpriteRow = 11;
+				hi.indexOfSpriteRow = TILE_DUST_CORNER;
 				}
 				break;
 			case 'B':
 				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = 5;
+					hi.indexOfSpriteRow = TILE_METAL;
 					hi.collide = true;
 				}
 				else if(currentWorld == WORLD_ENGLAND){
-				hi.indexOfSpriteRow = 0;
+				hi.indexOfSpriteRow = TILE_BLANK;
 				hi.collide = true;
 				}
 				else if(currentWorld == WORLD_D1){
-					r_tile = (rand()%3) + 14;
+					r_tile = (rand()%3) + TILE_SPIKE_LG;
 					hi.indexOfSpriteRow = r_tile;
 					hi.collide = true;
 				}
@@ -190,73 +190,73 @@ bool World::setWorld(char * fileName)
 				m_mapOfWorld.add(hi);*/
 				//Change the sprite to the Portal Sprite, which can be used to update.
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 0;
+				hi.indexOfSpriteRow = TILE_PORTAL;
 				hi.portal = true;
 				hi.portalIndexNumber++;
 				break;
 			case'p':
 				if(currentWorld == WORLD_D1){
-					r_tile = rand()%2 + 12;
+					r_tile = rand()%2 + TILE_DIRT1;
 					hi.indexOfSpriteRow = r_tile;
 				}
 				else
-					hi.indexOfSpriteRow = 7;
+					hi.indexOfSpriteRow = TILE_GRASS;
 				hi.playerSpawn = true;
 				break;
 			case 'd':
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 1;
+				hi.indexOfSpriteRow = TILE_DUNGEON;
 				hi.dungeon = true;
 				break;
 			case'S':
 					if(currentWorld == WORLD_D1){
-						r_tile = rand()%2 + 12;
+						r_tile = rand()%2 + TILE_DIRT1;
 						hi.indexOfSpriteRow = r_tile;
 						hi.spawnLocation = true;
 					 }
 					else if(currentWorld == WORLD_ENGLAND){
-						hi.indexOfSpriteRow = 7;
+						hi.indexOfSpriteRow = TILE_GRASS;
 						hi.spawnLocation = true;
 					 }
 					break;
 			case 'b':
 				if(currentWorld == WORLD_D1){
-						r_tile = rand()%2 + 12;
+						r_tile = rand()%2 + TILE_DIRT1;
 						hi.indexOfSpriteRow = r_tile;
 						hi.bossLoc = true;
 				}
 				break;
 			case 'W':
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 2;
+				hi.indexOfSpriteRow = TILE_WATER;
 				hi.collide = true;
 				break;
 			case 'U':
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 3;
+				hi.indexOfSpriteRow = TILE_WATER_D;
 				break;
 			case 'u':
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 4;
+				hi.indexOfSpriteRow = TILE_WATER_U;
 				break;
 			case 'L':
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 5;
+				hi.indexOfSpriteRow = TILE_WATER_R;
 				break;
 			case 'l':
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 6;
+				hi.indexOfSpriteRow = TILE_WATER_L;
 				break;
 			case '+':
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 7;
+				hi.indexOfSpriteRow = TILE_BRIDGE_V;
 				break;
 			case '=':
 				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = 8;
+				hi.indexOfSpriteRow = TILE_BRIDGE_H;
 				break;
 			default:
-				hi.indexOfSpriteRow = 0;
+				hi.indexOfSpriteRow = TILE_BLANK;
 				hi.collide = true;
 				break;
 			}
