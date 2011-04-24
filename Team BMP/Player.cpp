@@ -219,61 +219,37 @@ bool Player::loadPlayer()
 			//C#(Type)#(SubType)#(SubSubType)#(Dmg)#(Cost)#(Level)#/
 			//Minus the #'s.
 			//For example C 1 4 0 is Type MAGIC, Subtype DIVINE, SubSubType BASIC.
-			fscanf(infile, "%i", &hpenstrintexpsta);
-			fscanf(infile, "%i", &chipAndArmorHelper);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &chipAndArmorHelper);
 			Chip * iHopeThisWorks;
 			switch(hpenstrintexpsta)
 			{
-			case 0:
+			case ARMOR:
 				break;
-			case 1:
-				//Magic.
-				fscanf(infile, "%i", &hpenstrintexpsta);
+			case MAGIC:
+				fscanf_s(infile, "%i", &hpenstrintexpsta);
 				switch(chipAndArmorHelper)
 				{
-				case 4:
-					//Divine.
-					iHopeThisWorks = new Divine((e_chipSubSubType)hpenstrintexpsta);
-					break;
-				case 5:
-					iHopeThisWorks = new Lightning((e_chipSubSubType)hpenstrintexpsta);
-					break;
-				case 6:
-					iHopeThisWorks = new Fire((e_chipSubSubType)hpenstrintexpsta);
-					break;
-				case 7:
-					iHopeThisWorks = new Ice((e_chipSubSubType)hpenstrintexpsta);
-					break;
+				case DIVINE:	iHopeThisWorks = new Divine((e_chipSubSubType)hpenstrintexpsta);	break;
+				case LIGHTNING:	iHopeThisWorks = new Lightning((e_chipSubSubType)hpenstrintexpsta);	break;
+				case FIRE:		iHopeThisWorks = new Fire((e_chipSubSubType)hpenstrintexpsta);		break;
+				case ICE:		iHopeThisWorks = new Ice((e_chipSubSubType)hpenstrintexpsta);		break;
 				}
 				break;
-			case 2:
-				//Weapons
-				fscanf(infile, "%i", &hpenstrintexpsta);
+			case WEAPON:
+				fscanf_s(infile, "%i", &hpenstrintexpsta);
 				switch(chipAndArmorHelper)
 				{
-				case 8:
-					//Blunt
-					iHopeThisWorks = new Blunt((e_chipSubSubType)hpenstrintexpsta);
-					break;
-				case 9:
-					//Range
-					//iHopeThisWorks = new Ranged((e_chipSubSubType)hpenstrintexpsta);
-					break;
-				case 10:
-					//Slash
-					iHopeThisWorks = new Slash((e_chipSubSubType)hpenstrintexpsta);
-					break;
-				case 11:
-					//pierce
-					//iHopeThisWorks = new Pierce((e_chipSubSubType)hpenstrintexpsta);
-					break;
+				case BLUNT:		iHopeThisWorks = new Blunt((e_chipSubSubType)hpenstrintexpsta);		break;
+				//case RANGE:		iHopeThisWorks = new Ranged((e_chipSubSubType)hpenstrintexpsta);	break;
+				case SLASH:		iHopeThisWorks = new Slash((e_chipSubSubType)hpenstrintexpsta);		break;
+				//case PIERCE:	iHopeThisWorks = new Pierce((e_chipSubSubType)hpenstrintexpsta);	break;
 				}
 			}
-			iHopeThisWorks->setCamera(this->getCamera());
 			iHopeThisWorks->setNewed(true);
-			fscanf(infile, "%i", &hpenstrintexpsta);
-			fscanf(infile, "%i", &chipAndArmorHelper);
-			fscanf(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
+			fscanf_s(infile, "%i", &chipAndArmorHelper);
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			//To get it to where the level is.
 			for(int i = 0; i < hpenstrintexpsta; i++)
 			{

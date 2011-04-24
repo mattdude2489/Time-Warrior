@@ -49,61 +49,14 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	//the user interface variable
 	bool running = true;
-	//loading a sprite to see if it works with the entity
-	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	//Blunt b1(BASIC);
-	//Blunt b2(ADVANCED);
-	//Slash s1(BASIC);
-	//Slash s2(ADVANCED);
-	//Divine d1(BASIC);
-	//Divine d2(ADVANCED);
-	//Divine d3(EXPERT);
-	//Fire f1(BASIC);
-	//Fire f2(ADVANCED);
-	//Fire f3(EXPERT);
-	//Armor gear(HEAD, BASIC);
-	////gear.setOwner(&eTest);
-	//eTest.addToAttackInventory(&b1);
-	//eTest.addToAttackInventory(&b2);
-	//eTest.addToAttackInventory(&s1);
-	//eTest.addToAttackInventory(&s2);
-	//eTest.addToAttackInventory(&d1);
-	//eTest.addToAttackInventory(&d2);
-	//eTest.addToAttackInventory(&d3);
-	//eTest.addToAttackInventory(&f1);
-	//eTest.addToAttackInventory(&f2);
-	//eTest.addToAttackInventory(&f3);
 	Hud Ghud;
 	World world;
+	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	Player eTest(100,100,0,0,0,0,0,0,&test, &world);
-	//b1.levelUp();
-	//b2.levelUp();
-	//s1.levelUp();
-	//s2.levelUp();
-	//d1.levelUp();
-	//d2.levelUp();
-	//d3.levelUp();
-	//f1.levelUp();
-	//f2.levelUp();
-	//f3.levelUp();
-	//gear.levelUp();
-	/*eTest.setGauntletSlot(SLOT_ATK1, &s1);
-	eTest.setGauntletSlot(SLOT_ATK2, &f1);*/
-	//eTest.setGauntletSlot(SLOT_ARMOR_HEAD, &gear);
 	world.add(&eTest);
-	//world.add(&b1);
-	//world.add(&b2);
-	//world.add(&s1);
-	//world.add(&s2);
-	//world.add(&d1);
-	//world.add(&d2);
-	//world.add(&d3);
-	//world.add(&f1);
-	//world.add(&f2);
-	//world.add(&f3);
 	world.setCamera(eTest.getCamera());
+
 	//music test stuff
-	
 	AudioHandler ah;
 	ah.playRandom();
 #ifdef WITH_NETWORKING
