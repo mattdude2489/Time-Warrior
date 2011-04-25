@@ -75,7 +75,10 @@ class Weapon : public Chip
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
-			if(a_entity->getType() == CHIP || a_entity->getType()== NPC || a_entity == m_owner)
+			if(a_entity->getType() == CHIP
+			|| a_entity->getType()== NPC
+			|| a_entity->getType()== OBSTACLE
+			|| a_entity == m_owner)
 				return false;
 			else
 			{

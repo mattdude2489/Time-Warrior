@@ -400,6 +400,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Obstacle.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Player.h"
 				>
 			</File>

@@ -5,6 +5,7 @@
 using namespace std;
 #include "NPC.h"
 #include "Magic.h"
+#include "Obstacle.h"
 
 #define NPC_ADD
 
@@ -35,8 +36,8 @@ World::World()
 	m_sprites[BOSS1].fileName = "Sprites/demon0.bmp";
 	m_sprites[NPC1].fileName = "Sprites/greenguy.bmp";
 
-	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);//17
-	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);//9
+	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
+	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
@@ -189,8 +190,18 @@ bool World::setWorld(char * fileName)
 				}
 				m_mapOfWorld.add(hi);*/
 				//Change the sprite to the Portal Sprite, which can be used to update.
-				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = TILE_PORTAL;
+				//hi.currentTexture = m_worldSprites[ANIMATION];
+				//hi.indexOfSpriteRow = TILE_PORTAL;
+				if(currentWorld == WORLD_HUB){
+					hi.indexOfSpriteRow = TILE_METAL_QUAD;
+				}
+				else if(currentWorld == WORLD_ENGLAND){
+					hi.indexOfSpriteRow = TILE_GRASS;
+				}
+				else if(currentWorld == WORLD_D1){
+					r_tile = rand()%2 + TILE_DIRT1;
+					hi.indexOfSpriteRow = r_tile;
+				}
 				hi.portal = true;
 				hi.portalIndexNumber++;
 				break;
@@ -204,8 +215,18 @@ bool World::setWorld(char * fileName)
 				hi.playerSpawn = true;
 				break;
 			case 'd':
-				hi.currentTexture = m_worldSprites[ANIMATION];
-				hi.indexOfSpriteRow = TILE_DUNGEON;
+				//hi.currentTexture = m_worldSprites[ANIMATION];
+				//hi.indexOfSpriteRow = TILE_DUNGEON;
+				if(currentWorld == WORLD_HUB){
+					hi.indexOfSpriteRow = TILE_METAL_QUAD;
+				}
+				else if(currentWorld == WORLD_ENGLAND){
+					hi.indexOfSpriteRow = TILE_GRASS;
+				}
+				else if(currentWorld == WORLD_D1){
+					r_tile = rand()%2 + TILE_DIRT1;
+					hi.indexOfSpriteRow = r_tile;
+				}
 				hi.dungeon = true;
 				break;
 			case'S':
@@ -431,6 +452,24 @@ void World::setMonsters()
 			else{
 				m_player->setLocation(m_mapOfWorld.get(i).pos);
 			}
+		}
+		if(m_mapOfWorld.get(i).portal || m_mapOfWorld.get(i).dungeon)
+		{
+			sprite = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
+			Obstacle * obs = new Obstacle(sprite);
+			obs->setNewed(true);
+			if(m_mapOfWorld.get(i).portal)
+			{
+				sprite->setRIndex(TILE_PORTAL);
+				obs->setPortal();
+			}
+			else
+			{
+				sprite->setRIndex(TILE_DUNGEON);
+				obs->setDungeon();
+			}
+			obs->setLocation(m_mapOfWorld.get(i).pos);
+			this->add(obs);
 		}
 	}
 }
