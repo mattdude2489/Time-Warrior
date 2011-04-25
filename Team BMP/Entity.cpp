@@ -68,20 +68,24 @@ void Entity::update(int a_timePassed, World * a_world)
 							{
 								if(m_eType == PLAYER)
 								{
-									int dungeon = rand()%3;//picks a random dungeon 
-									this->setLastW();
-									switch(dungeon){
-										case 0:
-											a_world->setWorld("Maps/Dungeon1.txt");
-											break;
-										case 1:
-											a_world->setWorld("Maps/Dungeon0.txt");
-											break;
-										case 2:
-											a_world->setWorld("Maps/Dungeon2.txt");
-											break;
+									if(!a_world->isDClosed(tmp->getIndex())){//if the dungeon is not closed open it
+										int dungeon = rand()%3;//picks a random dungeon 
+
+										this->setLastW();
+										a_world->setDClosed(tmp->getIndex());
+										switch(dungeon){
+											case 0:
+												a_world->setWorld("Maps/Dungeon1.txt");
+												break;
+											case 1:
+												a_world->setWorld("Maps/Dungeon0.txt");
+												break;
+											case 2:
+												a_world->setWorld("Maps/Dungeon2.txt");
+												break;
+										}
+										a_world->setCamera(this->m_camera);
 									}
-									a_world->setCamera(this->m_camera);
 								}
 							}
 						}

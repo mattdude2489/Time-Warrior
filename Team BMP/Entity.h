@@ -367,4 +367,5 @@ public:
 	void setCurrentLocToLast(World * a_world);
 	virtual bool isPortal(){return false;}
 	virtual bool isDungeon(){return false;}
+	virtual int getIndex(){return 0;}
 };

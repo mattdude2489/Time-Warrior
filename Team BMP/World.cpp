@@ -58,11 +58,13 @@ World::World()
 			x = 0;
 		}
 	}
+	m_closed = NULL;
 }
 World::~World()
 {
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 			delete m_worldSprites[i];
+	delete m_closed;
 }
 
 int Tile::portalIndexNumber = 0; //I have to use global scope on this in order to use a static. That's just SAD.
@@ -84,6 +86,10 @@ bool World::setWorld(char * fileName)
 
 	Tile::portalIndexNumber = 0; //EPIC. THIS FARKING WORKS.
 	//start the actual loading of the textures.
+
+	//for dungeon count
+	int dcount = 0;
+
 	if(infile == NULL)
 		m_success = false;
 	else
@@ -133,7 +139,7 @@ bool World::setWorld(char * fileName)
 				switch(c)
 				{
 				case 'P':	hi.portal = true;	hi.portalIndexNumber++;	break;
-				case 'd':	hi.dungeon = true;							break;
+				case 'd':	hi.dungeon = true;		dcount++;			break;
 				case 'p':	hi.playerSpawn = true;						break;
 				case 'S':	hi.spawnLocation = true;					break;
 				case 'b':	hi.bossLoc = true;							break;
@@ -219,6 +225,15 @@ bool World::setWorld(char * fileName)
 	}
 	maxWorldX = tileX * FRAME_SIZE;
 	maxWorldY = tileY * FRAME_SIZE;
+	//this should only happen once if the world has never been created
+	if(!m_closed)
+	{
+		m_closed = new bool[dcount];
+		for(int i = 0; i < dcount; i++)//set them all to not be closed at first
+		{
+			m_closed[i] = false;
+		}
+	}
 	setMonsters();
 #ifdef NPC_ADD
 	setNPC();
@@ -328,6 +343,7 @@ void World::setMonsters()
 		for(int g = 0; g< m_mapOfEntities.size(); g++)
 			m_mapOfEntities.get(g).clearAllEntities();
 	}
+	int dcount = 0;
 	for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{
 		SDL_Sprite * sprite = NULL;
@@ -382,9 +398,21 @@ void World::setMonsters()
 		}
 		if(m_mapOfWorld.get(i).portal || m_mapOfWorld.get(i).dungeon)
 		{
-			sprite = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
+			bool check = false;
+			if(!m_closed)
+			{
+				check = m_closed[dcount];
+			}
+			if(check){
+				sprite = m_worldSprites[SINGLE];
+			}
+			else{
+				sprite = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
+			}
 			Obstacle * obs = new Obstacle(sprite);
 			obs->setNewed(true);
+			obs->setIndex(dcount);
+			dcount ++;
 			if(m_mapOfWorld.get(i).portal)
 			{
 				sprite->setRIndex(TILE_PORTAL);
@@ -392,8 +420,14 @@ void World::setMonsters()
 			}
 			else
 			{
-				sprite->setRIndex(TILE_DUNGEON);
-				obs->setDungeon();
+				if(check){
+					sprite->setRIndex(TILE_DUNGEON_CLOSED);
+				}
+				else{
+					sprite->setRIndex(TILE_DUNGEON);
+					obs->setDungeon();
+				}
+				
 			}
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			this->add(obs);
