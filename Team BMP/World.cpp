@@ -119,133 +119,62 @@ bool World::setWorld(char * fileName)
 			switch(c)
 			{
 			case 'G':
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = TILE_METAL_QUAD;
+			case 'P':
+			case 'd':
+			case 'p':
+			case 'S':
+			case 'b':
+				switch(currentWorld)
+				{
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
+				case WORLD_ENGLAND:	hi.indexOfSpriteRow = TILE_GRASS;				break;
+				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
 				}
-				else if(currentWorld == WORLD_ENGLAND){
-					hi.indexOfSpriteRow = TILE_GRASS;
-				}
-				else if(currentWorld == WORLD_D1){
-					r_tile = rand()%2 + TILE_DIRT1;
-					hi.indexOfSpriteRow = r_tile;
+				switch(c)
+				{
+				case 'P':	hi.portal = true;	hi.portalIndexNumber++;	break;
+				case 'd':	hi.dungeon = true;							break;
+				case 'p':	hi.playerSpawn = true;						break;
+				case 'S':	hi.spawnLocation = true;					break;
+				case 'b':	hi.bossLoc = true;							break;
 				}
 				break;
 			case 'D':
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = TILE_METAL_L;
-					hi.collide = true;
-				}
-				else{
-				hi.indexOfSpriteRow = TILE_DUST;
+				switch(currentWorld)
+				{
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_L;	hi.collide = true;	break;
+				default:			hi.indexOfSpriteRow = TILE_DUST;
 				}
 				break;
 			case 'H':
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = TILE_METAL_R;
-					hi.collide = true;
-				}
-				else{
-				hi.indexOfSpriteRow = TILE_DUST_D;
+				switch(currentWorld)
+				{
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_R;	hi.collide = true;	break;
+				default:			hi.indexOfSpriteRow = TILE_DUST_D;
 				}
 				break;
 			case 'V':
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = TILE_METAL_QUAD_L;
-					hi.collide = true;
-				}
-				else{
-				hi.indexOfSpriteRow = TILE_DUST_R;
+				switch(currentWorld)
+				{
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD_L;	hi.collide = true;	break;
+				default:			hi.indexOfSpriteRow = TILE_DUST_R;
 				}
 				break;
 			case 'M':
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = TILE_METAL_QUAD_R;
-					hi.collide = true;
-				}
-				else{
-				hi.indexOfSpriteRow = TILE_DUST_CORNER;
+				switch(currentWorld)
+				{
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD_R;	hi.collide = true;	break;
+				default:			hi.indexOfSpriteRow = TILE_DUST_CORNER;
 				}
 				break;
 			case 'B':
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = TILE_METAL;
-					hi.collide = true;
+				switch(currentWorld)
+				{
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL;				break;
+				case WORLD_ENGLAND:	hi.indexOfSpriteRow = TILE_BLANK;				break;
+				case WORLD_D1:		hi.indexOfSpriteRow = rand()%3 + TILE_SPIKE_LG;	break;
 				}
-				else if(currentWorld == WORLD_ENGLAND){
-				hi.indexOfSpriteRow = TILE_BLANK;
 				hi.collide = true;
-				}
-				else if(currentWorld == WORLD_D1){
-					r_tile = (rand()%3) + TILE_SPIKE_LG;
-					hi.indexOfSpriteRow = r_tile;
-					hi.collide = true;
-				}
-				break;
-			case 'P':
-				/*if(currentWorld == WORLD_HUB){
-				hi.indexOfSpriteRow = 5;
-				}
-				else{
-					hi.indexOfSpriteRow = 0;
-				}
-				m_mapOfWorld.add(hi);*/
-				//Change the sprite to the Portal Sprite, which can be used to update.
-				//hi.currentTexture = m_worldSprites[ANIMATION];
-				//hi.indexOfSpriteRow = TILE_PORTAL;
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = TILE_METAL_QUAD;
-				}
-				else if(currentWorld == WORLD_ENGLAND){
-					hi.indexOfSpriteRow = TILE_GRASS;
-				}
-				else if(currentWorld == WORLD_D1){
-					r_tile = rand()%2 + TILE_DIRT1;
-					hi.indexOfSpriteRow = r_tile;
-				}
-				hi.portal = true;
-				hi.portalIndexNumber++;
-				break;
-			case'p':
-				if(currentWorld == WORLD_D1){
-					r_tile = rand()%2 + TILE_DIRT1;
-					hi.indexOfSpriteRow = r_tile;
-				}
-				else
-					hi.indexOfSpriteRow = TILE_GRASS;
-				hi.playerSpawn = true;
-				break;
-			case 'd':
-				//hi.currentTexture = m_worldSprites[ANIMATION];
-				//hi.indexOfSpriteRow = TILE_DUNGEON;
-				if(currentWorld == WORLD_HUB){
-					hi.indexOfSpriteRow = TILE_METAL_QUAD;
-				}
-				else if(currentWorld == WORLD_ENGLAND){
-					hi.indexOfSpriteRow = TILE_GRASS;
-				}
-				else if(currentWorld == WORLD_D1){
-					r_tile = rand()%2 + TILE_DIRT1;
-					hi.indexOfSpriteRow = r_tile;
-				}
-				hi.dungeon = true;
-				break;
-			case'S':
-					if(currentWorld == WORLD_D1){
-						r_tile = rand()%2 + TILE_DIRT1;
-						hi.indexOfSpriteRow = r_tile;
-						hi.spawnLocation = true;
-					 }
-					else if(currentWorld == WORLD_ENGLAND){
-						hi.indexOfSpriteRow = TILE_GRASS;
-						hi.spawnLocation = true;
-					 }
-					break;
-			case 'b':
-				if(currentWorld == WORLD_D1){
-						r_tile = rand()%2 + TILE_DIRT1;
-						hi.indexOfSpriteRow = r_tile;
-						hi.bossLoc = true;
-				}
 				break;
 			case 'W':
 				hi.currentTexture = m_worldSprites[ANIMATION];
@@ -282,9 +211,7 @@ bool World::setWorld(char * fileName)
 				break;
 			}
 			if(c != '\n')
-			{
 				m_mapOfWorld.add(hi);
-			}
 			c = fgetc(infile);
 		}
 		m_success = true;
