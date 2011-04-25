@@ -177,5 +177,5 @@ class Chip : public Entity
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
 		virtual void setSprite(char * a_fileName){}
-		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){ if(this != NULL) m_spriteHUD->draw(a_screen, a_x, a_y);}
+		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){m_spriteHUD->draw(a_screen, a_x, a_y);}
 };
