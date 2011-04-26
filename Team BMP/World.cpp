@@ -230,9 +230,7 @@ bool World::setWorld(char * fileName)
 	{
 		m_closed = new bool[dcount];
 		for(int i = 0; i < dcount; i++)//set them all to not be closed at first
-		{
 			m_closed[i] = false;
-		}
 	}
 	setMonsters();
 #ifdef NPC_ADD
@@ -399,20 +397,16 @@ void World::setMonsters()
 		if(m_mapOfWorld.get(i).portal || m_mapOfWorld.get(i).dungeon)
 		{
 			bool check = false;
-			if(!m_closed)
-			{
+			if(m_closed && dcount)
 				check = m_closed[dcount];
-			}
-			if(check){
-				sprite = m_worldSprites[SINGLE];
-			}
-			else{
+			if(check)
+				sprite = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
+			else
 				sprite = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
-			}
 			Obstacle * obs = new Obstacle(sprite);
 			obs->setNewed(true);
 			obs->setIndex(dcount);
-			dcount ++;
+			dcount++;
 			if(m_mapOfWorld.get(i).portal)
 			{
 				sprite->setRIndex(TILE_PORTAL);
@@ -420,14 +414,11 @@ void World::setMonsters()
 			}
 			else
 			{
-				if(check){
+				if(check)
 					sprite->setRIndex(TILE_DUNGEON_CLOSED);
-				}
-				else{
+				else
 					sprite->setRIndex(TILE_DUNGEON);
-					obs->setDungeon();
-				}
-				
+				obs->setDungeon();
 			}
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			this->add(obs);
