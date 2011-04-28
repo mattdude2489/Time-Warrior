@@ -277,21 +277,25 @@ bool Player::loadPlayer()
 }
 void Player::newGame()
 {
-	Blunt* b1 = new Blunt(BASIC);
-	Blunt *b2 = new Blunt(ADVANCED);
-	Slash* s1 = new Slash(BASIC);
-	Slash *s2 = new Slash(ADVANCED);
-	Divine* d1 = new Divine(BASIC);
-	Divine *d2 = new Divine(ADVANCED);
-	Divine* d3 = new Divine(EXPERT);
-	Fire* f1 = new Fire(BASIC);
-	Fire *f2 = new Fire(ADVANCED);
-	Fire* f3 = new Fire(EXPERT);
-	Armor* gear = new Armor(HEAD, BASIC);
+	Blunt * b1 = new Blunt(BASIC);
+	Blunt * b2 = new Blunt(ADVANCED);
+	Blunt * b3 = new Blunt(EXPERT);
+	Slash * s1 = new Slash(BASIC);
+	Slash * s2 = new Slash(ADVANCED);
+	Slash * s3 = new Slash(EXPERT);
+	Divine * d1 = new Divine(BASIC);
+	Divine * d2 = new Divine(ADVANCED);
+	Divine * d3 = new Divine(EXPERT);
+	Fire * f1 = new Fire(BASIC);
+	Fire * f2 = new Fire(ADVANCED);
+	Fire * f3 = new Fire(EXPERT);
+	Armor * gear = new Armor(HEAD, BASIC);
 	b1->levelUp();
 	b2->levelUp();
+	b3->levelUp();
 	s1->levelUp();
 	s2->levelUp();
+	s3->levelUp();
 	d1->levelUp();
 	d2->levelUp();
 	d3->levelUp();
@@ -301,8 +305,10 @@ void Player::newGame()
 	gear->levelUp();
 	this->addToAttackInventory(b1);
 	this->addToAttackInventory(b2);
+	this->addToAttackInventory(b3);
 	this->addToAttackInventory(s1);
 	this->addToAttackInventory(s2);
+	this->addToAttackInventory(s3);
 	this->addToAttackInventory(d1);
 	this->addToAttackInventory(d2);
 	this->addToAttackInventory(d3);
@@ -312,8 +318,10 @@ void Player::newGame()
 	gear->setOwner(this);
 	b1->setNewed(true);
 	b2->setNewed(true);
+	b3->setNewed(true);
 	s1->setNewed(true);
 	s2->setNewed(true);
+	s3->setNewed(true);
 	d1->setNewed(true);
 	d2->setNewed(true);
 	d3->setNewed(true);
@@ -323,8 +331,10 @@ void Player::newGame()
 	gear->setNewed(true);
 	thisWorld->add(b1);
 	thisWorld->add(b2);
+	thisWorld->add(b3);
 	thisWorld->add(s1);
 	thisWorld->add(s2);
+	thisWorld->add(s3);
 	thisWorld->add(d1);
 	thisWorld->add(d2);
 	thisWorld->add(d3);

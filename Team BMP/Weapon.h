@@ -14,20 +14,28 @@ class Weapon : public Chip
 			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0){}
 		void setLocationUsingDirection()
 		{
-			switch(m_direction)
+			switch(m_cSubSubType)
 			{
-			case KEY_UP:
-				setLocation(centerAroundOwnerCenterX(), getOwnerCenterY() - m_sprite->getHeight());
+			case BASIC:
+			case ADVANCED:
+				switch(m_direction)
+				{
+				case KEY_UP:
+					setLocation(centerAroundOwnerCenterX(), getOwnerCenterY() - m_sprite->getHeight());
+					break;
+				case KEY_LEFT:
+					setLocation(getOwnerCenterX() - m_sprite->getWidth(), centerAroundOwnerCenterY());
+					break;
+				case KEY_DOWN:
+					setLocation(centerAroundOwnerCenterX(), getOwnerCenterY());
+					break;
+				case KEY_RIGHT:
+					setLocation(getOwnerCenterX(), centerAroundOwnerCenterY());
+					break;
+				}
 				break;
-			case KEY_LEFT:
-				setLocation(getOwnerCenterX() - m_sprite->getWidth(), centerAroundOwnerCenterY());
-				break;
-			case KEY_DOWN:
-				setLocation(centerAroundOwnerCenterX(), getOwnerCenterY());
-				break;
-			case KEY_RIGHT:
-				setLocation(getOwnerCenterX(), centerAroundOwnerCenterY());
-				break;
+			default:
+				setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 			}
 		}
 		void activateUnique()
@@ -68,7 +76,10 @@ class Weapon : public Chip
 					m_sprite->flipVertical();
 					break;
 				}
-				m_sprite->setRIndex(m_cSubSubType);
+				if(m_cSubSubType != EXPERT)
+					m_sprite->setRIndex(m_cSubSubType);
+				else
+					m_sprite->setRIndex(m_cSubSubType-1);
 				setLocationUsingDirection();
 				break;
 			}
@@ -138,11 +149,19 @@ class Weapon : public Chip
 		}
 		void setSprite(char * a_fileName)
 		{
-			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 2);
+			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, NUM_ROWS);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
-			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, 2);
+			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, NUM_ROWS);
 			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
-			m_spriteHUD->setRIndex(m_cSubSubType);
+			if(m_cSubSubType != EXPERT)
+				m_spriteHUD->setRIndex(m_cSubSubType);
+			else
+			{
+				m_sprite->setFrame(FRAME_SIZE, FRAME_SIZE);
+				m_sprite->setRIndex(m_cSubSubType-1);
+				m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE);
+				m_spriteHUD->setRIndex(m_cSubSubType-1);
+			}
 			initHudSprite();
 		}
 };
@@ -154,10 +173,13 @@ class Slash : public Weapon
 			switch(m_cSubSubType)
 			{
 			case BASIC:
-				return "Slash Swing";
+				return "Slash Strike";
 				break;
 			case ADVANCED:
-				return "X-Slash";
+				return "X-Strike";
+				break;
+			case EXPERT:
+				return "Hurricane Strike";
 				break;
 			default:
 				return "Slash";
@@ -172,6 +194,9 @@ class Slash : public Weapon
 			case ADVANCED:
 				return "Double Slash attack.";
 				break;
+			case EXPERT:
+				return "360 Degree Slash attack.";
+				break;
 			default:
 				return getName();
 			}
@@ -185,10 +210,13 @@ class Blunt : public Weapon
 			switch(m_cSubSubType)
 			{
 			case BASIC:
-				return "Blunt Swing";
+				return "Blunt Bash";
 				break;
 			case ADVANCED:
-				return "X-Blunt";
+				return "X-Bash";
+				break;
+			case EXPERT:
+				return "Hurricane Bash";
 				break;
 			default:
 				return "Blunt";
@@ -202,6 +230,9 @@ class Blunt : public Weapon
 				break;
 			case ADVANCED:
 				return "Double Blunt attack.";
+				break;
+			case EXPERT:
+				return "360 Degree Blunt attack.";
 				break;
 			default:
 				return getName();

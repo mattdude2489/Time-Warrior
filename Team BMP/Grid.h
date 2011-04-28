@@ -85,7 +85,8 @@ public:
 			{
 				if(m_mapOfEntities.get(i)->getLocation().y > m_mapOfEntities.get(k)->getLocation().y)
 				{
-					m_mapOfEntities.swap(i, k);
+					if(m_mapOfEntities.get(i)->getType() != TREE && m_mapOfEntities.get(k)->getType() != TREE)
+						m_mapOfEntities.swap(i, k);
 				}
 			}
 		}
@@ -97,8 +98,7 @@ public:
 		for(int i = 0; i < m_mapOfEntities.size(); i++) 
 		{
 			t_ent = m_mapOfEntities.get(i);
-			if(t_ent->getType() != TREE)
-				t_ent->update(timePassed, a_world);
+			t_ent->update(timePassed, a_world);
 			//checks to see if it is alive if not remove the damm thing
 			if(t_ent->getType() != CHIP && t_ent->getStatNumber(HEALTH_CURRENT)<=0)
 			{

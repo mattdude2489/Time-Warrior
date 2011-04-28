@@ -17,8 +17,12 @@ void Entity::update(int a_timePassed, World * a_world)
 	}
 	//update timer
 	m_timer += a_timePassed;
-	if(m_eType != CHIP && m_eType != OBSTACLE)
+	switch(m_eType)
 	{
+	case CHIP:
+	case OBSTACLE:
+		break;
+	default:
 		if(m_timer >= TIME_INACTIVE && m_sprite->getFrame() == 1)
 			m_sprite->stop();
 	}
@@ -34,13 +38,22 @@ void Entity::update(int a_timePassed, World * a_world)
 			|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->collide
 			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->collide)
 		{
-			if(m_eType != CHIP)
-				move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
-			else
+			switch(m_eType)
+			{
+			case CHIP:
 				m_shouldDraw = false;
+			case OBSTACLE:
+			case TREE:
+				break;
+			default:
+				move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+			}
 		}
-		if(m_eType != CHIP)
+		switch(m_eType)
 		{
+		case PLAYER:
+		case MINION:
+		case BOSS:
 			//Search through the entities in that particular grid. If there are any, check for collision with them.
 			for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
 			{
@@ -107,12 +120,8 @@ int Entity::getTotalDamageDealt(int a_amount, e_chipType a_type)
 	int stat = 0;
 	switch(a_type)
 	{
-	case MAGIC:
-		stat = getStatNumber(INTELLECT);
-		break;
-	case WEAPON:
-		stat = getStatNumber(STRENGTH);
-		break;
+	case MAGIC:		stat = getStatNumber(INTELLECT);	break;
+	case WEAPON:	stat = getStatNumber(STRENGTH);		break;
 	}
 	if(a_amount > 0)
 		return (int)(a_amount * ((double)(a_amount + stat) / a_amount));
@@ -124,27 +133,15 @@ int Entity::getTotalDamageTaken(int a_amount, e_chipSubType a_type)
 	int stat = 0;
 	switch(a_type)
 	{
-	case DIVINE:
-		break;
-	case LIGHTNING:
-		stat = getStatNumber(RESISTANCE_LIGHTNING);
-		break;
-	case FIRE:
-		stat = getStatNumber(RESISTANCE_FIRE);
-		break;
-	case ICE:
-		stat = getStatNumber(RESISTANCE_ICE);
-		break;
-	default:
-		stat = getStatNumber(DEFENSE);
+	case DIVINE:	break;
+	case LIGHTNING:	stat = getStatNumber(RESISTANCE_LIGHTNING);	break;
+	case FIRE:		stat = getStatNumber(RESISTANCE_FIRE);		break;
+	case ICE:		stat = getStatNumber(RESISTANCE_ICE);		break;
+	default:		stat = getStatNumber(DEFENSE);
 	}
 	if(a_amount > 0)
 		return (int)(a_amount * ((double)a_amount / (a_amount + stat)));
 	else
 		return 0;
 }
-void Entity::setCurrentLocToLast(World * a_world)
-{
-	this->setLocation(m_lastWLoc);
-	//a_world->setCamera(this->m_camera);
-}
+void Entity::setCurrentLocToLast(World * a_world){this->setLocation(m_lastWLoc);}
