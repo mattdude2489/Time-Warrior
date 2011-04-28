@@ -97,13 +97,17 @@ public:
 		for(int i = 0; i < m_mapOfEntities.size(); i++) 
 		{
 			t_ent = m_mapOfEntities.get(i);
-			t_ent->update(timePassed, a_world);
+			if(t_ent->getType() != TREE)
+				t_ent->update(timePassed, a_world);
 			//checks to see if it is alive if not remove the damm thing
 			if(t_ent->getType() != CHIP && t_ent->getStatNumber(HEALTH_CURRENT)<=0)
 			{
 				m_mapOfEntities.remove(i);
+				if(t_ent->getType()== BOSS)
+					clearABoss(a_world);
 			}
 		}
 	}
 	void clearAllEntities();
+	void clearABoss(World * a_world);
 };

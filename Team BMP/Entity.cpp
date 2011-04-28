@@ -57,11 +57,13 @@ void Entity::update(int a_timePassed, World * a_world)
 							{
 								if(m_eType == PLAYER)
 								{
-									if(a_world->getCurrentWorld() == WORLD_D1)
-										this->setLocation(1248, 128);
-									a_world->setWorld("Maps/MedEngMap.txt");
-									
-									a_world->setCamera(this->m_camera);
+									//if(a_world->getCurrentWorld() == WORLD_D1)
+									//	this->setLocation(1248, 128);
+									if(a_world->getBossCount() == 0){
+										a_world->setWorld("Maps/MedEngMap.txt");
+										
+										a_world->setCamera(this->m_camera);
+									}
 								}
 							}
 							else if(tmp->isDungeon())

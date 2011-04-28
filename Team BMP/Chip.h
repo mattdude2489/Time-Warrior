@@ -154,7 +154,8 @@ class Chip : public Entity
 						{
 							if(shouldApplyEffect(a_world->getEntity(i, grid)))
 							{
-								applyEffect(a_world->getEntity(i, grid));
+								if(a_world->getEntity(i, grid)->getType()!= TREE)
+									applyEffect(a_world->getEntity(i, grid));
 								collisionMade = true;
 							}
 						}

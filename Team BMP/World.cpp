@@ -38,6 +38,7 @@ World::World()
 
 	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
+	m_worldSprites[TREE_SPRITE] = new SDL_Sprite("Sprites/Tree.bmp", TREE_WIDTH, TREE_HEIGHT, FRAME_RATE, TREE_COUNT);
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
@@ -59,6 +60,7 @@ World::World()
 		}
 	}
 	m_closed = NULL;
+	bossCount = 0;
 }
 World::~World()
 {
@@ -89,6 +91,7 @@ bool World::setWorld(char * fileName)
 
 	//for dungeon count
 	int dcount = 0;
+	bossCount = 0;
 
 	if(infile == NULL)
 		m_success = false;
@@ -105,7 +108,7 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = false;
+				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree =  false;
 				x++;
 				hi.collideBox.x = hi.pos.x;
 				hi.collideBox.y = hi.pos.y;
@@ -130,6 +133,7 @@ bool World::setWorld(char * fileName)
 			case 'p':
 			case 'S':
 			case 'b':
+			case 'T':
 				switch(currentWorld)
 				{
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
@@ -143,6 +147,7 @@ bool World::setWorld(char * fileName)
 				case 'p':	hi.playerSpawn = true;						break;
 				case 'S':	hi.spawnLocation = true;					break;
 				case 'b':	hi.bossLoc = true;							break;
+				case 'T':	hi.tree = true;								break;
 				}
 				break;
 			case 'D':
@@ -376,6 +381,7 @@ void World::setMonsters()
 		}
 		if(m_mapOfWorld.get(i).bossLoc)
 		{
+			bossCount++;
 			sprite = new SDL_Sprite(m_sprites[BOSS1].fileName, m_sprites[BOSS1].frameWidth, m_sprites[BOSS1].frameHeight, m_sprites[BOSS1].animSpeed, m_sprites[BOSS1].rows);
 			Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,sprite);
 			newBoss->setNewed(true);
@@ -420,6 +426,16 @@ void World::setMonsters()
 					sprite->setRIndex(TILE_DUNGEON);
 				obs->setDungeon();
 			}
+			obs->setLocation(m_mapOfWorld.get(i).pos);
+			this->add(obs);
+		}
+		if(m_mapOfWorld.get(i).tree)
+		{
+			sprite = new SDL_Sprite("Sprites/Tree.bmp", TREE_WIDTH, TREE_HEIGHT, FRAME_RATE, TREE_COUNT);
+			Obstacle * obs = new Obstacle(sprite);
+			sprite->setRIndex(rand()%3);
+			obs->setTree();
+			obs->setNewed(true);
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			this->add(obs);
 		}

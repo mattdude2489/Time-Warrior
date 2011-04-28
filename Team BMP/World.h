@@ -6,7 +6,8 @@
 #include "srect.h"
 
 enum e_sprites			{SLIME, SKELETON, GHOST, BOSS1, NPC1, NUM_SPRITES};
-enum e_worldsprites		{SINGLE, ANIMATION, NUM_SPRITES_WORLD};
+enum e_worldsprites		{SINGLE, ANIMATION, TREE_SPRITE, NUM_SPRITES_WORLD};
+enum e_trees			{TREE_BARE, TREE_FALL, TREE_NORMAL, TREE_PALM, TREE_PINE, TREE_COUNT, TREE_WIDTH = 66, TREE_HEIGHT = 96};
 enum e_worldTileS		{TILE_BLANK, TILE_METAL_L, TILE_METAL_QUAD_L, TILE_METAL_R, TILE_METAL_QUAD_R, TILE_METAL, TILE_METAL_QUAD, TILE_GRASS, TILE_DUST, TILE_DUST_D, TILE_DUST_R, TILE_DUST_CORNER, TILE_DIRT1, TILE_DIRT2, TILE_SPIKE_LG, TILE_ROCKS, TILE_SPIKE_SM, TILE_DUNGEON_CLOSED, NUM_WORLD_TILE_S};
 enum e_worldTileA		{TILE_PORTAL, TILE_DUNGEON, TILE_WATER, TILE_WATER_D, TILE_WATER_U, TILE_WATER_R, TILE_WATER_L, TILE_BRIDGE_V, TILE_BRIDGE_H, NUM_WORLD_TILE_A};
 #define ERROR_CODE	-1
@@ -14,7 +15,7 @@ enum e_worldTileA		{TILE_PORTAL, TILE_DUNGEON, TILE_WATER, TILE_WATER_D, TILE_WA
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide, portal, dungeon, spawnLocation, bossLoc, playerSpawn;
+	bool collide, portal, dungeon, spawnLocation, bossLoc, playerSpawn, tree;
 	SPoint pos, *cam;
 	int indexOfSpriteRow;
 	static int portalIndexNumber;
@@ -38,7 +39,7 @@ private:
 	SDL_Sprite * m_worldSprites[NUM_SPRITES_WORLD];
 
 	bool m_success, * m_closed;//m_closed to determine if dungeon is closed
-	int clientPlayerIndex, currentWorld, maxWorldX, maxWorldY, tileX, tileY;
+	int clientPlayerIndex, currentWorld, maxWorldX, maxWorldY, tileX, tileY, bossCount;
 	Entity * m_player;
 	SRect m_cCamera; //The client's camera.
 public:
@@ -87,4 +88,6 @@ public:
 	void updateFromServer(char * a_in);
 	void setDClosed(int in){m_closed[in] = true;}
 	bool isDClosed(int in){return m_closed[in];}
+	int getBossCount(){return bossCount;}
+	void reduceBossCount(){bossCount--;}
 };

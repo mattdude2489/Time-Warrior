@@ -20,4 +20,5 @@ public:
 	void setDungeon(){m_dungeon = true;m_portal = false;}
 	void setIndex(int in){m_index = in;}
 	int getIndex(){return m_index;}
+	void setTree(){m_eType = TREE;}
 };
