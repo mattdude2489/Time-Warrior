@@ -147,23 +147,6 @@ class Weapon : public Chip
 				}
 			}
 		}
-		void setSprite(char * a_fileName)
-		{
-			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, NUM_ROWS);
-			m_sprite->setTransparency(COLOR_TRANSPARENT);
-			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE/2, FRAME_RATE, NUM_ROWS);
-			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
-			if(m_cSubSubType != EXPERT)
-				m_spriteHUD->setRIndex(m_cSubSubType);
-			else
-			{
-				m_sprite->setFrame(FRAME_SIZE, FRAME_SIZE);
-				m_sprite->setRIndex(m_cSubSubType-1);
-				m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE);
-				m_spriteHUD->setRIndex(m_cSubSubType-1);
-			}
-			initHudSprite();
-		}
 };
 class Slash : public Weapon
 {

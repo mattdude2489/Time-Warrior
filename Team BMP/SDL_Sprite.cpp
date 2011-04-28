@@ -362,6 +362,12 @@ void SDL_Sprite::setRIndex(const Uint32 & a_kruiRIndex) {
 	m_uiRIndex = a_kruiRIndex;
 }
 
+/** setCIndex - set sprite to use new animation col */
+void SDL_Sprite::setCIndex(const Uint32 & a_kruiCIndex) {
+	//set col index to specified
+	m_uiCIndex = a_kruiCIndex;
+}
+
 /** setTransparency (1) - sets color keycode to correlate to transparency for sprite */
 void SDL_Sprite::setTransparency(const Uint32 & a_kruiColorKey) {
 	//set the color key for transparency on the sprite's surface

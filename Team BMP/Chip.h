@@ -61,16 +61,6 @@ class Chip : public Entity
 			else
 				return 0;
 		}
-		void initHudSprite()
-		{
-			if(m_spriteHUD->isSprite())
-			{
-				m_spriteHUD->start();
-				m_spriteHUD->update(m_spriteHUD->getMaxFrames()*FRAME_RATE);
-				m_spriteHUD->update(1);
-				m_spriteHUD->stop();
-			}
-		}
 		int centerAroundOwnerCenterX(){return getOwnerCenterX() - m_sprite->getWidthOffsetCenter();}
 		int centerAroundOwnerCenterY(){return getOwnerCenterY() - m_sprite->getHeightOffsetCenter();}
 			//define for each spell
@@ -112,6 +102,10 @@ class Chip : public Entity
 						m_firstIteration = true;
 						m_shouldDraw = true;
 						m_sprite->start();
+						if(m_cType == WEAPON && m_cSubSubType == EXPERT)
+							m_sprite->restart(m_cSubSubType-1);
+						else
+							m_sprite->restart(m_cSubSubType);
 						m_sprite->setLoopToBegin(true);
 					}
 					activateUnique();
@@ -177,6 +171,48 @@ class Chip : public Entity
 		void deactivate(){m_shouldDraw = false;deactivateUnique();}
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
-		virtual void setSprite(char * a_fileName){}
+		void setSprite(char * a_fileName)
+		{
+			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+			m_sprite->setTransparency(COLOR_TRANSPARENT);
+			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
+
+			switch(m_cType)
+			{
+			case MAGIC:
+				switch(m_cSubSubType)
+				{
+				case BASIC:
+					m_sprite->stretch(50,50);
+					break;
+				case ADVANCED:
+					m_sprite->stretch(200,200);
+					break;
+				case EXPERT:
+					m_sprite->stretch(300,300);
+					break;
+				}
+				break;
+			case WEAPON:
+				if(m_cSubSubType != EXPERT)
+				{
+					m_sprite->setFrame(FRAME_SIZE, FRAME_SIZE/2);
+					m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
+				}
+				break;
+			}
+			if(!(m_cType == WEAPON && m_cSubSubType == EXPERT))
+			{
+				m_sprite->setRIndex(m_cSubSubType);
+				m_spriteHUD->setRIndex(m_cSubSubType);
+			}
+			else
+			{
+				m_sprite->setRIndex(m_cSubSubType-1);
+				m_spriteHUD->setRIndex(m_cSubSubType-1);
+			}
+			m_spriteHUD->setCIndex(m_spriteHUD->getMaxFrames()-1);
+		}
 		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){m_spriteHUD->draw(a_screen, a_x, a_y);}
 };

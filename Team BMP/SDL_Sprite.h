@@ -93,6 +93,8 @@ public:
 	const bool setMaxFrames(const Uint32 & a_kruiRIndex, const Uint32 & a_kruiMaxFrames);
 	/** setRIndex - set sprite to use new animation row */
 	void setRIndex(const Uint32 & a_kruiRIndex);
+	/** setCIndex - set sprite to use new animation col */
+	void setCIndex(const Uint32 & a_kruiCIndex);
 	/** setTransparency (1) - sets color keycode to correlate to transparency for sprite */
     void setTransparency(const Uint32 & a_kruiColorKey);
 	/** setTransparency (2) - sets color keycode to correlate to transparency for sprite */

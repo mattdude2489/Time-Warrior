@@ -78,28 +78,6 @@ class Magic : public Chip
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
 				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
 		}
-		void setSprite(char * a_fileName)
-		{
-			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-			m_sprite->setTransparency(COLOR_TRANSPARENT);
-			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
-			switch(m_cSubSubType)
-			{
-			case BASIC:
-				m_sprite->stretch(50,50);
-				break;
-			case ADVANCED:
-				m_sprite->stretch(200,200);
-				break;
-			case EXPERT:
-				m_sprite->stretch(300,300);
-				break;
-			}
-			m_sprite->setRIndex(m_cSubSubType);
-			m_spriteHUD->setRIndex(m_cSubSubType);
-			initHudSprite();
-		}
 		void updateUniqueTwo(int a_timePassed)
 		{
 			if(m_shouldDraw)
