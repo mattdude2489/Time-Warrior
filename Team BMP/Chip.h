@@ -102,10 +102,10 @@ class Chip : public Entity
 						m_firstIteration = true;
 						m_shouldDraw = true;
 						m_sprite->start();
-						if(m_cType == WEAPON && m_cSubSubType == EXPERT)
-							m_sprite->restart(m_cSubSubType-1);
-						else
+						if(!(m_cType == WEAPON && m_cSubSubType == EXPERT))
 							m_sprite->restart(m_cSubSubType);
+						else
+							m_sprite->restart(m_cSubSubType-1);
 						m_sprite->setLoopToBegin(true);
 					}
 					activateUnique();

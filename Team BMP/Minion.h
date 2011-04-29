@@ -108,5 +108,17 @@ public:
 				m_stats[i] = (int)(a_player->getStatNumber(i) * SCALE_BOSS);
 		}
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];//incase the players health is low this will set the minion/boss to full
+		if(m_eType == MINION)
+		{
+			m_level = (int)(a_player->getLevel() * SCALE_MIN);
+			if(m_level <= 0)
+				m_level = 1;
+		}
+		else if( m_eType == BOSS)
+		{
+			m_level = (int)(a_player->getLevel() * SCALE_BOSS);
+			if(m_level <= 0)
+				m_level = 1;
+		}
 	}
 };
