@@ -72,8 +72,8 @@ public:
 	}
 	void levelUp()
 	{
-		m_level++;
-		m_expLvReq += m_level;
+		m_stats[LEVEL]++;
+		m_expLvReq += m_stats[LEVEL];
 		m_statPoints += POINTS_GIVEN;
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];

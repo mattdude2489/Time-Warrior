@@ -8,9 +8,9 @@ void Grid::clearAllEntities()
 		{
 			for(int i = 0; i < m_mapOfEntities.size(); i++)
 			{
-				if(!(m_mapOfEntities.get(i)->getType() == PLAYER || (m_mapOfEntities.get(i)->getType() == CHIP && m_mapOfEntities.get(i)->isChipOwnerPlayer())))
+				if(!(m_mapOfEntities.get(i)->getType() == PLAYER || (m_mapOfEntities.get(i)->getType() == CHIP && m_mapOfEntities.get(i)->getFlag(FLAG_OWNER_PLAYER))))
 				{
-					if(m_mapOfEntities.get(i)->getNewed())
+					if(m_mapOfEntities.get(i)->getFlag(FLAG_NUDE))
 					{
 						delete m_mapOfEntities.get(i); //GET RID OF IT. NAO.
 						m_mapOfEntities.remove(i);

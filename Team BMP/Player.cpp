@@ -15,7 +15,7 @@ void Player::initPlayer(World * newWorld)
 	}
 	m_statPoints = 0;
 	m_experience = 0;
-	m_expLvReq = m_level+1;
+	m_expLvReq = m_stats[LEVEL]+1;
 	setVelocity(0,0);
 	thisWorld = newWorld;
 	if(!loadPlayer())
@@ -65,7 +65,7 @@ Player::~Player()
 		//if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
 		if(m_gauntlet[i] != NULL) 
 		{
-			if(m_gauntlet[i]->getNewed() && m_gauntlet[i]->getType() == ARMOR)
+			if(m_gauntlet[i]->getFlag(FLAG_NUDE) && m_gauntlet[i]->getType() == ARMOR)
 				delete m_gauntlet[i];
 		}
 	}
@@ -74,7 +74,7 @@ Player::~Player()
 	//	for(int k = 0; k < NUM_CHIP_LEVELS; k++)
 	//	{
 	//		if(m_attackInventory[i][k] != NULL)
-	//			if(m_attackInventory[i][k]->getNewed())
+	//			if(m_attackInventory[i][k]->getFlag(FLAG_NUDE))
 	//				delete m_attackInventory[i][k];
 	//	}
 	//}
@@ -109,21 +109,21 @@ void Player::save()
 
 	FILE * outfile;
 	outfile = fopen("playerSave.txt", "w");
-	fprintf(outfile, "P %i %i %i %i %i %f %i %i / ", m_level, m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	fprintf(outfile, "P %i %i %i %i %i %f %i %i / ", m_stats[LEVEL], m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
 	for(int i = SLOT_ARMOR_HEAD; i < NUM_SLOTS; i++)
 	{
 		if(m_gauntlet[i])
-			fprintf(outfile, "A %i %i %i %i %i %i %i / ", m_gauntlet[i]->getSubType() ,m_gauntlet[i]->getSubSubType() ,m_gauntlet[i]->getStatNumber(DEFENSE), m_gauntlet[i]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[i]->getStatNumber(RESISTANCE_ICE), m_gauntlet[i]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[i]->getLevel());
+			fprintf(outfile, "A %i %i %i %i %i %i %i / ", m_gauntlet[i]->getSubType() ,m_gauntlet[i]->getSubSubType() ,m_gauntlet[i]->getStatNumber(DEFENSE), m_gauntlet[i]->getStatNumber(RESISTANCE_FIRE), m_gauntlet[i]->getStatNumber(RESISTANCE_ICE), m_gauntlet[i]->getStatNumber(RESISTANCE_LIGHTNING), m_gauntlet[i]->getStatNumber(LEVEL));
 	}
 	//The Chips/Attack Inventory.
 	//Yes, I know magic number are evil, but as these are debug, we're ok to leave them in there for now.
 	//once this works, we can change them easily enough.
 	//Before the double for loops, put the stuff into here.
 	bool slotChipsIn = false;
-	fprintf(outfile, "S %i %i %i %i %i %i / ", m_gauntlet[slotChipsIn]->getType(), m_gauntlet[slotChipsIn]->getSubType(), m_gauntlet[slotChipsIn]->getSubSubType(), m_gauntlet[slotChipsIn]->getDamage(), m_gauntlet[slotChipsIn]->getCost(), m_gauntlet[slotChipsIn]->getLevel());
+	fprintf(outfile, "S %i %i %i %i %i %i / ", m_gauntlet[slotChipsIn]->getType(), m_gauntlet[slotChipsIn]->getSubType(), m_gauntlet[slotChipsIn]->getSubSubType(), m_gauntlet[slotChipsIn]->getDamage(), m_gauntlet[slotChipsIn]->getCost(), m_gauntlet[slotChipsIn]->getStatNumber(LEVEL));
 	slotChipsIn = true;
-	fprintf(outfile, "S %i %i %i %i %i %i / ", m_gauntlet[slotChipsIn]->getType(), m_gauntlet[slotChipsIn]->getSubType(), m_gauntlet[slotChipsIn]->getSubSubType(), m_gauntlet[slotChipsIn]->getDamage(), m_gauntlet[slotChipsIn]->getCost(), m_gauntlet[slotChipsIn]->getLevel());
+	fprintf(outfile, "S %i %i %i %i %i %i / ", m_gauntlet[slotChipsIn]->getType(), m_gauntlet[slotChipsIn]->getSubType(), m_gauntlet[slotChipsIn]->getSubSubType(), m_gauntlet[slotChipsIn]->getDamage(), m_gauntlet[slotChipsIn]->getCost(), m_gauntlet[slotChipsIn]->getStatNumber(LEVEL));
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++)
 	{
 		for(int k = 0; k < NUM_CHIP_LEVELS; k++)
@@ -133,7 +133,7 @@ void Player::save()
 				if(!((m_attackInventory[i][k]->getType() == m_gauntlet[0]->getType() && m_attackInventory[i][k]->getSubType() == m_gauntlet[0]->getSubType() && m_attackInventory[i][k]->getSubSubType() == m_gauntlet[0]->getSubSubType())
 					|| (m_attackInventory[i][k]->getType() == m_gauntlet[1]->getType() && m_attackInventory[i][k]->getSubType() == m_gauntlet[1]->getSubType() && m_attackInventory[i][k]->getSubSubType() == m_gauntlet[1]->getSubSubType())))
 				{
-					fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getLevel());
+					fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getDamage(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getStatNumber(LEVEL));
 				}
 			}
 		}
@@ -166,7 +166,7 @@ bool Player::loadPlayer()
 		{
 			//Level
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
-			this->m_level = hpenstrintexpsta;
+			this->m_stats[LEVEL] = hpenstrintexpsta;
 			//HP
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_stats[HEALTH_CURRENT] = hpenstrintexpsta;
@@ -354,23 +354,23 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 		{
 		case SLOT_ATK1:
 		case SLOT_ATK2:
-			if(a_chip->getLevel() > 0 && a_chip->getType() != ARMOR)
+			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() != ARMOR)
 				isValid = true;
 			break;
 		case SLOT_ARMOR_HEAD:
-			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == HEAD)
+			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == HEAD)
 				isValid = true;
 			break;
 		case SLOT_ARMOR_TRUNK:
-			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == TRUNK)
+			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == TRUNK)
 				isValid = true;
 			break;
 		case SLOT_ARMOR_LIMB_UPPER:
-			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_UPPER)
+			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_UPPER)
 				isValid = true;
 			break;
 		case SLOT_ARMOR_LIMB_LOWER:
-			if(a_chip->getLevel() > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_LOWER)
+			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_LOWER)
 				isValid = true;
 			break;
 		}
@@ -408,28 +408,28 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		m_sprite->setRIndex(ROW_UP);
 		setVelocity(m_vel.x, -SPEED_PLAYER);
 		lastKey = KEY_UP;
-		m_activation = false;
+		m_flags[FLAG_ACTIVE] = false;
 	}
 	if(ui->getKeyLR() == KEY_RIGHT)
 	{
 		m_sprite->setRIndex(ROW_RIGHT);
 		setVelocity(SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_RIGHT;
-		m_activation = false;
+		m_flags[FLAG_ACTIVE] = false;
 	}
 	if(ui->getKeyUD() == KEY_DOWN)
 	{
 		m_sprite->setRIndex(ROW_DOWN);
 		setVelocity(m_vel.x, SPEED_PLAYER);
 		lastKey = KEY_DOWN;
-		m_activation = false;
+		m_flags[FLAG_ACTIVE] = false;
 	}
 	if(ui->getKeyLR() == KEY_LEFT)
 	{
 		m_sprite->setRIndex(ROW_LEFT);
 		setVelocity(-SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_LEFT;
-		m_activation = false;
+		m_flags[FLAG_ACTIVE] = false;
 	}
 	if(ui->getKeyLR() == KEY_NONE)
 		setVelocity(0, m_vel.y);
@@ -471,5 +471,5 @@ void Player::handleInput(UserInput * ui, World * a_world)
 	if(ui->getClick() == CLICK_RIGHT && ui->getMouseY() < HUD_Y)
 		activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey);
 	if(ui->getSpace() == true)
-		m_activation = true;
+		m_flags[FLAG_ACTIVE] = true;
 }

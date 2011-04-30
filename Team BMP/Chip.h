@@ -24,10 +24,10 @@ class Chip : public Entity
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_timeSinceLastAttack(0),
-			m_isEquipped(false), m_owner(NULL){m_eType = CHIP;m_level = 0;m_spriteHUD = NULL;}
+			m_isEquipped(false), m_owner(NULL){m_eType = CHIP;m_stats[LEVEL] = 0;m_spriteHUD = NULL;}
 		~Chip()
 		{
-			if(m_sprite && !nude)
+			if(m_sprite && !m_flags[FLAG_NUDE])
 				delete m_sprite;
 			if(m_spriteHUD)
 				delete m_spriteHUD;
@@ -35,7 +35,6 @@ class Chip : public Entity
 		e_chipType getType(){return m_cType;}
 		e_chipSubType getSubType(){return m_cSubType;}
 		e_chipSubSubType getSubSubType(){return m_cSubSubType;}
-		int getLevel(){return m_level;}
 		int getCost(){return m_cost;}
 		int getDamage(){return m_dmg;}
 		bool isEquipped(){return m_isEquipped;}
@@ -44,7 +43,7 @@ class Chip : public Entity
 		{
 			m_owner = a_owner;
 			if(m_owner->getType() == PLAYER)
-				m_chipOwnerPlayer = true;
+				m_flags[FLAG_OWNER_PLAYER] = true;
 		}
 		void setDirection(char a_dir){m_direction = a_dir;}
 		int getOwnerCenterX()
@@ -78,7 +77,7 @@ class Chip : public Entity
 					m_costLv = 5 * m_cSubSubType;
 				break;
 			}
-			m_level++;
+			m_stats[LEVEL]++;
 			m_cost += m_costLv;
 			m_dmg += m_dmgLv;
 			if(m_cSubType == BLUNT)
@@ -94,13 +93,13 @@ class Chip : public Entity
 		{
 			if(m_owner)
 			{
-				if(!m_shouldDraw)
+				if(!m_flags[FLAG_DRAW])
 				{
 					m_owner->useEnergy(m_cost);
 					if(m_cType != ARMOR)
 					{
 						m_firstIteration = true;
-						m_shouldDraw = true;
+						m_flags[FLAG_DRAW] = true;
 						m_sprite->start();
 						if(!(m_cType == WEAPON && m_cSubSubType == EXPERT))
 							m_sprite->restart(m_cSubSubType);
@@ -124,7 +123,7 @@ class Chip : public Entity
 		void updateUnique(int a_timePassed, World * a_world)
 		{
 			m_timeSinceLastAttack += a_timePassed;
-			if(m_shouldDraw && m_owner && m_cType != ARMOR)
+			if(m_flags[FLAG_DRAW] && m_owner && m_cType != ARMOR)
 			{
 				updateUniqueTwo(a_timePassed);
 				bool collisionMade = false, check = false;
@@ -168,7 +167,7 @@ class Chip : public Entity
 				}
 			}
 		}
-		void deactivate(){m_shouldDraw = false;deactivateUnique();}
+		void deactivate(){setDrawOff();deactivateUnique();}
 		virtual char * getName(){return "Chip";}
 		virtual char * getDescription(){return "Blank chip.";}
 		void setSprite(char * a_fileName)

@@ -62,7 +62,7 @@ public:
 class StatWindow
 {
 private:
-	TTtext m_text[NUM_STATS];
+	TTtext m_text[NUM_STATS-1];
 	TTtext m_lvlPts[2];
 	Player * m_player;
 	SRect m_window;
@@ -85,7 +85,7 @@ public:
 	}
 	void InitText(TTF_Font * a_font)
 	{
-		for(int i = 0; i < NUM_STATS; i++)
+		for(int i = 0; i < NUM_STATS-1; i++)
 			m_text[i].setFont(a_font);
 		m_lvlPts[0].setFont(a_font);
 		m_lvlPts[1].setFont(a_font);
@@ -99,12 +99,12 @@ public:
 	void putStatsInText()
 	{
 		char c_temp[CHARSIZE];
-		for(int i = 0; i < NUM_STATS; i++)
+		for(int i = 0; i < NUM_STATS-1; i++)
 		{
-			sprintf_s(c_temp, m_player->getStatName(i), m_player->getStatNumber(i));
+			sprintf_s(c_temp, m_player->getStatName((e_stats)i), m_player->getStatNumber((e_stats)i));
 			m_text[i].setMessage(c_temp);
 		}
-		sprintf_s(c_temp, "Level: %i", m_player->getLevel());
+		sprintf_s(c_temp, "Level: %i", m_player->getStatNumber(LEVEL));
 		m_lvlPts[0].setMessage(c_temp);
 		sprintf_s(c_temp, "Points to spend: %i", m_player->getPoints());
 		m_lvlPts[1].setMessage(c_temp);
@@ -130,7 +130,7 @@ public:
 		int t_x, t_y, t_s = 0;
 		t_x = t_y = TEXTSTART;
 		SDL_FillRect(a_screen, &m_window, WINDOWCOLOR);
-		for(int i = 0; i < NUM_STATS; i++)
+		for(int i = 0; i < NUM_STATS-1; i++)
 		{
 			m_text[i].printMessage(a_screen, t_x, t_y);
 			if(i == HEALTH_CURRENT || i == ENERGY_CURRENT)

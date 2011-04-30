@@ -30,7 +30,7 @@ public:
 		{
 			for(int i = 0; i < m_mapOfEntities.size(); i++)
 			{
-				if(m_mapOfEntities.get(i)->getNewed())
+				if(m_mapOfEntities.get(i)->getFlag(FLAG_NUDE))
 					delete m_mapOfEntities.get(i);
 			}
 		}

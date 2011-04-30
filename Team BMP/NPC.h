@@ -70,7 +70,7 @@ public:
 		if(a_world->getGrid(m_location.x, m_location.y)->getPlayer(emptyPointer))
 		{
 			//Player in the grid. I now have access to the player's location, AND ACTIVATION sequence.
-			if(this->collideSimple(emptyPointer) && emptyPointer->getActivation() && drawText == false)
+			if(this->collideSimple(emptyPointer) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
 				activateDialogue();
 			if(!(this->collideSimple(emptyPointer)))
 				deactivateDialogue();

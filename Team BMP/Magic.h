@@ -80,7 +80,7 @@ class Magic : public Chip
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
-			if(m_shouldDraw)
+			if(m_flags[FLAG_DRAW])
 			{
 				switch(m_cSubSubType)
 				{
@@ -88,7 +88,7 @@ class Magic : public Chip
 					{
 						if(moveToTarget((int)(SPEED_MAGIC*a_timePassed)))
 						{
-							if(m_timer >= TIME_EXPIRE)
+							if(m_timers[TIMER_GENERAL] >= TIME_EXPIRE)
 								deactivate();
 						}
 					}

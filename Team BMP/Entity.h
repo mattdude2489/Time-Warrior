@@ -9,11 +9,13 @@ struct Tile;
 enum e_chipType;
 enum e_chipSubType;
 
-enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN , STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
+enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN , STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, LEVEL, NUM_STATS};
 enum e_entityType{DUMMY, CHIP, PLAYER, NPC, MINION, BOSS, OBSTACLE, TREE};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff, COLOR_EXP = 0x00ffff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
+enum e_timer {TIMER_GENERAL, TIMER_REGEN, NUM_TIMERS};
+enum e_flags {FLAG_DRAW, FLAG_ACTIVE, FLAG_OWNER_PLAYER, FLAG_NUDE, NUM_FLAGS};
 enum e_frame {FRAME_SIZE = 32, FRAME_RATE = TIME_SECOND_MS/30};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_effect {KNOCKBACK, NUM_EFFECTS};
@@ -28,15 +30,13 @@ struct effect {bool active; SPoint target; int timer, timeLimit;};
 class Entity
 {
 protected:
-	int m_stats[NUM_STATS], m_timeToRegen, m_timer, m_level;
+	bool m_flags[NUM_FLAGS];
+	int m_stats[NUM_STATS], m_timers[NUM_TIMERS];
 	e_entityType m_eType;
-	bool m_shouldDraw, m_activation, m_chipOwnerPlayer; //This bool is pretty much there entirely for NPC dialogue at the moment.
 	SPoint m_location, m_prevLoc, *m_camera, m_target, m_lastWLoc;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
 	v2D m_vel; //The velocity. - ONLY for player movement
-	//I don't apologize for your vulgarity, or my own.
-	bool nude; //Lolz. Keeps track of whether or not it needs to delete it's own Sprite pointer when this is destroyed.
 	effect m_effects[NUM_EFFECTS];
 public:
 	Entity(){init();}
@@ -47,7 +47,7 @@ public:
 	}
 	virtual~Entity()
 	{
-		if(nude)
+		if(m_flags[FLAG_NUDE])
 			delete m_sprite;
 	}
 	void init(){init(1, 1, 0, 0, 0, 0, 0, 0);}
@@ -63,9 +63,11 @@ public:
 		m_stats[RESISTANCE_FIRE] = a_fRes;
 		m_stats[RESISTANCE_ICE] = a_iRes;
 		m_stats[RESISTANCE_LIGHTNING] = a_lRes;
-		m_timeToRegen = m_timer = 0;
-		m_level = 1;
-		m_shouldDraw = m_activation = nude = m_chipOwnerPlayer = false;
+		m_stats[LEVEL] = 1;
+		for(int i = 0; i < NUM_TIMERS; ++i)
+			m_timers[i] = 0;
+		for(int i = 0; i < NUM_FLAGS; ++i)
+			m_flags[i] = false;
 		m_camera = NULL;
 		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 		m_prevLoc = m_location;
@@ -77,7 +79,7 @@ public:
 	void initSprite(SDL_Sprite * a_sprite)
 	{
 		m_eType = DUMMY;
-		m_shouldDraw = true;
+		m_flags[FLAG_DRAW] = true;
 		m_sprite = a_sprite;
 		m_sprite->setTransparency(COLOR_TRANSPARENT);
 		m_sprite->restart(ROW_DOWN);
@@ -99,20 +101,20 @@ public:
 	}
 	void setNewed(bool newed)
 	{
-		nude = newed; //Set the newed variable to whatever it needs to be.
+		m_flags[FLAG_NUDE] = newed; //Set the newed variable to whatever it needs to be.
 	}
 	void move(int a_deltaX, int a_deltaY)
 	{
 		moveUnique(a_deltaX, a_deltaY);
 		m_location.x += a_deltaX;
 		m_location.y += a_deltaY;
-		m_timer = 0;
+		m_timers[TIMER_GENERAL] = 0;
 		m_sprite->start();
 	}
 	void move(SPoint a_point){move(a_point.x,a_point.y);}
 	virtual void draw(SDL_Surface * a_screen)
 	{
-		if(m_shouldDraw && m_camera)
+		if(m_flags[FLAG_DRAW] && m_camera)
 		{
 			m_hb.x = getLocationScreen().x;
 			m_hb.y = getLocationScreen().y;
@@ -151,8 +153,8 @@ public:
 	virtual void isPlayerInRange(Entity *a_player, int a_time){}
 	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
 	void setTarget(SPoint a_point){m_target.set(a_point);}
-	bool getActivation() {return m_activation;}
-	void setDrawOff(){m_shouldDraw = false;}
+	bool getFlag(e_flags a_flag){return m_flags[a_flag];}
+	void setDrawOff(){m_flags[FLAG_DRAW] = false;}
 	SPoint getDeltaBetweenLocationAnd(SPoint * a_point)
 	{
 		//calculate the delta (difference) between the target & current location
@@ -182,7 +184,6 @@ public:
 			return true;
 	}
 	bool moveToTarget(int a_maxDistance){return moveTo(&m_target, a_maxDistance);};
-	bool getNewed() {return nude;}
 	void faceTargetDirection()
 	{
 		/*
@@ -220,29 +221,26 @@ public:
 	virtual void updateUnique(int a_timePassed, World * a_world){}
 	virtual void drawUnique(SDL_Surface *a_screen){}
 	virtual void movePlayer(int a_timePassed){}
-	bool getVisible() {return m_shouldDraw;}
 
 	//Due to the CPU intensive nature of the pixel Collision, this should rarely be used.
 	bool epicCollide(SDL_Sprite * a_sprite, int a_x, int a_y)
 	{
-		if(m_shouldDraw && a_sprite->isSprite())
+		if(m_flags[FLAG_DRAW] && a_sprite->isSprite())
 			return m_sprite->pixelCollide(m_location.x, m_location.y, *a_sprite, a_x, a_y);
 		else
 			return false;
 	}
 	bool epicCollide(Entity * a_entity)
 	{
-		if(a_entity->getVisible())
-		{
+		if(a_entity->getFlag(FLAG_DRAW))
 			return epicCollide(a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
-		}
 		else
 			return false;
 	}
 
 	bool collideSimple(SDL_Sprite * a_sprite, int a_x, int a_y)
 	{
-		if(m_shouldDraw && a_sprite->isSprite())
+		if(m_flags[FLAG_DRAW] && a_sprite->isSprite())
 			return m_sprite->rectCollide(m_location.x, m_location.y, *a_sprite, a_x, a_y);
 		else
 			return false;
@@ -250,7 +248,7 @@ public:
 	//Says if there is a collision between two entities.
 	bool collideSimple(Entity * a_entity)
 	{
-		if(a_entity->getVisible())
+		if(a_entity->getFlag(FLAG_DRAW))
 			return collideSimple(a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
 		else
 			return false;
@@ -264,7 +262,7 @@ public:
 		else
 			return collideSimple(a_entity);
 	}
-	char * getStatName(int a_stat)
+	char * getStatName(e_stats a_stat)
 	{
 		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works
 		{
@@ -282,26 +280,18 @@ public:
 			default:					return "Invalid";
 		}
 	}
-	int getType() {return (int)m_eType;}
+	int getType(){return (int)m_eType;}
 	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
-	int getStatNumber(int a_stat)
-	{
-		//returns the stat based on a number
-		if(a_stat < 0 || a_stat > NUM_STATS)
-			return 0;
-		else
-			return m_stats[a_stat];
-	}
+	int getStatNumber(e_stats a_stat){return m_stats[a_stat];}
 	SPoint getLocation(){return m_location;}
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
 	SDL_Sprite * getSprite() {return m_sprite;}
 	int getTotalDamageTaken(int a_amount, e_chipSubType a_type);
 	int getTotalDamageDealt(int a_amount, e_chipType a_type);
-	int getLevel(){return m_level;}
 	virtual void gainExperience(double a_amount){}
-	double getExperienceFromDefeat(Entity * a_defeater){return m_level * ((double)m_level / a_defeater->getLevel());}
+	double getExperienceFromDefeat(Entity * a_defeater){return m_stats[LEVEL] * ((double)m_stats[LEVEL] / a_defeater->getStatNumber(LEVEL));}
 	virtual void hitFromPlayer(){}
 	void buffDefenseOrResistance(int a_amount, e_stats a_type)
 	{
@@ -356,7 +346,6 @@ public:
 				m_effects[KNOCKBACK].active = false;
 		}
 	}
-	bool isChipOwnerPlayer(){return m_chipOwnerPlayer;}
 	bool isLastWSet(){return !m_lastWLoc.isZero();}
 	void setLastW()
 	{

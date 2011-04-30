@@ -135,7 +135,7 @@ class Weapon : public Chip
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
-			if(m_shouldDraw)
+			if(m_flags[FLAG_DRAW])
 			{
 				switch(m_cSubSubType)
 				{

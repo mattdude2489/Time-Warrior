@@ -277,7 +277,7 @@ void World::setNPC()
 		for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
 		{
 			if(m_mapOfEntities.get(i).getEntity(k)->getType() == NPC &&
-				m_mapOfEntities.get(i).getEntity(k)->getNewed())
+				m_mapOfEntities.get(i).getEntity(k)->getFlag(FLAG_NUDE))
 			{
 				delete m_mapOfEntities.get(i).getEntity(k);
 				m_mapOfEntities.get(i).remove(k);
@@ -453,7 +453,7 @@ void World::update(Uint32 a_timePassed)
 			cE = m_mapOfEntities.get(z).getEntity(i);
 			if(getLocationGrid(cE) != ERROR_CODE)
 			{
-				if(getLocationGrid(cE) != z && cE->getVisible())
+				if(getLocationGrid(cE) != z && cE->getFlag(FLAG_DRAW))
 				{
 					m_mapOfEntities.get(getLocationGrid(cE)).setEntity(cE);
 					m_mapOfEntities.get(z).remove(i);

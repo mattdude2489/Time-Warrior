@@ -7,23 +7,23 @@ void Entity::update(int a_timePassed, World * a_world)
 	//Update position.
 	movePlayer(a_timePassed);
 	//update stats
-	m_timeToRegen += a_timePassed;
-	if(m_timeToRegen >= TIME_SECOND_MS)
+	m_timers[TIMER_REGEN] += a_timePassed;
+	if(m_timers[TIMER_REGEN] >= TIME_SECOND_MS)
 	{
-		m_timeToRegen = 0;
+		m_timers[TIMER_REGEN] = 0;
 		regen(m_stats[ENERGY_REGEN]);
 		if(m_eType == DUMMY)
 			heal(m_stats[ENERGY_REGEN]);
 	}
 	//update timer
-	m_timer += a_timePassed;
+	m_timers[TIMER_GENERAL] += a_timePassed;
 	switch(m_eType)
 	{
 	case CHIP:
 	case OBSTACLE:
 		break;
 	default:
-		if(m_timer >= TIME_INACTIVE && m_sprite->getFrame() == 1)
+		if(m_timers[TIMER_GENERAL] >= TIME_INACTIVE && m_sprite->getFrame() == 1)
 			m_sprite->stop();
 	}
 	//update health-bar & sprite
@@ -31,7 +31,7 @@ void Entity::update(int a_timePassed, World * a_world)
 	m_hb.h = 5;
 	m_sprite->update(a_timePassed);
 	//check for world collision/tile collision
-	if(m_shouldDraw)
+	if(m_flags[FLAG_DRAW])
 	{
 		if(a_world->getTile(m_location.x, m_location.y)->collide
 			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->collide
@@ -41,7 +41,7 @@ void Entity::update(int a_timePassed, World * a_world)
 			switch(m_eType)
 			{
 			case CHIP:
-				m_shouldDraw = false;
+				setDrawOff();
 			case OBSTACLE:
 			case TREE:
 				break;
