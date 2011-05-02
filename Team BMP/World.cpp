@@ -108,7 +108,7 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree =  false;
+				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = false;
 				x++;
 				hi.collideBox.x = hi.pos.x;
 				hi.collideBox.y = hi.pos.y;
@@ -142,12 +142,12 @@ bool World::setWorld(char * fileName)
 				}
 				switch(c)
 				{
-				case 'P':	hi.portal = true;	hi.portalIndexNumber++;	break;
-				case 'd':	hi.dungeon = true;		dcount++;			break;
-				case 'p':	hi.playerSpawn = true;						break;
-				case 'S':	hi.spawnLocation = true;					break;
-				case 'b':	hi.bossLoc = true;							break;
-				case 'T':	hi.tree = true;								break;
+				case 'P':	hi.portal = true;	hi.portalIndexNumber++;			break;
+				case 'd':	hi.dungeon = hi.collide = true;	dcount++;			break;
+				case 'p':	hi.playerSpawn = true;								break;
+				case 'S':	hi.spawnLocation = true;							break;
+				case 'b':	hi.bossLoc = true;									break;
+				case 'T':	hi.tree = true;										break;
 				}
 				break;
 			case 'D':
@@ -215,6 +215,38 @@ bool World::setWorld(char * fileName)
 			case '=':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_BRIDGE_H;
+				break;
+			case 'C':
+				hi.currentTexture = m_worldSprites[SINGLE];
+				hi.indexOfSpriteRow = TILE_CASTLE_GROUND;
+				break;
+			case '|':
+				hi.currentTexture = m_worldSprites[SINGLE];
+				hi.indexOfSpriteRow = TILE_CASTLE_WALL_V;
+				hi.collide = true;
+				break;
+			case '-':
+				hi.currentTexture = m_worldSprites[SINGLE];
+				hi.indexOfSpriteRow = TILE_CASTLE_WALL_H;
+				hi.collide = true;
+				break;
+			case '[':
+				hi.currentTexture = m_worldSprites[SINGLE];
+				hi.indexOfSpriteRow = TILE_CASTLE_DOOR_L;
+				hi.collide = true;
+				hi.door = true;
+				break;
+			case ']':
+				hi.currentTexture = m_worldSprites[SINGLE];
+				hi.indexOfSpriteRow = TILE_CASTLE_DOOR_R;
+				hi.collide = true;
+				hi.door = true;
+				break;
+			case '^':
+				hi.currentTexture = m_worldSprites[SINGLE];
+				hi.indexOfSpriteRow = TILE_CASTLE_STAIRS;
+				hi.collide = true;
+				hi.stairs = true;
 				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;
@@ -439,6 +471,7 @@ void World::setMonsters()
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			this->add(obs);
 		}
+		
 	}
 }
 

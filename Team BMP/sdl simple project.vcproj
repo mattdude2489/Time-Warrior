@@ -420,6 +420,38 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Maps"
+			>
+			<File
+				RelativePath=".\castle0.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Maps\Dungeon0.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Maps\Dungeon1.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Maps\Dungeon2.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Maps\HubWorldMap.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Maps\MedEngMap.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Maps\NPC Placements.txt"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

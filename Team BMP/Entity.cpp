@@ -48,6 +48,7 @@ void Entity::update(int a_timePassed, World * a_world)
 			default:
 				move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 			}
+
 		}
 		switch(m_eType)
 		{
@@ -63,7 +64,9 @@ void Entity::update(int a_timePassed, World * a_world)
 					{
 						Entity * tmp = a_world->getEntity(i, m_location.x, m_location.y);
 						if(tmp->getType() != OBSTACLE)
+						{
 							move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+						}
 						else
 						{
 							if(tmp->isPortal())
