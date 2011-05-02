@@ -217,36 +217,27 @@ bool World::setWorld(char * fileName)
 				hi.indexOfSpriteRow = TILE_BRIDGE_H;
 				break;
 			case 'C':
-				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.indexOfSpriteRow = TILE_CASTLE_GROUND;
 				break;
 			case '|':
-				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.indexOfSpriteRow = TILE_CASTLE_WALL_V;
 				hi.collide = true;
 				break;
 			case '-':
-				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.indexOfSpriteRow = TILE_CASTLE_WALL_H;
 				hi.collide = true;
 				break;
 			case '[':
-				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.indexOfSpriteRow = TILE_CASTLE_DOOR_L;
-				hi.collide = true;
-				hi.door = true;
+				hi.collide = hi.door = true;
 				break;
 			case ']':
-				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.indexOfSpriteRow = TILE_CASTLE_DOOR_R;
-				hi.collide = true;
-				hi.door = true;
+				hi.collide = hi.door = true;
 				break;
 			case '^':
-				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.indexOfSpriteRow = TILE_CASTLE_STAIRS;
-				hi.collide = true;
-				hi.stairs = true;
+				hi.collide = hi.stairs = true;
 				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;

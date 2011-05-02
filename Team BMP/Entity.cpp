@@ -33,22 +33,23 @@ void Entity::update(int a_timePassed, World * a_world)
 	//check for world collision/tile collision
 	if(m_flags[FLAG_DRAW])
 	{
-		if(a_world->getTile(m_location.x, m_location.y)->collide
-			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->collide
-			|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->collide
-			|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->collide)
+		switch(m_eType)
 		{
-			switch(m_eType)
-			{
-			case CHIP:
-				setDrawOff();
 			case OBSTACLE:
 			case TREE:
 				break;
 			default:
-				move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
-			}
-
+				if(a_world->getTile(m_location.x, m_location.y)->collide
+					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->collide
+					|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->collide
+					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->collide)
+				{
+					switch(m_eType)
+					{
+					case CHIP:	setDrawOff();	break;
+					default:	move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+					}
+				}
 		}
 		switch(m_eType)
 		{
