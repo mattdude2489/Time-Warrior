@@ -16,9 +16,16 @@ public:
 	}
 	bool isPortal(){return m_portal;}
 	bool isDungeon(){return m_dungeon;}
+	bool isDoor()
+	{
+		if(m_eType == DOOR)
+			return true;
+		return false;
+	}
 	void setPortal(){m_portal = true;m_dungeon = false;}
 	void setDungeon(){m_dungeon = true;m_portal = false;}
 	void setIndex(int in){m_index = in;}
 	int getIndex(){return m_index;}
 	void setTree(){m_eType = TREE;}
+	void setDoor(){m_eType = DOOR;}
 };

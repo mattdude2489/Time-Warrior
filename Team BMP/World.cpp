@@ -76,12 +76,18 @@ bool World::setWorld(char * fileName)
 	
 	FILE * infile;
 	fopen_s(&infile, fileName, "r");
+
+
 	if(fileName == "Maps/HubWorldMap.txt")
 		currentWorld = WORLD_HUB;
 	if(fileName == "Maps/MedEngMap.txt")
 		currentWorld = WORLD_ENGLAND;
 	if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" ||fileName == "Maps/Dungeon2.txt" )
 		currentWorld = WORLD_D1;
+	//if(fileName == "Maps/Castle0.txt")
+	//	currentWorld = WORLD_CASTLE;
+
+		
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
 		m_mapOfWorld.release();
@@ -139,11 +145,12 @@ bool World::setWorld(char * fileName)
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
 				case WORLD_ENGLAND:	hi.indexOfSpriteRow = TILE_GRASS;				break;
 				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
+				case WORLD_CASTLE:	hi.indexOfSpriteRow = TILE_CASTLE_GROUND;		break;
 				}
 				switch(c)
 				{
 				case 'P':	hi.portal = true;	hi.portalIndexNumber++;			break;
-				case 'd':	hi.dungeon = hi.collide = true;	dcount++;			break;
+				case 'd':	hi.dungeon =					dcount++;			break;
 				case 'p':	hi.playerSpawn = true;								break;
 				case 'S':	hi.spawnLocation = true;							break;
 				case 'b':	hi.bossLoc = true;									break;
@@ -229,11 +236,11 @@ bool World::setWorld(char * fileName)
 				break;
 			case '[':
 				hi.indexOfSpriteRow = TILE_CASTLE_DOOR_L;
-				hi.collide = hi.door = true;
+				hi.door = true;
 				break;
 			case ']':
 				hi.indexOfSpriteRow = TILE_CASTLE_DOOR_R;
-				hi.collide = hi.door = true;
+				hi.door = true;
 				break;
 			case '^':
 				hi.indexOfSpriteRow = TILE_CASTLE_STAIRS;

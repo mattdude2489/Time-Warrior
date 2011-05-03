@@ -10,7 +10,7 @@ enum e_chipType;
 enum e_chipSubType;
 
 enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN , STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, LEVEL, NUM_STATS};
-enum e_entityType{DUMMY, CHIP, PLAYER, NPC, MINION, BOSS, OBSTACLE, TREE};
+enum e_entityType{DUMMY, CHIP, PLAYER, NPC, MINION, BOSS, OBSTACLE, TREE, DOOR};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff, COLOR_EXP = 0x00ffff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
@@ -356,5 +356,6 @@ public:
 	void setCurrentLocToLast(World * a_world);
 	virtual bool isPortal(){return false;}
 	virtual bool isDungeon(){return false;}
+	virtual bool isDoor(){return false;}
 	virtual int getIndex(){return 0;}
 };

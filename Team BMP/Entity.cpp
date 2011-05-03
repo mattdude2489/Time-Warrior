@@ -50,6 +50,15 @@ void Entity::update(int a_timePassed, World * a_world)
 					default:	move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 					}
 				}
+				if(a_world->getTile(m_location.x, m_location.y)->door
+					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->door
+					|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->door
+					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->door)
+				{
+					a_world->setWorld("Maps/Castle0.txt");
+					a_world->setCamera(this->m_camera);
+				}
+				
 		}
 		switch(m_eType)
 		{
