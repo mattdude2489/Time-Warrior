@@ -1,17 +1,17 @@
 #include "sdl/sdl.h"
 #include "srect.h"
 #include "spoint.h"
-#include "UserInput.h"
+//#include "UserInput.h"
 #include "Chip.h"
 #include "Entity.h"
-#include "Player.h"
-#include "World.h"
+//#include "Player.h"
+//#include "World.h"
 #include "Hud.h"
-#include "audiohandler.h"
+//#include "audiohandler.h"
 #include "servermodule.h"
 #include "Minion.h"
-#include "NPC.h"
-
+//#include "NPC.h"
+#include "baseEngine.h"
 //#define WITH_NETWORKING
 
 //Some debugging includes
