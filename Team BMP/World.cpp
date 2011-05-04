@@ -64,6 +64,7 @@ World::World()
 	}
 	m_closed = NULL;
 	bossCount = 0;
+	castleCount = 0;
 }
 World::~World()
 {
@@ -83,11 +84,11 @@ bool World::setWorld(char * fileName)
 
 	if(fileName == "Maps/HubWorldMap.txt")
 		currentWorld = WORLD_HUB;
-	if(fileName == "Maps/MedEngMap.txt")
+	else if(fileName == "Maps/MedEngMap.txt")
 		currentWorld = WORLD_ENGLAND;
-	if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" ||fileName == "Maps/Dungeon2.txt" )
+	else if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" ||fileName == "Maps/Dungeon2.txt" )
 		currentWorld = WORLD_D1;
-	if(fileName == "Maps/Castle0.txt")
+	else if(strcmp(fileName ,"Maps/Castle0.txt")||strcmp(fileName, "Maps/Castle1.txt"))
 		currentWorld = WORLD_CASTLE;
 
 		
@@ -247,7 +248,7 @@ bool World::setWorld(char * fileName)
 				break;
 			case '^':
 				hi.indexOfSpriteRow = TILE_CASTLE_STAIRS;
-				hi.collide = hi.stairs = true;
+				hi.stairs = true;
 				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;
@@ -389,7 +390,6 @@ void World::setMonsters()
 			for(int m = 0; m < numMinions; m++)
 			{
 				int spriteSheet = 0;
-				//spriteSheet = rand()%NUM_SPRITE_SHEETS_TO_CHOOSE_FROM;
 				spriteSheet = rand()%(NUM_SPRITE_SHEETS_TO_CHOOSE_FROM-1);
 				switch(currentWorld)
 				{

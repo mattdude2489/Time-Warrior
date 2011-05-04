@@ -53,9 +53,16 @@ void Entity::update(int a_timePassed, World * a_world)
 				if(a_world->getTile(m_location.x, m_location.y)->door
 					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->door
 					|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->door
-					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->door)
+					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->door
+					|| a_world->getTile(m_location.x, m_location.y)->stairs
+					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->stairs
+					|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->stairs
+					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->stairs)
 				{
-					a_world->setWorld("Maps/Castle0.txt");
+					char temp[20];
+					sprintf(temp, "Maps/Castle%i.txt", a_world->getCastleCount());
+					a_world->setWorld(temp);
+					a_world->incCastleCount();
 					a_world->setCamera(this->m_camera);
 				}
 				

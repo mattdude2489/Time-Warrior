@@ -39,7 +39,7 @@ private:
 	SDL_Sprite * m_worldSprites[NUM_SPRITES_WORLD];
 
 	bool m_success, * m_closed;//m_closed to determine if dungeon is closed
-	int clientPlayerIndex, currentWorld, maxWorldX, maxWorldY, tileX, tileY, bossCount;
+	int clientPlayerIndex, currentWorld, maxWorldX, maxWorldY, tileX, tileY, bossCount, castleCount;
 	Entity * m_player;
 	SRect m_cCamera; //The client's camera.
 public:
@@ -90,4 +90,6 @@ public:
 	bool isDClosed(int in){return m_closed[in];}
 	int getBossCount(){return bossCount;}
 	void reduceBossCount(){bossCount--;}
+	int getCastleCount(){return castleCount;}
+	void incCastleCount(){castleCount++;}
 };
