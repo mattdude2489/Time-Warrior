@@ -1,5 +1,14 @@
 001
-Hi. Welcome to the Colosseum of Time.#40 60
-1 1
-WE ARE DOOMED.#50 100
-2 0
+Hi. Welcome to the Colosseum of Time. We hope you have a \n wonderful time.#40 60
+101
+WE ARE DOOMED.#100 100
+200
+#0 0
+300
+#0 0
+400
+#0 0
+500
+#0 0
+600
+#0 0

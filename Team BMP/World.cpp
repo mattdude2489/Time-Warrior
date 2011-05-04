@@ -7,7 +7,7 @@ using namespace std;
 #include "Magic.h"
 #include "Obstacle.h"
 
-#define NPC_ADDno
+#define NPC_ADD
 
 World::World()
 {
@@ -334,8 +334,12 @@ void World::setNPC()
 		c = fgetc(infile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
 		c = fgetc(infile);
 		c -= 48;
+		if(c == EOF)
+		{
+			fclose(infile);
+			return;
+		}
 	}
-
 	char * charpoint = " ";
 	//char * buff; //I ONLY NEED ONE CHARACTER...but I needed a *...and it wouldn't let me just use char *.
 	c = fgetc(infile);
@@ -344,15 +348,25 @@ void World::setNPC()
 	for(int i = 0; i < forLoopNum; i++)
 	{
 		string s;
+		c = fgetc(infile);
 		while(c != '#')
 		{
-			c = fgetc(infile);
 			if(c == '\n') //IGNORING.
 				c = fgetc(infile);
+
+			if(c == 92)
+			{
+				c = fgetc(infile);
+				if(c == 'n')
+				{
+					c = 10; //The \n character.
+				}
+			}
 //			charpoint = (char)c;
 			//itoa(c, charpoint, 10); //Convert it to a char*.
 			char buff = (char)c;
 			s.append(1, buff);
+			c = fgetc(infile);
 		}
 		fscanf_s(infile, "%i", &x);
 		fscanf_s(infile, "%i", &y);

@@ -24,14 +24,7 @@ public:
 	}
 	void initNPC()
 	{
-		m_eType = NPC; 
-		whatTheyHaveToSay = "Hi."; 
-		drawText = false; 
-		m_Text.setBackColor(0x0000ff);
-		m_Text.setTextColor(0xffffff);
-		m_arialFont.changeSizeTo(20);
-		m_Text.setFont(m_arialFont.getFont()); 
-		m_Text.setMessage(whatTheyHaveToSay);
+		initNPC("Hi.");
 	}
 	void initNPC(char * talk)
 	{
