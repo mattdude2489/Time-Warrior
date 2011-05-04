@@ -117,10 +117,8 @@ public:
 			{
 				switch(i)
 				{
-				case 0: m_player->incHealth();break;
-				case 1: m_player->incEnergy();break;
-				case 2: m_player->incStr();break;
-				case 3: m_player->incInt();break;
+				case 2:	m_player->incStr();	break;
+				case 3:	m_player->incInt();	break;
 				}
 			}
 		}

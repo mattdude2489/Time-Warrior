@@ -153,7 +153,7 @@ bool World::setWorld(char * fileName)
 				switch(c)
 				{
 				case 'P':	hi.portal = true;	hi.portalIndexNumber++;			break;
-				case 'd':	hi.dungeon =					dcount++;			break;
+				case 'd':	hi.dungeon = true;	dcount++;						break;
 				case 'p':	hi.playerSpawn = true;								break;
 				case 'S':	hi.spawnLocation = true;							break;
 				case 'b':	hi.bossLoc = true;									break;

@@ -56,7 +56,7 @@ public:
 	{
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX] = a_health;
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX] = a_energy;
-		m_stats[ENERGY_REGEN] = 5;
+		m_stats[ENERGY_REGEN] = (int)(m_stats[ENERGY_MAX] * .05);
 		m_stats[STRENGTH] = a_str;
 		m_stats[INTELLECT] = a_int;
 		m_stats[DEFENSE] = a_def;

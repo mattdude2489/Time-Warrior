@@ -169,27 +169,41 @@ bool Player::loadPlayer()
 			this->m_stats[LEVEL] = hpenstrintexpsta;
 			//HP
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
-			this->m_stats[HEALTH_CURRENT] = hpenstrintexpsta;
-			this->m_stats[HEALTH_MAX] = hpenstrintexpsta;
 			//Energy
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
-			this->m_stats[ENERGY_CURRENT] = hpenstrintexpsta;
-			this->m_stats[ENERGY_MAX] = hpenstrintexpsta;
 			//Strength
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_stats[STRENGTH] = hpenstrintexpsta;
+			if(this->m_stats[STRENGTH] < 0)
+				this->m_stats[STRENGTH] = 0;
+			this->m_stats[HEALTH_MAX] += this->m_stats[STRENGTH];
+			this->m_stats[HEALTH_CURRENT] = this->m_stats[HEALTH_MAX];
+			this->m_stats[DEFENSE] += this->m_stats[STRENGTH];
 			//Intelligence
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_stats[INTELLECT] = hpenstrintexpsta;
+			if(this->m_stats[INTELLECT] < 0)
+				this->m_stats[INTELLECT] = 0;
+			this->m_stats[ENERGY_MAX] += this->m_stats[INTELLECT];
+			this->m_stats[ENERGY_CURRENT] = this->m_stats[ENERGY_MAX];
+			m_stats[ENERGY_REGEN] = (int)(m_stats[ENERGY_MAX] * .05);
+			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+				m_stats[i] += this->m_stats[INTELLECT];
 			//Current Exp.
 			fscanf_s(infile, "%f", &exp);
 			this->m_experience = exp;
+			if(this->m_experience < 0)
+				this->m_experience = 0;
 			//Current Level Requirement
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_expLvReq = hpenstrintexpsta;
+			if(this->m_expLvReq < 0)
+				this->m_expLvReq = 0;
 			//Stat Points.
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_statPoints = hpenstrintexpsta;
+			if(this->m_statPoints < 0)
+				this->m_statPoints = 0;
 		}
 		//If it's reading the Armor...
 		else if(charget == 'A')

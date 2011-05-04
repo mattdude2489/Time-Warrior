@@ -11,7 +11,7 @@
 
 enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
 enum e_hud {HUD_WIDTH = SCREEN_WIDTH, HUD_HEIGHT = FRAME_SIZE, HUD_X = 0, HUD_Y = SCREEN_HEIGHT-HUD_HEIGHT};
-enum e_exp {POINTS_GIVEN = 5, INC_HEALTH = 10, INC_ENERGY = 5};
+enum e_exp {POINTS_GIVEN = 1};
 
 class Player : public Entity
 {
@@ -90,8 +90,22 @@ public:
 	int getExpReq(){return m_expLvReq;}
 	double getCurExp(){return m_experience;}
 	int getPoints(){return m_statPoints;}
-	void incStr(){m_stats[STRENGTH]++;m_statPoints--;}
-	void incInt(){m_stats[INTELLECT]++;m_statPoints--;}
-	void incHealth(){m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX] = m_stats[HEALTH_MAX]+INC_HEALTH ;m_statPoints--;}
-	void incEnergy(){m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX] = m_stats[ENERGY_MAX]+INC_ENERGY ;m_statPoints--;}
+	void incStr()
+	{
+		m_stats[HEALTH_MAX]++;
+		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
+		m_stats[STRENGTH]++;
+		m_stats[DEFENSE]++;
+		m_statPoints--;
+	}
+	void incInt()
+	{
+		m_stats[ENERGY_MAX]++;
+		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
+		m_stats[ENERGY_REGEN] = (int)(m_stats[ENERGY_MAX] * .05);
+		m_stats[INTELLECT]++;
+		for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+			m_stats[i]++;
+		m_statPoints--;
+	}
 };
