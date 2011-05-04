@@ -1,4 +1,5 @@
 #include "sdl/sdl.h"
+#include "SDL_Sprite.h"
 #include "srect.h"
 #include "spoint.h"
 //#include "UserInput.h"

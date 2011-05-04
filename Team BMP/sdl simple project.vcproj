@@ -176,6 +176,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BaseLeveler.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Entity.cpp"
 				>
 			</File>
@@ -381,6 +385,10 @@
 			>
 			<File
 				RelativePath=".\Armor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BaseLeveler.h"
 				>
 			</File>
 			<File
