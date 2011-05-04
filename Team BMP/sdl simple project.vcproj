@@ -440,7 +440,7 @@
 			Name="Maps"
 			>
 			<File
-				RelativePath=".\Maps\castle0.txt"
+				RelativePath=".\Maps\Castle0.txt"
 				>
 			</File>
 			<File

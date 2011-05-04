@@ -7,7 +7,7 @@ using namespace std;
 #include "Magic.h"
 #include "Obstacle.h"
 
-#define NPC_ADD
+#define NPC_ADDno
 
 World::World()
 {
@@ -35,6 +35,9 @@ World::World()
 	m_sprites[GHOST].fileName = "Sprites/ghost.bmp";
 	m_sprites[BOSS1].fileName = "Sprites/demon0.bmp";
 	m_sprites[NPC1].fileName = "Sprites/greenguy.bmp";
+	m_sprites[KNIGHT0].fileName = "Sprites/knight0.bmp";
+	m_sprites[KNIGHT1].fileName = "Sprites/knight1.bmp";
+	
 
 	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
@@ -84,8 +87,8 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_ENGLAND;
 	if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" ||fileName == "Maps/Dungeon2.txt" )
 		currentWorld = WORLD_D1;
-	//if(fileName == "Maps/Castle0.txt")
-	//	currentWorld = WORLD_CASTLE;
+	if(fileName == "Maps/Castle0.txt")
+		currentWorld = WORLD_CASTLE;
 
 		
 	//Clear the previous map of the world, in order to create a better one.
@@ -382,14 +385,18 @@ void World::setMonsters()
 		SDL_Sprite * sprite = NULL;
 		if(m_mapOfWorld.get(i).spawnLocation)
 		{
-			numMinions = (rand()%3)+3;
+			numMinions = (rand()%3)+1;
 			for(int m = 0; m < numMinions; m++)
 			{
 				int spriteSheet = 0;
 				//spriteSheet = rand()%NUM_SPRITE_SHEETS_TO_CHOOSE_FROM;
 				spriteSheet = rand()%(NUM_SPRITE_SHEETS_TO_CHOOSE_FROM-1);
-				if(currentWorld == WORLD_D1)
+				switch(currentWorld)
 				{
+				case WORLD_ENGLAND:
+					sprite = new SDL_Sprite(m_sprites[SLIME].fileName, m_sprites[SLIME].frameWidth, m_sprites[SLIME].frameHeight, m_sprites[SLIME].animSpeed, m_sprites[SLIME].rows);
+					break;
+				case WORLD_D1:
 					switch(spriteSheet)
 					{
 					case 0:
@@ -399,9 +406,19 @@ void World::setMonsters()
 						sprite = new SDL_Sprite(m_sprites[GHOST].fileName, m_sprites[GHOST].frameWidth, m_sprites[GHOST].frameHeight, m_sprites[GHOST].animSpeed, m_sprites[GHOST].rows);
 						break;
 					}
+					break;
+				case WORLD_CASTLE:
+					switch(spriteSheet)
+					{
+					case 0:
+						sprite = new SDL_Sprite(m_sprites[KNIGHT0].fileName, m_sprites[KNIGHT0].frameWidth, m_sprites[KNIGHT0].frameHeight, m_sprites[KNIGHT0].animSpeed, m_sprites[KNIGHT0].rows);
+						break;
+					case 1:
+						sprite = new SDL_Sprite(m_sprites[KNIGHT1].fileName, m_sprites[KNIGHT1].frameWidth, m_sprites[KNIGHT1].frameHeight, m_sprites[KNIGHT1].animSpeed, m_sprites[KNIGHT1].rows);
+						break;
+					}
+					break;
 				}
-				else
-					sprite = new SDL_Sprite(m_sprites[SLIME].fileName, m_sprites[SLIME].frameWidth, m_sprites[SLIME].frameHeight, m_sprites[SLIME].animSpeed, m_sprites[SLIME].rows);
 				Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
 				newEntity->setNewed(true);
 				newEntity->scaleToPlayer(m_player);

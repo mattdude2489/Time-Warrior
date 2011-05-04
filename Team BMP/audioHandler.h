@@ -17,7 +17,7 @@ public:
 	{
 		Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT,2,4096);
 		char temp[32];
-		currentTrack = 0;
+		currentTrack = m_currentWorld = 0;
 		for(int i = 0; i < NUM_SONGS; i ++)
 		{
 			sprintf_s(temp, "Music/Track%i.wav", i);
@@ -56,9 +56,10 @@ public:
 	}
 	void update(int a_currentWorld)
 	{
+
 		if(m_currentWorld!= a_currentWorld)
 		{
-			playRandom();
+			nextTrack();
 			m_currentWorld = a_currentWorld;
 		}
 	}
