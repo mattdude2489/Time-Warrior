@@ -1,14 +1,14 @@
-001
+0 1
 Hi. Welcome to the Colosseum of Time. We hope you have a \n wonderful time.#40 60
-101
+1 1
 WE ARE DOOMED.#100 100
-200
+2 0
 #0 0
-300
+3 0
 #0 0
-400
+4 0
 #0 0
-500
+5 0
 #0 0
-600
+6 0
 #0 0

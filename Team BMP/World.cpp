@@ -322,18 +322,33 @@ void World::setNPC()
 	FILE * infile;
 	fopen_s(&infile, "Maps/NPC Placements.txt", "r");
 	int c = 0, x = 0, y = 0;
-	c = fgetc(infile);
-	c -= 48; //48 is the range between 0 ASCII and NULL.
+	//c = fgetc(infile);
+//	if(currentWorld != 0)
+		fscanf_s(infile, "%i", &c);
+	/*else
+	{
+		c = fgetc(infile);
+		c -= 48;
+	}*/
+	//c -= 48; //48 is the range between 0 ASCII and NULL.
 	//This system may work for the first few things...but then it'll blow up.
 	while(c != currentWorld)
 	{
 		while(c != '#')
+		{
 			c = fgetc(infile);
-		fscanf_s(infile,"%i",&x);
-		fscanf_s(infile,"%i",&y);
+			if(c == EOF) //Because this area is dangerous of becoming an infinite loop, give some escape code.
+			{
+				fclose(infile);
+				return;
+			}
+		}
+		fscanf_s(infile,"%i",&x); //The two integers.
+		fscanf_s(infile,"%i",&y); //The two integers, x and y value.
 		c = fgetc(infile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
-		c = fgetc(infile);
-		c -= 48;
+		//c = fgetc(infile);
+		fscanf_s(infile, "%i", &c);
+	//	c -= 48;
 		if(c == EOF)
 		{
 			fclose(infile);
@@ -342,9 +357,10 @@ void World::setNPC()
 	}
 	char * charpoint = " ";
 	//char * buff; //I ONLY NEED ONE CHARACTER...but I needed a *...and it wouldn't let me just use char *.
-	c = fgetc(infile);
+	//c = fgetc(infile);
 	c = fgetc(infile); //This SHOULD make it get an integer.
-	int forLoopNum = c-48;
+	fscanf_s(infile, "%i", &c);
+	int forLoopNum = c;
 	for(int i = 0; i < forLoopNum; i++)
 	{
 		string s;
