@@ -164,14 +164,15 @@ bool Player::loadPlayer()
 		//if it's reading the Player...
 		if(charget == 'P')
 		{
-			//Level
-				//store for later testing
+			//Level (IGNORE)
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
-			int lvLoad = hpenstrintexpsta;
+
 			//HP (IGNORE)
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
+
 			//Energy (IGNORE)
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
+
 			//Strength
 				//make sure stored value is valid
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
@@ -181,6 +182,7 @@ bool Player::loadPlayer()
 				//update related stats
 			this->m_stats[HEALTH_MAX] += this->m_stats[STRENGTH];
 			this->m_stats[DEFENSE] += this->m_stats[STRENGTH];
+
 			//Intelligence
 				//make sure stored value is valid
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
@@ -192,30 +194,37 @@ bool Player::loadPlayer()
 			m_stats[ENERGY_REGEN] = (int)(m_stats[ENERGY_MAX] * .05);
 			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
 				m_stats[i] += this->m_stats[INTELLECT];
+
 			//Current Exp.
 				//make sure stored value is valid
 			fscanf_s(infile, "%f", &exp);
 			this->m_experience = exp;
 			if(this->m_experience < 0)
 				this->m_experience = 0;
+
 			//Current Level Requirement (IGNORE)
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
+
 			//Stat Points.
 				//make sure stored value is valid
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_statPoints = hpenstrintexpsta;
 			if(this->m_statPoints < 0)
 				this->m_statPoints = 0;
-				//make sure level and current experience are valid
-			int lvShould = this->m_stats[STRENGTH] + this->m_stats[INTELLECT] + this->m_statPoints + this->m_stats[LEVEL];
-			int curPts = this->m_statPoints;
-			if(lvLoad != lvShould)
-				lvLoad = lvShould;
-			for(int i = this->m_stats[LEVEL]; i < lvLoad; ++i)
+				//make sure level is valid
+					//lv = default level (1) + strength + intellect + leftover stat points
+			int lvShould = this->m_stats[LEVEL] + this->m_stats[STRENGTH] + this->m_stats[INTELLECT] + this->m_statPoints;
+			int ptsBeforeLeveling = this->m_statPoints;
+			for(int i = this->m_stats[LEVEL]; i < lvShould; ++i)
 				this->levelUp();
-			this->m_statPoints = curPts;
-			if(this->m_experience >= m_expLvReq)
-				this->m_experience = 0;
+				//make sure exp is valid
+			this->m_statPoints = ptsBeforeLeveling;
+			if(this->m_experience >= this->m_expLvReq)
+			{
+				int expToScaleDown = (int)this->m_experience;
+				this->m_experience -= expToScaleDown;
+				this->m_experience += expToScaleDown % this->m_expLvReq;
+			}
 		}
 		//If it's reading the Armor...
 		else if(charget == 'A')
