@@ -81,7 +81,7 @@ public:
 	void gainExperience(double a_amount)
 	{
 		m_experience += a_amount;
-		if(m_experience >= m_expLvReq)
+		while(m_experience >= m_expLvReq)
 		{
 			m_experience -= m_expLvReq;
 			levelUp();
