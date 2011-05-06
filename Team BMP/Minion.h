@@ -9,59 +9,27 @@ enum e_states	{WANDER, CHASE, GUARD};
 enum e_wander	{WANDER_DIST = 50, WANDER_MAX = WANDER_DIST*2,WANDER_DIRECTION_TIME = TIME_SECOND_MS*3};
 #define		SCALE_MIN		.75
 #define		SCALE_BOSS		1.75
+
 class Minion : public Entity
 {
 protected:
 	int m_lastDirectionChange, m_state, m_hitLast;
 	bool m_playerTargeted;
-
 public:
-	Minion(){}
-	Minion(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
-		:Entity(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite)
+	Minion(SDL_Sprite * a_sprite)
+		:Entity(a_sprite)
 	{
 		m_eType = MINION;
-		m_lastDirectionChange = 0;
-		m_hitLast = 0;
 		m_state = WANDER;
 		m_target.set(m_location);
 		m_playerTargeted = false;
+		m_lastDirectionChange = m_hitLast = 0;
 	}
 	void checkState(int a_timePassed, World * a_world);
-	void initMinion(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite)
-	{
-		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite);
-		
-		m_eType = MINION;
-		m_lastDirectionChange = 0;
-		m_hitLast = 0;
-		m_state = WANDER;
-		m_target.set(m_location);
-		m_playerTargeted = false;
-	}
-	void respawn()
-	{
-		heal(getStatNumber(HEALTH_MAX));
-		setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);
-		m_state = WANDER;
-	}
-	void updateUnique(int a_timePassed, World * a_world)
-	{
-		checkState(a_timePassed, a_world);
-	}
-	void draw(SDL_Surface * a_screen)
-	{
-		if(m_flags[FLAG_DRAW] && m_camera)
-		{
-			m_hb.x = getLocationScreen().x;
-			m_hb.y = getLocationScreen().y;
-			if(m_eType != CHIP && getStatNumber(HEALTH_CURRENT) < getStatNumber(HEALTH_MAX))
-				SDL_FillRect(a_screen, &m_hb, COLOR_HEALTH);
-			faceTargetDirection();
-			m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y);
-			drawUnique(a_screen);
-		}
-	}
+	void respawn(){heal(getStatNumber(HEALTH_MAX));setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);m_state = WANDER;}
+	void updateUnique(int a_timePassed, World * a_world){checkState(a_timePassed, a_world);}
+	void updateTargPlayer(Entity *a_player){m_target.set(a_player->getLocation());}
+	void hitFromPlayer(){m_playerTargeted = true;m_state = CHASE;}
 	void wander(int a_timePassed)
 	{
 		m_lastDirectionChange += a_timePassed;
@@ -74,29 +42,19 @@ public:
 			m_lastDirectionChange = 0;
 		}
 	}
-	void updateTargPlayer(Entity *a_player){m_target.set(a_player->getLocation());}
 	void isPlayerInRange(Entity *a_player, int a_time)
 	{
 		double distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
 		if(distance < ENGAGE_RANGE)
-		{
 			m_state = CHASE;
-		}
 		else
-		{
 			m_state = WANDER;
-		}
 		m_hitLast += a_time;
 		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)
 		{
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
 		}
-	}
-	void hitFromPlayer()
-	{
-		m_playerTargeted = true;
-		m_state = CHASE;
 	}
 	void scaleToPlayer(Entity * a_player)
 	{
@@ -106,11 +64,10 @@ public:
 				m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_MIN);
 			else if( m_eType == BOSS)
 				m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_BOSS);
+			if(m_stats[i] <= 0 && a_player->getStatNumber((e_stats)i) > 0)
+				m_stats[i] = 1;
 		}
 		//in case the players health is low this will set the minion/boss to full
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
-		//in case the scale multiplication creates an invalid level
-		if(m_stats[LEVEL] <= 0)
-			m_stats[LEVEL] = 1;
 	}
 };

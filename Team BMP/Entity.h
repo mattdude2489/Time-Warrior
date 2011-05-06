@@ -50,7 +50,7 @@ public:
 		if(m_flags[FLAG_NUDE])
 			delete m_sprite;
 	}
-	void init(){init(1, 1, 0, 0, 0, 0, 0, 0);}
+	void init(){init(true, true, false, false, false, false, false, false);}
 	void init(SDL_Sprite * a_sprite){init();initSprite(a_sprite);}
 	void init(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes)
 	{
@@ -93,16 +93,8 @@ public:
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
 	void update(int a_timePassed, World * a_world);
-	void setLocation(int a_x, int a_y)
-	{
-		setLocationUnique(a_x, a_y);
-		m_location.x = a_x;
-		m_location.y = a_y;
-	}
-	void setNewed(bool newed)
-	{
-		m_flags[FLAG_NUDE] = newed; //Set the newed variable to whatever it needs to be.
-	}
+	void setLocation(int a_x, int a_y){setLocationUnique(a_x, a_y);m_location.set(a_x, a_y);}
+	void setNewed(bool newed){m_flags[FLAG_NUDE] = newed;}
 	void move(int a_deltaX, int a_deltaY)
 	{
 		moveUnique(a_deltaX, a_deltaY);
@@ -112,7 +104,7 @@ public:
 		m_sprite->start();
 	}
 	void move(SPoint a_point){move(a_point.x,a_point.y);}
-	virtual void draw(SDL_Surface * a_screen)
+	void draw(SDL_Surface * a_screen)
 	{
 		if(m_flags[FLAG_DRAW] && m_camera)
 		{
@@ -120,6 +112,13 @@ public:
 			m_hb.y = getLocationScreen().y;
 			if(m_eType != CHIP && getStatNumber(HEALTH_CURRENT) < getStatNumber(HEALTH_MAX))
 				SDL_FillRect(a_screen, &m_hb, COLOR_HEALTH);
+			switch(m_eType)
+			{
+			case MINION:
+			case BOSS:
+				faceTargetDirection();
+				break;
+			}
 			m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y);
 			drawUnique(a_screen);
 		}
@@ -221,7 +220,6 @@ public:
 	virtual void updateUnique(int a_timePassed, World * a_world){}
 	virtual void drawUnique(SDL_Surface *a_screen){}
 	virtual void movePlayer(int a_timePassed){}
-
 	//Due to the CPU intensive nature of the pixel Collision, this should rarely be used.
 	bool epicCollide(SDL_Sprite * a_sprite, int a_x, int a_y)
 	{
@@ -347,12 +345,7 @@ public:
 		}
 	}
 	bool isLastWSet(){return !m_lastWLoc.isZero();}
-	void setLastW()
-	{
-		m_lastWLoc.setX(m_location.getX());
-		//set with offset so when you go back it doesnt send you into the dungeon again
-		m_lastWLoc.setY(m_location.getY()+(2*FRAME_SIZE));
-	}
+	void setLastW(){m_lastWLoc.set(m_location.getX(), m_location.getY()+(2*FRAME_SIZE));}
 	void setCurrentLocToLast(World * a_world);
 	virtual bool isPortal(){return false;}
 	virtual bool isDungeon(){return false;}

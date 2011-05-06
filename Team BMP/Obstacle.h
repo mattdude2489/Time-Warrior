@@ -3,7 +3,7 @@
 
 class Obstacle : public Entity
 {
-protected:
+private:
 	bool m_portal, m_dungeon;
 	int m_index;
 public:
@@ -12,20 +12,15 @@ public:
 		a_sprite->setLoopToBegin(true);
 		m_eType = OBSTACLE;
 		m_portal = m_dungeon = false;
-		m_index  = 0;
+		m_index = 0;
 	}
-	bool isPortal(){return m_portal;}
+	bool isDoor(){return m_eType == DOOR;}
 	bool isDungeon(){return m_dungeon;}
-	bool isDoor()
-	{
-		if(m_eType == DOOR)
-			return true;
-		return false;
-	}
-	void setPortal(){m_portal = true;m_dungeon = false;}
-	void setDungeon(){m_dungeon = true;m_portal = false;}
-	void setIndex(int in){m_index = in;}
+	bool isPortal(){return m_portal;}
 	int getIndex(){return m_index;}
-	void setTree(){m_eType = TREE;}
+	void setIndex(int in){m_index = in;}
 	void setDoor(){m_eType = DOOR;}
+	void setDungeon(){m_dungeon = true;m_portal = false;}
+	void setPortal(){m_portal = true;m_dungeon = false;}
+	void setTree(){m_eType = TREE;}
 };

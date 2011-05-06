@@ -449,7 +449,7 @@ void World::setMonsters()
 					}
 					break;
 				}
-				Minion * newEntity = new Minion(100, 100, 3, 2, 5, 0, 0, 0, sprite);
+				Minion * newEntity = new Minion(sprite);
 				newEntity->setNewed(true);
 				newEntity->scaleToPlayer(m_player);
 				newEntity->setLocation(m_mapOfWorld.get(i).pos);
@@ -460,7 +460,7 @@ void World::setMonsters()
 		{
 			bossCount++;
 			sprite = new SDL_Sprite(m_sprites[BOSS1].fileName, m_sprites[BOSS1].frameWidth, m_sprites[BOSS1].frameHeight, m_sprites[BOSS1].animSpeed, m_sprites[BOSS1].rows);
-			Boss * newBoss = new Boss(200,200,10,10,10,0,0,0,sprite);
+			Boss * newBoss = new Boss(sprite);
 			newBoss->setNewed(true);
 			newBoss->scaleToPlayer(m_player);
 			newBoss->setBossLoc(m_mapOfWorld.get(i).pos);

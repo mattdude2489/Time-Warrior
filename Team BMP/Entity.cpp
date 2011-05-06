@@ -37,6 +37,7 @@ void Entity::update(int a_timePassed, World * a_world)
 		{
 			case OBSTACLE:
 			case TREE:
+			case DOOR:
 				break;
 			default:
 				if(a_world->getTile(m_location.x, m_location.y)->collide
@@ -60,7 +61,7 @@ void Entity::update(int a_timePassed, World * a_world)
 					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->stairs)
 				{
 					char temp[20];
-					sprintf(temp, "Maps/Castle%i.txt", a_world->getCastleCount());
+					sprintf_s(temp, "Maps/Castle%i.txt", a_world->getCastleCount());
 					a_world->setWorld(temp);
 					a_world->incCastleCount();
 					a_world->setCamera(this->m_camera);

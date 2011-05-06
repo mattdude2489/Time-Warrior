@@ -16,7 +16,6 @@ private:
 public:
 	NonPlayerChar(SDL_Sprite * a_sprite)
 		:Entity(a_sprite){initNPC();}
-
 	NonPlayerChar(char* talk, SDL_Sprite *a_sprite)
 		:Entity(a_sprite)
 	{
