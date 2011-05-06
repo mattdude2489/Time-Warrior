@@ -10,7 +10,7 @@ class NonPlayerChar : public Entity
 {
 private:
 	char * whatTheyHaveToSay; //Probably nothing worthwhile.
-	TTtext m_Text; //The text variable.
+	TTtext m_Text[3]; //The text variable.
 	MyFont m_arialFont;
 	bool drawText;
 public:
@@ -30,11 +30,32 @@ public:
 		m_eType = NPC;
 		whatTheyHaveToSay = talk;
 		drawText = false;
-		m_Text.setBackColor(0x0000ff);
-		m_Text.setTextColor(0xffffff);
 		m_arialFont.changeSizeTo(20);
-		m_Text.setFont(m_arialFont.getFont());
-		m_Text.setMessage(whatTheyHaveToSay);
+		for(int i = 0; i < 3; i++)
+		{
+			m_Text[i].setFont(m_arialFont.getFont());
+			m_Text[i].setTextColor(0xffffff);
+			m_Text[i].setBackColor(0x0000ff);
+		}
+		
+		char neededChar = whatTheyHaveToSay[0];
+		int x = 0, y = 0, z = 0;
+		char tehMessage[3][50] = {" "};
+		while(neededChar != 0)
+		{
+			if(neededChar == 10)
+			{
+				m_Text[y].setMessage(tehMessage[y]);
+				if(y < 3)
+					y++;
+				x = 0;
+			}
+			tehMessage[y][x] = neededChar;
+			x++;
+			z++;
+			neededChar = whatTheyHaveToSay[z];
+		}
+		m_Text[y].setMessage(tehMessage[y]);
 	}
 	void activateDialogue()
 	{
@@ -52,7 +73,11 @@ public:
 			SRect rect;
 			rect.x = 0; rect.y = 400; rect.w = 800; rect.h = 168;
 			SDL_FillRect(a_screen, &rect, 0x0000ff);
-			m_Text.printMessage(a_screen, 20, 420);
+			for(int i = 0; i < 3; i++)
+			{
+				if(m_Text[i].messageAvailable())
+					m_Text[i].printMessage(a_screen, 20, 420+i*25);
+			}
 		}
 	}
 	void updateUnique(int a_timePassed, World *a_world)

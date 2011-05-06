@@ -47,6 +47,7 @@ public:
 		m_backColor.b = 255;
 		m_backColor.r = 255;
 		m_backColor.g = 255;
+		m_message = NULL;
 	}
 	//Sets the text color, but not the background.
 	void setTextColor(Uint32 color)
@@ -72,6 +73,7 @@ public:
 	{
 		apply_surface(a_x, a_y, m_message, a_screen);
 	}
+	bool messageAvailable() {if(m_message != NULL) return true; else return false;}
 	int getMesageWidth(){return m_message->w;}
 	void setFont(TTF_Font * a_font){m_font = a_font;}
 	void setFontSize(int a_size)
@@ -80,6 +82,7 @@ public:
 	}
 	~TTtext()
 	{
-		SDL_FreeSurface(m_message);
+		if(m_message != NULL)
+			SDL_FreeSurface(m_message);
 	}
 };

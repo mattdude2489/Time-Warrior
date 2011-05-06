@@ -35,5 +35,5 @@ public:
 	baseEngine();
 	~baseEngine();
 	void setPlayer(Player play) {cPlayer = play;}
-	void setWorld(World omg) {cWorld = omg;} //My...god...
+	void setWorld(World omg) {cWorld = omg;} //My...god...ok, this isn't so bad.
 };
