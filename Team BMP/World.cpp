@@ -552,6 +552,11 @@ void World::update(Uint32 a_timePassed)
 		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc()))
 			m_mapOfEntities.get(i).update(a_timePassed, this);
 	}
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	{
+		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc()))
+			m_mapOfEntities.get(i).clearDeadEntities(this);
+	}
 	m_worldSprites[ANIMATION]->update(a_timePassed);
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	//Make sure for each grid's sorting.

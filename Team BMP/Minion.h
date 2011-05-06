@@ -61,10 +61,11 @@ public:
 		int highest = 0;
 		for(int i = 0; i < NUM_STATS; i++)
 		{
-			if(m_eType == MINION)//scale the minions slightly weeker then player but close
-				m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_MIN);
-			else if( m_eType == BOSS)
-				m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_BOSS);
+			switch(m_eType)
+			{
+			case MINION:	m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_MIN);	break;
+			case BOSS:		m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_BOSS);	break;
+			}
 			if(m_stats[i] <= 0 && (a_player->getStatNumber((e_stats)i) > 0 || (i == STRENGTH || i == INTELLECT)))
 				m_stats[i] = 1;
 			switch(i)
