@@ -58,15 +58,29 @@ public:
 	}
 	void scaleToPlayer(Entity * a_player)
 	{
+		int highest = 0;
 		for(int i = 0; i < NUM_STATS; i++)
 		{
 			if(m_eType == MINION)//scale the minions slightly weeker then player but close
 				m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_MIN);
 			else if( m_eType == BOSS)
 				m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_BOSS);
-			if(m_stats[i] <= 0 && a_player->getStatNumber((e_stats)i) > 0)
+			if(m_stats[i] <= 0 && (a_player->getStatNumber((e_stats)i) > 0 || (i == STRENGTH || i == INTELLECT)))
 				m_stats[i] = 1;
+			switch(i)
+			{
+			case DEFENSE:
+			case RESISTANCE_FIRE:
+			case RESISTANCE_ICE:
+			case RESISTANCE_LIGHTNING:
+				if(a_player->getStatNumber((e_stats)i) > highest)
+					highest = a_player->getStatNumber((e_stats)i);
+			}
 		}
+		if(m_stats[STRENGTH] < highest)
+			m_stats[STRENGTH] = highest;
+		if(m_stats[INTELLECT] < highest)
+			m_stats[INTELLECT] = highest;
 		//in case the players health is low this will set the minion/boss to full
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
 	}
