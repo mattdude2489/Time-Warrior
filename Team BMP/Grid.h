@@ -85,29 +85,28 @@ public:
 			{
 				if(m_mapOfEntities.get(i)->getLocation().y > m_mapOfEntities.get(k)->getLocation().y)
 				{
-					if(m_mapOfEntities.get(i)->getType() != TREE && m_mapOfEntities.get(k)->getType() != TREE)
+					if(m_mapOfEntities.get(i)->getType() != OBSTACLE && m_mapOfEntities.get(k)->getType() != OBSTACLE)
 						m_mapOfEntities.swap(i, k);
 				}
 			}
 		}
 	}
-	
 	void update(Uint32 timePassed, World * a_world) 
 	{
-		for(int i = 0; i < m_mapOfEntities.size(); i++) 
+		for(int i = 0; i < m_mapOfEntities.size(); i++)
 			m_mapOfEntities.get(i)->update(timePassed, a_world);
 	}
-	void clearDeadEntities(World * a_world)
+	void clearDeadEntities(World * a_world) 
 	{
 		Entity * t_ent;
 		for(int i = 0; i < m_mapOfEntities.size(); i++) 
 		{
 			t_ent = m_mapOfEntities.get(i);
 			//checks to see if it is alive if not remove the damm thing
-			if(t_ent->getType() != CHIP && t_ent->getStatNumber(HEALTH_CURRENT)<=0)
+			if(!t_ent->getFlag(FLAG_DRAW)&& t_ent->getStatNumber(HEALTH_CURRENT) <= 0)
 			{
 				m_mapOfEntities.remove(i);
-				if(t_ent->getType()== BOSS)
+				if(t_ent->getType() == BOSS)
 					clearABoss(a_world);
 			}
 		}

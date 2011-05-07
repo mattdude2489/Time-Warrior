@@ -31,13 +31,15 @@ class Magic : public Chip
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
-			if(a_entity->getType() == CHIP
-			|| a_entity->getType()== NPC
-			|| a_entity->getType()== OBSTACLE
-			|| a_entity == m_owner)
+			if(a_entity == m_owner)
 				return false;
-			else
+			switch(a_entity->getType())
 			{
+			case CHIP:
+			case NPC:
+				return false;
+				break;
+			default:
 				switch(m_cSubType)
 				{
 				case DIVINE:
@@ -63,9 +65,9 @@ class Magic : public Chip
 			case DIVINE:
 				if(a_entity->getType() == m_owner->getType())
 					a_entity->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));
-				else
-					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg/2,MAGIC), m_cSubType);
-				break;
+				//else
+				//	a_entity->hit(m_owner->getTotalDamageDealt(m_dmg/2,MAGIC), m_cSubType);
+				//break;
 			case LIGHTNING:
 			case FIRE:
 			case ICE:
@@ -76,7 +78,10 @@ class Magic : public Chip
 			if(a_entity->getType()!= m_owner->getType()){
 				a_entity->hitFromPlayer();}
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
+			{
+				a_entity->setDrawOff();
 				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
+			}
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{

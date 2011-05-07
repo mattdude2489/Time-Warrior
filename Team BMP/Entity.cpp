@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "World.h"
 #include "Chip.h"
+#include "Obstacle.h"
 
 void Entity::update(int a_timePassed, World * a_world)
 {
@@ -36,8 +37,6 @@ void Entity::update(int a_timePassed, World * a_world)
 		switch(m_eType)
 		{
 			case OBSTACLE:
-			case TREE:
-			case DOOR:
 				break;
 			default:
 				if(a_world->getTile(m_location.x, m_location.y)->collide
@@ -51,20 +50,23 @@ void Entity::update(int a_timePassed, World * a_world)
 					default:	move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 					}
 				}
-				if(a_world->getTile(m_location.x, m_location.y)->door
-					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->door
-					|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->door
-					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->door
-					|| a_world->getTile(m_location.x, m_location.y)->stairs
-					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->stairs
-					|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->stairs
-					|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->stairs)
+				if(m_eType == PLAYER)
 				{
-					char temp[20];
-					sprintf_s(temp, "Maps/Castle%i.txt", a_world->getCastleCount());
-					a_world->setWorld(temp);
-					a_world->incCastleCount();
-					a_world->setCamera(this->m_camera);
+					if(a_world->getTile(m_location.x, m_location.y)->door
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->door
+						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->door
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->door
+						|| a_world->getTile(m_location.x, m_location.y)->stairs
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->stairs
+						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->stairs
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->stairs)
+					{
+						char temp[20];
+						sprintf_s(temp, "Maps/Castle%i.txt", a_world->getCastleCount());
+						a_world->setWorld(temp);
+						a_world->incCastleCount();
+						a_world->setCamera(this->m_camera);
+					}
 				}
 				
 		}
@@ -82,12 +84,10 @@ void Entity::update(int a_timePassed, World * a_world)
 					{
 						Entity * tmp = a_world->getEntity(i, m_location.x, m_location.y);
 						if(tmp->getType() != OBSTACLE)
-						{
 							move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
-						}
 						else
 						{
-							if(tmp->isPortal())
+							if(tmp->isObstacle(PORTAL))
 							{
 								if(m_eType == PLAYER)
 								{
@@ -95,12 +95,11 @@ void Entity::update(int a_timePassed, World * a_world)
 									//	this->setLocation(1248, 128);
 									if(a_world->getBossCount() == 0){
 										a_world->setWorld("Maps/MedEngMap.txt");
-										
 										a_world->setCamera(this->m_camera);
 									}
 								}
 							}
-							else if(tmp->isDungeon())
+							else if(tmp->isObstacle(DUNGEON))
 							{
 								if(m_eType == PLAYER)
 								{
@@ -124,6 +123,8 @@ void Entity::update(int a_timePassed, World * a_world)
 									}
 								}
 							}
+							else
+								move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 						}
 					}
 				}
@@ -154,7 +155,7 @@ int Entity::getTotalDamageTaken(int a_amount, e_chipSubType a_type)
 	int stat = 0;
 	switch(a_type)
 	{
-	case DIVINE:	break;
+	case DIVINE:	stat = a_amount;							break;
 	case LIGHTNING:	stat = getStatNumber(RESISTANCE_LIGHTNING);	break;
 	case FIRE:		stat = getStatNumber(RESISTANCE_FIRE);		break;
 	case ICE:		stat = getStatNumber(RESISTANCE_ICE);		break;

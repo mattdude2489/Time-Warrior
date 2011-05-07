@@ -24,7 +24,4 @@ void Grid::clearAllEntities()
 			
 		}
 }
-void Grid::clearABoss(World * a_world)
-{
-	a_world->reduceBossCount();
-}
+void Grid::clearABoss(World * a_world){a_world->reduceBossCount();}

@@ -3,6 +3,7 @@
 #pragma once
 #include "Entity.h"
 #include "World.h"
+#include "Obstacle.h"
 
 enum e_chipType {ARMOR, MAGIC, WEAPON, NUM_CHIP_TYPES};
 enum e_chipSubType {HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE, NUM_TOTAL_CHIP_SUBS, NUM_CHIP_SUBS_PER_TYPE = NUM_TOTAL_CHIP_SUBS/NUM_CHIP_TYPES};
@@ -147,7 +148,7 @@ class Chip : public Entity
 						{
 							if(shouldApplyEffect(a_world->getEntity(i, grid)))
 							{
-								if(a_world->getEntity(i, grid)->getType()!= TREE)
+								if(a_world->getEntity(i, grid)->getType() != OBSTACLE)
 									applyEffect(a_world->getEntity(i, grid));
 								collisionMade = true;
 							}

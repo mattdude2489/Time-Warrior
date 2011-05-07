@@ -1,26 +1,31 @@
 //Obstacle class
 //Author: John Parks
 
+#pragma once
+
+enum e_obstacleType {PORTAL, DUNGEON, TREE, DOOR, NUM_OBSTACLE_TYPES};
+
 class Obstacle : public Entity
 {
 private:
-	bool m_portal, m_dungeon;
+	bool m_oType[NUM_OBSTACLE_TYPES];
 	int m_index;
 public:
 	Obstacle(SDL_Sprite *a_sprite):Entity(a_sprite)
 	{
 		a_sprite->setLoopToBegin(true);
 		m_eType = OBSTACLE;
-		m_portal = m_dungeon = false;
+		for(int i = 0; i < NUM_OBSTACLE_TYPES; ++i)
+			m_oType[i] = false;
 		m_index = 0;
 	}
-	bool isDoor(){return m_eType == DOOR;}
-	bool isDungeon(){return m_dungeon;}
-	bool isPortal(){return m_portal;}
+	bool isObstacle(e_obstacleType a_type){return m_oType[a_type];}
 	int getIndex(){return m_index;}
 	void setIndex(int in){m_index = in;}
-	void setDoor(){m_eType = DOOR;}
-	void setDungeon(){m_dungeon = true;m_portal = false;}
-	void setPortal(){m_portal = true;m_dungeon = false;}
-	void setTree(){m_eType = TREE;}
+	void setObstacleType(e_obstacleType a_type)
+	{
+		for(int i = 0; i < NUM_OBSTACLE_TYPES; ++i)
+			m_oType[i] = false;
+		m_oType[a_type] = true;
+	}
 };

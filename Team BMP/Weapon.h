@@ -86,13 +86,15 @@ class Weapon : public Chip
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
-			if(a_entity->getType() == CHIP
-			|| a_entity->getType()== NPC
-			|| a_entity->getType()== OBSTACLE
-			|| a_entity == m_owner)
+			if(a_entity == m_owner)
 				return false;
-			else
+			switch(a_entity->getType())
 			{
+			case CHIP:
+			case NPC:
+				return false;
+				break;
+			default:
 				switch(m_cSubSubType)
 				{
 				case BASIC:
@@ -131,7 +133,10 @@ class Weapon : public Chip
 				break;
 			}
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
+			{
+				a_entity->setDrawOff();
 				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
+			}
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{

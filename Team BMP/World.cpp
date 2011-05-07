@@ -407,7 +407,7 @@ void World::setMonsters()
 	int numMinions = 0;
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
-		for(int g = 0; g< m_mapOfEntities.size(); g++)
+		for(int g = 0; g < m_mapOfEntities.size(); g++)
 			m_mapOfEntities.get(g).clearAllEntities();
 	}
 	int dcount = 0;
@@ -493,7 +493,7 @@ void World::setMonsters()
 			if(m_mapOfWorld.get(i).portal)
 			{
 				sprite->setRIndex(TILE_PORTAL);
-				obs->setPortal();
+				obs->setObstacleType(PORTAL);
 			}
 			else
 			{
@@ -501,7 +501,7 @@ void World::setMonsters()
 					sprite->setRIndex(TILE_DUNGEON_CLOSED);
 				else
 					sprite->setRIndex(TILE_DUNGEON);
-				obs->setDungeon();
+				obs->setObstacleType(DUNGEON);
 			}
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			this->add(obs);
@@ -511,7 +511,7 @@ void World::setMonsters()
 			sprite = new SDL_Sprite("Sprites/Tree.bmp", TREE_WIDTH, TREE_HEIGHT, FRAME_RATE, TREE_COUNT);
 			Obstacle * obs = new Obstacle(sprite);
 			sprite->setRIndex(rand()%3);
-			obs->setTree();
+			obs->setObstacleType(TREE);
 			obs->setNewed(true);
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			this->add(obs);
