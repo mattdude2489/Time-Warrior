@@ -5,6 +5,7 @@
 #include "spoint.h"
 #include "trueTextPrinter.h"
 #include "Player.h"
+#include "surfaceFunctions.h"
 
 #define BUTTONCOLOR			0xffff00
 #define WINDOWCOLOR			0xffffff
@@ -22,6 +23,7 @@ class Button
 {
 private:
 	SRect m_buttonShape;
+	SDL_Sprite * m_image;
 public:
 	Button(){}
 	Button(int a_width, int a_height, int a_x, int a_y){setUpButton(a_width, a_height, a_x, a_y);}
@@ -37,10 +39,18 @@ public:
 		m_buttonShape.setWidth(a_width);
 		m_buttonShape.setHeight(a_height);
 	}
+	void setImage(char * a_fileName)
+	{
+		m_image = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
+	}
 	void setPos(int a_x, int a_y)
 	{
 		m_buttonShape.setX(a_x);
 		m_buttonShape.setY(a_y);
+	}
+	void update(int a_time)
+	{
+		m_image->update(a_time);
 	}
 	bool wasClicked(UserInput * a_input)//returns only if there is a click inside its bounds
 	{
@@ -54,8 +64,11 @@ public:
 	}
 	void draw(SDL_Surface * a_screen)
 	{
-		//this will change when i get a bmp for it to load into as a button
-		SDL_FillRect(a_screen, &m_buttonShape, BUTTONCOLOR);
+		m_image->draw(a_screen, m_buttonShape.getMaxX(), m_buttonShape.getMaxY());
+	}
+	~Button()
+	{
+		delete m_image;
 	}
 };
 
@@ -65,14 +78,12 @@ private:
 	TTtext m_text[NUM_STATS-1];
 	TTtext m_lvlPts[2];
 	Player * m_player;
-	SRect m_window;
+	SDL_Surface *  m_window;
 	Button m_addStat[STATINC];
 public:
 	StatWindow()
 	{
-		m_window.setHeight(WINDOWHEIGHT);
-		m_window.setWidth(WINDOWWIDTH);
-		m_window.setPosition(WINDOWXY);
+		m_window = load_image("Sprites/SideBar.bmp");
 		for(int i = 0; i < STATINC; i++)
 		{
 			if(i < 2){
@@ -81,6 +92,7 @@ public:
 			else{
 				m_addStat[i].setUpButton(TEXTYOFF, TEXTYOFF-2, WINDOWWIDTH/2, STATOFF + ((i+1)*STATOFF));
 			}
+			m_addStat[i].setImage("Sprites/button1.bmp");
 		}
 	}
 	void InitText(TTF_Font * a_font)
@@ -127,7 +139,7 @@ public:
 	{
 		int t_x, t_y, t_s = 0;
 		t_x = t_y = TEXTSTART;
-		SDL_FillRect(a_screen, &m_window, WINDOWCOLOR);
+		apply_surface(0,0,m_window, a_screen);
 		for(int i = 0; i < NUM_STATS-1; i++)
 		{
 			m_text[i].printMessage(a_screen, t_x, t_y);
@@ -149,5 +161,8 @@ public:
 				m_addStat[i].draw(a_screen);
 			}
 		}
+	}
+	~StatWindow()
+	{
 	}
 };

@@ -11,11 +11,14 @@ public:
 	MyFont()
 	{
 		TTF_Init();
-		m_font = TTF_OpenFont("arial.ttf",FONTSIZE);
 	}
 	MyFont(int fontsize)
 	{
 		TTF_Init();
+		m_font = TTF_OpenFont("arial.ttf", fontsize);
+	}
+	void setFont(int fontsize)
+	{
 		m_font = TTF_OpenFont("arial.ttf", fontsize);
 	}
 	void changeSizeTo(int fontsize)

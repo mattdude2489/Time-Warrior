@@ -2,6 +2,7 @@
 //Author: John Parks
 #pragma once
 #include "Chip.h"
+#include "audioHandler.h"
 
 class Weapon : public Chip
 {

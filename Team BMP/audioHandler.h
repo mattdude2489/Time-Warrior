@@ -6,11 +6,14 @@
 #include <time.h>
 
 #define NUM_SONGS				9
+#define NUM_EFFECTS				3
+enum	e_effects	{E_SLASH, E_BLUNT, E_FIRE};
 
 class AudioHandler
 {
 private:
 	Mix_Music * m_music[NUM_SONGS];
+	Mix_Chunk * m_effects[NUM_EFFECTS];
 	int currentTrack, m_currentWorld;;
 public:
 	AudioHandler()
@@ -22,6 +25,11 @@ public:
 		{
 			sprintf_s(temp, "Music/Track%i.wav", i);
 			m_music[i] = Mix_LoadMUS(temp);
+		}
+		for(int i = 0; i < NUM_EFFECTS; i++)
+		{
+			sprintf_s(temp, "Music/Effect%i.wav", i);
+			m_effects[i] = Mix_LoadWAV(temp);
 		}
 	}
 	void playMusic()
@@ -56,18 +64,25 @@ public:
 	}
 	void update(int a_currentWorld)
 	{
-
 		if(m_currentWorld!= a_currentWorld)
 		{
 			nextTrack();
 			m_currentWorld = a_currentWorld;
 		}
 	}
+	void playEffect(int a_track)
+	{
+		Mix_PlayChannel(-1, m_effects[a_track], 0);
+	}
 	~AudioHandler()
 	{
 		for(int i = 0; i < NUM_SONGS; i ++)
 		{
 			Mix_FreeMusic(m_music[i]);
+		}
+		for(int i =0 ; i < NUM_EFFECTS; i++)
+		{
+			Mix_FreeChunk(m_effects[i]);
 		}
 	}
 };

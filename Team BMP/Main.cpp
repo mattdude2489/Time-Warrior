@@ -70,6 +70,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	TTtext fps;
 	int ifps = 0;
 	char cfps[10];
+	hi.setFont(FONTSIZE);
 	fps.setFont(hi.getFont());
 	fps.setMessage("0");
 	while(running) //While loop, can be easily used for testing.
@@ -132,7 +133,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 #endif
 		//update
 		world.update(passed);
-		Ghud.updateHud(&eTest, &ui);
+		Ghud.updateHud(&eTest, &ui, passed);
 		ah.update(world.getCurrentWorld());//need to figure out to switch songs when entering a new area
 		//draw
 		//reset the screen.

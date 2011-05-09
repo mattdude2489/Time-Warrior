@@ -18,7 +18,7 @@ private:
 	SRect bars[NUM_BARS];
 	Uint32 colors[NUM_BARS];
 
-	MyFont m_myFont;
+	MyFont m_myFont[2];
 	TTtext m_text[NUM_STAT_BARS];
 	StatWindow m_statWin;
 	bool m_showStats;
@@ -53,12 +53,15 @@ public:
 		colors[BAR_HEALTH] = COLOR_HEALTH;
 		colors[BAR_ENERGY] = COLOR_ENERGY;
 		colors[BAR_EXP] = COLOR_EXP;
-		m_statWin.InitText(m_myFont.getFont());
+		m_myFont[0].setFont(FONTSIZE);
+		m_myFont[1].setFont(18);
+		m_statWin.InitText(m_myFont[1].getFont());
 		m_statButton.setUpButton(STAT_BUTTON_SETTINGS);
+		m_statButton.setImage("Sprites/button.bmp");
 		m_showStats = false;
 		for(int i = 0; i < NUM_STAT_BARS; i++)
 		{
-			m_text[i].setFont(m_myFont.getFont());
+			m_text[i].setFont(m_myFont[0].getFont());
 			m_text[i].setTextColor(0xffffffff);
 		}
 		m_text[0].setMessage("Health");
@@ -74,25 +77,27 @@ public:
 		if(m_showStats)
 			m_statWin.handleInput(ui);
 	}
-	void updateHud(Player * p, UserInput * ui)
+	void updateHud(Player * p, UserInput * ui, int a_time)
 	{
 		handleInput(ui);
 		bars[BAR_HEALTH].setWidth((int)((double)p->getStatNumber(HEALTH_CURRENT)/(double)p->getStatNumber(HEALTH_MAX) * ONE_HUNDRED_PERCENT));
 		bars[BAR_ENERGY].setWidth((int)((double)p->getStatNumber(ENERGY_CURRENT)/(double)p->getStatNumber(ENERGY_MAX) * ONE_HUNDRED_PERCENT));
 		bars[BAR_EXP].setWidth((int)(p->getCurExp()/(double)p->getExpReq() * ONE_HUNDRED_PERCENT));
 		m_statWin.setPlayer(p);
+		if(p->getPoints()>0)
+			m_statButton.update(a_time);
 	}
 	void draw(SDL_Surface * screen)
 	{
 		for(int i = 0; i < NUM_BARS; i++){
 			SDL_FillRect(screen, &bars[i], colors[i]);}
-		m_statButton.draw(screen);
 		for(int i = 0; i < 2; ++i)
 			m_statWin.getPlayer()->drawSlot((e_gauntletSlots)i, screen, (HUD_X + HUD_WIDTH) - ((2-(i-1)) * HUD_HEIGHT), HUD_Y);
 		for(int i = 0; i < NUM_STAT_BARS; i++)
 		{	
 			m_text[i].printMessage(screen, bars[BAR_BACK].getWidth(), bars[BAR_BACK].getY()+(i*BAR_HEIGHT)-1);
 		}
+		m_statButton.draw(screen);
 		if(m_showStats)
 			m_statWin.draw(screen);
 		
