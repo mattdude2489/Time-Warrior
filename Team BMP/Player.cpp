@@ -43,7 +43,7 @@ void Player::addToArmorInventory(Chip * a_chip)
 			if(!m_armorInventory[i] && !slotFound)
 			{
 				a_chip->setOwner(this);
-				m_armorInventory[i] = chip;
+				m_armorInventory[i] = a_chip;
 				slotFound = true;
 			}
 		}
