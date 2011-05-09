@@ -7,18 +7,22 @@
 class Weapon : public Chip
 {
 	protected:
+		//flags for sprite's flip(s) & rotation
 		bool m_isFlipH, m_isFlipV;
 		int m_rotateDeg;
 	public:
 		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(WEAPON, a_subType, a_subSubType),
 			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0){}
+		//set the weapon's position based on whatever direction its owner is facing
 		void setLocationUsingDirection()
 		{
+			//set the weapon's position
 			switch(m_cSubSubType)
 			{
 			case BASIC:
 			case ADVANCED:
+				//Basic & Advanced weapons based on owner's direction
 				switch(m_direction)
 				{
 				case KEY_UP:
@@ -36,11 +40,13 @@ class Weapon : public Chip
 				}
 				break;
 			default:
+				//Expert weapons centered on owner
 				setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 			}
 		}
 		void activateUnique()
 		{
+			//un-flip sprite if it has been flipped in any way
 			if(m_isFlipH)
 			{
 				m_sprite->flipHorizontal();
@@ -51,9 +57,11 @@ class Weapon : public Chip
 				m_sprite->flipVertical();
 				m_isFlipV = false;
 			}
+			//un-rotate sprite if it has been rotated in any way
 			for(int i = 0; i < (360/90) - m_rotateDeg / 90; ++i)
 				m_sprite->rotate90();
 			m_rotateDeg = 0;
+			//adjust the flip/rotation to match the facing direction
 			switch(m_cSubSubType)
 			{
 			case BASIC:
@@ -77,16 +85,19 @@ class Weapon : public Chip
 					m_sprite->flipVertical();
 					break;
 				}
+				//due to different row sizes, sprite's row has to be re-set
 				if(m_cSubSubType != EXPERT)
 					m_sprite->setRIndex(m_cSubSubType);
 				else
 					m_sprite->setRIndex(m_cSubSubType-1);
+				//set weapon's position based on facing direction
 				setLocationUsingDirection();
 				break;
 			}
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
+			//do not apply weapon's dmg/effect to certain entities
 			if(a_entity == m_owner)
 				return false;
 			switch(a_entity->getType())
@@ -95,6 +106,7 @@ class Weapon : public Chip
 			case NPC:
 				return false;
 				break;
+			//check for collision between weapon & entity
 			default:
 				switch(m_cSubSubType)
 				{
@@ -113,11 +125,14 @@ class Weapon : public Chip
 		}
 		void applyEffect(Entity * a_entity)
 		{
+			//apply effects based on type of weapon
 			switch(m_cSubType)
 			{
 			case BLUNT:
+				//knockback entities of non owner-type
 				if(a_entity->getType() != m_owner->getType())
 				{
+					//apply knockback distance based on last successful hit & weapon level
 					int limit = TIME_SECOND_MS*(m_cSubSubType+1);
 					if(m_timeSinceLastAttack > limit)
 						m_timeSinceLastAttack = limit;
@@ -129,10 +144,12 @@ class Weapon : public Chip
 			case RANGE:
 			case SLASH:
 			case PIERCE:
+				//dmg entities of non owner-type
 				if(a_entity->getType() != m_owner->getType())
 					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,WEAPON), m_cSubType);
 				break;
 			}
+			//erase & gain experience from killed entities
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
 			{
 				a_entity->setDrawOff();
@@ -148,6 +165,7 @@ class Weapon : public Chip
 				case BASIC:
 				case ADVANCED:
 				case EXPERT:
+					//adjust weapon's location based on player's direction
 					setLocationUsingDirection();
 					break;
 				}
@@ -161,33 +179,19 @@ class Slash : public Weapon
 		char * getName(){
 			switch(m_cSubSubType)
 			{
-			case BASIC:
-				return "Slash Strike";
-				break;
-			case ADVANCED:
-				return "X-Strike";
-				break;
-			case EXPERT:
-				return "Hurricane Strike";
-				break;
-			default:
-				return "Slash";
+			case BASIC:		return "Slash Strike";		break;
+			case ADVANCED:	return "X-Strike";			break;
+			case EXPERT:	return "Hurricane Strike";	break;
+			default:		return "Slash";
 			}
 		}
 		char * getDescription(){
 			switch(m_cSubSubType)
 			{
-			case BASIC:
-				return "Slash attack.";
-				break;
-			case ADVANCED:
-				return "Double Slash attack.";
-				break;
-			case EXPERT:
-				return "360 Degree Slash attack.";
-				break;
-			default:
-				return getName();
+			case BASIC:		return "Slash attack.";				break;
+			case ADVANCED:	return "Double Slash attack.";		break;
+			case EXPERT:	return "360 Degree Slash attack.";	break;
+			default:		return getName();
 			}
 		}
 };
@@ -198,33 +202,19 @@ class Blunt : public Weapon
 		char * getName(){
 			switch(m_cSubSubType)
 			{
-			case BASIC:
-				return "Blunt Bash";
-				break;
-			case ADVANCED:
-				return "X-Bash";
-				break;
-			case EXPERT:
-				return "Hurricane Bash";
-				break;
-			default:
-				return "Blunt";
+			case BASIC:		return "Blunt Bash";		break;
+			case ADVANCED:	return "X-Bash";			break;
+			case EXPERT:	return "Hurricane Bash";	break;
+			default:		return "Blunt";
 			}
 		}
 		char * getDescription(){
 			switch(m_cSubSubType)
 			{
-			case BASIC:
-				return "Blunt attack.";
-				break;
-			case ADVANCED:
-				return "Double Blunt attack.";
-				break;
-			case EXPERT:
-				return "360 Degree Blunt attack.";
-				break;
-			default:
-				return getName();
+			case BASIC:		return "Blunt attack.";				break;
+			case ADVANCED:	return "Double Blunt attack.";		break;
+			case EXPERT:	return "360 Degree Blunt attack.";	break;
+			default:		return getName();
 			}
 		}
 };

@@ -16,7 +16,7 @@ enum e_exp {POINTS_GIVEN = 1};
 class Player : public Entity
 {
 private:
-	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS];
+	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS], *m_armorInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE];
 	SPoint m_cameraP;
 	int m_statPoints, m_expLvReq;
 	double m_experience;
@@ -34,6 +34,7 @@ public:
 	void moveUnique(int a_deltaX, int a_deltaY){m_cameraP.x += a_deltaX;m_cameraP.y += a_deltaY;}
 	void drawSlot(e_gauntletSlots a_slot, SDL_Surface * a_screen, int a_x, int a_y){m_gauntlet[a_slot]->drawHUD(a_screen, a_x, a_y);}
 	void addToAttackInventory(Chip * a_chip);
+	void addToArmorInventory(Chip * a_chip);
 	void save();
 	void setWorld(World * currWorld) {thisWorld = currWorld;}
 	bool loadPlayer();

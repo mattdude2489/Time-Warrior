@@ -10,6 +10,7 @@ void Player::initPlayer(World * newWorld)
 		m_gauntlet[i] = NULL;
 	for(int s = 0; s < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++s)
 	{
+		m_armorInventory[s] = NULL;
 		for(int l = 0; l < NUM_CHIP_LEVELS; ++l)
 			m_attackInventory[s][l] = NULL;
 	}
@@ -30,6 +31,22 @@ void Player::addToAttackInventory(Chip * a_chip)
 		a_chip->setOwner(this);
 		m_attackInventory[a_chip->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_chip->getSubSubType()] = a_chip;
 		break;
+	}
+}
+void Player::addToArmorInventory(Chip * a_chip)
+{
+	bool slotFound = false;
+	if(a_chip->getType() == ARMOR)
+	{
+		for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
+		{
+			if(!m_armorInventory[i] && !slotFound)
+			{
+				a_chip->setOwner(this);
+				m_armorInventory[i] = chip;
+				slotFound = true;
+			}
+		}
 	}
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot)
