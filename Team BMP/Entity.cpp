@@ -48,6 +48,8 @@ void Entity::update(int a_timePassed, World * a_world)
 					{
 					case CHIP:	setDrawOff();	break;
 					default:	move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+						if(m_eType == MINION)
+							this->setStopped();
 					}
 				}
 				if(m_eType == PLAYER)
@@ -134,6 +136,7 @@ void Entity::update(int a_timePassed, World * a_world)
 	//update previous location & anything unique
 	if(!m_prevLoc.equals(m_location))
 		m_prevLoc = m_location;
+
 	updateUnique(a_timePassed, a_world);
 	useEffects(a_timePassed);
 }

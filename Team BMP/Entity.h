@@ -349,5 +349,6 @@ public:
 	void setLastW(){m_lastWLoc.set(m_location.getX(), m_location.getY()+(2*FRAME_SIZE));}
 	void setCurrentLocToLast(World * a_world);
 	virtual bool isObstacle(e_obstacleType a_type){return false;}
+	virtual void setStopped(){};
 	virtual int getIndex(){return 0;}
 };

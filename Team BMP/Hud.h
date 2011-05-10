@@ -86,6 +86,8 @@ public:
 		m_statWin.setPlayer(p);
 		if(p->getPoints()>0)
 			m_statButton.update(a_time);
+		else
+			m_statButton.stopAni();
 	}
 	void draw(SDL_Surface * screen)
 	{

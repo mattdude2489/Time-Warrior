@@ -15,9 +15,10 @@
 #define WINDOWXY			SPoint(0,0)
 #define CHARSIZE			30
 #define TEXTSTART			30
-#define TEXTYOFF			20
-#define	STATOFF				21
-#define	STATINC				4
+#define TEXTYOFF			32
+#define	STATOFF				130
+#define	STATINC				2
+
 
 class Button
 {
@@ -42,6 +43,9 @@ public:
 	void setImage(char * a_fileName)
 	{
 		m_image = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
+		m_buttonShape.setHeight(m_image->getHeight());
+		m_buttonShape.setWidth(m_image->getWidth());
+		
 	}
 	void setPos(int a_x, int a_y)
 	{
@@ -50,7 +54,13 @@ public:
 	}
 	void update(int a_time)
 	{
+		m_image->start();
 		m_image->update(a_time);
+	}
+	void stopAni()
+	{
+		m_image->stop();
+		m_image->restart();
 	}
 	bool wasClicked(UserInput * a_input)//returns only if there is a click inside its bounds
 	{
@@ -64,7 +74,7 @@ public:
 	}
 	void draw(SDL_Surface * a_screen)
 	{
-		m_image->draw(a_screen, m_buttonShape.getMaxX(), m_buttonShape.getMaxY());
+		m_image->draw(a_screen, m_buttonShape.getX(), m_buttonShape.getY());
 	}
 	~Button()
 	{
@@ -86,12 +96,7 @@ public:
 		m_window = load_image("Sprites/SideBar.bmp");
 		for(int i = 0; i < STATINC; i++)
 		{
-			if(i < 2){
-				m_addStat[i].setUpButton(TEXTYOFF, TEXTYOFF-2, WINDOWWIDTH/2, STATOFF + (i*STATOFF));
-			}
-			else{
-				m_addStat[i].setUpButton(TEXTYOFF, TEXTYOFF-2, WINDOWWIDTH/2, STATOFF + ((i+1)*STATOFF));
-			}
+			m_addStat[i].setPos((m_window->w/2), STATOFF +(i*TEXTYOFF));
 			m_addStat[i].setImage("Sprites/button1.bmp");
 		}
 	}
@@ -129,8 +134,8 @@ public:
 			{
 				switch(i)
 				{
-				case 2:	m_player->incStr();	break;
-				case 3:	m_player->incInt();	break;
+				case 0:	m_player->incStr();	break;
+				case 1:	m_player->incInt();	break;
 				}
 			}
 		}
