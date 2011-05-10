@@ -439,7 +439,7 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 			m_gauntlet[a_slot]->activate();
 	}
 }
-void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction)
+void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction, AudioHandler * ah)
 {
 	if((a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2) && m_gauntlet[a_slot])
 	{
@@ -448,10 +448,19 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 			m_gauntlet[a_slot]->setTarget(a_targetX, a_targetY);
 			m_gauntlet[a_slot]->setDirection(a_direction);
 			m_gauntlet[a_slot]->activate();
+			switch(m_gauntlet[a_slot]->getSubType())
+			{
+			case SLASH:	ah->playEffect(E_SLASH);		break;
+			case BLUNT:	ah->playEffect(E_BLUNT);		break;
+			case FIRE:	ah->playEffect(E_FIRE);			break;
+			case DIVINE:ah->playEffect(E_DIVINE);		break;
+			case LIGHTNING:ah->playEffect(E_LIGHTNING);	break;
+			case ICE:ah->playEffect(E_ICE);				break;
+			}
 		}
 	}
 }
-void Player::handleInput(UserInput * ui, World * a_world)
+void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 {
 	static char lastKey = KEY_DOWN;
 	//This is where the UI goes to get handled by the Player class. Well...it would've been world class, but we dun have one of them yet.
@@ -519,9 +528,10 @@ void Player::handleInput(UserInput * ui, World * a_world)
 		break;
 	}
 	if(ui->getClick() == CLICK_LEFT && ui->getMouseY() < HUD_Y)
-		activateGauntletAttack(SLOT_ATK1, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey);
+		activateGauntletAttack(SLOT_ATK1, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
+
 	if(ui->getClick() == CLICK_RIGHT && ui->getMouseY() < HUD_Y)
-		activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey);
+		activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
 	if(ui->getSpace() == true)
 		m_flags[FLAG_ACTIVE] = true;
 }

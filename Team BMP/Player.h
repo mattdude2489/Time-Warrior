@@ -8,6 +8,7 @@
 #include "Magic.h"
 #include "Weapon.h"
 #include "World.h"
+#include "audioHandler.h"
 
 enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
 enum e_hud {HUD_WIDTH = SCREEN_WIDTH, HUD_HEIGHT = FRAME_SIZE, HUD_X = 0, HUD_Y = SCREEN_HEIGHT-HUD_HEIGHT};
@@ -42,8 +43,8 @@ public:
 	void setGauntletSlot(e_gauntletSlots a_slot);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);
 	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level);
-	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction);
-	void handleInput(UserInput * ui, World * a_world);
+	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction, AudioHandler * ah);
+	void handleInput(UserInput * ui, World * a_world, AudioHandler *ah);
 	void setVelocity(double newVelX, double newVelY){m_vel.x = newVelX; m_vel.y = newVelY;}
 	void movePlayer(int a_timePassed)
 	{

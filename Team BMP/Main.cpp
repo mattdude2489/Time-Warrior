@@ -130,7 +130,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 #ifdef WITH_NETWORKING
 		eTest.handleInput(&ui, &world);
 #else
-		eTest.handleInput(&ui, &world);
+		eTest.handleInput(&ui, &world, &ah);
 #endif
 		//update
 		world.update(passed);

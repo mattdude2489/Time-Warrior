@@ -28,7 +28,16 @@ public:
 	void checkState(int a_timePassed, World * a_world);
 	void respawn(){heal(getStatNumber(HEALTH_MAX));setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);m_state = WANDER;}
 	void updateUnique(int a_timePassed, World * a_world){checkState(a_timePassed, a_world);}
-	void updateTargPlayer(Entity *a_player){m_target.set(a_player->getLocation());}
+	void updateTargPlayer(Entity *a_player, int a_time)
+	{
+		m_target.set(a_player->getLocation());
+		m_hitLast += a_time;
+		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)
+		{
+			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
+			m_hitLast = 0;
+		}
+	}
 	void hitFromPlayer(){m_playerTargeted = true;m_state = CHASE;}
 	void wander(int a_timePassed)
 	{
@@ -42,19 +51,15 @@ public:
 			m_lastDirectionChange = 0;
 		}
 	}
-	void isPlayerInRange(Entity *a_player, int a_time)
+	void isPlayerInRange(Entity *a_player)
 	{
 		double distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
 		if(distance < ENGAGE_RANGE)
 			m_state = CHASE;
 		else
 			m_state = WANDER;
-		m_hitLast += a_time;
-		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)
-		{
-			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
-			m_hitLast = 0;
-		}
+		
+		
 	}
 	void scaleToPlayer(Entity * a_player)
 	{
