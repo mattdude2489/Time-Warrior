@@ -39,6 +39,7 @@ public:
 	SRect getLoc() {return m_rectLoc;}
 	void setLoc(int x, int y, int h, int w)
 	{
+		printf("x: %i | y: %i | w: %i | h: %i \n", x,y,w,h);
 		m_rectLoc.x = x; m_rectLoc.y = y; m_rectLoc.h = h; m_rectLoc.w = w;
 	}
 	//Sets and gets.

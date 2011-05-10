@@ -271,6 +271,20 @@ bool World::setWorld(char * fileName)
 		for(int i = 0; i < dcount; i++)//set them all to not be closed at first
 			m_closed[i] = false;
 	}
+	//resize the grids
+	int x = 0, y = 0, w = 0, h = 0;
+	w = getGridWidth();
+	h = getGridHeight();
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	{
+		m_mapOfEntities.get(i).setLoc(x*w, y*h, h, w);
+		x++;
+		if(x == NUM_GRIDS_PER_ROW_COL)
+		{
+			y++;
+			x = 0;
+		}
+	}
 	setMonsters();
 #ifdef NPC_ADD
 	setNPC();
@@ -539,13 +553,7 @@ void World::update(Uint32 a_timePassed)
 			}
 		}
 	}
-	/*if(m_mapOfEntities.get(clientPlayerIndex).getPlayer(cE))
-	{
-		//Change the camera stuffs.
-		m_cCamera.x = m_player->getLocation().x - SCREEN_CENTER_X;
-		m_cCamera.y = m_player->getLocation().y - SCREEN_CENTER_Y;
-	}*/
-	//printf("(%d,%d) with (%d,%d)\n", m_cCamera.x, m_cCamera.y, m_cCamera.w, m_cCamera.h);
+	
 	//Update entities based on where the current Camera is.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{
@@ -562,13 +570,14 @@ void World::update(Uint32 a_timePassed)
 	//Make sure for each grid's sorting.
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 		m_mapOfEntities.get(i).sortOnYPosition();
+	m_cCamera.setPosition(*m_player->getCamera());
 }
 void World::draw(SDL_Surface * a_screen)
 {
 	//Entities draw.
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 	{
-		if(m_cCamera.intersects(SRect(m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y, m_mapOfWorld.get(i).collideBox.w, m_mapOfWorld.get(i).collideBox.h)))
+		if(m_cCamera.intersects(m_mapOfWorld.get(i).collideBox))
 		{
 			m_mapOfWorld.get(i).currentTexture->setRIndex(m_mapOfWorld.get(i).indexOfSpriteRow);
 			m_mapOfWorld.get(i).currentTexture->draw(a_screen, m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y);

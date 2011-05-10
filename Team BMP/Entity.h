@@ -17,7 +17,7 @@ enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
 enum e_timer {TIMER_GENERAL, TIMER_REGEN, NUM_TIMERS};
 enum e_flags {FLAG_DRAW, FLAG_ACTIVE, FLAG_OWNER_PLAYER, FLAG_NUDE, NUM_FLAGS};
-enum e_frame {FRAME_SIZE = 32, FRAME_RATE = TIME_SECOND_MS/30};
+enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 100};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_effect {KNOCKBACK, NUM_EFFECTS};
 
@@ -155,6 +155,7 @@ public:
 	void setTarget(SPoint a_point){m_target.set(a_point);}
 	bool getFlag(e_flags a_flag){return m_flags[a_flag];}
 	void setDrawOff(){m_flags[FLAG_DRAW] = false;}
+	virtual SPoint * getCamera(){return m_camera;}
 	SPoint getDeltaBetweenLocationAnd(SPoint * a_point)
 	{
 		//calculate the delta (difference) between the target & current location
