@@ -43,9 +43,10 @@ public:
 	void setImage(char * a_fileName)
 	{
 		m_image = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
+		m_image->setTransparency(COLOR_TRANSPARENT);
+		m_image->setLoopToBegin(true);
 		m_buttonShape.setHeight(m_image->getHeight());
 		m_buttonShape.setWidth(m_image->getWidth());
-		
 	}
 	void setPos(int a_x, int a_y)
 	{
