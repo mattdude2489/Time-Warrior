@@ -137,6 +137,7 @@ public:
 			for(int i = 0; i < STATINC; i++)
 				m_addStat[i].draw(a_screen);
 		}
+		m_player->drawInventory(a_screen, 0, t_y, (m_window->w/2)/FRAME_SIZE);
 	}
 	~StatWindow(){}
 };

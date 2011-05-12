@@ -16,7 +16,7 @@ class Chip : public Entity
 		e_chipType m_cType;
 		e_chipSubType m_cSubType;
 		e_chipSubSubType m_cSubSubType;
-		//whether or not it's equipped (NOTE: variable not used)
+		//whether or not it's equipped
 		bool m_isEquipped;
 		//flag to whether or not the sprite is on its 1st animation run-through
 		bool m_firstIteration;
@@ -52,7 +52,8 @@ class Chip : public Entity
 		//returns whether or not it's equipped to anyone
 		bool isEquipped(){return m_isEquipped;}
 		//toggle whether or not it's equipped
-		void toggleEquip(){m_isEquipped = !m_isEquipped;}
+		void equip(){m_isEquipped = true;}
+		void unequip(){m_isEquipped = false;}
 		//set it's owner
 		void setOwner(Entity * a_owner)
 		{
@@ -255,18 +256,28 @@ class Chip : public Entity
 				break;
 			}
 			//use correct row based on level
-			if(!(m_cType == WEAPON && m_cSubSubType == EXPERT))
+			switch(m_cType)
 			{
-				m_sprite->setRIndex(m_cSubSubType);
-				m_spriteHUD->setRIndex(m_cSubSubType);
+			case ARMOR:
+				m_sprite->setRIndex(m_cSubType);
+				m_spriteHUD->setRIndex(m_cSubType);
+				break;
+			case MAGIC:
+			case WEAPON:
+				if(!(m_cType == WEAPON && m_cSubSubType == EXPERT))
+				{
+					m_sprite->setRIndex(m_cSubSubType);
+					m_spriteHUD->setRIndex(m_cSubSubType);
+				}
+				else
+				{
+					m_sprite->setRIndex(m_cSubSubType-1);
+					m_spriteHUD->setRIndex(m_cSubSubType-1);
+				}
+				//dispaly last available frame as "symbol" for HUD sprite
+				m_spriteHUD->setCIndex(m_spriteHUD->getMaxFrames()-1);
+				break;
 			}
-			else
-			{
-				m_sprite->setRIndex(m_cSubSubType-1);
-				m_spriteHUD->setRIndex(m_cSubSubType-1);
-			}
-			//dispaly last available frame as "symbol" for HUD sprite
-			m_spriteHUD->setCIndex(m_spriteHUD->getMaxFrames()-1);
 		}
 		//draws HUD sprite @ specified location
 		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){m_spriteHUD->draw(a_screen, a_x, a_y);}

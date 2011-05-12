@@ -22,6 +22,21 @@ void Player::initPlayer(World * newWorld)
 	if(!loadPlayer())
 		newGame();
 }
+void Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns)
+{
+	int x = a_x, y = a_y;
+	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
+	{
+		if(m_armorInventory[i])
+			m_armorInventory[i]->drawHUD(a_screen, x, y);
+		x += FRAME_SIZE;
+		if((x-a_x)/FRAME_SIZE > a_columns)
+		{
+			x = a_x;
+			y += FRAME_SIZE;
+		}
+	}
+}
 void Player::addToAttackInventory(Chip * a_chip)
 {
 	switch(a_chip->getType())
@@ -80,21 +95,12 @@ Player::~Player()
 	for(int i = 0; i < NUM_SLOTS; i++) //Deletes the Armor from memory.
 	{
 		//if(m_gauntlet[i] != NULL && m_gauntlet[i]->getType() == ARMOR)
-		if(m_gauntlet[i] != NULL) 
+		if(m_gauntlet[i] != NULL)
 		{
 			if(m_gauntlet[i]->getFlag(FLAG_NUDE) && m_gauntlet[i]->getType() == ARMOR)
 				delete m_gauntlet[i];
 		}
 	}
-	//for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++) //Deletes the chips from memory.
-	//{
-	//	for(int k = 0; k < NUM_CHIP_LEVELS; k++)
-	//	{
-	//		if(m_attackInventory[i][k] != NULL)
-	//			if(m_attackInventory[i][k]->getFlag(FLAG_NUDE))
-	//				delete m_attackInventory[i][k];
-	//	}
-	//}
 }
 
 void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
@@ -265,8 +271,7 @@ bool Player::loadPlayer()
 			{
 				gear->levelUp();
 			}
-			
-			gear->setOwner(this);
+			this->addToArmorInventory(gear);
 			//replace the old one...whatever it was...with the new one loaded from a file.
 			setGauntletSlot(SLOT_ARMOR_HEAD, gear);
 		}
@@ -367,7 +372,7 @@ void Player::newGame()
 	this->addToAttackInventory(f1);
 	this->addToAttackInventory(f2);
 	this->addToAttackInventory(f3);
-	gear->setOwner(this);
+	this->addToArmorInventory(gear);
 	b1->setNewed(true);
 	b2->setNewed(true);
 	b3->setNewed(true);
@@ -429,11 +434,15 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 	}
 	if(isValid)
 	{
-		//debuff stats gained from armor
-		if(a_chip->getType() == ARMOR && m_gauntlet[a_slot])
+		//take out current Chip
+		if(m_gauntlet[a_slot])
+		{
+			m_gauntlet[a_slot]->unequip();
 			m_gauntlet[a_slot]->deactivate();
+		}
+		//put in selected Chip
 		m_gauntlet[a_slot] = a_chip;
-		m_gauntlet[a_slot]->toggleEquip();
+		m_gauntlet[a_slot]->equip();
 		//buff stats gained from armor
 		if(a_chip->getType() == ARMOR)
 			m_gauntlet[a_slot]->activate();

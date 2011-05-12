@@ -24,6 +24,7 @@ class Armor : public Chip
 				if(i == DEFENSE || i == m_resisType)
 					m_stats[i] = (rand()%interval + 1) + (interval*m_cSubSubType);
 			}
+			setSprite("Sprites/armor.bmp");
 		}
 		void activateUnique()
 		{
