@@ -450,12 +450,12 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 			m_gauntlet[a_slot]->activate();
 			switch(m_gauntlet[a_slot]->getSubType())
 			{
-			case SLASH:	ah->playEffect(E_SLASH);		break;
-			case BLUNT:	ah->playEffect(E_BLUNT);		break;
-			case FIRE:	ah->playEffect(E_FIRE);			break;
-			case DIVINE:ah->playEffect(E_DIVINE);		break;
-			case LIGHTNING:ah->playEffect(E_LIGHTNING);	break;
-			case ICE:ah->playEffect(E_ICE);				break;
+			case DIVINE:	ah->playEffect(E_DIVINE);		break;
+			case LIGHTNING:	ah->playEffect(E_LIGHTNING);	break;
+			case FIRE:		ah->playEffect(E_FIRE);			break;
+			case ICE:		ah->playEffect(E_ICE);			break;
+			case BLUNT:		ah->playEffect(E_BLUNT);		break;
+			case SLASH:		ah->playEffect(E_SLASH);		break;
 			}
 		}
 	}

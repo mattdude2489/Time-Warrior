@@ -10,7 +10,7 @@ enum e_chipType;
 enum e_chipSubType;
 enum e_obstacleType;
 
-enum e_stats {HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN , STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, LEVEL, NUM_STATS};
+enum e_stats {LEVEL, HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN , STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 enum e_entityType{DUMMY, CHIP, PLAYER, NPC, MINION, BOSS, OBSTACLE};
 enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x0000ff, COLOR_BASE = 0x808080, COLOR_TRANSPARENT = 0xff00ff, COLOR_EXP = 0x00ffff};
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
@@ -266,7 +266,8 @@ public:
 	{
 		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works
 		{
-			case HEALTH_CURRENT:		return "Health:%i";				break;
+			case LEVEL:					return "Level: %i";				break;
+			case HEALTH_CURRENT:		return "Health: %i";			break;
 			case HEALTH_MAX:			return "/%i";					break;
 			case ENERGY_CURRENT:		return "Energy: %i";			break;
 			case ENERGY_MAX:			return "/%i";					break;

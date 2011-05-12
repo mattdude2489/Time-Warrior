@@ -15,7 +15,7 @@
 #define WINDOWXY			SPoint(0,0)
 #define CHARSIZE			30
 #define TEXTSTART			FRAME_SIZE
-#define TEXTYOFF			TEXTSTART
+#define TEXTYOFF			FRAME_SIZE
 #define	STATOFF				4
 #define	STATINC				2
 
@@ -64,8 +64,8 @@ public:
 class StatWindow
 {
 private:
-	TTtext m_text[NUM_STATS-1];
-	TTtext m_lvlPts[2];
+	TTtext m_text[NUM_STATS];
+	TTtext m_lvlPts;
 	Player * m_player;
 	SDL_Surface *  m_window;
 	Button m_addStat[STATINC];
@@ -81,10 +81,9 @@ public:
 	}
 	void InitText(TTF_Font * a_font)
 	{
-		for(int i = 0; i < NUM_STATS-1; i++)
+		for(int i = 0; i < NUM_STATS; i++)
 			m_text[i].setFont(a_font);
-		for(int i = 0; i < 2; ++i)
-			m_lvlPts[i].setFont(a_font);
+		m_lvlPts.setFont(a_font);
 	}
 	Player * getPlayer(){return m_player;}
 	void setPlayer(Player * a_player)
@@ -95,15 +94,13 @@ public:
 	void putStatsInText()
 	{
 		char c_temp[CHARSIZE];
-		for(int i = 0; i < NUM_STATS-1; i++)
+		for(int i = 0; i < NUM_STATS; i++)
 		{
 			sprintf_s(c_temp, m_player->getStatName((e_stats)i), m_player->getStatNumber((e_stats)i));
 			m_text[i].setMessage(c_temp);
 		}
-		sprintf_s(c_temp, "Level: %i", m_player->getStatNumber(LEVEL));
-		m_lvlPts[0].setMessage(c_temp);
 		sprintf_s(c_temp, "Points to spend: %i", m_player->getPoints());
-		m_lvlPts[1].setMessage(c_temp);
+		m_lvlPts.setMessage(c_temp);
 	}
 	void handleInput(UserInput * ui)
 	{
@@ -121,10 +118,9 @@ public:
 	}
 	void draw(SDL_Surface * a_screen)
 	{
-		int t_x, t_y, t_s = 0;
-		t_x = t_y = TEXTSTART;
+		int t_x = TEXTSTART, t_y = 0, t_s = 0;
 		apply_surface(0,0,m_window, a_screen);
-		for(int i = 0; i < NUM_STATS-1; i++)
+		for(int i = 0; i < NUM_STATS; i++)
 		{
 			m_text[i].printMessage(a_screen, t_x, t_y);
 			if(i == HEALTH_CURRENT || i == ENERGY_CURRENT)
@@ -135,8 +131,7 @@ public:
 				t_y += TEXTYOFF;
 			}
 		}
-		for(int i = 0; i < 2; i ++)
-			m_lvlPts[i].printMessage(a_screen, TEXTSTART + (i*(WINDOWWIDTH/2-TEXTSTART)), 0);
+		m_lvlPts.printMessage(a_screen, m_window->w/2, 0);
 		if(m_player->getPoints()>0)
 		{
 			for(int i = 0; i < STATINC; i++)
