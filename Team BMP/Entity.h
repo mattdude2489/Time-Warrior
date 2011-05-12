@@ -266,17 +266,17 @@ public:
 	{
 		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works
 		{
-			case HEALTH_CURRENT:		return "Health:%i";			break;
-			case HEALTH_MAX:			return "/%i";				break;
-			case ENERGY_CURRENT:		return "Energy: %i";		break;
-			case ENERGY_MAX:			return "/%i";				break;
-			case ENERGY_REGEN:			return "\tRegen: %i";		break;
-			case STRENGTH:				return "Strength: %i";		break;
-			case INTELLECT:				return "Intellect: %i";		break;
-			case DEFENSE:				return "Defense: %i";		break;
-			case RESISTANCE_FIRE:		return "\tFire: %i";		break;
-			case RESISTANCE_ICE:		return "\tIce: %i";			break;
-			case RESISTANCE_LIGHTNING:	return "\tLightning: %i";	break;
+			case HEALTH_CURRENT:		return "Health:%i";				break;
+			case HEALTH_MAX:			return "/%i";					break;
+			case ENERGY_CURRENT:		return "Energy: %i";			break;
+			case ENERGY_MAX:			return "/%i";					break;
+			case ENERGY_REGEN:			return "Energy Regen: %i";		break;
+			case STRENGTH:				return "Strength: %i";			break;
+			case INTELLECT:				return "Intellect: %i";			break;
+			case DEFENSE:				return "Defense: %i";			break;
+			case RESISTANCE_FIRE:		return "Resist Fire: %i";		break;
+			case RESISTANCE_ICE:		return "Resist Ice: %i";		break;
+			case RESISTANCE_LIGHTNING:	return "Resist Lightning: %i";	break;
 			default:					return "Invalid";
 		}
 	}
