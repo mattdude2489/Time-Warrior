@@ -35,40 +35,23 @@ void Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_colum
 	switch(a_type)
 	{
 		case ARMOR:	isArmor = true;	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE;	break;
-		default:	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE;
+		default:	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE*NUM_CHIP_LEVELS;
 	}
 	for(int i = 0; i < amt; ++i)
 	{
 		if(isArmor)
-		{
 			test = m_armorInventory[i];
-			if(test)
-				test->drawHUD(a_screen, x, y);
-			else
-				m_blankInventory->draw(a_screen, x, y);
-			x += FRAME_SIZE;
-			if((x-a_x)/FRAME_SIZE >= a_columns)
-			{
-				x = a_x;
-				y += FRAME_SIZE;
-			}
-		}
 		else
+			test = m_attackInventory[i/NUM_CHIP_LEVELS][i%NUM_CHIP_LEVELS];
+		if(test)
+			test->drawHUD(a_screen, x, y);
+		else
+			m_blankInventory->draw(a_screen, x, y);
+		x += FRAME_SIZE;
+		if((x-a_x)/FRAME_SIZE >= a_columns)
 		{
-			for(int j = 0; j < NUM_CHIP_LEVELS; ++j)
-			{
-				test = m_attackInventory[i][j];
-				if(test)
-					test->drawHUD(a_screen, x, y);
-				else
-					m_blankInventory->draw(a_screen, x, y);
-				x += FRAME_SIZE;
-				if((x-a_x)/FRAME_SIZE >= a_columns)
-				{
-					x = a_x;
-					y += FRAME_SIZE;
-				}
-			}
+			x = a_x;
+			y += FRAME_SIZE;
 		}
 	}
 }
