@@ -137,7 +137,11 @@ public:
 			for(int i = 0; i < STATINC; i++)
 				m_addStat[i].draw(a_screen);
 		}
-		m_player->drawInventory(a_screen, 0, t_y, m_window->w/FRAME_SIZE);
+		m_player->drawInventory(a_screen, 0, t_y, m_window->w/FRAME_SIZE, ARMOR);
+		t_y += FRAME_SIZE*2;
+		m_player->drawInventory(a_screen, 0, t_y, m_window->w/FRAME_SIZE, MAGIC);
+		t_y += FRAME_SIZE*3;
+		m_player->drawGauntlet(a_screen, 0, t_y, m_window->w/FRAME_SIZE);
 	}
 	~StatWindow(){}
 };

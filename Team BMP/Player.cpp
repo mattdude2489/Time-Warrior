@@ -26,13 +26,59 @@ void Player::initPlayer(World * newWorld)
 	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
 }
-void Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns)
+void Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns, e_chipType a_type)
+{
+	bool isArmor = false;
+	int x = a_x, y = a_y;
+	int amt;
+	Chip * test = NULL;
+	switch(a_type)
+	{
+		case ARMOR:	isArmor = true;	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE;	break;
+		default:	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE;
+	}
+	for(int i = 0; i < amt; ++i)
+	{
+		if(isArmor)
+		{
+			test = m_armorInventory[i];
+			if(test)
+				test->drawHUD(a_screen, x, y);
+			else
+				m_blankInventory->draw(a_screen, x, y);
+			x += FRAME_SIZE;
+			if((x-a_x)/FRAME_SIZE >= a_columns)
+			{
+				x = a_x;
+				y += FRAME_SIZE;
+			}
+		}
+		else
+		{
+			for(int j = 0; j < NUM_CHIP_LEVELS; ++j)
+			{
+				test = m_attackInventory[i][j];
+				if(test)
+					test->drawHUD(a_screen, x, y);
+				else
+					m_blankInventory->draw(a_screen, x, y);
+				x += FRAME_SIZE;
+				if((x-a_x)/FRAME_SIZE >= a_columns)
+				{
+					x = a_x;
+					y += FRAME_SIZE;
+				}
+			}
+		}
+	}
+}
+void Player::drawGauntlet(SDL_Surface * a_screen, int a_x, int a_y, int a_columns)
 {
 	int x = a_x, y = a_y;
-	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
+	for(int i = 0; i < NUM_SLOTS; ++i)
 	{
-		if(m_armorInventory[i])
-			m_armorInventory[i]->drawHUD(a_screen, x, y);
+		if(m_gauntlet[i])
+			drawSlot((e_gauntletSlots)i, a_screen, x, y);
 		else
 			m_blankInventory->draw(a_screen, x, y);
 		x += FRAME_SIZE;

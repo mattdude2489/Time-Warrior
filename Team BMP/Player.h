@@ -36,7 +36,8 @@ public:
 	void setLocationUnique(int a_x, int a_y){m_cameraP.set(a_x - SCREEN_CENTER_X, a_y - SCREEN_CENTER_Y);}
 	void moveUnique(int a_deltaX, int a_deltaY){m_cameraP.x += a_deltaX;m_cameraP.y += a_deltaY;}
 	void drawSlot(e_gauntletSlots a_slot, SDL_Surface * a_screen, int a_x, int a_y){m_gauntlet[a_slot]->drawHUD(a_screen, a_x, a_y);}
-	void drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns);
+	void drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns, e_chipType a_type);
+	void drawGauntlet(SDL_Surface * a_screen, int a_x, int a_y, int a_columns);
 	void addToAttackInventory(Chip * a_chip);
 	void addToArmorInventory(Chip * a_chip);
 	void save();
