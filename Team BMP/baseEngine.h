@@ -14,9 +14,11 @@
 
 struct State
 {
+	UserInput hai;
 	virtual void enter() = 0;
 	virtual void execute() = 0;
 	virtual void exit() = 0;
+	virtual void handleInput(UserInput obj) = 0;
 	//virtual static State* instance()=0; //I DEAR GOD TO HOPE THIS WORKS.
 };
 
@@ -26,6 +28,7 @@ private:
 	Player cPlayer;
 	World cWorld;
 	AudioHandler cah;
+	UserInput uai; //I needed something.
 	//c in front of any variables usually means "client."
 public:
 	static State* cState;
@@ -36,4 +39,5 @@ public:
 	~baseEngine();
 	void setPlayer(Player play) {cPlayer = play;}
 	void setWorld(World omg) {cWorld = omg;} //My...god...ok, this isn't so bad.
+	void handleInput(UserInput obj);
 };

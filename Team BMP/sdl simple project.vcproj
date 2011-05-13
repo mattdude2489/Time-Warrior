@@ -305,14 +305,6 @@
 					RelativePath=".\templatevector2.h"
 					>
 				</File>
-				<File
-					RelativePath=".\winsockerrorhelp.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\winsockerrorhelp.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="BaseEngine"
@@ -323,6 +315,26 @@
 				</File>
 				<File
 					RelativePath=".\baseEngineState.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Networking Take 2"
+				>
+				<File
+					RelativePath=".\Client.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Server.h"
+					>
+				</File>
+				<File
+					RelativePath=".\winsockerrorhelp.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\winsockerrorhelp.h"
 					>
 				</File>
 			</Filter>

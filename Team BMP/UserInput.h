@@ -17,11 +17,12 @@ class UserInput
 		char initKey;			//The initial key. All input gets passed through this.
 		char hotKeyLeft;		//The hot key pressed for the left mouse click.
 		char hotKeyRight;		//The hot key pressed for the right mouse click.
-		bool spaceBar;			//The spaceBar. When pressed, activate NPC dialogue. 
+		bool spaceBar;			//The spaceBar. When pressed, activate NPC dialogue.
+		bool esc;				//The escape key. Will close the program if put in full-screen.
 
 	public:
-		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE){} //Basic constructor.
-		void setMouse(int x, int y) {mouseX = x; mouseY = y;} 
+		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE), esc(false){} //Basic constructor.
+		void setMouse(int x, int y) {mouseX = x; mouseY = y;}
 		int getMouseX() {return mouseX;}
 		int getMouseY() {return mouseY;}
 		int getMouseXY(int &cX, int &cY) {cX = mouseX; cY = mouseY;} //So you DON'T have to use just getMouseX and getMouseY.
@@ -41,6 +42,7 @@ class UserInput
 		bool getSpace() {return spaceBar;}
 		//Resetting the mouse. Used in order to prevent the mouse being held down.
 		void resetClick() {mouseClick = CLICK_NONE;}
+		bool getX() {return esc;}
 		
 		//If the initKey is a W, A, S, or D, then set it to keyPressUpDown or keyPressLeftRight.
 		void updateUI(bool upDown)
@@ -77,6 +79,8 @@ class UserInput
 						hotKeyRight = initKey;
 					if(initKey == ' ')
 						spaceBar = true;
+					if(initKey == 27)
+						esc = true;
 					if(!(initKey == 'm' || initKey == 'i'))
 						initKey = KEY_NONE; //Reset the initial Key.
 				}
