@@ -139,12 +139,16 @@ void Player::save()
 			fprintf(outfile, "A %i %i %i %i %i %i %i / ", m_armorInventory[i]->getSubType() ,m_armorInventory[i]->getSubSubType() ,m_armorInventory[i]->getStatNumber(DEFENSE), m_armorInventory[i]->getStatNumber(RESISTANCE_FIRE), m_armorInventory[i]->getStatNumber(RESISTANCE_ICE), m_armorInventory[i]->getStatNumber(RESISTANCE_LIGHTNING), m_armorInventory[i]->getStatNumber(LEVEL));
 	}
 	//The Chips/Attack Inventory.
+	fprintf(outfile, "C %i %i %i %i %i %i / ", m_gauntlet[SLOT_ATK1]->getType(), m_gauntlet[SLOT_ATK1]->getSubType(), m_gauntlet[SLOT_ATK1]->getSubSubType(), m_gauntlet[SLOT_ATK1]->isEquipped(), m_gauntlet[SLOT_ATK1]->getCost(), m_gauntlet[SLOT_ATK1]->getStatNumber(LEVEL));
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++)
 	{
 		for(int k = 0; k < NUM_CHIP_LEVELS; k++)
 		{
 			if(m_attackInventory[i][k])
-				fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->isEquipped(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getStatNumber(LEVEL));
+			{
+				if(m_attackInventory[i][k] != m_gauntlet[SLOT_ATK1])
+					fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->isEquipped(), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->getStatNumber(LEVEL));
+			}
 		}
 	}
 	fclose(outfile);
