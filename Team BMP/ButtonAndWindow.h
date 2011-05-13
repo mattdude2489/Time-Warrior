@@ -10,8 +10,10 @@
 #define BUTTONCOLOR			0xffff00
 #define WINDOWCOLOR			0xffffff
 #define STATBUTTON			0xff0000
+//only used by Player to check atk-click
 #define WINDOWHEIGHT		SCREEN_HEIGHT
 #define WINDOWWIDTH			(SCREEN_WIDTH/2)
+//used to position window & its contents
 #define WINDOWXY			SPoint(0,0)
 #define CHARSIZE			30
 #define TEXTSTART			FRAME_SIZE
@@ -67,7 +69,7 @@ private:
 	TTtext m_text[NUM_STATS];
 	TTtext m_lvlPts;
 	Player * m_player;
-	SDL_Surface *  m_window;
+	SDL_Surface * m_window;
 	Button m_addStat[STATINC];
 public:
 	StatWindow()
@@ -75,7 +77,7 @@ public:
 		m_window = load_image("Sprites/SideBar.bmp");
 		for(int i = 0; i < STATINC; i++)
 		{
-			m_addStat[i].setPos((m_window->w/2), (i+STATOFF)*TEXTYOFF);
+			m_addStat[i].setPos(WINDOWXY.x + (m_window->w/2), WINDOWXY.y + ((i+STATOFF)*TEXTYOFF));
 			m_addStat[i].setImage("Sprites/button1.bmp");
 		}
 	}
@@ -118,8 +120,9 @@ public:
 	}
 	void draw(SDL_Surface * a_screen)
 	{
-		int t_x = TEXTSTART, t_y = 0, t_s = 0;
-		apply_surface(0,0,m_window, a_screen);
+		int t_x = WINDOWXY.x, t_y = WINDOWXY.y;
+		apply_surface(t_x,t_y,m_window, a_screen);
+		t_x += TEXTSTART;
 		for(int i = 0; i < NUM_STATS; i++)
 		{
 			m_text[i].printMessage(a_screen, t_x, t_y);
@@ -127,21 +130,21 @@ public:
 				t_x += m_text[i].getMesageWidth();
 			else
 			{
-				t_x = TEXTSTART;
+				t_x = WINDOWXY.x + TEXTSTART;
 				t_y += TEXTYOFF;
 			}
 		}
-		m_lvlPts.printMessage(a_screen, m_window->w/2, 0);
-		if(m_player->getPoints()>0)
+		m_lvlPts.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y);
+		if(m_player->getPoints() > 0)
 		{
 			for(int i = 0; i < STATINC; i++)
 				m_addStat[i].draw(a_screen);
 		}
-		m_player->drawInventory(a_screen, 0, t_y, m_window->w/FRAME_SIZE, ARMOR);
-		t_y += FRAME_SIZE*2;
-		m_player->drawInventory(a_screen, 0, t_y, m_window->w/FRAME_SIZE, MAGIC);
+		m_player->drawInventory(a_screen, WINDOWXY.x, t_y, m_window->w/FRAME_SIZE, MAGIC);
 		t_y += FRAME_SIZE*3;
-		m_player->drawGauntlet(a_screen, 0, t_y, m_window->w/FRAME_SIZE);
+		m_player->drawInventory(a_screen, WINDOWXY.x, t_y, m_window->w/FRAME_SIZE, ARMOR);
+		t_y += FRAME_SIZE*2;
+		m_player->drawGauntlet(a_screen, WINDOWXY.x, t_y, m_window->w/FRAME_SIZE);
 	}
 	~StatWindow(){}
 };
