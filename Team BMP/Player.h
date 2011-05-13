@@ -24,6 +24,7 @@ private:
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
 	bool loadedPlayer, m_isStatWindowActive;
 	World * thisWorld;
+	SDL_Sprite * m_blankInventory;
 public:
 	void initPlayer(World * newWorld);
 	void setWindowStatus(bool a_isActive){m_isStatWindowActive = a_isActive;}

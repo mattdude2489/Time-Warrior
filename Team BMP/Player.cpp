@@ -23,6 +23,8 @@ void Player::initPlayer(World * newWorld)
 	if(!loadPlayer())
 		newGame();
 	m_isStatWindowActive = false;
+	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
+	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
 }
 void Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns)
 {
@@ -31,8 +33,10 @@ void Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_colum
 	{
 		if(m_armorInventory[i])
 			m_armorInventory[i]->drawHUD(a_screen, x, y);
+		else
+			m_blankInventory->draw(a_screen, x, y);
 		x += FRAME_SIZE;
-		if((x-a_x)/FRAME_SIZE > a_columns)
+		if((x-a_x)/FRAME_SIZE >= a_columns)
 		{
 			x = a_x;
 			y += FRAME_SIZE;
@@ -94,6 +98,7 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot)
 Player::~Player()
 {
 	save();
+	delete m_blankInventory;
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{
 		if(m_armorInventory[i])
@@ -479,7 +484,11 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 }
 void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 {
+	static bool validClick;
 	static char lastKey = KEY_DOWN;
+	static SPoint mouse;
+	static SRect hud(HUD_X, HUD_Y, HUD_WIDTH, HUD_HEIGHT);
+	static SRect window(WINDOWXY.x, WINDOWXY.y, WINDOWWIDTH, WINDOWHEIGHT);
 	//This is where the UI goes to get handled by the Player class. Well...it would've been world class, but we dun have one of them yet.
 	if(ui->getKeyUD() == KEY_UP)
 	{
@@ -513,45 +522,26 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 		setVelocity(0, m_vel.y);
 	if(ui->getKeyUD() == KEY_NONE)
 		setVelocity(m_vel.x, 0);
-
 	switch(ui->getHKeyL())
 	{
-	case KEY_HOT_ATK1_BAS:
-		setGauntletSlot(SLOT_ATK1, BASIC);
-		break;
-	case KEY_HOT_ATK1_ADV:
-		setGauntletSlot(SLOT_ATK1, ADVANCED);
-		break;
-	case KEY_HOT_ATK1_EXP:
-		setGauntletSlot(SLOT_ATK1, EXPERT);
-		break;
-	case KEY_HOT_ATK1_LEG:
-		setGauntletSlot(SLOT_ATK1);
-		break;
+	case KEY_HOT_ATK1_BAS:	setGauntletSlot(SLOT_ATK1, BASIC);		break;
+	case KEY_HOT_ATK1_ADV:	setGauntletSlot(SLOT_ATK1, ADVANCED);	break;
+	case KEY_HOT_ATK1_EXP:	setGauntletSlot(SLOT_ATK1, EXPERT);		break;
+	case KEY_HOT_ATK1_LEG:	setGauntletSlot(SLOT_ATK1);				break;
 	}
 	switch(ui->getHKeyR())
 	{
-	case KEY_HOT_ATK2_BAS:
-		setGauntletSlot(SLOT_ATK2, BASIC);
-		break;
-	case KEY_HOT_ATK2_ADV:
-		setGauntletSlot(SLOT_ATK2, ADVANCED);
-		break;
-	case KEY_HOT_ATK2_EXP:
-		setGauntletSlot(SLOT_ATK2, EXPERT);
-		break;
-	case KEY_HOT_ATK2_LEG:
-		setGauntletSlot(SLOT_ATK2);
-		break;
+	case KEY_HOT_ATK2_BAS:	setGauntletSlot(SLOT_ATK2, BASIC);		break;
+	case KEY_HOT_ATK2_ADV:	setGauntletSlot(SLOT_ATK2, ADVANCED);	break;
+	case KEY_HOT_ATK2_EXP:	setGauntletSlot(SLOT_ATK2, EXPERT);		break;
+	case KEY_HOT_ATK2_LEG:	setGauntletSlot(SLOT_ATK2);				break;
 	}
-	SPoint mouse(ui->getMouseX(),  ui->getMouseY());
-	SRect hud(HUD_X, HUD_Y, HUD_WIDTH, HUD_HEIGHT);
-	SRect window(WINDOWXY.x, WINDOWXY.y, WINDOWWIDTH, WINDOWHEIGHT);
-	bool validClick = !hud.contains(mouse) && (!m_isStatWindowActive || !window.contains(mouse));
+	mouse.set(ui->getMouseX(),  ui->getMouseY());
+	validClick = !hud.contains(mouse) && (!m_isStatWindowActive || !window.contains(mouse));
 	if(ui->getClick() == CLICK_LEFT && validClick)
 			activateGauntletAttack(SLOT_ATK1, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
 	if(ui->getClick() == CLICK_RIGHT && validClick)
 			activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
-	if(ui->getSpace() == true)
+	if(ui->getSpace())
 		m_flags[FLAG_ACTIVE] = true;
 }
