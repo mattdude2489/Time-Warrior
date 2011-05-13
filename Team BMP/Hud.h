@@ -84,6 +84,7 @@ public:
 		bars[BAR_ENERGY].setWidth((int)((double)p->getStatNumber(ENERGY_CURRENT)/(double)p->getStatNumber(ENERGY_MAX) * ONE_HUNDRED_PERCENT));
 		bars[BAR_EXP].setWidth((int)(p->getCurExp()/(double)p->getExpReq() * ONE_HUNDRED_PERCENT));
 		m_statWin.setPlayer(p);
+		p->setWindowStatus(m_showStats);
 		if(p->getPoints()>0)
 			m_statButton.update(a_time);
 		else

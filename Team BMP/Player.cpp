@@ -1,6 +1,7 @@
 //Basic Player Class Extensions.
 #include "Player.h"
 #include "UserInput.h"
+#include "ButtonAndWIndow.h"
 #include <stdio.h>
 
 void Player::initPlayer(World * newWorld)
@@ -21,6 +22,7 @@ void Player::initPlayer(World * newWorld)
 	thisWorld = newWorld;
 	if(!loadPlayer())
 		newGame();
+	m_isStatWindowActive = false;
 }
 void Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns)
 {
@@ -169,7 +171,7 @@ bool Player::loadPlayer()
 	int hpenstrintexpsta; //The various Player stats.
 	int chipAndArmorHelper;
 	float exp;
-	static int gauntletSlotSetter = 0;
+	static int gauntletSlotSetter = SLOT_ATK1;
 	char charget;
 	charget = fgetc(infile);
 	while(charget != EOF)
@@ -542,11 +544,14 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 		setGauntletSlot(SLOT_ATK2);
 		break;
 	}
-	if(ui->getClick() == CLICK_LEFT && ui->getMouseY() < HUD_Y)
-		activateGauntletAttack(SLOT_ATK1, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
-
-	if(ui->getClick() == CLICK_RIGHT && ui->getMouseY() < HUD_Y)
-		activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
+	SPoint mouse(ui->getMouseX(),  ui->getMouseY());
+	SRect hud(HUD_X, HUD_Y, HUD_WIDTH, HUD_HEIGHT);
+	SRect window(WINDOWXY.x, WINDOWXY.y, WINDOWWIDTH, WINDOWHEIGHT);
+	bool validClick = !hud.contains(mouse) && (!m_isStatWindowActive || !window.contains(mouse));
+	if(ui->getClick() == CLICK_LEFT && validClick)
+			activateGauntletAttack(SLOT_ATK1, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
+	if(ui->getClick() == CLICK_RIGHT && validClick)
+			activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
 	if(ui->getSpace() == true)
 		m_flags[FLAG_ACTIVE] = true;
 }

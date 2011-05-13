@@ -22,10 +22,11 @@ private:
 	int m_statPoints, m_expLvReq;
 	double m_experience;
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
-	bool loadedPlayer;
+	bool loadedPlayer, m_isStatWindowActive;
 	World * thisWorld;
 public:
 	void initPlayer(World * newWorld);
+	void setWindowStatus(bool a_isActive){m_isStatWindowActive = a_isActive;}
 	Player():Entity(){initPlayer(NULL);}//OMG DON'T USE THIS DON'T USE THIS OMGWTF DON'T USE THIS
 	Player(int a_health, int a_energy, int a_str, int a_int, int a_def, int a_fRes, int a_iRes, int a_lRes, SDL_Sprite * a_sprite, World * newWorld)
 		:Entity(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes, a_sprite){initPlayer(newWorld);}
