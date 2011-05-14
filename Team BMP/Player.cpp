@@ -26,51 +26,62 @@ void Player::initPlayer(World * newWorld)
 	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
 }
-void Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns, e_chipType a_type)
+//draws & formats the display of specified Chip collection
+//param:
+//	int a_x, a_y		: location of upper-left corner to start drawing
+//	e_inventory a_type	: which collection to draw (INVENTORY_ATTACK, INVENTORY_ARMOR, INVENTORY_GAUNTLET)
+//	int a_maxColumns	: formats # of columns to display (0 for unlimited columns - a.k.a. as many as it takes)
+//	int a_maxNum		: formats # of Chips to draw (0 to draw all)
+//	int a_startIndex	: specifies index of which Chip to start drawing process (which to draw 1st)
+//returns # of rows it took to draw formatted collection
+int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex)
 {
-	bool isArmor = false;
-	int x = a_x, y = a_y;
-	int amt;
+	bool valid = false;
+	int amt = 0, x = a_x, y = a_y, rows = 0;
 	Chip * test = NULL;
+	//get size of specified inventory
 	switch(a_type)
 	{
-		case ARMOR:	isArmor = true;	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE;	break;
-		default:	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE*NUM_CHIP_LEVELS;
+		case INVENTORY_ATTACK:	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE*NUM_CHIP_LEVELS;	break;
+		case INVENTORY_ARMOR:	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE;					break;
+		default:				amt = NUM_SLOTS;
 	}
-	for(int i = 0; i < amt; ++i)
+	//check if the starting index is valid
+	if(a_startIndex < 0 || a_startIndex >= amt)
+		a_startIndex = 0;
+	//draw contents, starting @ specified index
+	for(int i = a_startIndex; i < amt; ++i)
 	{
-		if(isArmor)
-			test = m_armorInventory[i];
-		else
-			test = m_attackInventory[i/NUM_CHIP_LEVELS][i%NUM_CHIP_LEVELS];
+		//get Chip from inventory to test
+		switch(a_type)
+		{
+			case INVENTORY_ATTACK:	test = m_attackInventory[i/NUM_CHIP_LEVELS][i%NUM_CHIP_LEVELS];	break;
+			case INVENTORY_ARMOR:	test = m_armorInventory[i];										break;
+			default:				test = m_gauntlet[i];
+		}
+		//draw Chip if it exists & can be used, or draw blank
+		valid = false;
 		if(test)
+			valid = test->getStatNumber(LEVEL) > 0;
+		if(test && valid)
 			test->drawHUD(a_screen, x, y);
 		else
 			m_blankInventory->draw(a_screen, x, y);
+		//calc # of rows it took to draw the inventory with the given format
+		rows = ((y-a_y)/FRAME_SIZE) + 1;
+		//update position for next iteration
 		x += FRAME_SIZE;
-		if((x-a_x)/FRAME_SIZE >= a_columns)
+		if((x-a_x)/FRAME_SIZE >= a_maxColumns && a_maxColumns > 0)
 		{
 			x = a_x;
 			y += FRAME_SIZE;
 		}
+		//check if # restriction has been met
+		if((i-a_startIndex)+1 >= a_maxNum && a_maxNum > 0)
+			break;
 	}
-}
-void Player::drawGauntlet(SDL_Surface * a_screen, int a_x, int a_y, int a_columns)
-{
-	int x = a_x, y = a_y;
-	for(int i = 0; i < NUM_SLOTS; ++i)
-	{
-		if(m_gauntlet[i])
-			drawSlot((e_gauntletSlots)i, a_screen, x, y);
-		else
-			m_blankInventory->draw(a_screen, x, y);
-		x += FRAME_SIZE;
-		if((x-a_x)/FRAME_SIZE >= a_columns)
-		{
-			x = a_x;
-			y += FRAME_SIZE;
-		}
-	}
+	//return # of rows it took to draw the inventory with the given format
+	return rows;
 }
 void Player::addToAttackInventory(Chip * a_chip)
 {

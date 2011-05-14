@@ -10,7 +10,7 @@
 enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, BAR_EXP,  NUM_BARS, NUM_STAT_BARS = NUM_BARS-2};
 enum e_bar {BAR_WIDTH = ONE_HUNDRED_PERCENT, BAR_HEIGHT = HUD_HEIGHT/NUM_STAT_BARS, BAR_X = HUD_X, BAR_Y = HUD_Y};
 
-#define STAT_BUTTON_SETTINGS	HUD_HEIGHT,HUD_HEIGHT,((HUD_X+HUD_WIDTH)-HUD_HEIGHT),HUD_Y
+#define STAT_BUTTON_SETTINGS	HUD_HEIGHT,HUD_HEIGHT,((HUD_X+HUD_WIDTH)-FRAME_SIZE),HUD_Y
 
 class Hud
 {
@@ -92,14 +92,11 @@ public:
 	}
 	void draw(SDL_Surface * screen)
 	{
-		for(int i = 0; i < NUM_BARS; i++){
-			SDL_FillRect(screen, &bars[i], colors[i]);}
-		for(int i = 0; i < 2; ++i)
-			m_statWin.getPlayer()->drawSlot((e_gauntletSlots)i, screen, (HUD_X + HUD_WIDTH) - ((2-(i-1)) * HUD_HEIGHT), HUD_Y);
+		for(int i = 0; i < NUM_BARS; i++)
+			SDL_FillRect(screen, &bars[i], colors[i]);
+		m_statWin.getPlayer()->drawInventory(screen, (HUD_X + HUD_WIDTH)-(FRAME_SIZE*3), HUD_Y, INVENTORY_GAUNTLET, 0, 2, 0);
 		for(int i = 0; i < NUM_STAT_BARS; i++)
-		{	
 			m_text[i].printMessage(screen, bars[BAR_BACK].getWidth(), bars[BAR_BACK].getY()+(i*BAR_HEIGHT)-1);
-		}
 		m_statButton.draw(screen);
 		if(m_showStats)
 			m_statWin.draw(screen);

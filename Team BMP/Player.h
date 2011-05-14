@@ -10,6 +10,7 @@
 #include "World.h"
 #include "audioHandler.h"
 
+enum e_inventory {INVENTORY_ATTACK, INVENTORY_ARMOR, INVENTORY_GAUNTLET, NUM_INVENTORY};
 enum e_gauntletSlots {SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
 enum e_hud {HUD_WIDTH = SCREEN_WIDTH, HUD_HEIGHT = FRAME_SIZE, HUD_X = 0, HUD_Y = SCREEN_HEIGHT-HUD_HEIGHT};
 enum e_exp {POINTS_GIVEN = 1};
@@ -35,9 +36,7 @@ public:
 	~Player();
 	void setLocationUnique(int a_x, int a_y){m_cameraP.set(a_x - SCREEN_CENTER_X, a_y - SCREEN_CENTER_Y);}
 	void moveUnique(int a_deltaX, int a_deltaY){m_cameraP.x += a_deltaX;m_cameraP.y += a_deltaY;}
-	void drawSlot(e_gauntletSlots a_slot, SDL_Surface * a_screen, int a_x, int a_y){m_gauntlet[a_slot]->drawHUD(a_screen, a_x, a_y);}
-	void drawInventory(SDL_Surface * a_screen, int a_x, int a_y, int a_columns, e_chipType a_type);
-	void drawGauntlet(SDL_Surface * a_screen, int a_x, int a_y, int a_columns);
+	int drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex);
 	void addToAttackInventory(Chip * a_chip);
 	void addToArmorInventory(Chip * a_chip);
 	void save();

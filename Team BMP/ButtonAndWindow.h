@@ -66,8 +66,7 @@ public:
 class StatWindow
 {
 private:
-	TTtext m_text[NUM_STATS];
-	TTtext m_lvlPts;
+	TTtext m_text[NUM_STATS],  m_lvlPts, m_inventory[NUM_INVENTORY];
 	Player * m_player;
 	SDL_Surface * m_window;
 	Button m_addStat[STATINC];
@@ -86,6 +85,8 @@ public:
 		for(int i = 0; i < NUM_STATS; i++)
 			m_text[i].setFont(a_font);
 		m_lvlPts.setFont(a_font);
+		for(int i = 0; i < NUM_INVENTORY; i++)
+			m_inventory[i].setFont(a_font);
 	}
 	Player * getPlayer(){return m_player;}
 	void setPlayer(Player * a_player)
@@ -103,6 +104,12 @@ public:
 		}
 		sprintf_s(c_temp, "Points to spend: %i", m_player->getPoints());
 		m_lvlPts.setMessage(c_temp);
+		sprintf_s(c_temp, "Unlocked Attacks:");
+		m_inventory[INVENTORY_ATTACK].setMessage(c_temp);
+		sprintf_s(c_temp, "Armor Inventory:");
+		m_inventory[INVENTORY_ARMOR].setMessage(c_temp);
+		sprintf_s(c_temp, "Gauntlet Configuration:");
+		m_inventory[INVENTORY_GAUNTLET].setMessage(c_temp);
 	}
 	void handleInput(UserInput * ui)
 	{
@@ -134,17 +141,19 @@ public:
 				t_y += TEXTYOFF;
 			}
 		}
+		t_x = WINDOWXY.x + m_window->w/4;
 		m_lvlPts.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y);
 		if(m_player->getPoints() > 0)
 		{
 			for(int i = 0; i < STATINC; i++)
 				m_addStat[i].draw(a_screen);
 		}
-		m_player->drawInventory(a_screen, WINDOWXY.x, t_y, m_window->w/FRAME_SIZE, MAGIC);
-		t_y += FRAME_SIZE*3;
-		m_player->drawInventory(a_screen, WINDOWXY.x, t_y, m_window->w/FRAME_SIZE, ARMOR);
-		t_y += FRAME_SIZE*2;
-		m_player->drawGauntlet(a_screen, WINDOWXY.x, t_y, m_window->w/FRAME_SIZE);
+		for(int i = 0; i < NUM_INVENTORY; ++i)
+		{
+			m_inventory[i].printMessage(a_screen, t_x, t_y);
+			t_y += TEXTYOFF;
+			t_y += m_player->drawInventory(a_screen, WINDOWXY.x, t_y, (e_inventory)i, m_window->w/FRAME_SIZE, 0, 0) * FRAME_SIZE;
+		}
 	}
 	~StatWindow(){}
 };
