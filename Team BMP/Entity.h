@@ -20,6 +20,7 @@ enum e_flags {FLAG_DRAW, FLAG_ACTIVE, FLAG_OWNER_PLAYER, FLAG_NUDE, NUM_FLAGS};
 enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 100};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_effect {KNOCKBACK, NUM_EFFECTS};
+enum e_material {MTRL_DEFAULT, MTRL_WOOD, MTRL_FIRE, MTRL_EARTH, MTRL_METAL, MTRL_WATER, MTRL_AIR, MTRL_LIGHT, MTRL_DARK, MTRL_RUBBER};
 
 #define	SPEED_PLAYER	.1
 #define	SPEED_MAGIC		(SPEED_PLAYER*2)
@@ -32,8 +33,9 @@ class Entity
 {
 protected:
 	bool m_flags[NUM_FLAGS];
-	int m_stats[NUM_STATS], m_timers[NUM_TIMERS];
+	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_statPoints;
 	e_entityType m_eType;
+	e_material m_mtrl;
 	SPoint m_location, m_prevLoc, *m_camera, m_target, m_lastWLoc;
 	SDL_Sprite * m_sprite;
 	SDL_Rect m_hb;
@@ -76,10 +78,12 @@ public:
 		for(int i = 0; i < NUM_EFFECTS; ++i)
 			m_effects[i].active = false;
 		m_lastWLoc.set(0,0);//using the 00 to say there is none yet
+		m_eType = DUMMY;
+		m_mtrl = MTRL_DEFAULT;
+		m_statPoints = 0;
 	}
 	void initSprite(SDL_Sprite * a_sprite)
 	{
-		m_eType = DUMMY;
 		m_flags[FLAG_DRAW] = true;
 		m_sprite = a_sprite;
 		m_sprite->setTransparency(COLOR_TRANSPARENT);
@@ -91,6 +95,8 @@ public:
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes);
 		initSprite(a_sprite);
 	}
+	void setMaterial(e_material a_mtrl){m_mtrl = a_mtrl;}
+	void reallocateResistancesAccordingToMaterial();
 	void setCamera(SPoint * a_camera){m_camera = a_camera;}
 	void setLocation(SPoint newLoc){setLocation(newLoc.x, newLoc.y);}
 	void update(int a_timePassed, World * a_world);
@@ -285,6 +291,7 @@ public:
 	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
 	int getStatNumber(e_stats a_stat){return m_stats[a_stat];}
+	int getPoints(){return m_statPoints;}
 	SPoint getLocation(){return m_location;}
 	SPoint getPreviousLocation() {return m_prevLoc;}
 	SPoint getLocationScreen(){return m_location.difference(*m_camera);}
@@ -353,4 +360,31 @@ public:
 	virtual bool isObstacle(e_obstacleType a_type){return false;}
 	virtual void setStopped(){};
 	virtual int getIndex(){return 0;}
+	virtual void levelUpUnique(){};
+	void levelUp()
+	{
+		m_stats[LEVEL]++;
+		m_statPoints++;
+		levelUpUnique();
+		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
+		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
+	}
+	void incStr()
+	{
+		m_stats[HEALTH_MAX]++;
+		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
+		m_stats[STRENGTH]++;
+		m_stats[DEFENSE]++;
+		m_statPoints--;
+	}
+	void incInt()
+	{
+		m_stats[ENERGY_MAX]++;
+		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
+		m_stats[ENERGY_REGEN] = (int)(m_stats[ENERGY_MAX] * .05);
+		m_stats[INTELLECT]++;
+		for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+			m_stats[i]++;
+		m_statPoints--;
+	}
 };

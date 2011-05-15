@@ -84,9 +84,9 @@ class Chip : public Entity
 		//returns y location to center around owner
 		int centerAroundOwnerCenterY(){return getOwnerCenterY() - m_sprite->getHeightOffsetCenter();}
 		//virtual func to update inherited-class variables
-		virtual void levelUpUnique(){}
-		//increases its level & updates appropriate variables
-		void levelUp()
+		virtual void levelUpUniqueTwo(){}
+		//updates appropriate variables
+		void levelUpUnique()
 		{
 			switch(m_cType)
 			{
@@ -100,14 +100,13 @@ class Chip : public Entity
 					m_costLv = 5 * m_cSubSubType;
 				break;
 			}
-			//update level, cost, dmg
-			m_stats[LEVEL]++;
+			//update cost & dmg
 			m_cost += m_costLv;
 			m_dmg += m_dmgLv;
 			if(m_cSubType == BLUNT)
 				m_dmg = (int)((double)m_dmg *.75);
 			//update variables unique to inherited classes
-			levelUpUnique();
+			levelUpUniqueTwo();
 		}
 		//virtual func to specially activate inherited classes
 		virtual void activateUnique(){}

@@ -20,7 +20,7 @@ class Player : public Entity
 private:
 	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS], *m_armorInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE];
 	SPoint m_cameraP;
-	int m_statPoints, m_expLvReq;
+	int m_expLvReq;
 	double m_experience;
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
 	bool loadedPlayer, m_isStatWindowActive;
@@ -75,14 +75,7 @@ public:
 			break;
 		}
 	}
-	void levelUp()
-	{
-		m_stats[LEVEL]++;
-		m_expLvReq += m_stats[LEVEL];
-		m_statPoints += POINTS_GIVEN;
-		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
-		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
-	}
+	void levelUpUnique(){m_expLvReq += m_stats[LEVEL];}
 	void gainExperience(double a_amount)
 	{
 		m_experience += a_amount;
@@ -94,23 +87,4 @@ public:
 	}
 	int getExpReq(){return m_expLvReq;}
 	double getCurExp(){return m_experience;}
-	int getPoints(){return m_statPoints;}
-	void incStr()
-	{
-		m_stats[HEALTH_MAX]++;
-		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
-		m_stats[STRENGTH]++;
-		m_stats[DEFENSE]++;
-		m_statPoints--;
-	}
-	void incInt()
-	{
-		m_stats[ENERGY_MAX]++;
-		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
-		m_stats[ENERGY_REGEN] = (int)(m_stats[ENERGY_MAX] * .05);
-		m_stats[INTELLECT]++;
-		for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
-			m_stats[i]++;
-		m_statPoints--;
-	}
 };

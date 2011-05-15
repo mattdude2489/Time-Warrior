@@ -63,31 +63,43 @@ public:
 	}
 	void scaleToPlayer(Entity * a_player)
 	{
-		int highest = 0;
-		for(int i = 0; i < NUM_STATS; i++)
+		int highest, lowest;
+		double scaler = 0;
+		switch(m_eType)
 		{
-			switch(m_eType)
-			{
-			case MINION:	m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_MIN);	break;
-			case BOSS:		m_stats[i] = (int)(a_player->getStatNumber((e_stats)i) * SCALE_BOSS);	break;
-			}
-			if(m_stats[i] <= 0 && (a_player->getStatNumber((e_stats)i) > 0 || (i == STRENGTH || i == INTELLECT)))
-				m_stats[i] = 1;
-			switch(i)
-			{
-			case DEFENSE:
-			case RESISTANCE_FIRE:
-			case RESISTANCE_ICE:
-			case RESISTANCE_LIGHTNING:
-				if(a_player->getStatNumber((e_stats)i) > highest)
-					highest = a_player->getStatNumber((e_stats)i);
-			}
+		case MINION:	scaler = SCALE_MIN;		break;
+		case BOSS:		scaler = SCALE_BOSS;	break;
 		}
-		if(m_stats[STRENGTH] < highest)
-			m_stats[STRENGTH] = highest;
-		if(m_stats[INTELLECT] < highest)
-			m_stats[INTELLECT] = highest;
-		//in case the players health is low this will set the minion/boss to full
+		highest = (int)(a_player->getStatNumber(LEVEL) * scaler);
+		if(highest <= 0)
+			highest = 1;
+		//add whatever base health/energy the player started with
+		m_stats[HEALTH_MAX] += a_player->getStatNumber(HEALTH_MAX) - a_player->getStatNumber(STRENGTH);
+		m_stats[ENERGY_MAX] += a_player->getStatNumber(ENERGY_MAX) - a_player->getStatNumber(INTELLECT);
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
+		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
+		//level up to the highest allowed level
+		for(int i = m_stats[LEVEL]; i < highest; ++i)
+			levelUp();
+		//increase personal stats
+		for(int i = 0; i < (int)(m_stats[LEVEL]*.5); ++i)
+		{
+			if(i%2)
+				incStr();
+			else
+				incInt();
+		}
+		//check to make sure dmg is always done
+		while(m_stats[STRENGTH] < a_player->getStatNumber(DEFENSE))
+			incStr();
+		lowest = a_player->getStatNumber(RESISTANCE_FIRE);
+		if(lowest > a_player->getStatNumber(RESISTANCE_ICE))
+			lowest = a_player->getStatNumber(RESISTANCE_ICE);
+		if(lowest > a_player->getStatNumber(RESISTANCE_LIGHTNING))
+			lowest = a_player->getStatNumber(RESISTANCE_LIGHTNING);
+		while(m_stats[INTELLECT] < lowest)
+			incInt();
+		//alter resists based on material/substance
+		reallocateResistancesAccordingToMaterial();
 	}
 };

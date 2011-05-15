@@ -13,7 +13,7 @@ class Magic : public Chip
 			:Chip(MAGIC, a_subType, a_subSubType),
 			m_dmgCombo(0),m_dmgComboLv(0){}
 		int getComboBonus(){return m_dmgCombo;}
-		void levelUpUnique(){m_dmgCombo += m_dmgComboLv;}
+		void levelUpUniqueTwo(){m_dmgCombo += m_dmgComboLv;}
 		void activateUnique()
 		{
 			//adjust the target position

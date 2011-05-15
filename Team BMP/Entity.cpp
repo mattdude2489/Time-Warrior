@@ -158,7 +158,14 @@ int Entity::getTotalDamageTaken(int a_amount, e_chipSubType a_type)
 	int stat = 0;
 	switch(a_type)
 	{
-	case DIVINE:	stat = a_amount;							break;
+	case DIVINE://since there is no Divine resistance, must set appropriate dmg here
+		switch(m_mtrl)
+		{
+		case MTRL_LIGHT:	stat = (int)(a_amount*.5);	break;	//with dmg algorithm, equates to 1/3 dmg
+		case MTRL_DARK:		break;	//already init to 0			//with dmg algorithm, equates to 1/1 dmg
+		default:			stat = a_amount;					//with dmg algorithm, equates to 1/2 dmg
+		}
+		break;
 	case LIGHTNING:	stat = getStatNumber(RESISTANCE_LIGHTNING);	break;
 	case FIRE:		stat = getStatNumber(RESISTANCE_FIRE);		break;
 	case ICE:		stat = getStatNumber(RESISTANCE_ICE);		break;
@@ -168,5 +175,54 @@ int Entity::getTotalDamageTaken(int a_amount, e_chipSubType a_type)
 		return (int)(a_amount * ((double)a_amount / (a_amount + stat)));
 	else
 		return 0;
+}
+void Entity::reallocateResistancesAccordingToMaterial()
+{
+	//because it chages stats, this func should only be caused ONCE per Entity instance
+	static bool called = false;
+	if(!called && m_mtrl != MTRL_DEFAULT)
+	{
+		called = true;
+		e_stats strongest, weakest;
+		/*
+		should only store known resistances (RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING)
+			abbreviated R_F, R_I, R_L
+		culminates in 6 possible combos:
+			strong:	R_F		R_F		R_I		R_I		R_L		R_L
+			weak:	R_I		R_L		R_F		R_L		R_F		R_I
+		*/
+		switch(m_mtrl)
+		{
+		case MTRL_FIRE:
+			strongest = RESISTANCE_FIRE;
+			weakest = RESISTANCE_ICE;
+			break;
+		case MTRL_METAL:
+			strongest = RESISTANCE_FIRE;
+			weakest = RESISTANCE_LIGHTNING;
+			break;
+		case MTRL_WOOD:
+		case MTRL_DARK:
+			strongest = RESISTANCE_ICE;
+			weakest = RESISTANCE_FIRE;
+			break;
+		case MTRL_WATER:
+			strongest = RESISTANCE_ICE;
+			weakest = RESISTANCE_LIGHTNING;
+			break;
+		case MTRL_EARTH:
+			strongest = RESISTANCE_LIGHTNING;
+			weakest = RESISTANCE_FIRE;
+			break;
+		case MTRL_AIR:
+		case MTRL_RUBBER:
+		case MTRL_LIGHT:
+			strongest = RESISTANCE_LIGHTNING;
+			weakest = RESISTANCE_ICE;
+		}
+		int amtMoved = (int)(m_stats[weakest] * .5);
+		m_stats[weakest] -= amtMoved;
+		m_stats[strongest] += amtMoved;
+	}
 }
 void Entity::setCurrentLocToLast(World * a_world){this->setLocation(m_lastWLoc);}

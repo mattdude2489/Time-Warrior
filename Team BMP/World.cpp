@@ -434,20 +434,24 @@ void World::setMonsters()
 			for(int m = 0; m < numMinions; m++)
 			{
 				int spriteSheet = 0;
+				e_material mtrl;
 				spriteSheet = rand()%(NUM_SPRITE_SHEETS_TO_CHOOSE_FROM-1);
 				switch(currentWorld)
 				{
 				case WORLD_ENGLAND:
 					sprite = new SDL_Sprite(m_sprites[SLIME].fileName, m_sprites[SLIME].frameWidth, m_sprites[SLIME].frameHeight, m_sprites[SLIME].animSpeed, m_sprites[SLIME].rows);
+					mtrl = MTRL_RUBBER;
 					break;
 				case WORLD_D1:
 					switch(spriteSheet)
 					{
 					case 0:
 						sprite = new SDL_Sprite(m_sprites[SKELETON].fileName, m_sprites[SKELETON].frameWidth, m_sprites[SKELETON].frameHeight, m_sprites[SKELETON].animSpeed, m_sprites[SKELETON].rows);
+						mtrl = MTRL_DARK;
 						break;
 					case 1:
 						sprite = new SDL_Sprite(m_sprites[GHOST].fileName, m_sprites[GHOST].frameWidth, m_sprites[GHOST].frameHeight, m_sprites[GHOST].animSpeed, m_sprites[GHOST].rows);
+						mtrl = MTRL_DARK;
 						break;
 					}
 					break;
@@ -456,15 +460,18 @@ void World::setMonsters()
 					{
 					case 0:
 						sprite = new SDL_Sprite(m_sprites[KNIGHT0].fileName, m_sprites[KNIGHT0].frameWidth, m_sprites[KNIGHT0].frameHeight, m_sprites[KNIGHT0].animSpeed, m_sprites[KNIGHT0].rows);
+						mtrl = MTRL_METAL;
 						break;
 					case 1:
 						sprite = new SDL_Sprite(m_sprites[KNIGHT1].fileName, m_sprites[KNIGHT1].frameWidth, m_sprites[KNIGHT1].frameHeight, m_sprites[KNIGHT1].animSpeed, m_sprites[KNIGHT1].rows);
+						mtrl = MTRL_METAL;
 						break;
 					}
 					break;
 				}
 				Minion * newEntity = new Minion(sprite);
 				newEntity->setNewed(true);
+				newEntity->setMaterial(mtrl);
 				newEntity->scaleToPlayer(m_player);
 				newEntity->setLocation(m_mapOfWorld.get(i).pos);
 				this->add(newEntity);
@@ -475,6 +482,7 @@ void World::setMonsters()
 			bossCount++;
 			sprite = new SDL_Sprite(m_sprites[BOSS1].fileName, m_sprites[BOSS1].frameWidth, m_sprites[BOSS1].frameHeight, m_sprites[BOSS1].animSpeed, m_sprites[BOSS1].rows);
 			Boss * newBoss = new Boss(sprite);
+			newBoss->setMaterial(MTRL_FIRE);
 			newBoss->setNewed(true);
 			newBoss->scaleToPlayer(m_player);
 			newBoss->setBossLoc(m_mapOfWorld.get(i).pos);

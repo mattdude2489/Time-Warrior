@@ -30,6 +30,7 @@ private:
 public:
 	Button(){}
 	Button(int a_width, int a_height, int a_x, int a_y){setUpButton(a_width, a_height, a_x, a_y);}
+	int getX(){return m_buttonShape.x;}
 	void setUpButton(int a_width, int a_height, int a_x, int a_y)
 	{
 		m_buttonShape.setWidth(a_width);

@@ -10,8 +10,6 @@
 enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, BAR_EXP,  NUM_BARS, NUM_STAT_BARS = NUM_BARS-2};
 enum e_bar {BAR_WIDTH = ONE_HUNDRED_PERCENT, BAR_HEIGHT = HUD_HEIGHT/NUM_STAT_BARS, BAR_X = HUD_X, BAR_Y = HUD_Y};
 
-#define STAT_BUTTON_SETTINGS	HUD_HEIGHT,HUD_HEIGHT,((HUD_X+HUD_WIDTH)-FRAME_SIZE),HUD_Y
-
 class Hud
 {
 private:
@@ -56,7 +54,7 @@ public:
 		m_myFont[0].setFont(FONTSIZE);
 		m_myFont[1].setFont(18);
 		m_statWin.InitText(m_myFont[1].getFont());
-		m_statButton.setUpButton(STAT_BUTTON_SETTINGS);
+		m_statButton.setUpButton(FRAME_SIZE, FRAME_SIZE, ((HUD_X+HUD_WIDTH)-FRAME_SIZE), HUD_Y);
 		m_statButton.setImage("Sprites/button.bmp");
 		m_showStats = false;
 		for(int i = 0; i < NUM_STAT_BARS; i++)
@@ -94,9 +92,10 @@ public:
 	{
 		for(int i = 0; i < NUM_BARS; i++)
 			SDL_FillRect(screen, &bars[i], colors[i]);
-		m_statWin.getPlayer()->drawInventory(screen, (HUD_X + HUD_WIDTH)-(FRAME_SIZE*3), HUD_Y, INVENTORY_GAUNTLET, 0, 2, 0);
 		for(int i = 0; i < NUM_STAT_BARS; i++)
 			m_text[i].printMessage(screen, bars[BAR_BACK].getWidth(), bars[BAR_BACK].getY()+(i*BAR_HEIGHT)-1);
+		int x = m_statButton.getX()-(FRAME_SIZE*SLOT_ARMOR_HEAD);
+		m_statWin.getPlayer()->drawInventory(screen, x, HUD_Y, INVENTORY_GAUNTLET, 0, (m_statButton.getX()-x)/FRAME_SIZE, SLOT_ATK1);
 		m_statButton.draw(screen);
 		if(m_showStats)
 			m_statWin.draw(screen);
