@@ -58,8 +58,6 @@ public:
 			m_state = CHASE;
 		else
 			m_state = WANDER;
-		
-		
 	}
 	void scaleToPlayer(Entity * a_player)
 	{
@@ -71,18 +69,16 @@ public:
 		case BOSS:		scaler = SCALE_BOSS;	break;
 		}
 		highest = (int)(a_player->getStatNumber(LEVEL) * scaler);
-		if(highest <= 0)
-			highest = 1;
 		//add whatever base health/energy the player started with
 		m_stats[HEALTH_MAX] += a_player->getStatNumber(HEALTH_MAX) - a_player->getStatNumber(STRENGTH);
 		m_stats[ENERGY_MAX] += a_player->getStatNumber(ENERGY_MAX) - a_player->getStatNumber(INTELLECT);
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
 		//level up to the highest allowed level
-		for(int i = m_stats[LEVEL]; i < highest; ++i)
+		for(int i = m_stats[LEVEL]; i < highest || m_stats[LEVEL] <= 0; ++i)
 			levelUp();
 		//increase personal stats
-		for(int i = 0; i < (int)(m_stats[LEVEL]*.5); ++i)
+		for(int i = 0; m_statPoints > 0; ++i)
 		{
 			if(i%2)
 				incStr();
@@ -90,15 +86,17 @@ public:
 				incInt();
 		}
 		//check to make sure dmg is always done
-		while(m_stats[STRENGTH] < a_player->getStatNumber(DEFENSE))
+		while(m_stats[STRENGTH] < a_player->getStatNumber(DEFENSE) || m_stats[STRENGTH] <= 0)
 			incStr();
 		lowest = a_player->getStatNumber(RESISTANCE_FIRE);
-		if(lowest > a_player->getStatNumber(RESISTANCE_ICE))
-			lowest = a_player->getStatNumber(RESISTANCE_ICE);
-		if(lowest > a_player->getStatNumber(RESISTANCE_LIGHTNING))
-			lowest = a_player->getStatNumber(RESISTANCE_LIGHTNING);
-		while(m_stats[INTELLECT] < lowest)
+		for(int i = RESISTANCE_FIRE+1; i < RESISTANCE_FIRE+3; ++i)
+		{
+			if(lowest > a_player->getStatNumber((e_stats)i))
+				lowest = a_player->getStatNumber((e_stats)i);
+		}
+		while(m_stats[INTELLECT] < lowest || m_stats[INTELLECT] <= 0)
 			incInt();
+		m_statPoints = 0;
 		//alter resists based on material/substance
 		reallocateResistancesAccordingToMaterial();
 	}

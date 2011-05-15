@@ -363,11 +363,17 @@ public:
 	virtual void levelUpUnique(){};
 	void levelUp()
 	{
-		m_stats[LEVEL]++;
 		m_statPoints++;
+		m_stats[LEVEL]++;
 		levelUpUnique();
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
+	}
+	void decreasePoints()
+	{
+		m_statPoints--;
+		if(m_statPoints < 0)
+			m_statPoints = 0;
 	}
 	void incStr()
 	{
@@ -375,7 +381,7 @@ public:
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
 		m_stats[STRENGTH]++;
 		m_stats[DEFENSE]++;
-		m_statPoints--;
+		decreasePoints();
 	}
 	void incInt()
 	{
@@ -385,6 +391,6 @@ public:
 		m_stats[INTELLECT]++;
 		for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
 			m_stats[i]++;
-		m_statPoints--;
+		decreasePoints();
 	}
 };

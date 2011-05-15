@@ -178,7 +178,7 @@ int Entity::getTotalDamageTaken(int a_amount, e_chipSubType a_type)
 }
 void Entity::reallocateResistancesAccordingToMaterial()
 {
-	//because it chages stats, this func should only be caused ONCE per Entity instance
+	//because it changes stats, this func should only be caused ONCE per Entity instance
 	static bool called = false;
 	if(!called && m_mtrl != MTRL_DEFAULT)
 	{
