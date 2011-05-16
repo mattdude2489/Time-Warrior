@@ -18,26 +18,27 @@ struct State
 	virtual void enter() = 0;
 	virtual void execute() = 0;
 	virtual void exit() = 0;
-	virtual void handleInput(UserInput obj) = 0;
+	virtual void handleInput(UserInput obj) {};
 	//virtual static State* instance()=0; //I DEAR GOD TO HOPE THIS WORKS.
 };
 
 class baseEngine
 {
 private:
-	Player cPlayer;
-	World cWorld;
+	Player * cPlayer;
+	World * cWorld;
 	AudioHandler cah;
 	UserInput uai; //I needed something.
 	//c in front of any variables usually means "client."
 public:
 	static State* cState;
-	World* getWorld() {return &cWorld;}
-	Player* getPlayer() {return &cPlayer;}
+	World* getWorld() {return cWorld;}
+	Player* getPlayer() {return cPlayer;}
 	void init();
 	baseEngine();
 	~baseEngine();
-	void setPlayer(Player play) {cPlayer = play;}
-	void setWorld(World omg) {cWorld = omg;} //My...god...ok, this isn't so bad.
-	void handleInput(UserInput obj);
+	void setPlayer(Player * play) {cPlayer = play;}
+	void setWorld(World * omg) {cWorld = omg;} //My...god...ok, this isn't so bad.
+	void handleInput(UserInput obj) {cState->handleInput(obj);}
+	baseEngine * instance() {static baseEngine be; return &be;}
 };

@@ -51,22 +51,26 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	//the user interface variable
 	bool running = true;
+	baseEngine be;
+
 	Hud Ghud;
 	World world;
 	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	Player eTest(ONE_HUNDRED_PERCENT, ONE_HUNDRED_PERCENT, false, false, false, false, false, false, &test, &world);
 	world.add(&eTest);
 	world.setCamera(eTest.getCamera());
-
 	printf("%d %d %d", sizeof(test), sizeof(world), sizeof(eTest));
 	//music test stuff
 	AudioHandler ah;
 	ah.playRandom();
+	
+	be.setWorld(&world);
+	be.setPlayer(&eTest);
 #ifdef WITH_NETWORKING
 	char send[1000], old[1000], *in;
 	bool changeInInfoSoSend = false;
 #endif
-	if(!world.getSuccess()){printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");}
+	if(!be.getWorld()->getSuccess()){printf("The map was loaded unsuccessfully. THERE IS A PROBLEM.");}
 	UserInput aui;
 	MyFont hi;
 	TTtext fps;
@@ -129,10 +133,11 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 			}
 		}
 #ifdef WITH_NETWORKING
-		eTest.handleInput(&ui, &world);
-#else
 		eTest.handleInput(&ui, &world, &ah);
+#else
+		//eTest.handleInput(&ui, &world, &ah);
 #endif
+		be.handleInput(ui);
 		//update
 		world.update(passed);
 		Ghud.updateHud(&eTest, &ui, passed);
