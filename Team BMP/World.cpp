@@ -42,6 +42,7 @@ World::World()
 	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	m_worldSprites[TREE_SPRITE] = new SDL_Sprite("Sprites/Tree.bmp", TREE_WIDTH, TREE_HEIGHT, FRAME_RATE, TREE_COUNT);
+	m_worldSprites[ROCK_SHRUB] = new SDL_Sprite("Sprites/RocksandShrubs.bmp", FRAME_SIZE,FRAME_SIZE, FRAME_RATE, NUM_ROCK_SHRUB); 
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
@@ -118,7 +119,7 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = false;
+				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = false;
 				x++;
 				hi.collideBox.x = hi.pos.x;
 				hi.collideBox.y = hi.pos.y;
@@ -149,7 +150,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
 				case WORLD_ENGLAND:	hi.indexOfSpriteRow = TILE_GRASS;				break;
 				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
-				case WORLD_CASTLE:	hi.indexOfSpriteRow = TILE_CASTLE_GROUND;		break;
+				
 				}
 				switch(c)
 				{
@@ -249,6 +250,41 @@ bool World::setWorld(char * fileName)
 			case '^':
 				hi.indexOfSpriteRow = TILE_CASTLE_STAIRS;
 				hi.stairs = true;
+				break;
+			case 'Q':
+				hi.indexOfSpriteRow = DESERT_WALL;
+				hi.collide = true;
+				break;
+			case '{':
+				hi.indexOfSpriteRow = DESERT_ARCH_L;
+				hi.ddoor = true;
+				break;
+			case '}':
+				hi.indexOfSpriteRow = DESERT_ARCH_R;
+				hi.ddoor = true;
+				break;
+			case '<':
+				hi.indexOfSpriteRow = FOREST_ARCH_L;
+				hi.fdoor = true;
+				break;
+			case '>':
+				hi.indexOfSpriteRow = FOREST_ARCH_R;
+				hi.fdoor = true;
+				break;
+			case '@':
+				hi.currentTexture = m_worldSprites[ROCK_SHRUB];
+				hi.indexOfSpriteRow = rand()%2;
+				hi.collide = true;
+				break;
+			case '#':
+				hi.currentTexture = m_worldSprites[ROCK_SHRUB];
+				hi.indexOfSpriteRow = BUSH;
+				hi.collide = true;
+				break;
+			case '$':
+				hi.currentTexture = m_worldSprites[ROCK_SHRUB];
+				hi.indexOfSpriteRow = CACTUS;
+				hi.collide = true;
 				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;
