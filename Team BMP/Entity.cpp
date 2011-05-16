@@ -215,8 +215,8 @@ void Entity::reallocateResistancesAccordingToMaterial()
 			weakest = RESISTANCE_FIRE;
 			break;
 		case MTRL_AIR:
-		case MTRL_RUBBER:
 		case MTRL_LIGHT:
+		case MTRL_RUBBER:
 			strongest = RESISTANCE_LIGHTNING;
 			weakest = RESISTANCE_ICE;
 		}

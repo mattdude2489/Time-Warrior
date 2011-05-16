@@ -2,6 +2,7 @@
 
 #include "Minion.h"
 #include "Magic.h"
+#include "Weapon.h"
 
 class Boss : public Minion
 {
@@ -29,22 +30,28 @@ public:
 			delete m_attack;
 		switch(a_subType)
 		{
-		case FIRE:
-			m_attack = new Fire(a_subSubType);
-			m_attack->setNewed(true);
-			break;
+		case DIVINE:	m_attack = new Divine(a_subSubType);	break;
+		case LIGHTNING:	m_attack = new Lightning(a_subSubType);	break;
+		case FIRE:		m_attack = new Fire(a_subSubType);		break;
+		case ICE:		m_attack = new Ice(a_subSubType);		break;
+		case BLUNT:		m_attack = new Blunt(a_subSubType);		break;
+		//case RANGE:		m_attack = new Range(a_subSubType);		break;
+		case SLASH:		m_attack = new Slash(a_subSubType);		break;
+		//case PIERCE:	m_attack = new Pierce(a_subSubType);	break;
 		}
-		m_attack->setOwner(this);
-		m_attack->levelUp();
-		a_world->add(m_attack);
+		if(m_attack)
+		{
+			m_attack->setNewed(true);
+			m_attack->setOwner(this);
+			m_attack->levelUp();
+			a_world->add(m_attack);
+		}
 	}
 	void isPlayerInRange(Entity *a_player, int a_time)
 	{
 		double distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
 		if(distance < BOSS_ENGAGE)
-		{
 			m_state = CHASE;
-		}
 		else
 		{
 			//if the player runs too far away the boss will reset to its original position and guard
