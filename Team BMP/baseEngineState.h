@@ -40,12 +40,44 @@ private:
 	//INCLUDE SDL STUFF HERES
 	SDL_Surface * screen;
 	UserInput * stateUI;
+	//Uint32 then = SDL_GetTicks(), now, passed, second = 0;
+	Uint32 then, now, passed, second;
 public:
-	void enter() {screen = SDL_SCREEN_STARTUP;}
-	void execute() {} //Input Logic Draw
-	void exit() {SDL_FreeSurface(screen);}
+	void enter(baseEngine* be) 
+	{
+		screen = SDL_SCREEN_STARTUP;
+		stateUI = NULL;
+		then = SDL_GetTicks();
+		now = passed = second = 0;
+	}
+	void execute(baseEngine* be) 
+	{
+		now = SDL_GetTicks();
+		passed = now - then;
+		then = now;
+		/*if(now - second > 1000)
+		{
+			sprintf_s(cfps, "%i", ifps);
+			fps.setMessage(cfps);
+			ifps = 0;
+			second = now;
+		}*/
+		if(stateUI != NULL)
+		{
+			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
+			be->getWorld()->update(passed);
+			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
+		}
+
+		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+		be->getWorld()->draw(screen);
+		be->getHUD()->draw(screen);
+
+		SDL_Flip(screen);
+	} //Input Logic Draw
+	void exit(baseEngine* be) {SDL_FreeSurface(screen);}
 	static actualGameState* instance() {static actualGameState instance; return &instance;}
-	void handleInput(UserInput obj) {}
+	void handleInput(UserInput * obj) {stateUI = obj;}
 };
 
 class titleScreenState : public State
@@ -60,7 +92,7 @@ private:
 	UserInput * stateUI;
 public:
 
-	void enter() 
+	void enter(baseEngine* be) 
 	{
 		titleScreen.setSprite("Sprites/posTitleScreen.bmp", 626, 470, 0, 1); //MAGIC NUMBAHS = BAD
 		choice = 0;
@@ -71,10 +103,10 @@ public:
 		loadGame.setDimension(SPoint(110, 137)); //These are debug numbers, btw. Not entirely accurate.
 		loadGame.setPosition(SPoint(443, 306)); //Setting up the stuffs...
 		//INCLUDE SDL STUFF HERE
-		screen = SDL_SCREEN_STARTUP;
+		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 		stateUI = NULL;
 	}
-	void execute() 
+	void execute(baseEngine* be) 
 	{
 		//Input Logic Draw
 		if(stateUI != NULL)
@@ -86,34 +118,33 @@ public:
 			else if(networkGame.contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY()))&& stateUI->getClick() == 1)
 				choice = 3;
 		}
+		if(choice != 0)
+			exit(be);
 
 		titleScreen.draw(screen, 0, 0);
 		SDL_Flip(screen);
 		SDL_Delay(SDLDELAY);
 	}//Title screen stuffs.
-	void exit() 
+	void exit(baseEngine* be) 
 	{
 		//Use the choice variable here, that's set during execute!
 		SDL_FreeSurface(screen);
 		switch(choice)
 		{
 		case 1:
-			baseEngine::cState = actualGameState::instance();
-			baseEngine::cState->enter();
+			be->changeState(actualGameState::instance());
 			break;
 		case 2:
-			baseEngine::cState = actualGameState::instance();
-			baseEngine::cState->enter();
+			be->changeState(actualGameState::instance());
 			break;
 		case 3:
-			baseEngine::cState = actualGameState::instance();
-			baseEngine::cState->enter();
+			be->changeState(actualGameState::instance());
 			break;
 		default:
 			break;
 		}
 		//IT SHOULD NEVER MAKE IT TO HERE. IF IT DOES, THEN SOMETHING IS WRONG.
-		enter();
+		enter(be);
 	}
 	static titleScreenState* instance() {static titleScreenState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}
@@ -122,9 +153,9 @@ public:
 class splashScreenState : public State
 {
 public:
-	void enter() {}
-	void execute() {} //Timer or something similar.
-	void exit() {baseEngine::cState = titleScreenState::instance(); baseEngine::cState->enter(); }
+	void enter(baseEngine* be) {}
+	void execute(baseEngine* be) {} //Timer or something similar.
+	void exit(baseEngine* be) {be->changeState(titleScreenState::instance()); }
 	static splashScreenState* instance() {static splashScreenState instance; return &instance;}
-	void handleInput(UserInput obj) {}
+	void handleInput(UserInput * obj) {}
 };
