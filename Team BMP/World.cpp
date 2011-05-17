@@ -136,7 +136,6 @@ bool World::setWorld(char * fileName)
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
 				case WORLD_ENGLAND:	hi.indexOfSpriteRow = TILE_GRASS;				break;
 				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
-				
 				}
 				switch(c)
 				{
@@ -601,7 +600,6 @@ void World::update(Uint32 a_timePassed)
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 		m_mapOfEntities.get(i).sortOnYPosition();
 	m_cCamera.setPosition(*m_player->getCamera());
-	//printf("plyr pos (%d,%d), plyr cam (%d,%d), world cam (%d,%d)\n", m_player->getLocation().x, m_player->getLocation().y, m_player->getCamera()->x, m_player->getCamera()->y, m_cCamera.getPosition().x, m_cCamera.getPosition().y);
 }
 void World::draw(SDL_Surface * a_screen)
 {
