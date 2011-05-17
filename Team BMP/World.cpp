@@ -440,11 +440,8 @@ void World::setNPC()
 void World::setMonsters()
 {
 	int numMinions = 0;
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
-	{
-		for(int g = 0; g < m_mapOfEntities.size(); g++)
-			m_mapOfEntities.get(g).clearAllEntities();
-	}
+	for(int g = 0; g < m_mapOfEntities.size(); g++)
+		m_mapOfEntities.get(g).clearAllEntities();
 	int dcount = 0;
 	for(int i = 0; i < m_mapOfWorld.size(); i++)
 	{
