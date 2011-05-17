@@ -49,20 +49,6 @@ World::World()
 	m_worldSprites[ANIMATION]->start();
 
 	m_success = setWorld("Maps/HubWorldMap.txt");
-
-	int x = 0, y = 0, w = 0, h = 0;
-	w = getGridWidth();
-	h = getGridHeight();
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
-	{
-		m_mapOfEntities.get(i).setLoc(x*w, y*h, w, h);
-		x++;
-		if(x == NUM_GRIDS_PER_ROW_COL)
-		{
-			y++;
-			x = 0;
-		}
-	}
 	m_closed = NULL;
 	bossCount = 0;
 	castleCount = 0;
@@ -615,6 +601,7 @@ void World::update(Uint32 a_timePassed)
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
 		m_mapOfEntities.get(i).sortOnYPosition();
 	m_cCamera.setPosition(*m_player->getCamera());
+	//printf("plyr pos (%d,%d), plyr cam (%d,%d), world cam (%d,%d)\n", m_player->getLocation().x, m_player->getLocation().y, m_player->getCamera()->x, m_player->getCamera()->y, m_cCamera.getPosition().x, m_cCamera.getPosition().y);
 }
 void World::draw(SDL_Surface * a_screen)
 {
@@ -628,9 +615,7 @@ void World::draw(SDL_Surface * a_screen)
 		}
 	}
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
-	{
 		m_mapOfEntities.get(i).draw(a_screen); //Why does it seem like the Entities are getting further and further away from direct access?
-	}
 }
 int World::getNumEntities()
 {
