@@ -90,31 +90,13 @@ public:
 		for(int i = 0; i < m_mapOfEntities.size(); i++)
 			m_mapOfEntities.get(i)->update(timePassed, a_world);
 	}
-	void clearDeadEntities(World * a_world) 
+	void clearEntity(int a_index)
 	{
-		Entity * t_ent;
-		bool loop = true;
-		while(loop)
-		{
-			loop = false;
-			for(int i = 0; i < m_mapOfEntities.size(); i++) 
-			{
-				t_ent = m_mapOfEntities.get(i);
-				//checks to see if it is alive if not remove the damm thing
-				if(!t_ent->getFlag(FLAG_DRAW) && t_ent->getStatNumber(HEALTH_CURRENT) <= 0)
-				{
-					if(t_ent->getType() == BOSS)
-						clearABoss(a_world);
-					if(m_mapOfEntities.get(i)->getFlag(FLAG_NUDE))
-						delete m_mapOfEntities.get(i);
-					m_mapOfEntities.remove(i);
-					//because the size of m_mapOfEntities is changing with each remove,
-					//check to remove entities again until none have to be removed
-					loop = true;
-				}
-			}
-		}
+		if(m_mapOfEntities.get(a_index)->getFlag(FLAG_NUDE))
+			delete m_mapOfEntities.get(a_index);
+		m_mapOfEntities.remove(a_index);
 	}
 	void clearAllEntities();
+	void clearDeadEntities(World * a_world);
 	void clearABoss(World * a_world);
 };

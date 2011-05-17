@@ -59,7 +59,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	Player eTest(ONE_HUNDRED_PERCENT, ONE_HUNDRED_PERCENT, false, false, false, false, false, false, &test, &world);
 	world.add(&eTest);
 	world.setCamera(eTest.getCamera());
-	printf("%d %d %d", sizeof(test), sizeof(world), sizeof(eTest));
+	printf("%d %d %d\n", sizeof(test), sizeof(world), sizeof(eTest));
 	//music test stuff
 	AudioHandler ah;
 	ah.playRandom();

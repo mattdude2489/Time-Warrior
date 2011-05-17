@@ -19,9 +19,30 @@ void Grid::clearAllEntities()
 			}
 			if(remove)
 			{
-				if(m_mapOfEntities.get(i)->getFlag(FLAG_NUDE))
-					delete m_mapOfEntities.get(i); //GET RID OF IT. NAO.
-				m_mapOfEntities.remove(i);
+				clearEntity(i);
+				//because the size of m_mapOfEntities is changing with each remove,
+				//check to remove entities again until none have to be removed
+				loop = true;
+			}
+		}
+	}
+}
+void Grid::clearDeadEntities(World * a_world) 
+{
+	Entity * t_ent;
+	bool loop = true;
+	while(loop)
+	{
+		loop = false;
+		for(int i = 0; i < m_mapOfEntities.size(); i++) 
+		{
+			t_ent = m_mapOfEntities.get(i);
+			//checks to see if it is alive if not remove the damm thing
+			if(!t_ent->getFlag(FLAG_DRAW) && t_ent->getStatNumber(HEALTH_CURRENT) <= 0)
+			{
+				if(t_ent->getType() == BOSS)
+					clearABoss(a_world);
+				clearEntity(i);
 				//because the size of m_mapOfEntities is changing with each remove,
 				//check to remove entities again until none have to be removed
 				loop = true;
