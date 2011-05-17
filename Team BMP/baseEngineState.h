@@ -66,6 +66,7 @@ public:
 		{
 			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
 			be->getWorld()->update(passed);
+			be->getAH()->update(be->getWorld()->getCurrentWorld());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
 		}
 
@@ -78,6 +79,19 @@ public:
 	void exit(baseEngine* be) {SDL_FreeSurface(screen);}
 	static actualGameState* instance() {static actualGameState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}
+};
+
+class newGameState : public State
+{
+private:
+	char * playerName;
+	UserInput * stateUI;
+public:
+	void enter(baseEngine *be) {}
+	void execute(baseEngine *be) {}
+	void exit(baseEngine *be) {}
+	void handleInput(UserInput * obj) {stateUI = obj;}
+	static newGameState* instance() {static newGameState instance; return &instance;}
 };
 
 class titleScreenState : public State

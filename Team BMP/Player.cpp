@@ -24,6 +24,7 @@ void Player::initPlayer(World * newWorld)
 	m_isStatWindowActive = false;
 	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
+	playerName = "New Name";
 }
 //draws & formats the display of specified Chip collection
 //param:

@@ -68,9 +68,9 @@ public:
 	}
 	void handleInput(UserInput * ui)
 	{
-		if(m_statButton.wasClicked(ui) && !m_showStats)
+		if((m_statButton.wasClicked(ui) && !m_showStats) || (!m_showStats && ui->getLastKey() == 'i'))
 			m_showStats = true;
-		else if(m_statButton.wasClicked(ui) && m_showStats)
+		else if((m_statButton.wasClicked(ui) && m_showStats) || (m_showStats && ui->getLastKey() == 'i'))
 			m_showStats = false;
 		if(m_showStats)
 			m_statWin.handleInput(ui);

@@ -26,6 +26,7 @@ private:
 	bool loadedPlayer, m_isStatWindowActive;
 	World * thisWorld;
 	SDL_Sprite * m_blankInventory;
+	char * playerName;
 public:
 	void initPlayer(World * newWorld);
 	void setWindowStatus(bool a_isActive){m_isStatWindowActive = a_isActive;}
@@ -43,6 +44,8 @@ public:
 	void setWorld(World * currWorld) {thisWorld = currWorld;}
 	bool loadPlayer();
 	void newGame();
+	void setName(char * newName) {playerName = newName;}
+	char * getName() {return playerName;}
 	void setGauntletSlot(e_gauntletSlots a_slot);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);
 	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level);

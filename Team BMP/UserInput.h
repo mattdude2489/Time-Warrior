@@ -5,7 +5,7 @@
 
 
 enum e_mouseClick {CLICK_NONE, CLICK_LEFT, CLICK_MIDDLE, CLICK_RIGHT};
-enum e_keyboardKey {KEY_NONE = 'n', KEY_UP = 'w', KEY_LEFT = 'a', KEY_DOWN = 's', KEY_RIGHT = 'd', KEY_HOT_ATK1_BAS = '1', KEY_HOT_ATK1_ADV = '2', KEY_HOT_ATK1_EXP = '3', KEY_HOT_ATK1_LEG = '4' ,KEY_HOT_ATK2_BAS = '5', KEY_HOT_ATK2_ADV = '6', KEY_HOT_ATK2_EXP = '7', KEY_HOT_ATK2_LEG = '8'};
+enum e_keyboardKey {KEY_NONE = 'n', KEY_UP = 'w', KEY_LEFT = 'a', KEY_DOWN = 's', KEY_RIGHT = 'd', KEY_HOT_ATK1_BAS = '1', KEY_HOT_ATK1_ADV = '2', KEY_HOT_ATK1_EXP = '3', KEY_HOT_ATK1_LEG = '4' ,KEY_HOT_ATK2_BAS = '5', KEY_HOT_ATK2_ADV = '6', KEY_HOT_ATK2_EXP = '7', KEY_HOT_ATK2_LEG = '8', KEY_TRUE_NONE = 10};
 
 class UserInput
 {
@@ -15,6 +15,7 @@ class UserInput
 		char keyPressUpDown;	//If the user is pressing up or down.
 		char keyPressLeftRight;	//If the user is pressing left or right.
 		char initKey;			//The initial key. All input gets passed through this.
+		char lastKeyPressed;	//The last key pressed. Similar to initKey, but stores it all the time.
 		char hotKeyLeft;		//The hot key pressed for the left mouse click.
 		char hotKeyRight;		//The hot key pressed for the right mouse click.
 		bool spaceBar;			//The spaceBar. When pressed, activate NPC dialogue.
@@ -38,6 +39,8 @@ class UserInput
 		char getHKeyL() {return hotKeyLeft;}
 		char getHKeyR() {return hotKeyRight;}
 		void setKey(char key) {initKey = key;}
+		void setLastKey(char key) {lastKeyPressed = key;}
+		char getLastKey() {char lastKey = lastKeyPressed; lastKeyPressed = KEY_TRUE_NONE; return lastKey;}
 		char getKey() {return initKey;}
 		bool getSpace() {return spaceBar;}
 		//Resetting the mouse. Used in order to prevent the mouse being held down.
@@ -51,6 +54,7 @@ class UserInput
 			{
 				if(initKey != KEY_NONE)
 				{
+					lastKeyPressed = initKey;
 					if(initKey == KEY_UP || initKey == KEY_DOWN)
 						keyPressUpDown = KEY_NONE;
 					if(initKey == KEY_LEFT || initKey == KEY_RIGHT)
