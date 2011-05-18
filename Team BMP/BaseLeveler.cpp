@@ -5,7 +5,7 @@ BaseLeveler::BaseLeveler(void)
 	LS_Init();
 	//intitalize the XP_STATS variable Divine
 	divineBlock.attack_level = STARTING_LV;
-	divineBlock.attack_type = DIVINE;
+	divineBlock.attack_type = DIVINE_0;
 	divineBlock.total_XP = STARTING_XP;
 	divineBlock.upgradeable = false;
 
@@ -16,12 +16,12 @@ BaseLeveler::BaseLeveler(void)
 	lightningBlock.upgradeable = false;
 	//fire
 	fireBlock.attack_level = STARTING_LV;
-	fireBlock.attack_type = FIRE;
+	fireBlock.attack_type = FIRE_0;
 	fireBlock.total_XP = STARTING_XP;
 	fireBlock.upgradeable = false;
 	//ice
 	iceBlock.attack_level = STARTING_LV;
-	iceBlock.attack_type = ICE;
+	iceBlock.attack_type = ICE_0;
 	iceBlock.total_XP = STARTING_XP;
 	iceBlock.upgradeable = false;
 	//melee
@@ -41,41 +41,52 @@ void BaseLeveler::GainMagicXP(int chipBaseType)
 {
 	switch(chipBaseType)
 	{
-	case DIVINE:
-		divineBlock.total_XP++;
-		if(isLevelUp((int)DIVINE))
-			divineBlock.attack_level++;
+	case DIVINE_0:
+		divineBlock.total_XP += 1;
+		if(isLevelUp((int)DIVINE_0))
+			divineBlock.attack_level += 1;
 		break;
 	case STORM:
-		lightningBlock.total_XP++;
+		lightningBlock.total_XP += 1;
 		if(isLevelUp((int)STORM))
-			lightningBlock.attack_level++;
+			lightningBlock.attack_level += 1;
 		break;
-	case FIRE:
-		fireBlock.total_XP++;
-		if(isLevelUp((int)FIRE))
-			fireBlock.attack_level++;
+	case FIRE_0:
+		fireBlock.total_XP+=1;
+		if(isLevelUp((int)FIRE_0))
+			fireBlock.attack_level += 1;
 		break;
-	case ICE:
-		iceBlock.total_XP++;
-		if(isLevelUp((int)ICE))
-			iceBlock.attack_level++;
+	case ICE_0:
+		iceBlock.total_XP += 1;
+		if(isLevelUp((int)ICE_0))
+			iceBlock.attack_level += 1;
 		break;
 	}//end switch
 }
 
 void BaseLeveler::GainMeleeXP()
 {
-	meleeBlock.total_XP++;
+	meleeBlock.total_XP += 1;
 	if(isLevelUp((int)MELEE))
-		meleeBlock.attack_level++;
+		meleeBlock.attack_level += 1;
 }
 /*--- Level checking fuctions ---*/
 /*--- Accessor/Mutators ---*/
+int BaseLeveler::getAttackLevel(int type)
+{
+	switch(type)
+	{
+	case DIVINE_0: return divineBlock.attack_level; break;
+	case STORM: return lightningBlock.attack_level; break;
+	case FIRE_0: return fireBlock.attack_level; break;
+	case ICE_0: return iceBlock.attack_level; break;
+	case MELEE: return meleeBlock.attack_level; break;
+	}
+}
 /*--- Main Functions ---*/
 void BaseLeveler::LS_Init()
 {
-	XP_KEY = new LEVEL_SYSTEM[40];
+	XP_KEY = new LEVEL_SYSTEM[MAX_ATK_LVL];
 	for(int i = 0; i < MAX_ATK_LVL; i++)
 	{
 		if(i == 0)
@@ -95,7 +106,7 @@ bool BaseLeveler::isLevelUp(int type)
 {
 	switch(type)
 	{
-	case DIVINE:
+	case DIVINE_0:
 		if(divineBlock.total_XP >= XP_KEY[divineBlock.attack_level + 1].xpRequired)
 			return true;
 		else
@@ -107,13 +118,13 @@ bool BaseLeveler::isLevelUp(int type)
 		else
 			return false;
 		break;
-	case FIRE:
+	case FIRE_0:
 		if(fireBlock.total_XP >= XP_KEY[fireBlock.attack_level + 1].xpRequired)
 			return true;
 		else
 			return false;
 		break;
-	case ICE:
+	case ICE_0:
 		if(iceBlock.total_XP >= XP_KEY[iceBlock.attack_level + 1].xpRequired)
 			return true;
 		else
@@ -126,4 +137,33 @@ bool BaseLeveler::isLevelUp(int type)
 			return false;
 		break;
 	}//end switch
+	return false;
+}
+
+bool BaseLeveler::isMaxLevel(int type)
+{
+	switch(type)
+	{
+	case DIVINE_0:
+		if(divineBlock.attack_level == MAX_ATK_LVL)
+			return true;
+		break;
+	case STORM:
+		if(lightningBlock.attack_level == MAX_ATK_LVL)
+			return true;
+		break;
+	case FIRE_0:
+		if(fireBlock.attack_level == MAX_ATK_LVL)
+			return true;
+		break;
+	case ICE_0:
+		if(iceBlock.attack_level == MAX_ATK_LVL)
+			return true;
+		break;
+	case MELEE:
+		if(meleeBlock.attack_level == MAX_ATK_LVL)
+			return true;
+		break;
+	}//end switch
+	return false;
 }

@@ -33,10 +33,10 @@ struct XP_STATS
 // the base attack types
 enum BASE_TYPE
 {
-	DIVINE = 0,
+	DIVINE_0 = 0,
 	STORM,
-	FIRE,
-	ICE,
+	FIRE_0,
+	ICE_0,
 	MELEE,
 	DIVINE_1,
 	STORM_1,
@@ -62,6 +62,7 @@ public:
 	BaseLeveler(void);
 	~BaseLeveler(void);
 	/*--- Base Functions ---*/
+	//upgrade function to check if at a upgradeable level 10
 	/*--- XP Gain Functions ---*/
 	void GainMagicXP(int chipBaseType);
 	void GainMeleeXP();
@@ -69,6 +70,7 @@ public:
 	// check if the level allows for an upgrade
 	void upgradeAttack(XP_STATS statBlock){}
 	/*--- Accessor/Mutators ---*/
+	int getAttackLevel(int type);
 	//check if the the attack can be upgraded (every 10 levels)
 	void isUpgradeable(XP_STATS statBlock){}
 private:
@@ -76,6 +78,7 @@ private:
 	void LS_Init();
 	//check the current level and XP if, XP
 	bool isLevelUp(int type);
+	bool isMaxLevel(int type);
 	/*--- Outside Variables ---*/
 	/*--- Class Variables ---*/
 	// This goes up to L40

@@ -1,9 +1,11 @@
 //Chip class
 //Author: John Parks
 #pragma once
+#include "BaseLeveler.h"
 #include "Entity.h"
 #include "World.h"
 #include "Obstacle.h"
+
 
 enum e_chipType {ARMOR, MAGIC, WEAPON, NUM_CHIP_TYPES};
 enum e_chipSubType {HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE, NUM_TOTAL_CHIP_SUBS, NUM_CHIP_SUBS_PER_TYPE = NUM_TOTAL_CHIP_SUBS/NUM_CHIP_TYPES};
@@ -28,11 +30,14 @@ class Chip : public Entity
 		SDL_Sprite * m_spriteHUD;
 		//owner of this Chip
 		Entity * m_owner;
+		//Chip Leveler
+		BaseLeveler * m_tracker;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_timeSinceLastAttack(0),
-			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL){m_eType = CHIP;m_stats[LEVEL] = 0;}
+			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_tracker(NULL)
+		    {m_eType = CHIP;m_stats[LEVEL] = 0; m_tracker = new BaseLeveler();}
 		~Chip()
 		{
 			//free memory from allocated sprites
@@ -40,6 +45,8 @@ class Chip : public Entity
 				delete m_sprite;
 			if(m_spriteHUD)
 				delete m_spriteHUD;
+			if(m_tracker)
+				delete m_tracker;
 		}
 		//returns Chip's various types
 		e_chipType getType(){return m_cType;}
@@ -194,10 +201,43 @@ class Chip : public Entity
 							{
 								//detect collision with Obstacles, but don't apply effect in such case
 								if(a_world->getEntity(i, grid)->getType() != OBSTACLE)
+								{
 									applyEffect(a_world->getEntity(i, grid));
+									switch(m_cType)
+									{
+									case WEAPON:
+										switch(m_cSubType)
+										{
+										case BLUNT:
+										case SLASH:
+										case PIERCE:
+										case RANGE:
+											m_tracker->GainMeleeXP();
+											break;
+										}//end weapon subtype
+										break;
+									case MAGIC:
+										switch(m_cSubType)
+										{
+										case DIVINE:
+											m_tracker->GainMagicXP(0);
+											break;
+										case LIGHTNING:
+											m_tracker->GainMagicXP(1);
+											break;
+										case FIRE:
+											m_tracker->GainMagicXP(2);
+											break;
+										case ICE:
+											m_tracker->GainMagicXP(3);
+											break;
+										}//end magic subtype
+										break;
+									}//end type Switch
+								}// end collision if
 								collisionMade = true;
-							}
-						}
+							}//end shouldApplyEffect
+						}//for loop
 					}
 					check = false;
 				}
