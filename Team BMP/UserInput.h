@@ -40,7 +40,7 @@ class UserInput
 		char getHKeyR() {return hotKeyRight;}
 		void setKey(char key) {initKey = key;}
 		void setLastKey(char key) {lastKeyPressed = key;}
-		char getLastKey() {char lastKey = lastKeyPressed; lastKeyPressed = KEY_TRUE_NONE; return lastKey;}
+		char getLastKey() {char lastKey = lastKeyPressed; lastKeyPressed = 10; return lastKey;}
 		char getKey() {return initKey;}
 		bool getSpace() {return spaceBar;}
 		//Resetting the mouse. Used in order to prevent the mouse being held down.

@@ -490,7 +490,7 @@ void World::setNPC()
 		SDL_Sprite * newSprite = new SDL_Sprite(m_sprites[NPC1].fileName, m_sprites[NPC1].frameWidth, m_sprites[NPC1].frameHeight, m_sprites[NPC1].animSpeed, m_sprites[NPC1].rows);
 		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), newSprite);
 		newNPC->setNewed(true);
-		newNPC->setLocation(x, y);
+		newNPC->setLocation(x*FRAME_SIZE, y*FRAME_SIZE);
 		add(newNPC);
 		c = fgetc(infile);
 	}

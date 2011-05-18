@@ -7,6 +7,7 @@
 #define SDLDELAY		17
 #include "sdl/sdl.h"
 #include <stdio.h>
+#include <conio.h>
 
 //THIS NEXT LINE IS OMGWTFDANGEROUS, BE CAREFUL WHEN USING THIS LINE.
 #define SDL_SCREEN_STARTUP			SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE)
@@ -42,6 +43,10 @@ private:
 	UserInput * stateUI;
 	//Uint32 then = SDL_GetTicks(), now, passed, second = 0;
 	Uint32 then, now, passed, second;
+	TTtext fps;
+	MyFont myfps;
+	char cfps[10];
+	int ifps;
 public:
 	void enter(baseEngine* be) 
 	{
@@ -49,19 +54,24 @@ public:
 		stateUI = NULL;
 		then = SDL_GetTicks();
 		now = passed = second = 0;
+		myfps.setFont(FONTSIZE);
+		fps.setFont(myfps.getFont());
+		ifps = 0;
+		fps.setMessage("0");
 	}
 	void execute(baseEngine* be) 
 	{
+		ifps++;
 		now = SDL_GetTicks();
 		passed = now - then;
 		then = now;
-		/*if(now - second > 1000)
+		if(now - second > 1000)
 		{
 			sprintf_s(cfps, "%i", ifps);
 			fps.setMessage(cfps);
 			ifps = 0;
 			second = now;
-		}*/
+		}
 		if(stateUI != NULL)
 		{
 			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
@@ -73,7 +83,7 @@ public:
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		be->getWorld()->draw(screen);
 		be->getHUD()->draw(screen);
-
+		fps.printMessage(screen, 0, 0);
 		SDL_Flip(screen);
 	} //Input Logic Draw
 	void exit(baseEngine* be) {SDL_FreeSurface(screen);}
@@ -84,12 +94,79 @@ public:
 class newGameState : public State
 {
 private:
-	char * playerName;
+	char playerName[20];
+	char * enterNameMessage;
 	UserInput * stateUI;
+	SDL_Sprite newGameScreen;
+	SDL_Surface * screen;
+	bool typing, finished;
+	SRect type;
+	SDL_Rect newType;
+	int num;
+	MyFont hi;
+	TTtext playerNewName;
+	TTtext enterNewMessage;
 public:
-	void enter(baseEngine *be) {}
-	void execute(baseEngine *be) {}
-	void exit(baseEngine *be) {}
+	void enter(baseEngine *be) 
+	{
+		
+		enterNameMessage = "Enter new name below: ";
+		stateUI = NULL;
+		screen = SDL_SCREEN_STARTUP;
+		newGameScreen.setSprite("Sprites/newGameScreen.bmp", 626, 470, 0, 1);
+		typing = finished = false;
+		type.x = newType.x = 219;
+		type.y = newType.y = 224;
+		type.h = newType.h = 43;
+		type.w = newType.w = 204;
+		num = 1;
+		hi.setFont(FONTSIZE);
+		playerNewName.setFont(hi.getFont());
+		enterNewMessage.setFont(hi.getFont());
+	}
+	void execute(baseEngine *be) 
+	{
+		if(stateUI != NULL)
+		{
+			if(typing == true)
+			{
+				char c = stateUI->getLastKey();
+				//char c = getch();
+				if(c > 0)
+				{
+					if(c == 8 || c == 7 || c == 13) //Backspace, bell, tab, and newline.
+						{
+							playerName[num] = ' ';
+							num--;
+						}
+					else if(c == 10)
+					{
+						//Do nothing.
+					}
+					else if(num < 20)
+					{
+						playerName[num] = c;
+						num++;
+					}
+				}
+			}
+			if(type.contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())) && stateUI ->getClick() == 1)
+			{
+				typing = true;
+			}
+		}
+		playerNewName.setMessage(playerName);
+		enterNewMessage.setMessage(enterNameMessage);
+		//Draw
+		enterNewMessage.printMessage(screen, 100, 100);
+		SDL_FillRect(screen, &newType , 0xffffff);
+		playerNewName.printMessage(screen, 200, 250);
+		SDL_Flip(screen);
+	}
+	void exit(baseEngine *be) 
+	{
+
+	}
 	void handleInput(UserInput * obj) {stateUI = obj;}
 	static newGameState* instance() {static newGameState instance; return &instance;}
 };
@@ -146,7 +223,7 @@ public:
 		switch(choice)
 		{
 		case 1:
-			be->changeState(actualGameState::instance());
+			be->changeState(newGameState::instance());
 			break;
 		case 2:
 			be->changeState(actualGameState::instance());

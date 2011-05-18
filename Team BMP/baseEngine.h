@@ -17,7 +17,6 @@ class baseEngine;
 
 struct State
 {
-	UserInput hai;
 	virtual void enter(baseEngine* be) {}
 	virtual void execute(baseEngine* be){}
 	virtual void exit(baseEngine* be) {}
