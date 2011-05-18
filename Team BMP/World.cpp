@@ -158,21 +158,19 @@ bool World::setWorld(char * fileName)
 				switch(currentWorld)
 				{
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_R;	hi.collide = true;	break;
-				default:			hi.indexOfSpriteRow = TILE_DUST_D;
 				}
 				break;
 			case 'V':
 				switch(currentWorld)
 				{
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD_L;	hi.collide = true;	break;
-				default:			hi.indexOfSpriteRow = TILE_DUST_R;
+				default:			hi.indexOfSpriteRow = TILE_ROAD;
 				}
 				break;
 			case 'M':
 				switch(currentWorld)
 				{
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD_R;	hi.collide = true;	break;
-				default:			hi.indexOfSpriteRow = TILE_DUST_CORNER;
 				}
 				break;
 			case 'B':
@@ -212,6 +210,71 @@ bool World::setWorld(char * fileName)
 			case '=':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_BRIDGE_H;
+				break;
+			case ';':
+				hi.currentTexture = m_worldSprites[ANIMATION];
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_ANGLE_TR;		break;
+				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_ANGLE_DTR;		break;
+				}
+				break;
+			case '/':
+				hi.currentTexture = m_worldSprites[ANIMATION];
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_ANGLE_TL;		break;
+				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_ANGLE_DTL;		break;
+				}
+				break;
+				
+			case ')':
+				hi.currentTexture = m_worldSprites[ANIMATION];
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_ANGLE_BR;		break;
+				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_ANGLE_DBR;		break;
+				}
+				break;
+			case '(':
+				hi.currentTexture = m_worldSprites[ANIMATION];
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_ANGLE_BL;		break;
+				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_ANGLE_DBL;		break;
+				}
+				break;
+			case 'y':
+				hi.currentTexture = m_worldSprites[ANIMATION];
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_CORNER_TR;		break;
+				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DTR;	break;
+				}
+				break;
+			case 'Y':
+				hi.currentTexture = m_worldSprites[ANIMATION];
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_CORNER_TL;		break;
+				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DTL;	break;
+				}
+				break;
+			case 'z':
+				hi.currentTexture = m_worldSprites[ANIMATION];
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_CORNER_BR;		break;
+				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DBR;	break;
+				}
+				break;
+			case 'Z':
+				hi.currentTexture = m_worldSprites[ANIMATION];
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_CORNER_BL;		break;
+				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DBL;	break;
+				}
 				break;
 			case 'C':
 				hi.indexOfSpriteRow = TILE_CASTLE_GROUND;

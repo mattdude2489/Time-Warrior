@@ -18,6 +18,8 @@
 
 //Some debugging includes
 #include <stdio.h>
+//players sprite sizes
+enum e_player_sprites		{P_WIDTH = 17, P_HEIGHT = 27};
 
 int main(int argc, char ** argv)//must be the header for sdl application and yes the arg stuff
 {
@@ -55,7 +57,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	Hud Ghud;
 	World world;
-	SDL_Sprite test("Sprites/SpriteTest.bmp", 24, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	SDL_Sprite test("Sprites/SpriteTest.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
 	Player eTest(ONE_HUNDRED_PERCENT, ONE_HUNDRED_PERCENT, false, false, false, false, false, false, &test, &world);
 	world.add(&eTest);
 	world.setCamera(eTest.getCamera());
