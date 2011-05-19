@@ -32,11 +32,14 @@ class Chip : public Entity
 		Entity * m_owner;
 		//Chip Leveler
 		BaseLeveler * m_tracker;
+		//flags for sprite's flip(s) & rotation
+		bool m_isFlipH, m_isFlipV;
+		int m_rotateDeg;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_timeSinceLastAttack(0),
-			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_tracker(NULL)
+			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_tracker(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0)
 		    {m_eType = CHIP;m_stats[LEVEL] = 0; m_tracker = new BaseLeveler();}
 		~Chip()
 		{
@@ -85,6 +88,56 @@ class Chip : public Entity
 				return m_owner->getLocation().y + m_owner->getHeightOffsetCenter();
 			else
 				return 0;
+		}
+		void makeSpriteMatchDirection()
+		{
+			//un-flip sprite if it has been flipped in any way
+			if(m_isFlipH)
+			{
+				m_sprite->flipHorizontal();
+				m_isFlipH = false;
+			}
+			if(m_isFlipV)
+			{
+				m_sprite->flipVertical();
+				m_isFlipV = false;
+			}
+			//un-rotate sprite if it has been rotated in any way
+			for(int i = 0; i < (360/90) - m_rotateDeg / 90; ++i)
+				m_sprite->rotate90();
+			m_rotateDeg = 0;
+			int dir = m_direction;
+			if(m_cType == MAGIC)
+				dir = getTargetDirection();
+			switch(dir)
+			{
+			case KEY_LEFT:
+			case ROW_LEFT:
+				m_rotateDeg = 270;
+				m_sprite->rotate270();
+				break;
+			case KEY_RIGHT:
+			case ROW_RIGHT:
+				if(m_cType == WEAPON)
+				{
+					m_rotateDeg = 270;
+					m_sprite->rotate270();
+					m_isFlipH = true;
+					m_sprite->flipHorizontal();
+				}
+				else
+				{
+					m_rotateDeg = 90;
+					m_sprite->rotate90();
+				}
+				break;
+			case KEY_DOWN:
+			case ROW_DOWN:
+				m_isFlipH = m_isFlipV = true;
+				m_sprite->flipHorizontal();
+				m_sprite->flipVertical();
+				break;
+			}
 		}
 		//returns x location to center around owner
 		int centerAroundOwnerCenterX(){return getOwnerCenterX() - m_sprite->getWidthOffsetCenter();}
@@ -157,6 +210,14 @@ class Chip : public Entity
 					{
 						m_owner->useEnergy(m_cost);
 						centerTarget();
+						switch(m_cSubType)
+						{
+						case LIGHTNING:
+						case ICE:
+							if(m_cSubSubType == BASIC)
+								makeSpriteMatchDirection();
+							break;
+						}
 					}
 				}
 			}

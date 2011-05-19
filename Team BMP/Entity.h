@@ -123,7 +123,7 @@ public:
 			{
 			case MINION:
 			case BOSS:
-				faceTargetDirection();
+				m_sprite->setRIndex(getTargetDirection());
 				break;
 			}
 			m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y);
@@ -191,7 +191,7 @@ public:
 			return true;
 	}
 	bool moveToTarget(int a_maxDistance){return moveTo(&m_target, a_maxDistance);};
-	void faceTargetDirection()
+	int getTargetDirection()
 	{
 		/*
 		Sprite-Direction Diagram: based on how player's sprite faces when moved
@@ -204,22 +204,22 @@ public:
 		+-+-+-+
 		*/
 		if(m_target.x < m_location.x)
-				m_sprite->setRIndex(ROW_LEFT);
+				return ROW_LEFT;
 		else
 		{
 			if(m_target.x > m_location.x)
 			{
 				if(m_target.y > m_location.y)
-					m_sprite->setRIndex(ROW_DOWN);
+					return ROW_DOWN;
 				else
-					m_sprite->setRIndex(ROW_RIGHT);
+					return ROW_RIGHT;
 			}
 			else
 			{
 				if(m_target.y < m_location.y)
-					m_sprite->setRIndex(ROW_UP);
+					return ROW_UP;
 				else if(m_target.y > m_location.y)
-					m_sprite->setRIndex(ROW_DOWN);
+					return ROW_DOWN;
 			}
 		}
 	}

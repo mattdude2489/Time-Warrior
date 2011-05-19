@@ -31,6 +31,14 @@ class Magic : public Chip
 				setLocation(m_target);
 				break;
 			}
+			switch(m_cSubType)
+			{
+			case LIGHTNING:
+			case ICE:
+				if(m_cSubSubType == BASIC)
+					makeSpriteMatchDirection();
+				break;
+			}
 			//heal if using Divine
 			if(m_cSubType == DIVINE)
 				m_owner->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));

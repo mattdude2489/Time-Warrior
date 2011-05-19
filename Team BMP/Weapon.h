@@ -6,14 +6,9 @@
 
 class Weapon : public Chip
 {
-	protected:
-		//flags for sprite's flip(s) & rotation
-		bool m_isFlipH, m_isFlipV;
-		int m_rotateDeg;
 	public:
 		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
-			:Chip(WEAPON, a_subType, a_subSubType),
-			m_isFlipH(false),m_isFlipV(false),m_rotateDeg(0){}
+			:Chip(WEAPON, a_subType, a_subSubType){}
 		//set the weapon's position based on whatever direction its owner is facing
 		void setLocationUsingDirection()
 		{
@@ -46,54 +41,14 @@ class Weapon : public Chip
 		}
 		void activateUnique()
 		{
-			//un-flip sprite if it has been flipped in any way
-			if(m_isFlipH)
-			{
-				m_sprite->flipHorizontal();
-				m_isFlipH = false;
-			}
-			if(m_isFlipV)
-			{
-				m_sprite->flipVertical();
-				m_isFlipV = false;
-			}
-			//un-rotate sprite if it has been rotated in any way
-			for(int i = 0; i < (360/90) - m_rotateDeg / 90; ++i)
-				m_sprite->rotate90();
-			m_rotateDeg = 0;
-			//adjust the flip/rotation to match the facing direction
-			switch(m_cSubSubType)
-			{
-			case BASIC:
-			case ADVANCED:
-			case EXPERT:
-				switch(m_direction)
-				{
-				case KEY_LEFT:
-				case KEY_RIGHT:
-					m_rotateDeg = 270;
-					m_sprite->rotate270();
-					if(m_direction == KEY_RIGHT)
-					{
-						m_isFlipH = true;
-						m_sprite->flipHorizontal();
-					}
-					break;
-				case KEY_DOWN:
-					m_isFlipH = m_isFlipV = true;
-					m_sprite->flipHorizontal();
-					m_sprite->flipVertical();
-					break;
-				}
-				//due to different row sizes, sprite's row has to be re-set
-				if(m_cSubSubType != EXPERT)
-					m_sprite->setRIndex(m_cSubSubType);
-				else
-					m_sprite->setRIndex(m_cSubSubType-1);
-				//set weapon's position based on facing direction
-				setLocationUsingDirection();
-				break;
-			}
+			makeSpriteMatchDirection();
+			//due to different row sizes, sprite's row has to be re-set
+			if(m_cSubSubType != EXPERT)
+				m_sprite->setRIndex(m_cSubSubType);
+			else
+				m_sprite->setRIndex(m_cSubSubType-1);
+			//set weapon's position based on facing direction
+			setLocationUsingDirection();
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
