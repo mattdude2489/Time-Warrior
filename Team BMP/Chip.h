@@ -214,8 +214,7 @@ class Chip : public Entity
 						{
 						case LIGHTNING:
 						case ICE:
-							if(m_cSubSubType == BASIC)
-								makeSpriteMatchDirection();
+							makeSpriteMatchDirection();
 							break;
 						}
 					}

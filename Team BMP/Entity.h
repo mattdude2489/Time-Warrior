@@ -123,7 +123,11 @@ public:
 			{
 			case MINION:
 			case BOSS:
-				m_sprite->setRIndex(getTargetDirection());
+				{
+				int d = getTargetDirection();
+				if(d != NUM_ROWS)
+					m_sprite->setRIndex(d);
+				}
 				break;
 			}
 			m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y);
@@ -220,6 +224,8 @@ public:
 					return ROW_UP;
 				else if(m_target.y > m_location.y)
 					return ROW_DOWN;
+				else//some other # to identity that location == target (last known direction should be used)
+					return NUM_ROWS;
 			}
 		}
 	}
