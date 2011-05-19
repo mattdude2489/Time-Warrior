@@ -94,7 +94,7 @@ public:
 class newGameState : public State
 {
 private:
-	char playerName[20];
+	char playerName[21];
 	char * enterNameMessage;
 	UserInput * stateUI;
 	SDL_Sprite newGameScreen;
@@ -109,7 +109,11 @@ private:
 public:
 	void enter(baseEngine *be) 
 	{
-		
+		for(int i = 0; i < 20; i++)
+		{
+			playerName[i] = ' ';
+		}
+		playerName[20] = 0; //Null terminator.
 		enterNameMessage = "Enter new name below: ";
 		stateUI = NULL;
 		screen = SDL_SCREEN_STARTUP;
@@ -134,14 +138,18 @@ public:
 				//char c = getch();
 				if(c > 0)
 				{
-					if(c == 8 || c == 7 || c == 13) //Backspace, bell, tab, and newline.
+					if(c == 8 || c == 7) //Backspace, bell, tab, and newline.
 						{
-							playerName[num] = ' ';
 							num--;
+							playerName[num] = ' ';
 						}
 					else if(c == 10)
 					{
 						//Do nothing.
+					}
+					else if(c == 13)
+					{
+						exit(be);
 					}
 					else if(num < 20)
 					{
@@ -158,14 +166,17 @@ public:
 		playerNewName.setMessage(playerName);
 		enterNewMessage.setMessage(enterNameMessage);
 		//Draw
+		newGameScreen.draw(screen, 0, 0);
 		enterNewMessage.printMessage(screen, 100, 100);
-		SDL_FillRect(screen, &newType , 0xffffff);
-		playerNewName.printMessage(screen, 200, 250);
+		SDL_FillRect(screen, &newType , 0xff0000);
+		playerNewName.printMessage(screen, type.x, type.y+15);
 		SDL_Flip(screen);
 	}
 	void exit(baseEngine *be) 
 	{
-
+		be->getPlayer()->newGame();
+		be->getPlayer()->setName(playerName);
+		be->changeState(actualGameState::instance());
 	}
 	void handleInput(UserInput * obj) {stateUI = obj;}
 	static newGameState* instance() {static newGameState instance; return &instance;}

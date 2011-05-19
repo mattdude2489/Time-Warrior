@@ -486,6 +486,14 @@ void Player::newGame()
 	case LIMB_UPPER:	setGauntletSlot(SLOT_ARMOR_LIMB_UPPER, gear);	break;
 	case LIMB_LOWER:	setGauntletSlot(SLOT_ARMOR_LIMB_LOWER, gear);	break;
 	}
+	//Level: 0 to 1, HP Max 2 to 100, Energy Max 4 to 100, Strength 6 to 0, int 7 to 0;
+	m_stats[LEVEL] = 1;
+	m_stats[HEALTH_MAX] = 100;
+	m_stats[ENERGY_MAX] = 100;
+	m_stats[STRENGTH] = 0;
+	m_stats[INTELLECT] = 0;
+	m_experience = 0;
+	m_expLvReq = 2;
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 {
