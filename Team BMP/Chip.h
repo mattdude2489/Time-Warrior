@@ -19,9 +19,7 @@ class Chip : public Entity
 		e_chipSubType m_cSubType;
 		e_chipSubSubType m_cSubSubType;
 		//whether or not it's equipped
-		bool m_isEquipped;
-		//flag to whether or not the sprite is on its 1st animation run-through
-		bool m_firstIteration;
+		bool m_isEquipped, m_firstIteration;
 		//direction owner is facing
 		char m_direction;
 		//stats for energy cost, dmg, & time since last atk
@@ -40,7 +38,7 @@ class Chip : public Entity
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_timeSinceLastAttack(0),
 			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_tracker(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0)
-		    {m_eType = CHIP;m_stats[LEVEL] = 0; m_tracker = new BaseLeveler();}
+		{m_eType = CHIP; m_stats[LEVEL] = 0; m_tracker = new BaseLeveler();}
 		~Chip()
 		{
 			//free memory from allocated sprites
@@ -50,6 +48,20 @@ class Chip : public Entity
 				delete m_spriteHUD;
 			if(m_tracker)
 				delete m_tracker;
+		}
+		void resetLevelWithBaseLeveler()
+		{
+			if(m_cType != ARMOR)
+			{
+				switch(m_cSubType)
+				{
+				case DIVINE:	m_stats[LEVEL] = m_tracker->getAttackLevel(DIVINE_0);	break;
+				case LIGHTNING:	m_stats[LEVEL] = m_tracker->getAttackLevel(STORM);		break;
+				case FIRE:		m_stats[LEVEL] = m_tracker->getAttackLevel(FIRE_0);		break;
+				case ICE:		m_stats[LEVEL] = m_tracker->getAttackLevel(ICE_0);		break;
+				default:		m_stats[LEVEL] = m_tracker->getAttackLevel(MELEE);		break;
+				}
+			}
 		}
 		//returns Chip's various types
 		e_chipType getType(){return m_cType;}
@@ -269,9 +281,9 @@ class Chip : public Entity
 										switch(m_cSubType)
 										{
 										case BLUNT:
+										case RANGE:
 										case SLASH:
 										case PIERCE:
-										case RANGE:
 											m_tracker->GainMeleeXP();
 											break;
 										}//end weapon subtype
@@ -279,21 +291,14 @@ class Chip : public Entity
 									case MAGIC:
 										switch(m_cSubType)
 										{
-										case DIVINE:
-											m_tracker->GainMagicXP(0);
-											break;
-										case LIGHTNING:
-											m_tracker->GainMagicXP(1);
-											break;
-										case FIRE:
-											m_tracker->GainMagicXP(2);
-											break;
-										case ICE:
-											m_tracker->GainMagicXP(3);
-											break;
+										case DIVINE:	m_tracker->GainMagicXP(DIVINE_0);	break;
+										case LIGHTNING:	m_tracker->GainMagicXP(STORM);		break;
+										case FIRE:		m_tracker->GainMagicXP(FIRE_0);		break;
+										case ICE:		m_tracker->GainMagicXP(ICE_0);		break;
 										}//end magic subtype
 										break;
 									}//end type Switch
+									resetLevelWithBaseLeveler();
 								}// end collision if
 								collisionMade = true;
 							}//end shouldApplyEffect

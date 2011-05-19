@@ -129,7 +129,7 @@ class Magic : public Chip
 class Divine : public Magic
 {
 	public:
-		Divine(e_chipSubSubType a_subSubType):Magic(DIVINE, a_subSubType){setSprite("Sprites/magic_divine.bmp");}
+		Divine(e_chipSubSubType a_subSubType):Magic(DIVINE, a_subSubType){setSprite("Sprites/magic_divine.bmp");resetLevelWithBaseLeveler();}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -152,7 +152,7 @@ class Divine : public Magic
 class Lightning : public Magic
 {
 	public:
-		Lightning(e_chipSubSubType a_subSubType):Magic(LIGHTNING, a_subSubType){setSprite("Sprites/magic_lightning.bmp");}
+		Lightning(e_chipSubSubType a_subSubType):Magic(LIGHTNING, a_subSubType){setSprite("Sprites/magic_lightning.bmp");resetLevelWithBaseLeveler();}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -175,7 +175,7 @@ class Lightning : public Magic
 class Fire : public Magic
 {
 	public:
-		Fire(e_chipSubSubType a_subSubType):Magic(FIRE, a_subSubType){setSprite("Sprites/magic_fire.bmp");}
+		Fire(e_chipSubSubType a_subSubType):Magic(FIRE, a_subSubType){setSprite("Sprites/magic_fire.bmp");resetLevelWithBaseLeveler();}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -198,7 +198,7 @@ class Fire : public Magic
 class Ice : public Magic
 {
 	public:
-		Ice(e_chipSubSubType a_subSubType):Magic(ICE, a_subSubType){setSprite("Sprites/magic_ice.bmp");}
+		Ice(e_chipSubSubType a_subSubType):Magic(ICE, a_subSubType){setSprite("Sprites/magic_ice.bmp");resetLevelWithBaseLeveler();}
 		char * getName(){
 			switch(m_cSubSubType)
 			{

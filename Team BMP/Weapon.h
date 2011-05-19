@@ -8,7 +8,7 @@ class Weapon : public Chip
 {
 	public:
 		Weapon(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
-			:Chip(WEAPON, a_subType, a_subSubType){}
+			:Chip(WEAPON, a_subType, a_subSubType){resetLevelWithBaseLeveler();}
 		//set the weapon's position based on whatever direction its owner is facing
 		void setLocationUsingDirection()
 		{
