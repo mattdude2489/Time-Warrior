@@ -22,7 +22,7 @@ void Player::initPlayer(World * newWorld)
 	if(!loadPlayer())
 		newGame();
 	m_isStatWindowActive = false;
-	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
+	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 2);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
 	playerName = "New Name";
 }
@@ -64,9 +64,19 @@ int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory 
 		if(test)
 			valid = test->getStatNumber(LEVEL) > 0;
 		if(test && valid)
+		{
 			test->drawHUD(a_screen, x, y);
+			if(test->isEquipped() && a_type != INVENTORY_GAUNTLET)
+			{
+				m_blankInventory->setRIndex(1);
+				m_blankInventory->draw(a_screen, x, y);
+			}
+		}
 		else
+		{
+			m_blankInventory->setRIndex(0);
 			m_blankInventory->draw(a_screen, x, y);
+		}
 		//calc # of rows it took to draw the inventory with the given format
 		rows = ((y-a_y)/FRAME_SIZE) + 1;
 		//update position for next iteration
