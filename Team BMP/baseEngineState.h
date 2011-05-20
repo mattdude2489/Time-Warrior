@@ -68,7 +68,7 @@ public:
 		if(now - second > 1000)
 		{
 			sprintf_s(cfps, "%i", ifps);
-			fps.setMessage(cfps);
+			fps.setMessage(cfps); //Set message? Could setMessage be causing a memory leak? I don't think so, but who knows?
 			ifps = 0;
 			second = now;
 		}
@@ -88,6 +88,107 @@ public:
 	} //Input Logic Draw
 	void exit(baseEngine* be) {SDL_FreeSurface(screen);}
 	static actualGameState* instance() {static actualGameState instance; return &instance;}
+	void handleInput(UserInput * obj) {stateUI = obj;}
+};
+
+
+class loadGameState: public State
+{
+private:
+	UserInput * stateUI;	//The UserInput. We all know how this goes.
+	SDL_Surface * screen;	//The SDL_Surface of which this State writes to.
+	int optionOfReturn;		//The erroring integer, or the saveFile that the user has selected.
+	int saveFiles;			//The number of Save Files located in the file.
+	SRect * loadRects;		//...The soon to be array of rectangles that allow the user to switch which save file.
+	TTtext playerMessages;	//Any messages that may need to occur, such as erroring.
+	TTtext * loadMessages;	//I'm going to go to hell for this, aren't I?
+	int checkClick;
+public:
+	void enter(baseEngine *be)
+	{
+		optionOfReturn = 0; //Initialize the erroring integer.
+		checkClick = -1;
+		saveFiles = 0;
+		FILE * hi;
+		hi = fopen("playerSave.txt", "r"); //Open the file for reading.
+		if(hi == NULL)
+		{
+			optionOfReturn = -1; //Go back to Title Screen if the FILE cannot be opened, for some odd weird reason.
+			exit(be);
+		}
+		fpos_t newPos;
+		fgetpos(hi, &newPos);
+		char c = fgetc(hi);
+		while(c != EOF) //Get the amount of save Files within the playerSave.
+		{
+			if(c == '#')
+				saveFiles++;
+			c = fgetc(hi);
+		}
+		fsetpos(hi, &newPos);
+		//I'm going to hell for this, aren't I?
+		loadRects = new SRect[saveFiles];
+		loadMessages = new TTtext[saveFiles];
+		MyFont whoo;
+		//For the save Files to be recognized, we need a Name, and a Level.
+		int k; //Level variable. I don't feel like being descriptive atm.
+		for(int i = 0; i < saveFiles; i++)
+		{
+			//Start at the beginning, then move on to the next one.
+			loadRects[i].setDimension(SPoint(200, 15));
+			loadRects[i].setPosition(SPoint(100, (i*15)+100));
+			//Save Files will be reconstructed: Name, Level, and then character P.
+			char point[40];
+			fscanf(hi, "s", point);
+			strcat(point, ": Level ");
+			fscanf(hi, "i", k);
+			itoa(k, point, 10);
+			loadMessages[i].setFont(whoo.getFont());
+			loadMessages[i].setMessage(point);
+
+			//Now to get to the next player.
+			while(true) //My god...I can't believe I'm actually using this.
+			{
+				c = fgetc(hi);
+				if(c == '#')
+					break;
+			}
+		}
+		//And that...should be everything.
+	}
+	void execute(baseEngine *be)
+	{
+		//DO NOTHING FOR NOW. COMPILE FOR ERROR CHECKING. No Errors...continue with execute function.
+		//Input, Logic, Draw. Logic step...which requires an array of booleans. I...will not like this.
+		
+		if(stateUI != NULL)
+		{
+			for(int i = 0; i < saveFiles; i++)
+			{
+				if(loadRects[i].contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())) && stateUI->getClick() == 1)
+				{
+					checkClick = i;
+					exit(be);
+				}
+			}
+		}
+		SDL_Rect newRect;
+		for(int i = 0; i < saveFiles; i++)
+		{
+			newRect.x = loadRects[i].x; newRect.y = loadRects[i].y; newRect.h = loadRects[i].h; newRect.w = loadRects[i].w;
+			SDL_FillRect(screen, &newRect, 0xff0000);
+			loadMessages[i].printMessage(screen, loadRects[i].x, loadRects[i].y);
+		}
+
+		SDL_Flip(screen);
+	}
+	void exit(baseEngine *be)
+	{
+		SDL_FreeSurface(screen);
+		delete loadRects; //I'm going to hell aren't I?
+		delete loadMessages; //Yes. Yes you are.
+	}
+	static loadGameState* instance() {static loadGameState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}
 };
 
@@ -174,6 +275,7 @@ public:
 	}
 	void exit(baseEngine *be) 
 	{
+		SDL_FreeSurface(screen);
 		be->getPlayer()->newGame();
 		be->getPlayer()->setName(playerName);
 		be->changeState(actualGameState::instance());
@@ -237,7 +339,7 @@ public:
 			be->changeState(newGameState::instance());
 			break;
 		case 2:
-			be->changeState(actualGameState::instance());
+			be->changeState(loadGameState::instance());
 			break;
 		case 3:
 			be->changeState(actualGameState::instance());

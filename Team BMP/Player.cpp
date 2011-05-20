@@ -180,7 +180,7 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
 //SAVES CURRENT INVENTORY, INCLUDING ARMOR AND CHIPS.
 void Player::save()
 {
-	//File will go like this: P#(Level)#(HP)#(Energy)#(Str)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
+	//File will go like this: PlayerName#(Level)#P#(HP)#(Energy)#(Str)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
 	//							A#(SubType)#(SubSubType)#(Level)#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(isEquipped)#/
 	//							C#(Type)#(SubType)#(SubSubType)#(Level)#(Cost)#(isEquipped)#/
 	//Fire, Ice, Lightning, Bludgeoning, Slashing, Divine, Ranged, Piercing, Armor
@@ -188,7 +188,10 @@ void Player::save()
 
 	FILE * outfile;
 	outfile = fopen("playerSave.txt", "w");
-	fprintf(outfile, "P %i %i %i %i %i %f %i %i / ", m_stats[LEVEL], m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	if(outfile == NULL)
+		return; //Break out if it fails.
+
+	fprintf(outfile, "P %s %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{
@@ -208,6 +211,7 @@ void Player::save()
 			}
 		}
 	}
+	fprintf(outfile, "#"); //Required for the load screen...I know its annoying. I'm sorry.
 	fclose(outfile);
 
 }
@@ -228,6 +232,7 @@ bool Player::loadPlayer()
 	float exp;
 	static int gauntletSlotSetter = SLOT_ATK1;
 	char charget;
+	char name[20];
 	charget = fgetc(infile);
 	while(charget != EOF)
 	{
@@ -235,6 +240,7 @@ bool Player::loadPlayer()
 		if(charget == 'P')
 		{
 			//Level (IGNORE)
+			fscanf(infile, "%s", name);
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 
 			//HP (IGNORE)
@@ -246,6 +252,7 @@ bool Player::loadPlayer()
 			//Strength
 				//make sure stored value is valid
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
+			this->setName(name);
 			this->m_stats[STRENGTH] = hpenstrintexpsta;
 			if(this->m_stats[STRENGTH] < 0)
 				this->m_stats[STRENGTH] = 0;

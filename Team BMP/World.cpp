@@ -658,12 +658,12 @@ void World::setMonsters()
 void World::update(Uint32 a_timePassed)
 {
 	//Making sure that the entities are all in their correct grids.
-	Entity * cE = NULL;
+	Entity * cE = NULL; //Empty entity pointer...
 	for(int z = 0; z < m_mapOfEntities.size(); z++)
 	{
 		for(int i = 0; i < m_mapOfEntities.get(z).getNumberOfEntities(); i++)
 		{
-			cE = m_mapOfEntities.get(z).getEntity(i);
+			cE = m_mapOfEntities.get(z).getEntity(i); //Get the entity here.
 			if(getLocationGrid(cE) != ERROR_CODE)
 			{
 				if(getLocationGrid(cE) != z && cE->getFlag(FLAG_DRAW))
@@ -676,9 +676,9 @@ void World::update(Uint32 a_timePassed)
 	}
 	
 	//Update entities based on where the current Camera is.
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
+	for(int i = 0; i < m_mapOfEntities.size(); i++) //Check the grids...
 	{
-		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc()))
+		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc())) //If the grids intersect, update them.
 			m_mapOfEntities.get(i).update(a_timePassed, this);
 	}
 	for(int i = 0; i < m_mapOfEntities.size(); i++)

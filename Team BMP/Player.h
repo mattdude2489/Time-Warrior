@@ -20,7 +20,7 @@ class Player : public Entity
 private:
 	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS], *m_armorInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE];
 	SPoint m_cameraP;
-	int m_expLvReq;
+	int m_expLvReq, saveFile;
 	double m_experience;
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
 	bool loadedPlayer, m_isStatWindowActive;

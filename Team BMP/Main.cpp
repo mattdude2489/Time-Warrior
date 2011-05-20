@@ -141,13 +141,13 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 #endif
 		be.handleInput(&ui);
 		//update
+		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 		be.updateState();
 		//world.update(passed);
 		//Ghud.updateHud(&eTest, &ui, passed);
 		//ah.update(world.getCurrentWorld());//need to figure out to switch songs when entering a new area
 		//draw
 		//reset the screen.
-		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 #ifdef WITH_NETWORKING
 		strcpy(send, world.convertAllEntitiesToCharBuffer());
 		for(int i = 0; i < strlen(send)&& changeInInfoSoSend == false; i++)
