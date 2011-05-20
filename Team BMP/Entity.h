@@ -33,7 +33,7 @@ class Entity
 {
 protected:
 	bool m_flags[NUM_FLAGS];
-	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_statPoints;
+	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_statPoints, m_index;
 	e_entityType m_eType;
 	e_material m_mtrl;
 	SPoint m_location, m_prevLoc, *m_camera, m_target, m_lastWLoc;
@@ -50,8 +50,6 @@ public:
 	}
 	virtual~Entity()
 	{
-		if(m_flags[FLAG_NUDE])
-			delete m_sprite;
 	}
 	void init(){init(true, true, false, false, false, false, false, false);}
 	void init(SDL_Sprite * a_sprite){init();initSprite(a_sprite);}
@@ -128,6 +126,9 @@ public:
 				if(d != NUM_ROWS)
 					m_sprite->setRIndex(d);
 				}
+				break;
+			case OBSTACLE:
+				m_sprite->setRIndex(m_index);
 				break;
 			}
 			m_sprite->draw(a_screen, getLocationScreen().x, getLocationScreen().y);

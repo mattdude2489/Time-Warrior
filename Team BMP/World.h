@@ -16,27 +16,21 @@ enum e_worldTileA		{TILE_PORTAL, TILE_DUNGEON, TILE_WATER, TILE_WATER_D, TILE_WA
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide, portal, dungeon, spawnLocation, bossLoc, playerSpawn, tree, door, ddoor, fdoor, stairs;
+	bool collide, portal, dungeon, spawnLocation, bossLoc, playerSpawn, tree, door, ddoor, fdoor, stairs, animate;
 	SPoint pos, *cam;
-	int indexOfSpriteRow;
+	int indexOfSpriteRow, indexSpriteCol, animateUpdate;
 	static int portalIndexNumber;
 	SPoint getLocationScreen(){return pos.difference(*cam);}
-	Entity * m_player;
 	SRect collideBox;
 };
 
-struct SpriteInfo
-{
-	char * fileName;
-	int frameWidth, frameHeight, animSpeed, rows;
-};
 
 class World
 {
 private:
 	TemplateVector2<Grid> m_mapOfEntities;
 	TemplateVector2<Tile> m_mapOfWorld;
-	SpriteInfo m_sprites[NUM_SPRITES];
+	SDL_Sprite m_sprites[NUM_SPRITES];
 	SDL_Sprite * m_worldSprites[NUM_SPRITES_WORLD];
 
 	bool m_success, * m_closed;//m_closed to determine if dungeon is closed

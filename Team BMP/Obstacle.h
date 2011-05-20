@@ -9,7 +9,6 @@ class Obstacle : public Entity
 {
 private:
 	bool m_oType[NUM_OBSTACLE_TYPES];
-	int m_index;
 public:
 	Obstacle(SDL_Sprite *a_sprite):Entity(a_sprite)
 	{

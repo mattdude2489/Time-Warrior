@@ -10,6 +10,7 @@ private:
 	Chip * m_attack;
 	SPoint m_start;
 	int m_lastCast;
+	double distance;
 public:
 	Boss(SDL_Sprite * a_sprite)
 		:Minion(a_sprite)
@@ -18,6 +19,7 @@ public:
 		m_state = GUARD;
 		m_lastCast = 0;
 		m_attack = NULL;
+		distance = 0;
 	}
 	void setBossLoc(SPoint a_point)
 	{
@@ -47,9 +49,9 @@ public:
 			a_world->add(m_attack);
 		}
 	}
-	void isPlayerInRange(Entity *a_player, int a_time)
+	void isPlayerInRange(Entity *a_player)
 	{
-		double distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
+		distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
 		if(distance < BOSS_ENGAGE)
 			m_state = CHASE;
 		else
@@ -58,7 +60,10 @@ public:
 			m_location = m_start;
 			m_state = GUARD;
 		}
-		//updates the time till they can attack and cast again
+	}
+	void updateTargPlayer(Entity *a_player, int a_time)
+	{
+		m_target.set(a_player->getLocation());
 		m_hitLast += a_time;
 		m_lastCast += a_time;
 		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)//if coliding and the time to hit is up hit
