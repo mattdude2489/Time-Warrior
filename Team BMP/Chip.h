@@ -173,8 +173,10 @@ class Chip : public Entity
 				break;
 			}
 			//update cost & dmg
-			m_cost += m_costLv;
-			m_dmg += m_dmgLv;
+			//m_cost += m_costLv;
+			//m_dmg += m_dmgLv;
+			m_cost = m_costLv;
+			m_dmg = m_dmgLv;
 			if(m_cSubType == BLUNT)
 				m_dmg = (int)((double)m_dmg *.75);
 			//update variables unique to inherited classes

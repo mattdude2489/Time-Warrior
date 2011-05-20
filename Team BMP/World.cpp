@@ -252,6 +252,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DTR;	break;
 				}
 				break;
+				hi.collide = true;
 			case 'Y':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				switch(currentWorld)
@@ -260,6 +261,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DTL;	break;
 				}
 				break;
+				hi.collide = true;
 			case 'z':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				switch(currentWorld)
@@ -268,6 +270,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DBR;	break;
 				}
 				break;
+				hi.collide = true;
 			case 'Z':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				switch(currentWorld)
@@ -276,6 +279,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DBL;	break;
 				}
 				break;
+				hi.collide = true;
 			case 'C':
 				hi.indexOfSpriteRow = TILE_CASTLE_GROUND;
 				break;
