@@ -207,7 +207,7 @@ public:
 		+-+-+-+
 		|L|D|D|
 		+-+-+-+
-		*/
+		*
 		if(m_target.x < m_location.x)
 				return ROW_LEFT;
 		else
@@ -228,7 +228,34 @@ public:
 				else//some other # to identity that location == target (last known direction should be used)
 					return NUM_ROWS;
 			}
+		}*/
+		/*
+		Sprite-Direction Diagram: based on angle between target and location
+		+---+---+---+
+		|L\U| U |U/R|
+		+---+---+---+
+		| L |   | R |
+		+---+---+---+
+		|L/D| D |D\R|
+		+---+---+---+
+		*/
+		if(!m_location.equals(m_target))
+		{
+			int angleDeg = m_location.getAngleDegree(m_target, false);
+			//printf("angle: %d\n", angleDeg);
+			if(angleDeg < 45)
+				return ROW_RIGHT;
+			else if(angleDeg < 135)
+				return ROW_UP;
+			else if(angleDeg < 225)
+				return ROW_LEFT;
+			else if(angleDeg < 315)
+				return ROW_DOWN;
+			else
+				return ROW_RIGHT;
 		}
+		else
+			return NUM_ROWS;
 	}
 	virtual void setLocationUnique(int a_x, int a_y){}
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
