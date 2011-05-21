@@ -69,6 +69,10 @@ public:
 	}
 	void setMessage(char * a_message)//sets the text to print, this will need to be done every message
 	{
+		if(m_message != NULL)
+		{
+			SDL_FreeSurface(m_message);
+		}
 		m_message = TTF_RenderText_Blended(m_font, a_message, m_textColor);
 	}
 
