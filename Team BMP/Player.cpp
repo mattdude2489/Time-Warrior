@@ -475,8 +475,7 @@ void Player::newGame()
 	thisWorld->add(i1);
 	thisWorld->add(i2);
 	thisWorld->add(i3);
-	//add back in once BaseLeveler starts @ Lv 0
-	/*b1->levelUp();
+	b1->levelUp();
 	b2->levelUp();
 	b3->levelUp();
 	s1->levelUp();
@@ -493,7 +492,7 @@ void Player::newGame()
 	f3->levelUp();
 	i1->levelUp();
 	i2->levelUp();
-	i3->levelUp();*/
+	i3->levelUp();
 	this->setGauntletSlot(SLOT_ATK1, s1);
 	this->setGauntletSlot(SLOT_ATK2, f1);
 	switch(gear->getSubType())

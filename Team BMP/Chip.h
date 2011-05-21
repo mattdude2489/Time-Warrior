@@ -29,7 +29,7 @@ class Chip : public Entity
 		//owner of this Chip
 		Entity * m_owner;
 		//Chip Leveler
-		BaseLeveler * m_tracker;
+		BaseLeveler m_tracker;
 		//flags for sprite's flip(s) & rotation
 		bool m_isFlipH, m_isFlipV;
 		int m_rotateDeg;
@@ -37,17 +37,17 @@ class Chip : public Entity
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_timeSinceLastAttack(0),
-			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_tracker(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0)
-		{m_eType = CHIP; m_stats[LEVEL] = 0; m_tracker = new BaseLeveler();}
+			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0)
+		{m_eType = CHIP; m_stats[LEVEL] = 0;}// m_tracker = new BaseLeveler();}
 		~Chip()
 		{
 			//free memory from allocated sprites
-			if(m_sprite && !m_flags[FLAG_NUDE])
+			if(m_sprite)
 				delete m_sprite;
 			if(m_spriteHUD)
 				delete m_spriteHUD;
-			if(m_tracker)
-				delete m_tracker;
+			//if(m_tracker)
+			//	delete m_tracker;
 		}
 		void resetLevelWithBaseLeveler()
 		{
@@ -55,11 +55,11 @@ class Chip : public Entity
 			{
 				switch(m_cSubType)
 				{
-				case DIVINE:	m_stats[LEVEL] = m_tracker->getAttackLevel(DIVINE_0);	break;
-				case LIGHTNING:	m_stats[LEVEL] = m_tracker->getAttackLevel(STORM);		break;
-				case FIRE:		m_stats[LEVEL] = m_tracker->getAttackLevel(FIRE_0);		break;
-				case ICE:		m_stats[LEVEL] = m_tracker->getAttackLevel(ICE_0);		break;
-				default:		m_stats[LEVEL] = m_tracker->getAttackLevel(MELEE);		break;
+				case DIVINE:	m_stats[LEVEL] = m_tracker.getAttackLevel(DIVINE_0);	break;
+				case LIGHTNING:	m_stats[LEVEL] = m_tracker.getAttackLevel(STORM);		break;
+				case FIRE:		m_stats[LEVEL] = m_tracker.getAttackLevel(FIRE_0);		break;
+				case ICE:		m_stats[LEVEL] = m_tracker.getAttackLevel(ICE_0);		break;
+				default:		m_stats[LEVEL] = m_tracker.getAttackLevel(MELEE);		break;
 				}
 			}
 		}
@@ -286,17 +286,17 @@ class Chip : public Entity
 										case RANGE:
 										case SLASH:
 										case PIERCE:
-											m_tracker->GainMeleeXP();
+											m_tracker.GainMeleeXP();
 											break;
 										}//end weapon subtype
 										break;
 									case MAGIC:
 										switch(m_cSubType)
 										{
-										case DIVINE:	m_tracker->GainMagicXP(DIVINE_0);	break;
-										case LIGHTNING:	m_tracker->GainMagicXP(STORM);		break;
-										case FIRE:		m_tracker->GainMagicXP(FIRE_0);		break;
-										case ICE:		m_tracker->GainMagicXP(ICE_0);		break;
+										case DIVINE:	m_tracker.GainMagicXP(DIVINE_0);	break;
+										case LIGHTNING:	m_tracker.GainMagicXP(STORM);		break;
+										case FIRE:		m_tracker.GainMagicXP(FIRE_0);		break;
+										case ICE:		m_tracker.GainMagicXP(ICE_0);		break;
 										}//end magic subtype
 										break;
 									}//end type Switch
