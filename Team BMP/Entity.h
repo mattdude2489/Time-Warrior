@@ -199,49 +199,16 @@ public:
 	int getTargetDirection()
 	{
 		/*
-		Sprite-Direction Diagram: based on how player's sprite faces when moved
-		+-+-+-+
-		|L|U|R|
-		+-+-+-+
-		|L| |R|
-		+-+-+-+
-		|L|D|D|
-		+-+-+-+
-		*
-		if(m_target.x < m_location.x)
-				return ROW_LEFT;
-		else
-		{
-			if(m_target.x > m_location.x)
-			{
-				if(m_target.y > m_location.y)
-					return ROW_DOWN;
-				else
-					return ROW_RIGHT;
-			}
-			else
-			{
-				if(m_target.y < m_location.y)
-					return ROW_UP;
-				else if(m_target.y > m_location.y)
-					return ROW_DOWN;
-				else//some other # to identity that location == target (last known direction should be used)
-					return NUM_ROWS;
-			}
-		}*/
-		/*
 		Sprite-Direction Diagram: based on angle between target and location
-		+---+---+---+
-		|L\U| U |U/R|
-		+---+---+---+
-		| L |   | R |
-		+---+---+---+
-		|L/D| D |D\R|
-		+---+---+---+
+		+---+
+		|\U/|
+		|L R|
+		|/D\|
+		+---+
 		*/
 		if(!m_location.equals(m_target))
 		{
-			int angleDeg = m_location.getAngleDegree(m_target, false);
+			int angleDeg = m_location.getAngleDeg(m_target, false);
 			//printf("angle: %d\n", angleDeg);
 			if(angleDeg < 45)
 				return ROW_RIGHT;

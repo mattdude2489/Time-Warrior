@@ -101,13 +101,14 @@ struct SPoint
 	 */
 	int iterate(int & i_out, const SRect & a_area);
 	double getLength(){return sqrt((double)(x*x + y*y));}
-	double getAngleRadian(SPoint a_pt, bool a_isYUp){
+	int getAngleDeg(SPoint a_pt, bool a_isYUp)
+	{
+		double rad;
 		if(a_isYUp)
-			return atan(((double)(a_pt.y-y))/((double)(a_pt.x-x)));
+			rad = atan(((double)(a_pt.y-y))/((double)(a_pt.x-x)));
 		else
-			return atan(((double)(y-a_pt.y))/((double)(a_pt.x-x)));}
-	int getAngleDegree(SPoint a_pt, bool isYUp){
-		int ang = (int)(getAngleRadian(a_pt, isYUp)*(180/3.141592654));
+			rad = atan(((double)(y-a_pt.y))/((double)(a_pt.x-x)));
+		int ang = (int)(rad*(180/3.141592654));
 		if(a_pt.y < y && a_pt.x > x)
 			return ang;
 		else if ((a_pt.y < y && a_pt.x < x) || (a_pt.y > y && a_pt.x < x))
