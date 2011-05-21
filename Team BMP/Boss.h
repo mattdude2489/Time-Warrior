@@ -28,21 +28,21 @@ public:
 	}
 	void setChip(e_chipSubType a_subType, e_chipSubSubType a_subSubType, World * a_world)
 	{
-		if(m_attack)
-			delete m_attack;
-		switch(a_subType)
+		static bool called = false;
+		if(!called))
 		{
-		case DIVINE:	m_attack = new Divine(a_subSubType);	break;
-		case LIGHTNING:	m_attack = new Lightning(a_subSubType);	break;
-		case FIRE:		m_attack = new Fire(a_subSubType);		break;
-		case ICE:		m_attack = new Ice(a_subSubType);		break;
-		case BLUNT:		m_attack = new Blunt(a_subSubType);		break;
-		//case RANGE:		m_attack = new Range(a_subSubType);		break;
-		case SLASH:		m_attack = new Slash(a_subSubType);		break;
-		//case PIERCE:	m_attack = new Pierce(a_subSubType);	break;
-		}
-		if(m_attack)
-		{
+			called = true;
+			switch(a_subType)
+			{
+			case DIVINE:	m_attack = new Divine(a_subSubType);	break;
+			case LIGHTNING:	m_attack = new Lightning(a_subSubType);	break;
+			case FIRE:		m_attack = new Fire(a_subSubType);		break;
+			case ICE:		m_attack = new Ice(a_subSubType);		break;
+			case BLUNT:		m_attack = new Blunt(a_subSubType);		break;
+			//case RANGE:		m_attack = new Range(a_subSubType);		break;
+			//case PIERCE:	m_attack = new Pierce(a_subSubType);	break;
+			default:		m_attack = new Slash(a_subSubType);		break;
+			}
 			m_attack->setNewed(true);
 			m_attack->setOwner(this);
 			m_attack->levelUp();
