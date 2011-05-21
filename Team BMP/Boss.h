@@ -29,7 +29,7 @@ public:
 	void setChip(e_chipSubType a_subType, e_chipSubSubType a_subSubType, World * a_world)
 	{
 		static bool called = false;
-		if(!called))
+		if(!called)
 		{
 			called = true;
 			switch(a_subType)
