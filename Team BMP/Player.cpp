@@ -305,7 +305,7 @@ bool Player::loadPlayer(int saveToLoad)
 		if(charget == 'P')
 		{
 			//Level (IGNORE)
-			fscanf(infile, "%s", name);
+			fscanf_s(infile, "%s", name);
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 
 			//HP (IGNORE)

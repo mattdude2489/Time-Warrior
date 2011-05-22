@@ -76,12 +76,13 @@ int BaseLeveler::getAttackLevel(int type)
 {
 	switch(type)
 	{
-	case DIVINE_0: return divineBlock.attack_level; break;
-	case STORM: return lightningBlock.attack_level; break;
-	case FIRE_0: return fireBlock.attack_level; break;
-	case ICE_0: return iceBlock.attack_level; break;
-	case MELEE: return meleeBlock.attack_level; break;
+	case DIVINE_0:	return divineBlock.attack_level;	break;
+	case STORM:		return lightningBlock.attack_level;	break;
+	case FIRE_0:	return fireBlock.attack_level;		break;
+	case ICE_0:		return iceBlock.attack_level;		break;
+	case MELEE:		return meleeBlock.attack_level;		break;
 	}
+	return 0;
 }
 /*--- Main Functions ---*/
 void BaseLeveler::LS_Init()
@@ -106,36 +107,11 @@ bool BaseLeveler::isLevelUp(int type)
 {
 	switch(type)
 	{
-	case DIVINE_0:
-		if(divineBlock.total_XP >= XP_KEY[divineBlock.attack_level + 1].xpRequired)
-			return true;
-		else
-			return false;
-		break;
-	case STORM:
-		if(lightningBlock.total_XP >= XP_KEY[lightningBlock.attack_level + 1].xpRequired)
-			return true;
-		else
-			return false;
-		break;
-	case FIRE_0:
-		if(fireBlock.total_XP >= XP_KEY[fireBlock.attack_level + 1].xpRequired)
-			return true;
-		else
-			return false;
-		break;
-	case ICE_0:
-		if(iceBlock.total_XP >= XP_KEY[iceBlock.attack_level + 1].xpRequired)
-			return true;
-		else
-			return false;
-		break;
-	case MELEE:
-		if(meleeBlock.total_XP >= XP_KEY[meleeBlock.attack_level + 1].xpRequired)
-			return true;
-		else
-			return false;
-		break;
+	case DIVINE_0:	return divineBlock.total_XP >= XP_KEY[divineBlock.attack_level + 1].xpRequired;			break;
+	case STORM:		return lightningBlock.total_XP >= XP_KEY[lightningBlock.attack_level + 1].xpRequired;	break;
+	case FIRE_0:	return fireBlock.total_XP >= XP_KEY[fireBlock.attack_level + 1].xpRequired;				break;
+	case ICE_0:		return iceBlock.total_XP >= XP_KEY[iceBlock.attack_level + 1].xpRequired;				break;
+	case MELEE:		return meleeBlock.total_XP >= XP_KEY[meleeBlock.attack_level + 1].xpRequired;			break;
 	}//end switch
 	return false;
 }
@@ -144,26 +120,11 @@ bool BaseLeveler::isMaxLevel(int type)
 {
 	switch(type)
 	{
-	case DIVINE_0:
-		if(divineBlock.attack_level == MAX_ATK_LVL)
-			return true;
-		break;
-	case STORM:
-		if(lightningBlock.attack_level == MAX_ATK_LVL)
-			return true;
-		break;
-	case FIRE_0:
-		if(fireBlock.attack_level == MAX_ATK_LVL)
-			return true;
-		break;
-	case ICE_0:
-		if(iceBlock.attack_level == MAX_ATK_LVL)
-			return true;
-		break;
-	case MELEE:
-		if(meleeBlock.attack_level == MAX_ATK_LVL)
-			return true;
-		break;
+	case DIVINE_0:	return divineBlock.attack_level == MAX_ATK_LVL;		break;
+	case STORM:		return lightningBlock.attack_level == MAX_ATK_LVL;	break;
+	case FIRE_0:	return fireBlock.attack_level == MAX_ATK_LVL;		break;
+	case ICE_0:		return iceBlock.attack_level == MAX_ATK_LVL;		break;
+	case MELEE:		return meleeBlock.attack_level == MAX_ATK_LVL;		break;
 	}//end switch
 	return false;
 }

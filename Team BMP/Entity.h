@@ -27,7 +27,7 @@ enum e_material {MTRL_DEFAULT, MTRL_WOOD, MTRL_FIRE, MTRL_EARTH, MTRL_METAL, MTR
 #define	SPEED_MINION	SPEED_PLAYER
 
 struct v2D {double x, y;};//PLEASE DONT HATE ME
-struct effect {bool active; SPoint target; int timer, timeLimit, timeInterval, intervalCount, intervalLimit, dmg;};
+struct effect {bool active; SPoint target; int timer, timeLimit, interval, intervalLimit, dmg;};
 
 class Entity
 {
@@ -328,18 +328,18 @@ public:
 		}
 	}
 	bool colideWithTile(Tile * a_tile);
-	void activateEffect(e_effect a_effect, int a_maxDistance, SPoint * a_direction, int a_timeLimit, int a_maxDmg)
+	void activateEffect(e_effect a_effect, int a_maxDistanceOrDmg, SPoint * a_direction, int a_numSeconds)
 	{
 		if(a_effect == KNOCKBACK && !m_effects[KNOCKBACK].active)
 		{
 			m_effects[KNOCKBACK].active = true;
 			m_effects[KNOCKBACK].timer = 0;
-			m_effects[KNOCKBACK].timeLimit = (int)(a_maxDistance / SPEED_MAGIC);
+			m_effects[KNOCKBACK].timeLimit = (int)(a_maxDistanceOrDmg / SPEED_MAGIC);
 			m_effects[KNOCKBACK].target = *a_direction;
 
 			//TODO: put this code in func (used here & moveTo(SPoint*))
-			m_effects[KNOCKBACK].target.setX((int)(((double)m_effects[KNOCKBACK].target.x/m_effects[KNOCKBACK].target.getLength()) * a_maxDistance));
-			m_effects[KNOCKBACK].target.setY((int)(((double)m_effects[KNOCKBACK].target.y/m_effects[KNOCKBACK].target.getLength()) * a_maxDistance));
+			m_effects[KNOCKBACK].target.setX((int)(((double)m_effects[KNOCKBACK].target.x/m_effects[KNOCKBACK].target.getLength()) * a_maxDistanceOrDmg));
+			m_effects[KNOCKBACK].target.setY((int)(((double)m_effects[KNOCKBACK].target.y/m_effects[KNOCKBACK].target.getLength()) * a_maxDistanceOrDmg));
 
 			m_effects[KNOCKBACK].target.add(m_location);
 		}
@@ -347,10 +347,9 @@ public:
 		{
 			m_effects[FREEZE].active = true;
 			m_effects[FREEZE].timer = 0;
-			m_effects[FREEZE].intervalCount = 0;
-			m_effects[FREEZE].intervalLimit = 4;
-			m_effects[FREEZE].timeInterval = a_timeLimit;
-			m_effects[FREEZE].dmg = a_maxDmg/m_effects[FREEZE].intervalLimit;
+			m_effects[FREEZE].interval = 0;
+			m_effects[FREEZE].intervalLimit = a_numSeconds;
+			m_effects[FREEZE].dmg = a_maxDistanceOrDmg/m_effects[FREEZE].intervalLimit;
 			if(m_effects[FREEZE].dmg < 1)
 				m_effects[FREEZE].dmg = 1;
 		}

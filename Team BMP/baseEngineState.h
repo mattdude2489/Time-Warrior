@@ -144,11 +144,11 @@ public:
 				point[lol] = ' ';
 			point[40] = 0; //NULL TERMINATOR
 			char playerLevel[4] = {' ', ' ', ' ', 0}; //Level variable. I don't feel like being descriptive atm.
-			fscanf(hi, "%s", point);
-			fscanf(hi, "%s", point);
-			strcat(point, ": Level ");
-			fscanf(hi, "%s", playerLevel);
-			strcat(point, playerLevel);
+			fscanf_s(hi, "%s", point);
+			fscanf_s(hi, "%s", point);
+			strcat_s(point, ": Level ");
+			fscanf_s(hi, "%s", playerLevel);
+			strcat_s(point, playerLevel);
 			loadMessages[i].setFont(whoo.getFont());
 			loadMessages[i].setMessage(point);
 

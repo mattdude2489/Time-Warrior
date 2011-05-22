@@ -96,16 +96,13 @@ class Magic : public Chip
 					a_entity->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));
 				break;
 			case LIGHTNING:	//if critical, do additional hit
-				if(m_isCritical)
-				{
-					if(a_entity->getType() != m_owner->getType())
-						a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
-				}
+				if(m_isCritical && a_entity->getType() != m_owner->getType())
+					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
 				break;
 			case FIRE:		break;
 			case ICE:		//activate freeze effect
 				if(a_entity->getType() != m_owner->getType())
-					a_entity->activateEffect(FREEZE, 0, &SPoint(0,0), TIME_SECOND_MS, m_owner->getTotalDamageDealt(m_dmg,MAGIC));
+					a_entity->activateEffect(FREEZE, m_owner->getTotalDamageDealt(m_dmg,MAGIC), &SPoint(0,0), 2);//m_cSubSubType+1);
 				break;
 			}
 			//dmg entities of non owner-type
