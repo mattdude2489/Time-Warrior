@@ -237,18 +237,14 @@ void Entity::useEffects(int a_timePassed)
 	}
 	if(m_effects[FREEZE].active)
 	{
-		static int count = 0;
 		m_effects[FREEZE].timer += a_timePassed;
 		while(m_effects[FREEZE].timer > m_effects[FREEZE].timeInterval && m_effects[FREEZE].active)
 		{
-			count++;
+			m_effects[FREEZE].intervalCount++;
 			m_effects[FREEZE].timer -= m_effects[FREEZE].timeInterval;
 			hit(m_effects[FREEZE].dmg, ICE);
-			if((m_effects[FREEZE].timeInterval * count) > m_effects[FREEZE].timeLimit)
-			{
+			if(m_effects[FREEZE].intervalCount > m_effects[FREEZE].intervalLimit)
 				m_effects[FREEZE].active = false;
-				count = 0;
-			}
 		}
 	}
 }

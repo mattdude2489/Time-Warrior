@@ -27,7 +27,7 @@ enum e_material {MTRL_DEFAULT, MTRL_WOOD, MTRL_FIRE, MTRL_EARTH, MTRL_METAL, MTR
 #define	SPEED_MINION	SPEED_PLAYER
 
 struct v2D {double x, y;};//PLEASE DONT HATE ME
-struct effect {bool active; SPoint target; int timer, timeLimit, timeInterval, dmg;};
+struct effect {bool active; SPoint target; int timer, timeLimit, timeInterval, intervalCount, intervalLimit, dmg;};
 
 class Entity
 {
@@ -348,8 +348,9 @@ public:
 		{
 			m_effects[FREEZE].active = true;
 			m_effects[FREEZE].timer = 0;
-			m_effects[FREEZE].timeLimit = a_timeLimit;
-			m_effects[FREEZE].timeInterval = TIME_SECOND_MS/4;
+			m_effects[FREEZE].intervalCount = 0;
+			m_effects[FREEZE].intervalLimit = 4;
+			m_effects[FREEZE].timeInterval = a_timeLimit;
 			m_effects[FREEZE].dmg = a_dmg;
 		}
 	}
