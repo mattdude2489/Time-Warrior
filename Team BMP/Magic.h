@@ -47,12 +47,9 @@ class Magic : public Chip
 			case LIGHTNING:	int chance = rand() % ((m_cSubSubType+1) * 25) + 1;
 							switch(m_cSubSubType)
 							{
-											//25%
-							case BASIC:		if(chance % 4 == 0){m_isCritical = true;}	break;
-											//50%
-							case ADVANCED:	if(chance % 2 == 0){m_isCritical = true;}	break;
-											//75%
-							case EXPERT:	if(chance % 4 != 0){m_isCritical = true;}	break;
+							case BASIC:		if(chance % 4 == 0){m_isCritical = true;}	break;//25%
+							case ADVANCED:	if(chance % 2 == 0){m_isCritical = true;}	break;//50%
+							case EXPERT:	if(chance % 4 != 0){m_isCritical = true;}	break;//75%
 							}
 							break;
 			}
@@ -94,33 +91,26 @@ class Magic : public Chip
 			//apply effects based on type of spell
 			switch(m_cSubType)
 			{
-			case DIVINE:
-			case LIGHTNING:
-			case FIRE:
-			case ICE:
-				switch(m_cSubType)
+			case DIVINE:	//heal entities of same owner-type
+				if(a_entity->getType() == m_owner->getType())
+					a_entity->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));
+				break;
+			case LIGHTNING:	//if critical, do additional hit
+				if(m_isCritical)
 				{
-				case DIVINE:	//heal entities of same owner-type
-					if(a_entity->getType() == m_owner->getType())
-						a_entity->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));
-					break;
-				case LIGHTNING:	//if critical, do additional hit
-					if(m_isCritical)
-					{
-						if(a_entity->getType() != m_owner->getType())
-							a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
-					}
-					break;
-				case FIRE:		break;
-				case ICE:		//activate freeze effect
 					if(a_entity->getType() != m_owner->getType())
-						a_entity->activateEffect(FREEZE, 0, &SPoint(0,0), TIME_SECOND_MS, m_dmg);
-					break;
+						a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
 				}
-				//dmg entities of non owner-type
+				break;
+			case FIRE:		break;
+			case ICE:		//activate freeze effect
 				if(a_entity->getType() != m_owner->getType())
-					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
+					a_entity->activateEffect(FREEZE, 0, &SPoint(0,0), TIME_SECOND_MS, m_owner->getTotalDamageDealt(m_dmg,MAGIC));
+				break;
 			}
+			//dmg entities of non owner-type
+			if(a_entity->getType() != m_owner->getType())
+				a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
 			//let other entity know who it has been hit by
 			if(a_entity->getType()!= m_owner->getType())
 				a_entity->hitFromPlayer();

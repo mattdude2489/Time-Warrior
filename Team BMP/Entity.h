@@ -230,10 +230,10 @@ public:
 	virtual void drawUnique(SDL_Surface *a_screen){}
 	virtual void movePlayer(int a_timePassed){}
 	//Due to the CPU intensive nature of the pixel Collision, this should rarely be used.
-	bool epicCollide(SDL_Sprite * a_sprite, int a_x, int a_y)
+	/*bool epicCollide(SDL_Sprite * a_sprite, int a_x, int a_y)
 	{
 		if(m_flags[FLAG_DRAW] && a_sprite->isSprite())
-			return m_sprite->pixelCollide(m_location.x, m_location.y, *a_sprite, a_x, a_y);
+			return m_sprite->pixelCollide(m_location.x, m_location.y, *a_sprite, a_x, a_y);//caused run-time crash
 		else
 			return false;
 	}
@@ -243,8 +243,7 @@ public:
 			return epicCollide(a_entity->m_sprite, a_entity->getLocation().x, a_entity->getLocation().y);
 		else
 			return false;
-	}
-
+	}*/
 	bool collideSimple(SDL_Sprite * a_sprite, int a_x, int a_y)
 	{
 		if(m_flags[FLAG_DRAW] && a_sprite->isSprite())
@@ -329,7 +328,7 @@ public:
 		}
 	}
 	bool colideWithTile(Tile * a_tile);
-	void activateEffect(e_effect a_effect, int a_maxDistance, SPoint * a_direction, int a_timeLimit, int a_dmg)
+	void activateEffect(e_effect a_effect, int a_maxDistance, SPoint * a_direction, int a_timeLimit, int a_maxDmg)
 	{
 		if(a_effect == KNOCKBACK && !m_effects[KNOCKBACK].active)
 		{
@@ -351,7 +350,9 @@ public:
 			m_effects[FREEZE].intervalCount = 0;
 			m_effects[FREEZE].intervalLimit = 4;
 			m_effects[FREEZE].timeInterval = a_timeLimit;
-			m_effects[FREEZE].dmg = a_dmg;
+			m_effects[FREEZE].dmg = a_maxDmg/m_effects[FREEZE].intervalLimit;
+			if(m_effects[FREEZE].dmg < 1)
+				m_effects[FREEZE].dmg = 1;
 		}
 	}
 	void useEffects(int a_timePassed);

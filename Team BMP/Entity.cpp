@@ -82,8 +82,8 @@ void Entity::update(int a_timePassed, World * a_world)
 			{
 				if(collide(a_world->getEntity(i, m_location.x, m_location.y)))
 				{
-					if(epicCollide(a_world->getEntity(i, m_location.x, m_location.y)))
-					{
+					//if(epicCollide(a_world->getEntity(i, m_location.x, m_location.y)))
+					//{
 						Entity * tmp = a_world->getEntity(i, m_location.x, m_location.y);
 						if(tmp->getType() != OBSTACLE)
 							move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
@@ -128,7 +128,7 @@ void Entity::update(int a_timePassed, World * a_world)
 							else
 								move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 						}
-					}
+					//}
 				}
 			}
 		}
@@ -242,9 +242,10 @@ void Entity::useEffects(int a_timePassed)
 		{
 			m_effects[FREEZE].intervalCount++;
 			m_effects[FREEZE].timer -= m_effects[FREEZE].timeInterval;
-			hit(m_effects[FREEZE].dmg, ICE);
 			if(m_effects[FREEZE].intervalCount > m_effects[FREEZE].intervalLimit)
 				m_effects[FREEZE].active = false;
+			else
+				hit(m_effects[FREEZE].dmg, ICE);
 		}
 	}
 }
