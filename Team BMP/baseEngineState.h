@@ -106,6 +106,7 @@ private:
 public:
 	void enter(baseEngine *be)
 	{
+		screen = SDL_SCREEN_STARTUP;
 		optionOfReturn = 0; //Initialize the erroring integer.
 		checkClick = -1;
 		saveFiles = 0;
@@ -130,19 +131,24 @@ public:
 		loadRects = new SRect[saveFiles];
 		loadMessages = new TTtext[saveFiles];
 		MyFont whoo;
+		whoo.setFont(FONTSIZE); //My god, I feel like a retard.
 		//For the save Files to be recognized, we need a Name, and a Level.
-		int k; //Level variable. I don't feel like being descriptive atm.
 		for(int i = 0; i < saveFiles; i++)
 		{
 			//Start at the beginning, then move on to the next one.
 			loadRects[i].setDimension(SPoint(200, 15));
 			loadRects[i].setPosition(SPoint(100, (i*15)+100));
 			//Save Files will be reconstructed: Name, Level, and then character P.
-			char point[40];
-			fscanf(hi, "s", point);
+			char point[41];
+			for(int lol = 0; lol < 40; lol++)
+				point[lol] = ' ';
+			point[40] = 0; //NULL TERMINATOR
+			char playerLevel[4] = {' ', ' ', ' ', 0}; //Level variable. I don't feel like being descriptive atm.
+			fscanf(hi, "%s", point);
+			fscanf(hi, "%s", point);
 			strcat(point, ": Level ");
-			fscanf(hi, "i", k);
-			itoa(k, point, 10);
+			fscanf(hi, "%s", playerLevel);
+			strcat(point, playerLevel);
 			loadMessages[i].setFont(whoo.getFont());
 			loadMessages[i].setMessage(point);
 
@@ -186,7 +192,9 @@ public:
 	{
 		SDL_FreeSurface(screen);
 		delete loadRects; //I'm going to hell aren't I?
-		delete loadMessages; //Yes. Yes you are.
+//		delete loadMessages; //Yes. Yes you are.
+		be->getPlayer()->loadPlayer(checkClick);
+		be->changeState(actualGameState::instance());
 	}
 	static loadGameState* instance() {static loadGameState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}
@@ -244,7 +252,7 @@ public:
 							num--;
 							playerName[num] = ' ';
 						}
-					else if(c == 10)
+					else if(c == 10 || c == 32)
 					{
 						//Do nothing.
 					}

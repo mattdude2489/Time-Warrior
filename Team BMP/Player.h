@@ -26,7 +26,7 @@ private:
 	bool loadedPlayer, m_isStatWindowActive;
 	World * thisWorld;
 	SDL_Sprite * m_blankInventory;
-	char * playerName;
+	char playerName[21];
 public:
 	void initPlayer(World * newWorld);
 	void setWindowStatus(bool a_isActive){m_isStatWindowActive = a_isActive;}
@@ -40,11 +40,11 @@ public:
 	int drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex);
 	void addToAttackInventory(Chip * a_chip);
 	void addToArmorInventory(Chip * a_chip);
-	void save();
+	void save(int saveToSave);
 	void setWorld(World * currWorld) {thisWorld = currWorld;}
-	bool loadPlayer();
+	bool loadPlayer(int saveToLoad);
 	void newGame();
-	void setName(char * newName) {playerName = newName;}
+	void setName(char newName[21]) {for(int i = 0; i < 21; i++) {playerName[i] = newName[i];}}
 	char * getName() {return playerName;}
 	void setGauntletSlot(e_gauntletSlots a_slot);
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);

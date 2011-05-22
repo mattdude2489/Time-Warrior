@@ -17,14 +17,17 @@ void Player::initPlayer(World * newWorld)
 	}
 	m_experience = 0;
 	m_expLvReq = m_stats[LEVEL]+1;
+	for(int i = 0; i < 21; i++)
+	{
+		playerName[i] = ' ';
+	}
 	setVelocity(0,0);
 	thisWorld = newWorld;
-	if(!loadPlayer())
+	if(!loadPlayer(0))
 		newGame();
 	m_isStatWindowActive = false;
 	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 2);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
-	playerName = "New Name";
 }
 //draws & formats the display of specified Chip collection
 //param:
@@ -147,7 +150,7 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot)
 
 Player::~Player()
 {
-	save();
+	save(saveFile);
 	delete m_blankInventory;
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{
@@ -178,7 +181,7 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
 //Saves the current Player to a .txt file.
 //Saves the current experience, experience required for next level, stat points, max Hp, max Energy, str and int.
 //SAVES CURRENT INVENTORY, INCLUDING ARMOR AND CHIPS.
-void Player::save()
+void Player::save(int saveToSave)
 {
 	//File will go like this: PlayerName#(Level)#P#(HP)#(Energy)#(Str)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
 	//							A#(SubType)#(SubSubType)#(Level)#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(isEquipped)#/
@@ -187,9 +190,60 @@ void Player::save()
 	//#'s are spaces, for use of fscanf.
 
 	FILE * outfile;
-	outfile = fopen("playerSave.txt", "w");
+	outfile = fopen("playerSave.txt", "r+");
 	if(outfile == NULL)
-		return; //Break out if it fails.
+		outfile = fopen("playerSave.txt", "w+");
+
+	fpos_t pos = 0;
+	char newArray[10000]; //Please don't kill me.
+	int arrIndex = 0;
+	for(int i = 0; i < 10000; i++)
+	{
+		newArray[i] = 0; //PLEASE PLEASE PLEASE DON'T KILL ME.
+	}
+	//When here, search through the playerSave until it finds the correct save to save To.
+	//once that is found, save the current position in a Position pointer for the FILE stream.
+	//Then find the next save in the list (if there is one)
+	//and store EVERYTHING AFTER THAT in a char* array. Static, of course.
+	//After that, save like normal.
+	//Then take everything that's in that char * and PUT IT BACK. This will prevent the saves from overwriting each other.
+	if(loadedPlayer)
+	{
+		char charget;
+		//Do what the comment above says.
+		while(saveToSave != 0)
+		{
+			charget = fgetc(outfile);
+			if(charget == '#')
+				saveToSave--;
+		}
+		fgetpos(outfile, &pos);
+		charget = fgetc(outfile);
+		while(charget != '#')
+			charget = fgetc(outfile); //Get it to the next save...
+		charget = fgetc(outfile);
+		if(charget != EOF)
+		{
+			while(charget != EOF)
+			{
+				newArray[arrIndex] = charget = fgetc(outfile);
+				arrIndex++;
+			}
+		}
+		else
+		{
+			//Do nothing.
+		}
+		fsetpos(outfile, &pos); //Reset the cursor to prepare to overwrite.
+	}
+	else if(!loadedPlayer)
+	{
+		//Go to the EOF, and then save.
+		char charget = fgetc(outfile);
+		while(charget != EOF)
+			charget = fgetc(outfile);
+		fflush(outfile); //To switch the operation to writing.
+	}
 
 	fprintf(outfile, "P %s %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
@@ -212,10 +266,14 @@ void Player::save()
 		}
 	}
 	fprintf(outfile, "#"); //Required for the load screen...I know its annoying. I'm sorry.
+	
+	if(loadedPlayer) //Only if there is even a SEMBLANCE of a chance that there's something afterwards.
+	{				//If it's a newGame, it doesn't matter.
+		fprintf(outfile, " %s", newArray);
+	}
 	fclose(outfile);
-
 }
-bool Player::loadPlayer()
+bool Player::loadPlayer(int saveToLoad)
 {
 	//File will go like this: P#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
 	//							A#(SubType)#(SubSubType)#(Level)#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(isEquipped)#/
@@ -227,14 +285,21 @@ bool Player::loadPlayer()
 	if(infile == NULL)
 		return false;
 
+	this->saveFile = saveToLoad;
 	int hpenstrintexpsta; //The various Player stats.
 	int chipAndArmorHelper;
 	float exp;
 	static int gauntletSlotSetter = SLOT_ATK1;
 	char charget;
 	char name[20];
+	while(saveToLoad != 0) //Why can't save be this simple?
+	{
+		charget = fgetc(infile);
+		if(charget == '#')
+			saveToLoad--;
+	}
 	charget = fgetc(infile);
-	while(charget != EOF)
+	while(charget != '#')
 	{
 		//if it's reading the Player...
 		if(charget == 'P')
@@ -396,6 +461,7 @@ bool Player::loadPlayer()
 		//To continue or discontinue with the while loop.
 		charget = fgetc(infile);
 	}
+	this->loadedPlayer = true;
 	return true;
 }
 void Player::newGame()
@@ -510,6 +576,7 @@ void Player::newGame()
 	m_stats[INTELLECT] = 0;
 	m_experience = 0;
 	m_expLvReq = 2;
+	loadedPlayer = false;
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 {

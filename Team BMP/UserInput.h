@@ -22,7 +22,7 @@ class UserInput
 		bool esc;				//The escape key. Will close the program if put in full-screen.
 
 	public:
-		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE), esc(false){} //Basic constructor.
+		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE), esc(false), spaceBar(false){} //Basic constructor.
 		void setMouse(int x, int y) {mouseX = x; mouseY = y;}
 		int getMouseX() {return mouseX;}
 		int getMouseY() {return mouseY;}
