@@ -226,3 +226,29 @@ void Entity::reallocateResistancesAccordingToMaterial()
 	}
 }
 void Entity::setCurrentLocToLast(World * a_world){this->setLocation(m_lastWLoc);}
+void Entity::useEffects(int a_timePassed)
+{
+	if(m_effects[KNOCKBACK].active)
+	{
+		m_effects[KNOCKBACK].timer += a_timePassed;
+		if(moveTo(&m_effects[KNOCKBACK].target, (int)(SPEED_MAGIC*a_timePassed))
+		|| m_effects[KNOCKBACK].timer > m_effects[KNOCKBACK].timeLimit)
+			m_effects[KNOCKBACK].active = false;
+	}
+	if(m_effects[FREEZE].active)
+	{
+		static int count = 0;
+		m_effects[FREEZE].timer += a_timePassed;
+		while(m_effects[FREEZE].timer > m_effects[FREEZE].timeInterval && m_effects[FREEZE].active)
+		{
+			count++;
+			m_effects[FREEZE].timer -= m_effects[FREEZE].timeInterval;
+			hit(m_effects[FREEZE].dmg, ICE);
+			if((m_effects[FREEZE].timeInterval * count) > m_effects[FREEZE].timeLimit)
+			{
+				m_effects[FREEZE].active = false;
+				count = 0;
+			}
+		}
+	}
+}

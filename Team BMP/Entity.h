@@ -19,7 +19,7 @@ enum e_timer {TIMER_GENERAL, TIMER_REGEN, NUM_TIMERS};
 enum e_flags {FLAG_DRAW, FLAG_ACTIVE, FLAG_OWNER_PLAYER, FLAG_NUDE, NUM_FLAGS};
 enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 100};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
-enum e_effect {KNOCKBACK, NUM_EFFECTS};
+enum e_effect {KNOCKBACK, FREEZE, NUM_EFFECTS};
 enum e_material {MTRL_DEFAULT, MTRL_WOOD, MTRL_FIRE, MTRL_EARTH, MTRL_METAL, MTRL_WATER, MTRL_AIR, MTRL_LIGHT, MTRL_DARK, MTRL_RUBBER};
 
 #define	SPEED_PLAYER	.1
@@ -27,7 +27,7 @@ enum e_material {MTRL_DEFAULT, MTRL_WOOD, MTRL_FIRE, MTRL_EARTH, MTRL_METAL, MTR
 #define	SPEED_MINION	SPEED_PLAYER
 
 struct v2D {double x, y;};//PLEASE DONT HATE ME
-struct effect {bool active; SPoint target; int timer, timeLimit;};
+struct effect {bool active; SPoint target; int timer, timeLimit, timeInterval, dmg;};
 
 class Entity
 {
@@ -329,7 +329,7 @@ public:
 		}
 	}
 	bool colideWithTile(Tile * a_tile);
-	void activateEffect(e_effect a_effect, int a_maxDistance, SPoint * a_direction)
+	void activateEffect(e_effect a_effect, int a_maxDistance, SPoint * a_direction, int a_timeLimit, int a_dmg)
 	{
 		if(a_effect == KNOCKBACK && !m_effects[KNOCKBACK].active)
 		{
@@ -344,17 +344,16 @@ public:
 
 			m_effects[KNOCKBACK].target.add(m_location);
 		}
-	}
-	void useEffects(int a_timePassed)
-	{
-		if(m_effects[KNOCKBACK].active)
+		if(a_effect == FREEZE)
 		{
-			m_effects[KNOCKBACK].timer += a_timePassed;
-			if(moveTo(&m_effects[KNOCKBACK].target, (int)(SPEED_MAGIC*a_timePassed))
-			|| m_effects[KNOCKBACK].timer > m_effects[KNOCKBACK].timeLimit)
-				m_effects[KNOCKBACK].active = false;
+			m_effects[FREEZE].active = true;
+			m_effects[FREEZE].timer = 0;
+			m_effects[FREEZE].timeLimit = a_timeLimit;
+			m_effects[FREEZE].timeInterval = TIME_SECOND_MS/4;
+			m_effects[FREEZE].dmg = a_dmg;
 		}
 	}
+	void useEffects(int a_timePassed);
 	bool isLastWSet(){return !m_lastWLoc.isZero();}
 	void setLastW(){m_lastWLoc.set(m_location.getX(), m_location.getY()+(2*FRAME_SIZE));}
 	void setCurrentLocToLast(World * a_world);

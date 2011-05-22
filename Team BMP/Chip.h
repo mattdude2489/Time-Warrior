@@ -33,11 +33,12 @@ class Chip : public Entity
 		//flags for sprite's flip(s) & rotation
 		bool m_isFlipH, m_isFlipV;
 		int m_rotateDeg;
+		bool m_isCritical;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_timeSinceLastAttack(0),
-			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0)
+			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0),m_isCritical(false)
 		{m_eType = CHIP; m_stats[LEVEL] = 0;}// m_tracker = new BaseLeveler();}
 		~Chip()
 		{
@@ -177,8 +178,16 @@ class Chip : public Entity
 			//m_dmg += m_dmgLv;
 			m_cost = m_costLv;
 			m_dmg = m_dmgLv;
-			if(m_cSubType == BLUNT)
+			switch(m_cSubType)
+			{
+			case LIGHTNING:
+			case BLUNT:
 				m_dmg = (int)((double)m_dmg *.75);
+				break;
+			case ICE:
+				m_dmg = (int)((double)m_dmg *.5);
+				break;
+			}
 			//update variables unique to inherited classes
 			levelUpUniqueTwo();
 		}

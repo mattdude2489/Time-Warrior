@@ -39,9 +39,24 @@ class Magic : public Chip
 					makeSpriteMatchDirection();
 				break;
 			}
-			//heal if using Divine
-			if(m_cSubType == DIVINE)
-				m_owner->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));
+			//heal, calc chance for crit, or calc time duration
+			m_isCritical = false;
+			switch(m_cSubType)
+			{
+			case DIVINE:	m_owner->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));	break;
+			case LIGHTNING:	int chance = rand() % ((m_cSubSubType+1) * 25) + 1;
+							switch(m_cSubSubType)
+							{
+											//25%
+							case BASIC:		if(chance % 4 == 0){m_isCritical = true;}	break;
+											//50%
+							case ADVANCED:	if(chance % 2 == 0){m_isCritical = true;}	break;
+											//75%
+							case EXPERT:	if(chance % 4 != 0){m_isCritical = true;}	break;
+							}
+							break;
+			}
+
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
@@ -80,20 +95,35 @@ class Magic : public Chip
 			switch(m_cSubType)
 			{
 			case DIVINE:
-				//heal entities of same owner-type
-				if(a_entity->getType() == m_owner->getType())
-					a_entity->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));
 			case LIGHTNING:
 			case FIRE:
 			case ICE:
+				switch(m_cSubType)
+				{
+				case DIVINE:	//heal entities of same owner-type
+					if(a_entity->getType() == m_owner->getType())
+						a_entity->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));
+					break;
+				case LIGHTNING:	//if critical, do additional hit
+					if(m_isCritical)
+					{
+						if(a_entity->getType() != m_owner->getType())
+							a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
+					}
+					break;
+				case FIRE:		break;
+				case ICE:		//activate freeze effect
+					if(a_entity->getType() != m_owner->getType())
+						a_entity->activateEffect(FREEZE, 0, &SPoint(0,0), TIME_SECOND_MS, m_dmg);
+					break;
+				}
 				//dmg entities of non owner-type
 				if(a_entity->getType() != m_owner->getType())
 					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
-				break;
 			}
 			//let other entity know who it has been hit by
-			if(a_entity->getType()!= m_owner->getType()){
-				a_entity->hitFromPlayer();}
+			if(a_entity->getType()!= m_owner->getType())
+				a_entity->hitFromPlayer();
 			//erase & gain experience from killed entities
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
 			{
