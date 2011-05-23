@@ -183,6 +183,7 @@ public:
 		for(int i = 0; i < saveFiles; i++)
 		{
 			newRect.x = loadRects[i].x; newRect.y = loadRects[i].y; newRect.h = loadRects[i].h; newRect.w = loadRects[i].w;
+			//cause of red flash @ load game
 			SDL_FillRect(screen, &newRect, 0xff0000);
 			loadMessages[i].printMessage(screen, loadRects[i].x, loadRects[i].y);
 		}

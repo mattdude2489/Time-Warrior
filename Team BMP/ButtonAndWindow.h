@@ -147,7 +147,7 @@ public:
 		}
 		t_x = WINDOWXY.x + m_window->w/4;
 		m_lvlPts.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y);
-		m_playerName.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y + 40); //EVIL MAGIC NUMBERS, I KNOW.
+		m_playerName.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y + TEXTYOFF);
 		if(m_player->getPoints() > 0)
 		{
 			for(int i = 0; i < STATINC; i++)
