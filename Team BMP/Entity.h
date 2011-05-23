@@ -27,7 +27,7 @@ enum e_material {MTRL_DEFAULT, MTRL_WOOD, MTRL_FIRE, MTRL_EARTH, MTRL_METAL, MTR
 #define	SPEED_MINION	SPEED_PLAYER
 
 struct v2D {double x, y;};//PLEASE DONT HATE ME
-struct effect {bool active; SPoint target; int timer, timeLimit, interval, intervalLimit, dmg;};
+struct effect {bool active; SPoint target; int timer, timeLimit, dmg;};
 
 class Entity
 {
@@ -328,14 +328,16 @@ public:
 		}
 	}
 	bool colideWithTile(Tile * a_tile);
-	void activateEffect(e_effect a_effect, int a_maxDistanceOrDmg, SPoint * a_direction, int a_numSeconds)
+	//e_effect KNOCKBACK, maxDistance, direction
+	//e_effect FREEZE, maxDmg, time(numIntervals, sizeIntervalMS)
+	void activateEffect(e_effect a_effect, int a_maxDistanceOrDmg, SPoint * a_directionOrTime)
 	{
 		if(a_effect == KNOCKBACK && !m_effects[KNOCKBACK].active)
 		{
 			m_effects[KNOCKBACK].active = true;
 			m_effects[KNOCKBACK].timer = 0;
 			m_effects[KNOCKBACK].timeLimit = (int)(a_maxDistanceOrDmg / SPEED_MAGIC);
-			m_effects[KNOCKBACK].target = *a_direction;
+			m_effects[KNOCKBACK].target = *a_directionOrTime;
 
 			//TODO: put this code in func (used here & moveTo(SPoint*))
 			m_effects[KNOCKBACK].target.setX((int)(((double)m_effects[KNOCKBACK].target.x/m_effects[KNOCKBACK].target.getLength()) * a_maxDistanceOrDmg));
@@ -347,9 +349,14 @@ public:
 		{
 			m_effects[FREEZE].active = true;
 			m_effects[FREEZE].timer = 0;
-			m_effects[FREEZE].interval = 0;
-			m_effects[FREEZE].intervalLimit = a_numSeconds;
-			m_effects[FREEZE].dmg = a_maxDistanceOrDmg/m_effects[FREEZE].intervalLimit;
+			//# of intervals completed
+			m_effects[FREEZE].target.x = 0;
+			//size of each time interval
+			m_effects[FREEZE].target.y = a_directionOrTime->y;
+			//# of intervals to complete
+			m_effects[FREEZE].timeLimit = a_directionOrTime->x;
+			//split total dmg over each time interval
+			m_effects[FREEZE].dmg = a_maxDistanceOrDmg/m_effects[FREEZE].timeLimit;
 			if(m_effects[FREEZE].dmg < 1)
 				m_effects[FREEZE].dmg = 1;
 		}
