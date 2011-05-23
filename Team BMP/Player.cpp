@@ -207,6 +207,7 @@ void Player::save(int saveToSave)
 	{
 		newArray[i] = 10; //PLEASE PLEASE PLEASE DON'T KILL ME.
 	}
+	//newArray[9999] = 0; //Let's see if this gets rid of that character 152.
 	//newArray[10000] = 0; //Null Tahminatah.
 	//When here, search through the playerSave until it finds the correct save to save To.
 	//once that is found, save the current position in a Position pointer for the FILE stream.
@@ -230,7 +231,7 @@ void Player::save(int saveToSave)
 			charget = fgetc(outfile); //Get it to the next save...
 		if(charget != EOF)
 		{
-			charget = fgetc(outfile);
+			//charget = fgetc(outfile);
 			while(charget != EOF)
 			{
 				newArray[arrIndex] = charget = fgetc(outfile);
@@ -278,7 +279,7 @@ void Player::save(int saveToSave)
 	{				//If it's a newGame, it doesn't matter.
 		for(int i = 0; i < 10000; i++)
 		{
-			if(newArray[i] != 10)
+			if(newArray[i] != 10 && newArray[i] != EOF) //Heh heh...oops? I was an idiot again.
 			{
 				fprintf(outfile, "%c", newArray[i]);
 			}
@@ -286,6 +287,20 @@ void Player::save(int saveToSave)
 		//fprintf(outfile, " %s", newArray);
 	}
 	fclose(outfile);
+	//fclose(outfile);
+	//if(loadedPlayer) //Checking to see if the player is loaded, thus there might be something in the array.
+	//{
+	//	if(newArray[0] != 10) //Checking to see if there's something in the array. IF THERE IS, THEN DO THIS.
+	//	{
+	//		outfile = fopen("playerSave.txt", "a+"); //Append the 
+	//		for(int i = 0; i < 10000; i++)
+	//		{
+	//			if(newArray[i] != 10)
+	//				fprintf(outfile, "%c", newArray[i]);
+	//		}
+	//		fclose(outfile);
+	//	}
+	//}
 }
 bool Player::loadPlayer(int saveToLoad)
 {
