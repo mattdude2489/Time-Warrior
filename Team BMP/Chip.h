@@ -23,7 +23,7 @@ class Chip : public Entity
 		//direction owner is facing
 		char m_direction;
 		//stats for energy cost, dmg, & time since last atk
-		int m_cost, m_costLv, m_dmg, m_dmgLv, m_timeSinceLastAttack;
+		int m_cost, m_costLv, m_dmg, m_dmgLv, m_timeSinceLastAttack, m_lastSpriteFrame;
 		//sprite to display on HUD
 		SDL_Sprite * m_spriteHUD;
 		//owner of this Chip
@@ -215,6 +215,7 @@ class Chip : public Entity
 					if(m_cType != ARMOR)
 					{
 						m_firstIteration = true;
+						m_lastSpriteFrame = -1;
 						m_flags[FLAG_DRAW] = true;
 						m_sprite->start();
 						if(!(m_cType == WEAPON && m_cSubSubType == EXPERT))
@@ -251,7 +252,25 @@ class Chip : public Entity
 		{
 			//update last-atk timer
 			m_timeSinceLastAttack += a_timePassed;
-			//chech if should be updated
+			bool notContinuous = false;
+			switch(m_cType)
+			{
+			case MAGIC:
+				notContinuous = m_cSubSubType != BASIC;
+				break;
+			case WEAPON:
+				notContinuous = m_cSubType != RANGE;
+				break;
+			}
+			//auto-end if not a continuous atk & 1st iteration has finished
+			if(notContinuous)
+			{
+				if(!m_firstIteration && m_sprite->getFrame() == 0)
+					deactivate();
+				else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
+					m_firstIteration = false;
+			}
+			//check if should be updated
 			if(m_flags[FLAG_DRAW] && m_owner && m_cType != ARMOR)
 			{
 				//update stuff unique to inherited classes
@@ -275,8 +294,9 @@ class Chip : public Entity
 					case 2:	grid = dl;	check = grid != ul && grid != ur;				break;
 					case 3:	grid = dr;	check = grid != ul && grid != ur && grid != dl;	break;
 					}
-					if(check)
+					if(check && m_lastSpriteFrame != m_sprite->getFrame())
 					{
+						printf("checking %d w/frame %d\n", grid, m_sprite->getFrame());
 						for(int i = 0; i < a_world->getGrid(grid)->getNumberOfEntities(); ++i)
 						{
 							//check against each entity in grid
@@ -317,17 +337,10 @@ class Chip : public Entity
 					}
 					check = false;
 				}
-				//auto-end if projectiles collided or sprite finished iteration
-				if((((m_cType == MAGIC && m_cSubSubType == BASIC)
-					|| (m_cType == WEAPON && m_cSubType == RANGE))
-					&& collisionMade) || (!m_firstIteration && m_sprite->getFrame() == 0))
+				m_lastSpriteFrame = m_sprite->getFrame();
+				//auto-end if projectiles collided
+				if(!notContinuous && collisionMade)
 					deactivate();
-				else if(m_sprite->getFrame() == m_sprite->getMaxFrames()-1)
-				{
-					if((m_cType == MAGIC && m_cSubSubType != BASIC)
-						|| (m_cType == WEAPON && m_cSubType != RANGE))
-						m_firstIteration = false;
-				}
 			}
 		}
 		//de-activates current Chip
@@ -350,15 +363,9 @@ class Chip : public Entity
 			case MAGIC:
 				switch(m_cSubSubType)
 				{
-				case BASIC:
-					m_sprite->stretch(50,50);
-					break;
-				case ADVANCED:
-					m_sprite->stretch(200,200);
-					break;
-				case EXPERT:
-					m_sprite->stretch(300,300);
-					break;
+				case BASIC:		m_sprite->stretch(50,50);	break;
+				case ADVANCED:	m_sprite->stretch(200,200);	break;
+				case EXPERT:	m_sprite->stretch(300,300);	break;
 				}
 				break;
 				//if weapon, adjust frame size
