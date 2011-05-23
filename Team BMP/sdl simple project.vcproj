@@ -477,6 +477,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Maps\Forest.txt"
+				>
+			</File>
+			<File
 				RelativePath=".\Maps\HubWorldMap.txt"
 				>
 			</File>

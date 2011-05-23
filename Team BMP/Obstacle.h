@@ -3,7 +3,7 @@
 
 #pragma once
 
-enum e_obstacleType {PORTAL, DUNGEON, TREE, DOOR, NUM_OBSTACLE_TYPES};
+enum e_obstacleType {PORTAL, DUNGEON, TREE, DOOR, BUILDING, NUM_OBSTACLE_TYPES};
 
 class Obstacle : public Entity
 {

@@ -33,6 +33,7 @@ World::World()
 	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	m_worldSprites[TREE_SPRITE] = new SDL_Sprite("Sprites/Tree.bmp", TREE_WIDTH, TREE_HEIGHT, FRAME_RATE, TREE_COUNT);
 	m_worldSprites[ROCK_SHRUB] = new SDL_Sprite("Sprites/RocksandShrubs.bmp", FRAME_SIZE,FRAME_SIZE, FRAME_RATE, NUM_ROCK_SHRUB); 
+	m_worldSprites[BUILDINGS] = new SDL_Sprite("Sprites/Buildings.bmp", BUILDING_W, BUILDING_H, FRAME_RATE, NUM_ROCK_SHRUB);
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
@@ -65,8 +66,11 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_ENGLAND;
 	else if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" ||fileName == "Maps/Dungeon2.txt" )
 		currentWorld = WORLD_D1;
+	else if(strcmp(fileName , "Maps/Forest.txt"))
+		currentWorld = WORLD_FOREST;
 	else if(strcmp(fileName ,"Maps/Castle0.txt")||strcmp(fileName, "Maps/Castle1.txt"))
 		currentWorld = WORLD_CASTLE;
+	
 
 		
 	//Clear the previous map of the world, in order to create a better one.
@@ -95,7 +99,7 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = hi.animate = false;
+				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = hi.animate = hi.buildingh = hi.buildingv = false;
 				x++;
 				hi.collideBox.x = hi.pos.x;
 				hi.collideBox.y = hi.pos.y;
@@ -122,10 +126,12 @@ bool World::setWorld(char * fileName)
 			case 'S':
 			case 'b':
 			case 'T':
+			case 'e':
 				switch(currentWorld)
 				{
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
-				case WORLD_ENGLAND:	hi.indexOfSpriteRow = TILE_GRASS;				break;
+				case WORLD_ENGLAND:
+				case WORLD_FOREST:	hi.indexOfSpriteRow = TILE_GRASS;				break;
 				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
 				}
 				switch(c)
@@ -136,6 +142,8 @@ bool World::setWorld(char * fileName)
 				case 'S':	hi.spawnLocation = true;							break;
 				case 'b':	hi.bossLoc = true;									break;
 				case 'T':	hi.tree = true;										break;
+				case 'e':	hi.buildingh = true;								break;
+				case 'E':	hi.buildingv = true;								break;
 				}
 				break;
 			case 'D':
@@ -365,6 +373,15 @@ bool World::setWorld(char * fileName)
 				hi.indexOfSpriteRow = CACTUS;
 				hi.collide = true;
 				break;
+			case 'a':
+				hi.indexOfSpriteRow = TILE_TOWN_WALL_H;
+				hi.collide = true;
+				break;
+			case 'A':
+				hi.indexOfSpriteRow = TILE_TOWN_WALL_V;
+				hi.collide = true;
+				break;
+			
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;
 				hi.collide = true;
@@ -649,7 +666,26 @@ void World::setMonsters()
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			this->add(obs);
 		}
-		
+		if(m_mapOfWorld.get(i).buildingv)
+		{
+			sprite = m_worldSprites[BUILDING];
+			Obstacle * obs = new Obstacle(sprite);
+			obs->setIndex(rand()%2);
+			obs->setObstacleType(BUILDING);
+			obs->setNewed(true);
+			obs->setLocation(m_mapOfWorld.get(i).pos);
+			this->add(obs);
+		}
+		if(m_mapOfWorld.get(i).buildingh)
+		{
+			sprite = m_worldSprites[BUILDING];
+			Obstacle * obs = new Obstacle(sprite);
+			obs->setIndex((rand()%2)+2);
+			obs->setObstacleType(BUILDING);
+			obs->setNewed(true);
+			obs->setLocation(m_mapOfWorld.get(i).pos);
+			this->add(obs);
+		}
 	}
 }
 

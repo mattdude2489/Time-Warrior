@@ -8,7 +8,7 @@
 #include "templateVector.h"
 #include <time.h>
 enum e_grid {NUM_GRIDS = 16, NUM_GRIDS_PER_ROW_COL = 4, NUM_SPRITE_SHEETS_TO_CHOOSE_FROM = 3};
-enum e_world {WORLD_HUB, WORLD_ENGLAND, WORLD_D1, WORLD_CASTLE};
+enum e_world {WORLD_HUB, WORLD_ENGLAND, WORLD_D1, WORLD_CASTLE, WORLD_FOREST, WORLD_DESERT, WORLD_TOWN1, WORLD_TOWN2};
 
 class Minion;
 

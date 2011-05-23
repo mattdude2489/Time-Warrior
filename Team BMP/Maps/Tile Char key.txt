@@ -1,0 +1,91 @@
+a	:	TOWN WALL H
+A	:	TOWN WALL V
+b	:	BOSS LOCATION
+B	:	HUB TILE GROUND, BLANK, DUNGEON WALLS
+c	:	
+C	:	CASTLE GROUND
+d	:	DUNGEON
+D	:	HUB WALL L, DUST/DESERT
+e	:	BUILDING V
+E	:	BUILDING H
+f	:	
+F	:	
+g	:	
+G	:	GROUND TILES - MEDEVIEL, HUB, DUNGEON
+h	:	
+H	:	HUB WALL R, 
+i	:	
+I	:	
+j	:	
+J	:	
+k	:	
+K	:	
+l	:	WATER L
+L	:	WATER R
+m	:	
+M	:	HUB QUAD R, 
+n	:	ROAD TR
+N	:	ROAD TL
+o	:	ROAD BR
+O	:	ROAD BL
+p	:	PLAYER SPAWN
+P	:	PORTAL
+q	:	
+Q	:	DESERT WALL
+r	:	
+R	:	
+s	:	
+S	:	SPAWN LOCATION - MINION
+t	:	
+T	:	TREE
+u	:	WATER U
+U	:	WATER D
+v	:	
+V	:	HUB QUAD L, ROAD
+w	:	
+W	:	WATER
+x	:	
+X	:	
+y	:	WATER CORNER TR
+Y	:	WATER CORNER TL
+z	:	WATER CORNER BR
+Z	:	WATER CORNER BL
+1	:	
+2	:	
+3	:	
+4	:	
+5	:	
+6	:	
+7	:	
+8	:	
+9	:	
+0	:	
+-	:	
+=	:	BRIDGE H
+!	:	
+@	:	ROCKS
+#	:	BUSH
+$	:	CACTUS
+%	:	
+^	:	CASTLE STAIRS
+&	:	
+*	:	
+(	:	WATER ANGLE BL
+)	:	WATER ANGLE BR
+_	:	CASTLE WALL H
++	:	BRIDGE V
+[	:	CASTLE DOOR L
+]	:	CASTLE DOOR R
+{	:	DESERT ARCH L
+}	:	DESERT ARCH R
+;	:	WATER ANGLE TR
+:	:	
+,	:	
+.	:	
+<	:	FOREST ARCH L
+>	:	FOREST ARCH R
+/	:	WATER ANGLE TL
+?	:	
+|	:	CASTLE WALL V
+`	:	
+~	:	

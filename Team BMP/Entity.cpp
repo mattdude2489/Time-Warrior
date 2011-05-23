@@ -69,6 +69,19 @@ void Entity::update(int a_timePassed, World * a_world)
 						a_world->incCastleCount();
 						a_world->setCamera(this->m_camera);
 					}
+					if(a_world->getTile(m_location.x, m_location.y)->fdoor
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->fdoor
+						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->fdoor
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->fdoor
+						)
+					{
+						if(a_world->getCurrentWorld() == WORLD_ENGLAND)
+							a_world->setWorld("Maps/Forest.txt");
+						if(a_world->getCurrentWorld() == WORLD_FOREST)
+							a_world->setWorld("Maps/MedEngMap.txt");
+						a_world->setCamera(this->m_camera);
+
+					}
 				}
 				
 		}
