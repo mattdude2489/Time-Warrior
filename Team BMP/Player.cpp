@@ -17,14 +17,15 @@ void Player::initPlayer(World * newWorld)
 	}
 	m_experience = 0;
 	m_expLvReq = m_stats[LEVEL]+1;
-	for(int i = 0; i < 21; i++)
+	for(int i = 0; i < 20; i++)
 	{
 		playerName[i] = ' ';
 	}
+	playerName[20] = 0; //I hate the null terminator. I hate it so fucking much.
 	setVelocity(0,0);
 	thisWorld = newWorld;
-	if(!loadPlayer(0))
-		newGame();
+	/*if(!loadPlayer(0))
+		newGame();*/
 	m_isStatWindowActive = false;
 	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 2);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
@@ -190,17 +191,23 @@ void Player::save(int saveToSave)
 	//#'s are spaces, for use of fscanf.
 
 	FILE * outfile;
-	outfile = fopen("playerSave.txt", "r+");
-	if(outfile == NULL)
-		outfile = fopen("playerSave.txt", "w+");
+	if(loadedPlayer)
+	{
+		outfile = fopen("playerSave.txt", "r+");
+		if(outfile == NULL)
+			outfile = fopen("playerSave.txt", "w+");
+	}
+	else
+		outfile = fopen("playerSave.txt", "a+");
 
 	fpos_t pos = 0;
-	char newArray[10000]; //Please don't kill me.
+	char newArray[10001]; //Please don't kill me.
 	int arrIndex = 0;
 	for(int i = 0; i < 10000; i++)
 	{
-		newArray[i] = 0; //PLEASE PLEASE PLEASE DON'T KILL ME.
+		newArray[i] = ' '; //PLEASE PLEASE PLEASE DON'T KILL ME.
 	}
+	newArray[10000] = 0; //Null Tahminatah.
 	//When here, search through the playerSave until it finds the correct save to save To.
 	//once that is found, save the current position in a Position pointer for the FILE stream.
 	//Then find the next save in the list (if there is one)
@@ -221,7 +228,7 @@ void Player::save(int saveToSave)
 		charget = fgetc(outfile);
 		while(charget != '#')
 			charget = fgetc(outfile); //Get it to the next save...
-		charget = fgetc(outfile);
+		//charget = fgetc(outfile);
 		if(charget != EOF)
 		{
 			while(charget != EOF)
@@ -236,16 +243,16 @@ void Player::save(int saveToSave)
 		}
 		fsetpos(outfile, &pos); //Reset the cursor to prepare to overwrite.
 	}
-	else if(!loadedPlayer)
-	{
-		//Go to the EOF, and then save.
-		char charget = fgetc(outfile);
-		while(charget != EOF)
-			charget = fgetc(outfile);
-		fflush(outfile); //To switch the operation to writing.
-	}
+	//else if(!loadedPlayer)
+	//{
+	//	//Go to the EOF, and then save.
+	//	char charget = fgetc(outfile);
+	//	while(charget != EOF)
+	//		charget = fgetc(outfile);
+	//	fflush(outfile); //To switch the operation to writing.
+	//}
 
-	fprintf(outfile, "P %s %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	fprintf(outfile, " P %s %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{
@@ -291,7 +298,7 @@ bool Player::loadPlayer(int saveToLoad)
 	float exp;
 	static int gauntletSlotSetter = SLOT_ATK1;
 	char charget;
-	char name[20];
+	char name[21];
 	while(saveToLoad != 0) //Why can't save be this simple?
 	{
 		charget = fgetc(infile);
@@ -299,13 +306,17 @@ bool Player::loadPlayer(int saveToLoad)
 			saveToLoad--;
 	}
 	charget = fgetc(infile);
+	charget = fgetc(infile);
 	while(charget != '#')
 	{
 		//if it's reading the Player...
 		if(charget == 'P')
 		{
 			//Level (IGNORE)
-			fscanf_s(infile, "%s", name, 20);
+			charget = fgetc(infile); //Gets rid of the space.
+			for(int i = 0; i < 20; i++)
+				name[i] = fgetc(infile);
+			name[20] = 0; //NULL FUCKING TERMINATOR.
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 
 			//HP (IGNORE)

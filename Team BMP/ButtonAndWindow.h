@@ -67,7 +67,7 @@ public:
 class StatWindow
 {
 private:
-	TTtext m_text[NUM_STATS],  m_lvlPts, m_inventory[NUM_INVENTORY];
+	TTtext m_text[NUM_STATS],  m_lvlPts, m_inventory[NUM_INVENTORY], m_playerName;
 	Player * m_player;
 	SDL_Surface * m_window;
 	Button m_addStat[STATINC];
@@ -86,6 +86,7 @@ public:
 		for(int i = 0; i < NUM_STATS; i++)
 			m_text[i].setFont(a_font);
 		m_lvlPts.setFont(a_font);
+		m_playerName.setFont(a_font);
 		for(int i = 0; i < NUM_INVENTORY; i++)
 			m_inventory[i].setFont(a_font);
 	}
@@ -111,6 +112,8 @@ public:
 		m_inventory[INVENTORY_ARMOR].setMessage(c_temp);
 		sprintf_s(c_temp, "Gauntlet Configuration:");
 		m_inventory[INVENTORY_GAUNTLET].setMessage(c_temp);
+		sprintf_s(c_temp, "Name: %s", m_player->getName(), 21);
+		m_playerName.setMessage(c_temp);
 	}
 	void handleInput(UserInput * ui)
 	{
@@ -144,6 +147,7 @@ public:
 		}
 		t_x = WINDOWXY.x + m_window->w/4;
 		m_lvlPts.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y);
+		m_playerName.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y + 40); //EVIL MAGIC NUMBERS, I KNOW.
 		if(m_player->getPoints() > 0)
 		{
 			for(int i = 0; i < STATINC; i++)

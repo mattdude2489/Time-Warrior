@@ -144,8 +144,8 @@ public:
 				point[lol] = ' ';
 			point[40] = 0; //NULL TERMINATOR
 			char playerLevel[4] = {' ', ' ', ' ', 0}; //Level variable. I don't feel like being descriptive atm.
-			fscanf_s(hi, "%s", point,20);
-//			fscanf_s(hi, "%s", point);
+			fscanf_s(hi, "%s", point,20); //This gets rid of the P
+			fscanf_s(hi, "%s", point,20); //This is the actual NAME.
 			strcat_s(point, ": Level ");
 			fscanf_s(hi, "%s", playerLevel, 4);
 			strcat_s(point, playerLevel);
@@ -160,6 +160,7 @@ public:
 					break;
 			}
 		}
+		fclose(hi);
 		//And that...should be everything.
 	}
 	void execute(baseEngine *be)
