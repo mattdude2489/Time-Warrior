@@ -201,13 +201,13 @@ void Player::save(int saveToSave)
 		outfile = fopen("playerSave.txt", "a+");
 
 	fpos_t pos = 0;
-	char newArray[10001]; //Please don't kill me.
+	char newArray[10000]; //Please don't kill me.
 	int arrIndex = 0;
 	for(int i = 0; i < 10000; i++)
 	{
-		newArray[i] = ' '; //PLEASE PLEASE PLEASE DON'T KILL ME.
+		newArray[i] = 10; //PLEASE PLEASE PLEASE DON'T KILL ME.
 	}
-	newArray[10000] = 0; //Null Tahminatah.
+	//newArray[10000] = 0; //Null Tahminatah.
 	//When here, search through the playerSave until it finds the correct save to save To.
 	//once that is found, save the current position in a Position pointer for the FILE stream.
 	//Then find the next save in the list (if there is one)
@@ -226,11 +226,11 @@ void Player::save(int saveToSave)
 		}
 		fgetpos(outfile, &pos);
 		charget = fgetc(outfile);
-		while(charget != '#')
+		while(charget != '#' && charget != EOF)
 			charget = fgetc(outfile); //Get it to the next save...
-		//charget = fgetc(outfile);
 		if(charget != EOF)
 		{
+			charget = fgetc(outfile);
 			while(charget != EOF)
 			{
 				newArray[arrIndex] = charget = fgetc(outfile);
@@ -276,7 +276,14 @@ void Player::save(int saveToSave)
 	
 	if(loadedPlayer) //Only if there is even a SEMBLANCE of a chance that there's something afterwards.
 	{				//If it's a newGame, it doesn't matter.
-		fprintf(outfile, " %s", newArray);
+		for(int i = 0; i < 10000; i++)
+		{
+			if(newArray[i] != 10)
+			{
+				fprintf(outfile, "%c", newArray[i]);
+			}
+		}
+		//fprintf(outfile, " %s", newArray);
 	}
 	fclose(outfile);
 }

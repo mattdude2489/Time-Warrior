@@ -54,7 +54,6 @@ class UserInput
 			{
 				if(initKey != KEY_NONE)
 				{
-					lastKeyPressed = initKey;
 					if(initKey == KEY_UP || initKey == KEY_DOWN)
 						keyPressUpDown = KEY_NONE;
 					if(initKey == KEY_LEFT || initKey == KEY_RIGHT)
@@ -71,6 +70,7 @@ class UserInput
 			}
 			else
 				//Set the values.
+				lastKeyPressed = initKey;
 				if(initKey != KEY_NONE)
 				{
 					if(initKey == KEY_UP || initKey == KEY_DOWN)
