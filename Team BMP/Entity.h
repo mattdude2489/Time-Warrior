@@ -351,12 +351,12 @@ public:
 			m_effects[FREEZE].timer = 0;
 			//# of intervals completed
 			m_effects[FREEZE].target.x = 0;
-			//size of each time interval
-			m_effects[FREEZE].target.y = a_directionOrTime->y;
 			//# of intervals to complete
-			m_effects[FREEZE].timeLimit = a_directionOrTime->x;
+			m_effects[FREEZE].target.y = a_directionOrTime->x;
+			//time limit of each interval
+			m_effects[FREEZE].timeLimit = a_directionOrTime->y;
 			//split total dmg over each time interval
-			m_effects[FREEZE].dmg = a_maxDistanceOrDmg/m_effects[FREEZE].timeLimit;
+			m_effects[FREEZE].dmg = a_maxDistanceOrDmg/m_effects[FREEZE].target.y;
 			if(m_effects[FREEZE].dmg < 1)
 				m_effects[FREEZE].dmg = 1;
 		}
