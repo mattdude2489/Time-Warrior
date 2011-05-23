@@ -102,7 +102,7 @@ class Magic : public Chip
 			case FIRE:		break;
 			case ICE:		//activate freeze effect
 				if(a_entity->getType() != m_owner->getType())
-					a_entity->activateEffect(FREEZE, m_owner->getTotalDamageDealt(m_dmg*25,MAGIC), &SPoint(2,TIME_SECOND_MS));
+					a_entity->activateEffect(FREEZE, m_owner->getTotalDamageDealt(m_dmg,MAGIC), &SPoint(2,TIME_SECOND_MS));
 				break;
 			}
 			//dmg entities of non owner-type
