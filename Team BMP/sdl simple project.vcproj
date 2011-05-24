@@ -465,6 +465,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Maps\Desert.txt"
+				>
+			</File>
+			<File
 				RelativePath=".\Maps\Dungeon0.txt"
 				>
 			</File>

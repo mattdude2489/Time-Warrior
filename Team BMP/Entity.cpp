@@ -77,7 +77,19 @@ void Entity::update(int a_timePassed, World * a_world)
 					{
 						if(a_world->getCurrentWorld() == WORLD_ENGLAND)
 							a_world->setWorld("Maps/Forest.txt");
-						if(a_world->getCurrentWorld() == WORLD_FOREST)
+						else if(a_world->getCurrentWorld() == WORLD_FOREST)
+							a_world->setWorld("Maps/MedEngMap.txt");
+						a_world->setCamera(this->m_camera);
+					}
+					if(a_world->getTile(m_location.x, m_location.y)->ddoor
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->ddoor
+						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->ddoor
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->ddoor
+						)
+					{
+						if(a_world->getCurrentWorld() == WORLD_ENGLAND)
+							a_world->setWorld("Maps/Desert.txt");
+						else if(a_world->getCurrentWorld() == WORLD_DESERT)
 							a_world->setWorld("Maps/MedEngMap.txt");
 						a_world->setCamera(this->m_camera);
 

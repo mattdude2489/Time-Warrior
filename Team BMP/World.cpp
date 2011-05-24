@@ -25,6 +25,7 @@ World::World()
 	m_sprites[SKELETON].setSprite("Sprites/skeleton.bmp", FRAME_SIZE -8, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[GHOST].setSprite("Sprites/ghost.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[BOSS1].setSprite("Sprites/demon0.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[DRAGON].setSprite("Sprites/dragon.bmp", DRAGON_FRAME, DRAGON_FRAME, FRAME_RATE, NUM_ROWS);
 	m_sprites[NPC1].setSprite("Sprites/greenguy.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[KNIGHT0].setSprite("Sprites/knight0.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[KNIGHT1].setSprite("Sprites/knight1.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
@@ -66,7 +67,7 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_ENGLAND;
 	else if(fileName == "Maps/Dungeon1.txt" || fileName == "Maps/Dungeon0.txt" ||fileName == "Maps/Dungeon2.txt" )
 		currentWorld = WORLD_D1;
-	else if(strcmp(fileName , "Maps/Forest.txt"))
+	else if(fileName == "Maps/Forest.txt")
 		currentWorld = WORLD_FOREST;
 	else if(strcmp(fileName ,"Maps/Castle0.txt")||strcmp(fileName, "Maps/Castle1.txt"))
 		currentWorld = WORLD_CASTLE;
@@ -119,7 +120,15 @@ bool World::setWorld(char * fileName)
 			//Creations of entities & any particulars of the map
 			switch(c)
 			{
-			case 'G':
+			case 'G'://moved it to seperat one cause of the desert area
+				switch(currentWorld)
+				{
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
+				case WORLD_ENGLAND:
+				case WORLD_FOREST:	hi.indexOfSpriteRow = TILE_GRASS;				break;
+				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
+				}
+				break;
 			case 'P':
 			case 'd':
 			case 'p':
@@ -132,6 +141,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
 				case WORLD_ENGLAND:
 				case WORLD_FOREST:	hi.indexOfSpriteRow = TILE_GRASS;				break;
+				case WORLD_DESERT:	hi.indexOfSpriteRow = TILE_DUST;				break;
 				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
 				}
 				switch(c)
@@ -596,6 +606,32 @@ void World::setMonsters()
 						break;
 					}
 					break;
+				case WORLD_FOREST:
+					switch(spriteSheet)
+					{
+					case 0:
+						sprite = &m_sprites[SKELETON];
+						mtrl = MTRL_DARK;
+						break;
+					case 1:
+						sprite = &m_sprites[SLIME];
+						mtrl = MTRL_RUBBER;
+						break;
+					}
+					break;
+				case WORLD_DESERT:
+					switch(spriteSheet)
+					{
+					case 0:
+						sprite = &m_sprites[GHOST];
+						mtrl = MTRL_DARK;
+						break;
+					case 1:
+						sprite = &m_sprites[SLIME];
+						mtrl = MTRL_RUBBER;
+						break;
+					}
+					break;
 				}
 				Minion * newEntity = new Minion(sprite);
 				newEntity->setNewed(true);
@@ -608,7 +644,15 @@ void World::setMonsters()
 		if(m_mapOfWorld.get(i).bossLoc)
 		{
 			bossCount++;
-			sprite = &m_sprites[BOSS1];
+			switch(currentWorld)
+			{
+			case WORLD_FOREST:
+				sprite = &m_sprites[DRAGON];
+				break;
+			default:
+				sprite = &m_sprites[BOSS1];
+				break;
+			}
 			Boss * newBoss = new Boss(sprite);
 			newBoss->setMaterial(MTRL_FIRE);
 			newBoss->setNewed(true);
