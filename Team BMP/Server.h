@@ -20,7 +20,7 @@ class Server
 {
 private:
 	World * sWorld;
-	templateVector<SOCKET> sSockets;
+	TemplateVector2<SOCKET> sSockets;
 	char buffer[BUFF_SIZE];
 public:
 	Server(); //Default constructor.
@@ -34,4 +34,4 @@ public:
 	void changeWorld(World * w); //Changes the sWorld to the w World. Use only once.
 	World * getWorld(); //Returns the world pointer.
 	SOCKET getSocketAt(int index); //Returns the socket at the index.
-}
+};

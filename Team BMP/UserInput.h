@@ -19,10 +19,11 @@ class UserInput
 		char hotKeyLeft;		//The hot key pressed for the left mouse click.
 		char hotKeyRight;		//The hot key pressed for the right mouse click.
 		bool spaceBar;			//The spaceBar. When pressed, activate NPC dialogue.
+		bool shift;				//The shift key. When pressed, minus 32 to get the capital letter.
 		bool esc;				//The escape key. Will close the program if put in full-screen.
 
 	public:
-		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE), esc(false), spaceBar(false){} //Basic constructor.
+		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE), esc(false), spaceBar(false), shift(false){} //Basic constructor.
 		void setMouse(int x, int y) {mouseX = x; mouseY = y;}
 		int getMouseX() {return mouseX;}
 		int getMouseY() {return mouseY;}
@@ -40,12 +41,22 @@ class UserInput
 		char getHKeyR() {return hotKeyRight;}
 		void setKey(char key) {initKey = key;}
 		void setLastKey(char key) {lastKeyPressed = key;}
-		char getLastKey() {char lastKey = lastKeyPressed; lastKeyPressed = 10; return lastKey;}
 		char getKey() {return initKey;}
 		bool getSpace() {return spaceBar;}
 		//Resetting the mouse. Used in order to prevent the mouse being held down.
 		void resetClick() {mouseClick = CLICK_NONE;}
 		bool getX() {return esc;}
+		char getLastKey() 
+		{
+			char lastKey;
+			lastKey = lastKeyPressed; 
+			lastKeyPressed = 10; 
+			if(shift) 
+				lastKey-=32;
+			if(lastKey < 32 && shift)
+				lastKey = 10;
+			return lastKey;
+		}
 		
 		//If the initKey is a W, A, S, or D, then set it to keyPressUpDown or keyPressLeftRight.
 		void updateUI(bool upDown)
@@ -64,6 +75,8 @@ class UserInput
 						hotKeyRight = KEY_NONE;
 					if(initKey == ' ')
 						spaceBar = false;
+					if(initKey == 48 || initKey == 47)
+						shift = false;
 					if(!(initKey == 'm' || initKey == 'i'))
 						initKey = KEY_NONE; //Reset the initial Key.
 				}
@@ -85,6 +98,8 @@ class UserInput
 						spaceBar = true;
 					if(initKey == 27)
 						esc = true;
+					if(initKey == 47 || initKey == 48)
+						shift = true;
 					if(!(initKey == 'm' || initKey == 'i'))
 						initKey = KEY_NONE; //Reset the initial Key.
 				}

@@ -32,4 +32,4 @@ public:
 	bool sendBufferToServer();
 	void updateWorld();
 	void updateBuffer();
-}
+};

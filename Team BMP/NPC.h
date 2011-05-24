@@ -50,8 +50,11 @@ public:
 					y++;
 				x = 0;
 			}
-			tehMessage[y][x] = neededChar;
-			x++;
+			else
+			{
+				tehMessage[y][x] = neededChar;
+				x++;
+			}
 			z++;
 			neededChar = whatTheyHaveToSay[z];
 		}

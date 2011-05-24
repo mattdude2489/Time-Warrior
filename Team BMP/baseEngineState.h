@@ -58,6 +58,7 @@ public:
 		fps.setFont(myfps.getFont());
 		ifps = 0;
 		fps.setMessage("0");
+		be->getPlayer()->setGamePlayed(true);
 	}
 	void execute(baseEngine* be) 
 	{
@@ -175,7 +176,6 @@ public:
 				if(loadRects[i].contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())) && stateUI->getClick() == 1)
 				{
 					checkClick = i;
-					exit(be);
 				}
 			}
 		}
@@ -189,12 +189,14 @@ public:
 		}
 
 		SDL_Flip(screen);
+		if(checkClick >= 0)
+			exit(be);
 	}
 	void exit(baseEngine *be)
 	{
 		SDL_FreeSurface(screen);
-		delete loadRects; //I'm going to hell aren't I?
-//		delete loadMessages; //Yes. Yes you are.
+		delete [] loadRects; //I'm going to hell aren't I?
+		delete [] loadMessages; //Yes. Yes you are.
 		be->getPlayer()->loadPlayer(checkClick);
 		be->changeState(actualGameState::instance());
 	}
@@ -210,7 +212,7 @@ private:
 	UserInput * stateUI;
 	SDL_Sprite newGameScreen;
 	SDL_Surface * screen;
-	bool typing, finished;
+	bool typing, finished, shift;
 	SRect type;
 	SDL_Rect newType;
 	int num;
@@ -229,7 +231,7 @@ public:
 		stateUI = NULL;
 		screen = SDL_SCREEN_STARTUP;
 		newGameScreen.setSprite("Sprites/newGameScreen.bmp", 626, 470, 0, 1);
-		typing = finished = false;
+		typing = finished = shift = false;
 		type.x = newType.x = 219;
 		type.y = newType.y = 224;
 		type.h = newType.h = 43;
@@ -254,7 +256,7 @@ public:
 							num--;
 							playerName[num] = ' ';
 						}
-					else if(c == 10 || c == 32)
+					else if(c == 10 || c == 32 || c == 14 || c == 15 || c == 47 || c == 45)
 					{
 						//Do nothing.
 					}

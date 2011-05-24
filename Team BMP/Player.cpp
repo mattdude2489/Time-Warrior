@@ -24,6 +24,7 @@ void Player::initPlayer(World * newWorld)
 	playerName[20] = 0; //I hate the null terminator. I hate it so fucking much.
 	setVelocity(0,0);
 	thisWorld = newWorld;
+	gamePlayed = false;
 	/*if(!loadPlayer(0))
 		newGame();*/
 	m_isStatWindowActive = false;
@@ -151,7 +152,8 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot)
 
 Player::~Player()
 {
-	save(saveFile);
+	if(gamePlayed)
+		save(saveFile);
 	delete m_blankInventory;
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{

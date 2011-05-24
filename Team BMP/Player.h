@@ -23,7 +23,7 @@ private:
 	int m_expLvReq, saveFile;
 	double m_experience;
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
-	bool loadedPlayer, m_isStatWindowActive;
+	bool loadedPlayer, m_isStatWindowActive, gamePlayed;
 	World * thisWorld;
 	SDL_Sprite * m_blankInventory;
 	char playerName[21];
@@ -43,6 +43,8 @@ public:
 	void save(int saveToSave);
 	void setWorld(World * currWorld) {thisWorld = currWorld;}
 	bool loadPlayer(int saveToLoad);
+	void setGamePlayed(bool game) {gamePlayed = game;}
+	bool getGamePlayed() {return gamePlayed;}
 	void newGame();
 	void setName(char newName[21]) {for(int i = 0; i < 21; i++) {playerName[i] = newName[i];}}
 	char * getName() {return playerName;}
