@@ -5,8 +5,10 @@ Characters (15), Melee Attacks (40), Magic Attacks (40)
 */
 const int STARTING_XP = 0;
 const int STARTING_LV = 1;
-const int MAX_ATK_LVL = 40;
+const int MAX_ATK_LVL = 30;
 const int MAX_CHAR_LV = 15;
+const int NUM_BASE_TYPES = 5;
+const int MAX_UPGRADE_LV = 4;
 
 /*XP Gain Formula | f(n){n > 0} = f(n-1) + n
 f(1) = 0 + 1 = 1
@@ -20,6 +22,12 @@ struct LEVEL_SYSTEM
 	int level;
 	int xpRequired;
 };
+// upgrades
+struct CHIP_UPGRADE
+{
+	int upgrade_level;
+	bool active;
+};
 
 // hold the type, total XP, and current level of attack
 struct XP_STATS
@@ -28,6 +36,7 @@ struct XP_STATS
 	int attack_type;
 	int attack_level;
 	int total_XP;
+	CHIP_UPGRADE upgrades[MAX_UPGRADE_LV];
 };
 
 // the base attack types
@@ -52,7 +61,7 @@ enum BASE_TYPE
 	STORM_3,
 	FIRE_3,
 	ICE_3,
-	MELEE_3
+	MELEE_3,
 };
 
 class BaseLeveler
@@ -62,7 +71,8 @@ public:
 	BaseLeveler(void);
 	~BaseLeveler(void);
 	/*--- Base Functions ---*/
-	//upgrade function to check if at a upgradeable level 10
+	//upgrade function to check if at a upgradeable level 10 and if chip ha\s gained a level
+	void Update();
 	/*--- XP Gain Functions ---*/
 	void GainMagicXP(int chipBaseType);
 	void GainMeleeXP();
@@ -70,7 +80,10 @@ public:
 	// check if the level allows for an upgrade
 	void upgradeAttack(XP_STATS statBlock){}
 	/*--- Accessor/Mutators ---*/
+	void setAttackLvXP(int type, int level, int experience);
 	int getAttackLevel(int type);
+	int getAttackXP(int type);
+	bool getUpgradeStatus(int type, int upgradeLevel);
 	//check if the the attack can be upgraded (every 10 levels)
 	void isUpgradeable(XP_STATS statBlock){}
 private:
