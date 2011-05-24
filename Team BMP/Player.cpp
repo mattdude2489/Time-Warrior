@@ -734,4 +734,12 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 			activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
 	if(ui->getSpace())
 		m_flags[FLAG_ACTIVE] = true;
+	switch(ui->getLastKey())
+	{
+	case 'h':
+	case 'H':	this->useHealthPot();	break;
+	case 'e':
+	case 'E':	this->useEnergyPot();	break;
+	}
+
 }

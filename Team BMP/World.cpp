@@ -69,8 +69,11 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_D1;
 	else if(fileName == "Maps/Forest.txt")
 		currentWorld = WORLD_FOREST;
+	else if(fileName == "Maps/Desert.txt")
+		currentWorld = WORLD_DESERT;
 	else if(strcmp(fileName ,"Maps/Castle0.txt")||strcmp(fileName, "Maps/Castle1.txt"))
 		currentWorld = WORLD_CASTLE;
+
 	
 
 		
@@ -125,6 +128,7 @@ bool World::setWorld(char * fileName)
 				{
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
 				case WORLD_ENGLAND:
+				case WORLD_DESERT:
 				case WORLD_FOREST:	hi.indexOfSpriteRow = TILE_GRASS;				break;
 				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
 				}
@@ -391,7 +395,9 @@ bool World::setWorld(char * fileName)
 				hi.indexOfSpriteRow = TILE_TOWN_WALL_V;
 				hi.collide = true;
 				break;
-			
+			case 'c':
+				hi.indexOfSpriteRow = TILE_TOWN_DOOR;
+				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;
 				hi.collide = true;

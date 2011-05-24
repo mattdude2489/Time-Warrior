@@ -9,15 +9,17 @@
 
 enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, BAR_EXP,  NUM_BARS, NUM_STAT_BARS = NUM_BARS-2};
 enum e_bar {BAR_WIDTH = ONE_HUNDRED_PERCENT, BAR_HEIGHT = HUD_HEIGHT/NUM_STAT_BARS, BAR_X = HUD_X, BAR_Y = HUD_Y};
+enum e_pots{POT_HEALTH, POT_ENERGY, NUM_POTS};
 
 class Hud
 {
 private:
 	SRect bars[NUM_BARS];
 	Uint32 colors[NUM_BARS];
-
+	SDL_Sprite pots;
 	MyFont m_myFont[2];
 	TTtext m_text[NUM_STAT_BARS];
+	TTtext m_potText[NUM_POTS];
 	StatWindow m_statWin;
 	bool m_showStats;
 	Button m_statButton;
@@ -62,9 +64,18 @@ public:
 			m_text[i].setFont(m_myFont[0].getFont());
 			m_text[i].setTextColor(0xffffffff);
 		}
+		for(int i = 0; i < NUM_POTS; i++)
+		{
+			m_potText[i].setFont(m_myFont[0].getFont());
+			m_potText[i].setTextColor(0xffffffff);
+		}
 		m_text[0].setMessage("Health");
 		m_text[1].setMessage("Energy");
 		m_text[2].setMessage("Experience");
+		m_potText[0].setMessage("0");
+		m_potText[1].setMessage("0");
+		pots.setSprite("Sprites/Pots.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS-2);
+		pots.setTransparency(COLOR_TRANSPARENT);
 	}
 	void handleInput(UserInput * ui)
 	{
@@ -83,6 +94,11 @@ public:
 		bars[BAR_EXP].setWidth((int)(p->getCurExp()/(double)p->getExpReq() * ONE_HUNDRED_PERCENT));
 		m_statWin.setPlayer(p);
 		p->setWindowStatus(m_showStats);
+		char temp[3];
+		sprintf_s(temp, "%i",  p->getHPots());
+		m_potText[POT_HEALTH].setMessage(temp);
+		sprintf_s(temp, "%i",  p->getEPots());
+		m_potText[POT_ENERGY].setMessage(temp);
 		if(p->getPoints()>0)
 			m_statButton.update(a_time);
 		else
@@ -99,6 +115,13 @@ public:
 		m_statButton.draw(screen);
 		if(m_showStats)
 			m_statWin.draw(screen);
-		
+		pots.setRIndex(0);
+		pots.draw(screen, (SCREEN_WIDTH/2)-FRAME_SIZE, SCREEN_HEIGHT-FRAME_SIZE);
+		pots.setRIndex(1);
+		pots.draw(screen, (SCREEN_WIDTH/2), SCREEN_HEIGHT-FRAME_SIZE);
+		for(int i = 0; i < NUM_POTS; i ++)
+		{
+			m_potText[i].printMessage(screen, (SCREEN_WIDTH/2)-(FRAME_SIZE*i), SCREEN_HEIGHT-FRAME_SIZE);
+		}
 	}
 };

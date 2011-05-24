@@ -33,7 +33,7 @@ class Entity
 {
 protected:
 	bool m_flags[NUM_FLAGS];
-	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_statPoints, m_index;
+	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_statPoints, m_index, m_healthPots, m_energyPots;
 	e_entityType m_eType;
 	e_material m_mtrl;
 	SPoint m_location, m_prevLoc, *m_camera, m_target, m_lastWLoc;
@@ -79,6 +79,7 @@ public:
 		m_eType = DUMMY;
 		m_mtrl = MTRL_DEFAULT;
 		m_statPoints = 0;
+		m_healthPots = m_energyPots = 0;
 	}
 	void initSprite(SDL_Sprite * a_sprite)
 	{
@@ -401,4 +402,26 @@ public:
 			m_stats[i]++;
 		decreasePoints();
 	}
+	void useHealthPot()
+	{
+		if(m_healthPots > 0)
+		{
+			m_healthPots--;
+			heal(m_stats[HEALTH_MAX]/4);
+		}
+	}
+	void useEnergyPot()
+	{
+		if(m_energyPots > 0)
+		{
+			m_energyPots--;
+			m_stats[ENERGY_CURRENT]+= (m_stats[ENERGY_MAX]/4);
+			if(m_stats[ENERGY_CURRENT]>m_stats[ENERGY_MAX])
+				m_stats[ENERGY_CURRENT]=m_stats[ENERGY_MAX];
+		}
+	}
+	void receiveHPot(){m_healthPots++;}
+	void receiveEPot(){m_energyPots++;}
+	int getHPots(){return m_healthPots;}
+	int getEPots(){return m_energyPots;}
 };
