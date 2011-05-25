@@ -188,7 +188,7 @@ void Player::save(int saveToSave)
 {
 	//File will go like this: PlayerName#(Level)#P#(HP)#(Energy)#(Str)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
 	//							A#(SubType)#(SubSubType)#(Level)#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(isEquipped)#/
-	//							C#(Type)#(SubType)#(SubSubType)#(Level)#(Cost)#(isEquipped)#/
+	//							C#(Type)#(SubType)#(SubSubType)#(Level)#(Xp)#(isEquipped)#/
 	//Fire, Ice, Lightning, Bludgeoning, Slashing, Divine, Ranged, Piercing, Armor
 	//#'s are spaces, for use of fscanf.
 
@@ -263,7 +263,7 @@ void Player::save(int saveToSave)
 			fprintf(outfile, "A %i %i %i %i %i %i %i %i / ", m_armorInventory[i]->getSubType(), m_armorInventory[i]->getSubSubType(), m_armorInventory[i]->getStatNumber(LEVEL), m_armorInventory[i]->getStatNumber(DEFENSE), m_armorInventory[i]->getStatNumber(RESISTANCE_FIRE), m_armorInventory[i]->getStatNumber(RESISTANCE_ICE), m_armorInventory[i]->getStatNumber(RESISTANCE_LIGHTNING), m_armorInventory[i]->isEquipped());
 	}
 	//The Chips/Attack Inventory.
-	fprintf(outfile, "C %i %i %i %i %i %i / ", m_gauntlet[SLOT_ATK1]->getType(), m_gauntlet[SLOT_ATK1]->getSubType(), m_gauntlet[SLOT_ATK1]->getSubSubType(), m_gauntlet[SLOT_ATK1]->getStatNumber(LEVEL), m_gauntlet[SLOT_ATK1]->getCost(), m_gauntlet[SLOT_ATK1]->isEquipped());
+	fprintf(outfile, "C %i %i %i %i %i %i / ", m_gauntlet[SLOT_ATK1]->getType(), m_gauntlet[SLOT_ATK1]->getSubType(), m_gauntlet[SLOT_ATK1]->getSubSubType(), m_gauntlet[SLOT_ATK1]->getStatNumber(LEVEL), m_gauntlet[SLOT_ATK1]->getXP(), m_gauntlet[SLOT_ATK1]->isEquipped());
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++)
 	{
 		for(int k = 0; k < NUM_CHIP_LEVELS; k++)
@@ -271,7 +271,7 @@ void Player::save(int saveToSave)
 			if(m_attackInventory[i][k])
 			{
 				if(m_attackInventory[i][k] != m_gauntlet[SLOT_ATK1])
-					fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getStatNumber(LEVEL), m_attackInventory[i][k]->getCost(), m_attackInventory[i][k]->isEquipped());
+					fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getStatNumber(LEVEL), m_attackInventory[i][k]->getXP(), m_attackInventory[i][k]->isEquipped());
 			}
 		}
 	}
@@ -308,7 +308,7 @@ bool Player::loadPlayer(int saveToLoad)
 {
 	//File will go like this: P#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
 	//							A#(SubType)#(SubSubType)#(Level)#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(isEquipped)#/
-	//							C#(Type)#(SubType)#(SubSubType)#(Level)#(Cost)#(isEquipped)#/
+	//							C#(Type)#(SubType)#(SubSubType)#(Level)#(Xp)#(isEquipped)#/
 	
 	FILE * infile;
 	infile = fopen("playerSave.txt", "r");
@@ -441,7 +441,7 @@ bool Player::loadPlayer(int saveToLoad)
 			}
 		}
 		//If it's reading the Chips...
-		else if(charget == 'C' || charget == 'S')
+		else if(charget == 'C')
 		{
 			//type
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
@@ -475,13 +475,17 @@ bool Player::loadPlayer(int saveToLoad)
 				}
 			}
 			iHopeThisWorks->setNewed(true);
-			//level
+			//level (TODO - integrate w/BaseLeveler)
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
-			for(int i = 0; i < hpenstrintexpsta; i++)
-				iHopeThisWorks->levelUp();
+			if(hpenstrintexpsta > 0)
+			{
+				iHopeThisWorks->unlock();
+				for(int i = 0; i < hpenstrintexpsta; i++)
+					iHopeThisWorks->levelUp();
+			}
 			this->addToAttackInventory(iHopeThisWorks);
 			thisWorld->add(iHopeThisWorks);
-			//cost (IGNORE)
+			//Xp (TODO - integrate w/BaseLeveler)
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
 			//equip
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
@@ -576,24 +580,24 @@ void Player::newGame()
 	thisWorld->add(i1);
 	thisWorld->add(i2);
 	thisWorld->add(i3);
-	b1->levelUp();
-	b2->levelUp();
-	b3->levelUp();
-	s1->levelUp();
-	s2->levelUp();
-	s3->levelUp();
-	d1->levelUp();
-	d2->levelUp();
-	d3->levelUp();
-	l1->levelUp();
-	l2->levelUp();
-	l3->levelUp();
-	f1->levelUp();
-	f2->levelUp();
-	f3->levelUp();
-	i1->levelUp();
-	i2->levelUp();
-	i3->levelUp();
+	b1->unlock();
+	b2->unlock();
+	b3->unlock();
+	s1->unlock();
+	s2->unlock();
+	s3->unlock();
+	d1->unlock();
+	d2->unlock();
+	d3->unlock();
+	l1->unlock();
+	l2->unlock();
+	l3->unlock();
+	f1->unlock();
+	f2->unlock();
+	f3->unlock();
+	i1->unlock();
+	i2->unlock();
+	i3->unlock();
 	this->setGauntletSlot(SLOT_ATK1, s1);
 	this->setGauntletSlot(SLOT_ATK2, f1);
 	switch(gear->getSubType())

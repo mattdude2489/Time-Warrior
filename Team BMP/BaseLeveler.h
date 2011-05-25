@@ -36,7 +36,9 @@ struct XP_STATS
 	int attack_type;
 	int attack_level;
 	int total_XP;
-	CHIP_UPGRADE upgrades[MAX_UPGRADE_LV];
+	//each should only be concerned with itself,
+	//unlocking other levels will be handled by Player/Chip
+	//CHIP_UPGRADE upgrades[MAX_UPGRADE_LV];
 };
 
 // the base attack types
@@ -86,6 +88,17 @@ public:
 	bool getUpgradeStatus(int type, int upgradeLevel);
 	//check if the the attack can be upgraded (every 10 levels)
 	void isUpgradeable(XP_STATS statBlock){}
+	void unlock(int type)
+	{
+		switch(type)
+		{
+		case DIVINE_0:	divineBlock.upgradeable = true;		break;
+		case STORM:		lightningBlock.upgradeable= true;	break;
+		case FIRE_0:	fireBlock.upgradeable = true;		break;
+		case ICE_0:		iceBlock.upgradeable= true;			break;
+		case MELEE:		meleeBlock.upgradeable = true;		break;
+		}
+	}
 private:
 	/*--- Main Functions ---*/
 	void LS_Init();

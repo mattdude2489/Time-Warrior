@@ -8,56 +8,56 @@ BaseLeveler::BaseLeveler(void)
 	divineBlock.attack_type = DIVINE_0;
 	divineBlock.total_XP = STARTING_XP;
 	divineBlock.upgradeable = false;
-	for(int i = 0; i < MAX_UPGRADE_LV; i++)
+	/*for(int i = 0; i < MAX_UPGRADE_LV; i++)
 	{
 		divineBlock.upgrades[i].active = false;
 		divineBlock.upgrades[i].upgrade_level = i * 10;
 	}
-	divineBlock.upgrades[0].active = true;
+	divineBlock.upgrades[0].active = true;*/
 	//Storm
 	lightningBlock.attack_level = STARTING_LV;
 	lightningBlock.attack_type = STORM;
 	lightningBlock.total_XP = STARTING_XP;
 	lightningBlock.upgradeable = false;
-	for(int i = 0; i < MAX_UPGRADE_LV; i++)
+	/*for(int i = 0; i < MAX_UPGRADE_LV; i++)
 	{
 		lightningBlock.upgrades[i].active = false;
 		lightningBlock.upgrades[i].upgrade_level = i * 10;
 	}
-	lightningBlock.upgrades[0].active = true;
+	lightningBlock.upgrades[0].active = true;*/
 	//fire
 	fireBlock.attack_level = STARTING_LV;
 	fireBlock.attack_type = FIRE_0;
 	fireBlock.total_XP = STARTING_XP;
 	fireBlock.upgradeable = false;
-	for(int i = 0; i < MAX_UPGRADE_LV; i++)
+	/*for(int i = 0; i < MAX_UPGRADE_LV; i++)
 	{
 		fireBlock.upgrades[i].active = false;
 		fireBlock.upgrades[i].upgrade_level = i * 10;
 	}
-	fireBlock.upgrades[0].active = true;
+	fireBlock.upgrades[0].active = true;*/
 	//ice
 	iceBlock.attack_level = STARTING_LV;
 	iceBlock.attack_type = ICE_0;
 	iceBlock.total_XP = STARTING_XP;
 	iceBlock.upgradeable = false;
-	for(int i = 0; i < MAX_UPGRADE_LV; i++)
+	/*for(int i = 0; i < MAX_UPGRADE_LV; i++)
 	{
 		iceBlock.upgrades[i].active = false;
 		iceBlock.upgrades[i].upgrade_level = i * 10;
 	}
-	iceBlock.upgrades[0].active = true;
+	iceBlock.upgrades[0].active = true;*/
 	//melee
 	meleeBlock.attack_level = STARTING_LV;
 	meleeBlock.attack_type = MELEE;
 	meleeBlock.total_XP = STARTING_XP;
 	meleeBlock.upgradeable = false;
-	for(int i = 0; i < MAX_UPGRADE_LV; i++)
+	/*for(int i = 0; i < MAX_UPGRADE_LV; i++)
 	{
 		meleeBlock.upgrades[i].active = false;
 		meleeBlock.upgrades[i].upgrade_level = i * 10;
 	}
-	meleeBlock.upgrades[0].active = true;
+	meleeBlock.upgrades[0].active = true;*/
 }
 
 BaseLeveler::~BaseLeveler(void)
@@ -67,7 +67,7 @@ BaseLeveler::~BaseLeveler(void)
 /*--- Base Functions ---*/
 void BaseLeveler::Update()
 {
-	for(int i = 0; i < NUM_BASE_TYPES; i++)
+	/*for(int i = 0; i < NUM_BASE_TYPES; i++)
 	{
 		switch(i)
 		{
@@ -142,7 +142,7 @@ void BaseLeveler::Update()
 			}
 			break;
 		}//end switch
-	}//end for
+	}//end for*/
 }
 /*--- XP Gain Functions ---*/
 void BaseLeveler::GainMagicXP(int chipBaseType)
@@ -207,28 +207,44 @@ int BaseLeveler::getAttackXP(int type)
 
 int BaseLeveler::getAttackLevel(int type)
 {
+
 	switch(type)
 	{
-	case DIVINE_0:	return divineBlock.attack_level;	break;
-	case STORM:		return lightningBlock.attack_level;	break;
-	case FIRE_0:	return fireBlock.attack_level;		break;
-	case ICE_0:		return iceBlock.attack_level;		break;
-	case MELEE:		return meleeBlock.attack_level;		break;
+	case DIVINE_0:
+		if(divineBlock.upgradeable)
+			return divineBlock.attack_level;
+		break;
+	case STORM:
+		if(lightningBlock.upgradeable)
+			return lightningBlock.attack_level;
+		break;
+	case FIRE_0:
+		if(fireBlock.upgradeable)
+			return fireBlock.attack_level;
+		break;
+	case ICE_0:
+		if(iceBlock.upgradeable)
+			return iceBlock.attack_level;
+		break;
+	case MELEE:
+		if(meleeBlock.upgradeable)
+			return meleeBlock.attack_level;
+		break;
 	}
 	return 0;
 }
 
 bool BaseLeveler::getUpgradeStatus(int type, int upgradeLevel)
 {
-	switch(type)
+	/*switch(type)
 	{
 	case DIVINE_0:	return divineBlock.upgrades[upgradeLevel].active;	 break;
 	case STORM:		return lightningBlock.upgrades[upgradeLevel].active; break;
 	case FIRE_0:	return fireBlock.upgrades[upgradeLevel].active;		 break;
 	case ICE_0:		return iceBlock.upgrades[upgradeLevel].active;		 break;
 	case MELEE:		return meleeBlock.upgrades[upgradeLevel].active;	 break;
-	}
-	return 0;
+	}*/
+	return false;
 }
 
 /*--- Main Functions ---*/

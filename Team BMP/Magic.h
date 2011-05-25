@@ -88,7 +88,7 @@ class Magic : public Chip
 		}
 		void applyEffect(Entity * a_entity)
 		{
-			//apply effects based on type of spell
+			//apply special effects based on type of spell
 			switch(m_cSubType)
 			{
 			case DIVINE:	//heal entities of same owner-type
@@ -105,21 +105,20 @@ class Magic : public Chip
 					a_entity->activateEffect(FREEZE, m_owner->getTotalDamageDealt(m_dmg,MAGIC), &SPoint(2,TIME_SECOND_MS));
 				break;
 			}
-			//dmg entities of non owner-type
-			if(a_entity->getType() != m_owner->getType())
-				a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
-			//let other entity know who it has been hit by
-			if(a_entity->getType()!= m_owner->getType())
-				a_entity->hitFromPlayer();
-			//erase & gain experience from killed entities
-			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
+			//apply general effects based on type of spell
+			switch(m_cSubType)
 			{
-				a_entity->setDrawOff();
-				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
-				if((rand()%100)<20)//20 % chance to get a health pot
-					m_owner->receiveHPot();
-				if((rand()%100)<10)//10 % chance to get a energy pot
-					m_owner->receiveEPot();
+			case DIVINE:
+			case LIGHTNING:
+			case FIRE:
+			case ICE:
+				//dmg entities of non owner-type
+				if(a_entity->getType() != m_owner->getType())
+					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
+				//let other entity know who it has been hit by
+				if(a_entity->getType()!= m_owner->getType())
+					a_entity->hitFromPlayer();
+				break;
 			}
 		}
 		void updateUniqueTwo(int a_timePassed)

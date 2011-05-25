@@ -50,6 +50,36 @@ class Chip : public Entity
 			//if(m_tracker)
 			//	delete m_tracker;
 		}
+		void unlock()
+		{
+			if(m_cType != ARMOR)
+			{
+				switch(m_cSubType)
+				{
+				case DIVINE:	m_tracker.unlock(DIVINE_0);	break;
+				case LIGHTNING:	m_tracker.unlock(STORM);	break;
+				case FIRE:		m_tracker.unlock(FIRE_0);	break;
+				case ICE:		m_tracker.unlock(ICE_0);	break;
+				default:		m_tracker.unlock(MELEE);	break;
+				}
+				resetLevelWithBaseLeveler();
+			}
+		}
+		int getXP()
+		{
+			if(m_cType != ARMOR)
+			{
+				switch(m_cSubType)
+				{
+				case DIVINE:	m_tracker.getAttackXP(DIVINE_0);	break;
+				case LIGHTNING:	m_tracker.getAttackXP(STORM);		break;
+				case FIRE:		m_tracker.getAttackXP(FIRE_0);		break;
+				case ICE:		m_tracker.getAttackXP(ICE_0);		break;
+				default:		m_tracker.getAttackXP(MELEE);		break;
+				}
+			}
+			return 0;
+		}
 		void resetLevelWithBaseLeveler()
 		{
 			if(m_cType != ARMOR)
@@ -199,6 +229,20 @@ class Chip : public Entity
 		virtual bool shouldApplyEffect(Entity * a_entity){return false;}
 		//virtual func to specially apply effect from inherited classes
 		virtual void applyEffect(Entity * a_entity){}
+		void applyEffectAndStuffForKill(Entity * a_entity)
+		{
+			applyEffect(a_entity);
+			//erase & gain experience from killed entities
+			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
+			{
+				a_entity->setDrawOff();
+				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
+				if((rand()%100)<20)//20 % chance to get a health pot
+					m_owner->receiveHPot();
+				if((rand()%100)<10)//10 % chance to get a energy pot
+					m_owner->receiveEPot();
+			}
+		}
 		//adjusts the target to be centered
 		void centerTarget(){m_target.subtract(SPoint(m_sprite->getWidthOffsetCenter(), m_sprite->getHeightOffsetCenter()));}
 		//activates current Chip
@@ -252,17 +296,13 @@ class Chip : public Entity
 		{
 			//update last-atk timer
 			m_timeSinceLastAttack += a_timePassed;
+			//auto-end if not a continuous atk & 1st iteration has finished
 			bool notContinuous = false;
 			switch(m_cType)
 			{
-			case MAGIC:
-				notContinuous = m_cSubSubType != BASIC;
-				break;
-			case WEAPON:
-				notContinuous = m_cSubType != RANGE;
-				break;
+			case MAGIC:		notContinuous = m_cSubSubType != BASIC;	break;
+			case WEAPON:	notContinuous = m_cSubType != RANGE;	break;
 			}
-			//auto-end if not a continuous atk & 1st iteration has finished
 			if(notContinuous)
 			{
 				if(!m_firstIteration && m_sprite->getFrame() == 0)
@@ -296,7 +336,6 @@ class Chip : public Entity
 					}
 					if(check && m_lastSpriteFrame != m_sprite->getFrame())
 					{
-						printf("checking %d w/frame %d\n", grid, m_sprite->getFrame());
 						for(int i = 0; i < a_world->getGrid(grid)->getNumberOfEntities(); ++i)
 						{
 							//check against each entity in grid
@@ -305,7 +344,7 @@ class Chip : public Entity
 								//detect collision with Obstacles, but don't apply effect in such case
 								if(a_world->getEntity(i, grid)->getType() != OBSTACLE)
 								{
-									applyEffect(a_world->getEntity(i, grid));
+									applyEffectAndStuffForKill(a_world->getEntity(i, grid));
 									switch(m_cType)
 									{
 									case WEAPON:

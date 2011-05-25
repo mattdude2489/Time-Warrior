@@ -104,16 +104,6 @@ class Weapon : public Chip
 					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,WEAPON), m_cSubType);
 				break;
 			}
-			//erase & gain experience from killed entities
-			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
-			{
-				a_entity->setDrawOff();
-				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
-				if((rand()%100)<20)//20 % chance to get a health pot
-					m_owner->receiveHPot();
-				if((rand()%100)<10)//10 % chance to get a energy pot
-					m_owner->receiveEPot();
-			}
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
