@@ -16,7 +16,7 @@ enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
 enum e_timer {TIMER_GENERAL, TIMER_REGEN, NUM_TIMERS};
-enum e_flags {FLAG_DRAW, FLAG_ACTIVE, FLAG_OWNER_PLAYER, FLAG_NUDE, NUM_FLAGS};
+enum e_flags {FLAG_DRAW, FLAG_ACTIVE, FLAG_OWNER_PLAYER, FLAG_NUDE, FLAG_STOPPED, NUM_FLAGS};
 enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 100, DRAGON_FRAME = 65};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_effect {KNOCKBACK, FREEZE, NUM_EFFECTS};
@@ -367,7 +367,7 @@ public:
 	void setLastW(){m_lastWLoc.set(m_location.getX(), m_location.getY()+(2*FRAME_SIZE));}
 	void setCurrentLocToLast(World * a_world);
 	virtual bool isObstacle(e_obstacleType a_type){return false;}
-	virtual void setStopped(){};
+	virtual void setStopped(){m_flags[FLAG_STOPPED] = true;};
 	virtual int getIndex(){return 0;}
 	virtual void levelUpUnique(){};
 	void levelUp()

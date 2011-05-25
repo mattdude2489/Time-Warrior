@@ -140,6 +140,7 @@ bool World::setWorld(char * fileName)
 			case 'b':
 			case 'T':
 			case 'e':
+			case 'E':
 				switch(currentWorld)
 				{
 				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_QUAD;			break;
@@ -437,6 +438,7 @@ bool World::setWorld(char * fileName)
 #ifdef NPC_ADD
 	setNPC();
 #endif
+	printf("World made\n");
 	return m_success;
 }
 //sets up a camera for each entity & tile, so they correctly move relative to the player

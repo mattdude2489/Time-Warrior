@@ -4,11 +4,14 @@
 #pragma once
 
 enum e_obstacleType {PORTAL, DUNGEON, TREE, DOOR, BUILDING, NUM_OBSTACLE_TYPES};
+enum e_doorLocation	{DOOR_BOTTOM, DOOR_RIGHT};
 
 class Obstacle : public Entity
 {
 private:
 	bool m_oType[NUM_OBSTACLE_TYPES];
+	int doorFace;
+	SRect door;
 public:
 	Obstacle(SDL_Sprite *a_sprite):Entity(a_sprite)
 	{

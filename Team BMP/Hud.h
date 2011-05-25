@@ -113,15 +113,17 @@ public:
 		int x = m_statButton.getX()-(FRAME_SIZE*SLOT_ARMOR_HEAD);
 		m_statWin.getPlayer()->drawInventory(screen, x, HUD_Y, INVENTORY_GAUNTLET, 0, (m_statButton.getX()-x)/FRAME_SIZE, SLOT_ATK1);
 		m_statButton.draw(screen);
-		if(m_showStats)
-			m_statWin.draw(screen);
+		//drawing the pots on screen
 		pots.setRIndex(0);
 		pots.draw(screen, (SCREEN_WIDTH/2)-FRAME_SIZE, SCREEN_HEIGHT-FRAME_SIZE);
 		pots.setRIndex(1);
 		pots.draw(screen, (SCREEN_WIDTH/2), SCREEN_HEIGHT-FRAME_SIZE);
 		for(int i = 0; i < NUM_POTS; i ++)
-		{
-			m_potText[i].printMessage(screen, (SCREEN_WIDTH/2)-(FRAME_SIZE*i), SCREEN_HEIGHT-FRAME_SIZE);
+		{//will print the text at 1/2 screen then minus frame width for firest then exactly at mid
+			m_potText[i].printMessage(screen, (SCREEN_WIDTH/2)-(FRAME_SIZE*(1-i)), SCREEN_HEIGHT-FRAME_SIZE);
 		}
+		if(m_showStats)
+			m_statWin.draw(screen);
+		
 	}
 };

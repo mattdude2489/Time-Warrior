@@ -42,13 +42,14 @@ public:
 	void wander(int a_timePassed)
 	{
 		m_lastDirectionChange += a_timePassed;
-		if(m_lastDirectionChange > WANDER_DIRECTION_TIME || m_location.equals(m_target))
+		if(m_lastDirectionChange > WANDER_DIRECTION_TIME || m_location.equals(m_target)||m_flags[FLAG_STOPPED])
 		{
 			int tX, tY;
 			tX = m_location.getX()+((rand()%WANDER_MAX)-WANDER_DIST);//gives a + or - 50 change in wander
 			tY = m_location.getY()+((rand()%WANDER_MAX)-WANDER_DIST);
 			m_target.set(tX, tY);
 			m_lastDirectionChange = 0;
+			m_flags[FLAG_STOPPED] = false;
 		}
 	}
 	virtual void isPlayerInRange(Entity *a_player)
