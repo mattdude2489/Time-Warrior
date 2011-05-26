@@ -269,6 +269,13 @@ public:
 		else
 			return collideSimple(a_entity);
 	}
+	bool withinRange(Entity * a_entity, int range)
+	{
+		if(a_entity->getFlag(FLAG_DRAW) && m_flags[FLAG_DRAW])
+			return getDeltaBetweenLocationAnd(&a_entity->getLocation()).getLength() < range;
+		else
+			return false;
+	}
 	char * getStatName(e_stats a_stat)
 	{
 		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works

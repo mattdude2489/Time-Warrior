@@ -279,7 +279,6 @@ void BaseLeveler::LS_Init()
 
 bool BaseLeveler::isLevelUp(int type)
 {
-	//this is probably why Chip is leveling up during each combat hit
 	switch(type)
 	{
 	case DIVINE_0:	return divineBlock.total_XP >= XP_KEY[divineBlock.attack_level + 1].xpRequired;			break;

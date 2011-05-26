@@ -66,7 +66,7 @@ public:
 		m_target.set(a_player->getLocation());
 		m_hitLast += a_time;
 		m_lastCast += a_time;
-		if(this->collide(a_player)&&m_hitLast > HIT_DELAY)//if coliding and the time to hit is up hit
+		if(this->withinRange(a_player, (int)(FRAME_SIZE*1.25))&&m_hitLast > HIT_DELAY)//if coliding and the time to hit is up hit
 		{
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;

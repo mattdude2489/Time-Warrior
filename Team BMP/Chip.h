@@ -92,7 +92,7 @@ class Chip : public Entity
 				case ICE:		m_stats[LEVEL] = m_tracker.getAttackLevel(ICE_0);		break;
 				default:		m_stats[LEVEL] = m_tracker.getAttackLevel(MELEE);		break;
 				}
-				printf("level: %d, xp: %d\n", m_stats[LEVEL], getXP());
+				//printf("level: %d, xp: %d\n", m_stats[LEVEL], getXP());
 				setDamageWithLevel();
 			}
 		}
@@ -112,11 +112,11 @@ class Chip : public Entity
 			}
 			switch(m_cSubType)
 			{
-			case LIGHTNING:	m_dmg = (int)((double)m_dmg * 1.25);	break;
+			case LIGHTNING:	m_dmg = (int)((double)m_dmg * 1.25);	break;//total dmg (w/critical)	: 2.5
 			case FIRE:
-			case SLASH:		m_dmg = (int)((double)m_dmg * 2);		break;
-			case ICE:		m_dmg = (int)((double)m_dmg * .5);		break;
-			case BLUNT:		m_dmg = (int)((double)m_dmg * 1.5);		break;
+			case SLASH:		m_dmg = (int)((double)m_dmg * 2);		break;//total dmg (no effect)	: 2
+			case ICE:		m_dmg = (int)((double)m_dmg * .5);		break;//total dmg (w/freeze)	: 2
+			case BLUNT:		m_dmg = (int)((double)m_dmg * 1.5);		break;//total dmg (w/knockback)	: 1.5
 			}
 		}
 		void setLevelAndXP(int level, int experience)
@@ -269,7 +269,7 @@ class Chip : public Entity
 		//activates current Chip
 		void activate()
 		{
-			if(m_owner)
+			if(m_owner && m_stats[LEVEL] > 0)
 			{
 				//init stuff if not already displayed
 				if(!m_flags[FLAG_DRAW])

@@ -87,12 +87,13 @@ public:
 	{
 		//Search for a PLAYER in its grid, if they're colliding, check to see if spacebar is pressed. If so, activate its dialogue.
 		Entity * emptyPointer;
-		if(a_world->getGrid(m_location.x, m_location.y)->getPlayer(emptyPointer))
+		if((emptyPointer = a_world->getPlayer()))
 		{
+			int range = (int)(FRAME_SIZE*1.25);
 			//Player in the grid. I now have access to the player's location, AND ACTIVATION sequence.
-			if(this->collideSimple(emptyPointer) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
+			if(this->withinRange(emptyPointer, range) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
 				activateDialogue();
-			if(!(this->collideSimple(emptyPointer)))
+			if(!(this->withinRange(emptyPointer, range)))
 				deactivateDialogue();
 		}
 	}
