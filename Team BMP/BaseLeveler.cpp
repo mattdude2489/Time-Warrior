@@ -152,22 +152,22 @@ void BaseLeveler::GainMagicXP(int chipBaseType)
 	case DIVINE_0:
 		divineBlock.total_XP += 1;
 		if(isLevelUp((int)DIVINE_0))
-			divineBlock.attack_level += 1;
+			levelUp(DIVINE_0);
 		break;
 	case STORM:
 		lightningBlock.total_XP += 1;
 		if(isLevelUp((int)STORM))
-			lightningBlock.attack_level += 1;
+			levelUp(STORM);
 		break;
 	case FIRE_0:
 		fireBlock.total_XP+=1;
 		if(isLevelUp((int)FIRE_0))
-			fireBlock.attack_level += 1;
+			levelUp(FIRE_0);
 		break;
 	case ICE_0:
 		iceBlock.total_XP += 1;
 		if(isLevelUp((int)ICE_0))
-			iceBlock.attack_level += 1;
+			levelUp(ICE_0);
 		break;
 	}//end switch
 }
@@ -176,7 +176,7 @@ void BaseLeveler::GainMeleeXP()
 {
 	meleeBlock.total_XP += 1;
 	if(isLevelUp((int)MELEE))
-		meleeBlock.attack_level += 1;
+		levelUp(MELEE);
 }
 /*--- Level checking fuctions ---*/
 /*--- Accessor/Mutators ---*/
@@ -184,11 +184,22 @@ void BaseLeveler::setAttackLvXP(int type, int level, int experience)
 {
 	switch(type)
 	{
-	case DIVINE_0: divineBlock.attack_level = level;    divineBlock.total_XP = experience;	  break;
-	case STORM:	   lightningBlock.attack_level = level; lightningBlock.total_XP = experience; break;
-	case FIRE_0:   fireBlock.attack_level = level;		fireBlock.total_XP = experience;	  break;
-	case ICE_0:	   iceBlock.attack_level = level;		iceBlock.total_XP = experience;		  break;
-	case MELEE:	   meleeBlock.attack_level = level;		meleeBlock.total_XP = experience;	  break;
+	case DIVINE_0:	divineBlock.attack_level = level;		divineBlock.total_XP = experience;		break;
+	case STORM:		lightningBlock.attack_level = level;	lightningBlock.total_XP = experience;	break;
+	case FIRE_0:	fireBlock.attack_level = level;			fireBlock.total_XP = experience;		break;
+	case ICE_0:		iceBlock.attack_level = level;			iceBlock.total_XP = experience;			break;
+	case MELEE:		meleeBlock.attack_level = level;		meleeBlock.total_XP = experience;		break;
+	}
+	if(isLevelUp(type))
+	{
+		switch(type)
+		{
+		case DIVINE_0:	divineBlock.total_XP %= XP_KEY[getAttackLevel(type) + 1].xpRequired;	break;
+		case STORM:		lightningBlock.total_XP %= XP_KEY[getAttackLevel(type) + 1].xpRequired;	break;
+		case FIRE_0:	fireBlock.total_XP %= XP_KEY[getAttackLevel(type) + 1].xpRequired;		break;
+		case ICE_0:		iceBlock.total_XP %= XP_KEY[getAttackLevel(type) + 1].xpRequired;		break;
+		case MELEE:		meleeBlock.total_XP %= XP_KEY[getAttackLevel(type) + 1].xpRequired;		break;
+		}
 	}
 }
 

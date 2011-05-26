@@ -86,8 +86,6 @@ public:
 	int getAttackLevel(int type);
 	int getAttackXP(int type);
 	bool getUpgradeStatus(int type, int upgradeLevel);
-	//check if the the attack can be upgraded (every 10 levels)
-	void isUpgradeable(XP_STATS statBlock){}
 	void unlock(int type)
 	{
 		switch(type)
@@ -97,6 +95,32 @@ public:
 		case FIRE_0:	fireBlock.upgradeable = true;		break;
 		case ICE_0:		iceBlock.upgradeable= true;			break;
 		case MELEE:		meleeBlock.upgradeable = true;		break;
+		}
+	}
+	void levelUp(int type)
+	{
+		switch(type)
+		{
+		case DIVINE_0:
+			divineBlock.attack_level += 1;
+			divineBlock.total_XP = 0;
+			break;
+		case STORM:
+			lightningBlock.attack_level += 1;
+			lightningBlock.total_XP = 0;
+			break;
+		case FIRE_0:
+			fireBlock.attack_level += 1;
+			fireBlock.total_XP = 0;
+			break;
+		case ICE_0:
+			iceBlock.attack_level += 1;
+			iceBlock.total_XP = 0;
+			break;
+		case MELEE:
+			meleeBlock.attack_level += 1;
+			meleeBlock.total_XP = 0;
+			break;
 		}
 	}
 private:

@@ -45,7 +45,7 @@ public:
 			}
 			m_attack->setNewed(true);
 			m_attack->setOwner(this);
-			m_attack->levelUp();
+			m_attack->unlock();
 			a_world->add(m_attack);
 		}
 	}

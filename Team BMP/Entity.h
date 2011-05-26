@@ -330,7 +330,7 @@ public:
 	}
 	bool colideWithTile(Tile * a_tile);
 	//e_effect KNOCKBACK, maxDistance, direction
-	//e_effect FREEZE, maxDmg, time(numIntervals, sizeIntervalMS)
+	//e_effect FREEZE, dmg, time(numIntervals, sizeIntervalMS)
 	void activateEffect(e_effect a_effect, int a_maxDistanceOrDmg, SPoint * a_directionOrTime)
 	{
 		if(a_effect == KNOCKBACK && !m_effects[KNOCKBACK].active)
@@ -356,8 +356,8 @@ public:
 			m_effects[FREEZE].target.y = a_directionOrTime->x;
 			//time limit of each interval
 			m_effects[FREEZE].timeLimit = a_directionOrTime->y;
-			//split total dmg over each time interval
-			m_effects[FREEZE].dmg = a_maxDistanceOrDmg/m_effects[FREEZE].target.y;
+			//dmg to do each interval
+			m_effects[FREEZE].dmg = a_maxDistanceOrDmg;
 			if(m_effects[FREEZE].dmg < 1)
 				m_effects[FREEZE].dmg = 1;
 		}

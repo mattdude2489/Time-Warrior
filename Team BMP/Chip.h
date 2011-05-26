@@ -23,7 +23,7 @@ class Chip : public Entity
 		//direction owner is facing
 		char m_direction;
 		//stats for energy cost, dmg, & time since last atk
-		int m_cost, m_costLv, m_dmg, m_dmgLv, m_timeSinceLastAttack, m_lastSpriteFrame;
+		int m_cost, m_dmg, m_timeSinceLastAttack, m_lastSpriteFrame;
 		//sprite to display on HUD
 		SDL_Sprite * m_spriteHUD;
 		//owner of this Chip
@@ -37,7 +37,7 @@ class Chip : public Entity
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
-			m_cost(0),m_costLv(0),m_dmg(0),m_dmgLv(0),m_timeSinceLastAttack(0),
+			m_cost(0),m_dmg(0),m_timeSinceLastAttack(0),
 			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0),m_isCritical(false)
 		{m_eType = CHIP; m_stats[LEVEL] = 0;}// m_tracker = new BaseLeveler();}
 		~Chip()
@@ -92,6 +92,45 @@ class Chip : public Entity
 				case ICE:		m_stats[LEVEL] = m_tracker.getAttackLevel(ICE_0);		break;
 				default:		m_stats[LEVEL] = m_tracker.getAttackLevel(MELEE);		break;
 				}
+				setDamageWithLevel();
+			}
+		}
+		void setDamageWithLevel()
+		{
+			switch(m_cType)
+			{
+			case MAGIC:
+			case WEAPON:
+				//if Magic or Weapon, update dmg & cost increase per level
+				m_dmg = 5 * (m_cSubSubType + 1);// + m_stats[LEVEL];
+				if(m_cType == MAGIC)
+					m_cost = 5 * (m_cSubSubType + 1);// + m_stats[LEVEL];
+				else
+					m_cost = 5 * m_cSubSubType;// + m_stats[LEVEL];
+				break;
+			}
+			switch(m_cSubType)
+			{
+			case LIGHTNING:	m_dmg = (int)((double)m_dmg * 1.25);	break;
+			case FIRE:
+			case SLASH:		m_dmg = (int)((double)m_dmg * 2);		break;
+			case ICE:		m_dmg = (int)((double)m_dmg * .5);		break;
+			case BLUNT:		m_dmg = (int)((double)m_dmg * 1.5);		break;
+			}
+		}
+		void setLevelAndXP(int level, int experience)
+		{
+			if(m_cType != ARMOR)
+			{
+				switch(m_cSubType)
+				{
+				case DIVINE:	m_tracker.setAttackLvXP(DIVINE_0, level, experience);	break;
+				case LIGHTNING:	m_tracker.setAttackLvXP(STORM, level, experience);		break;
+				case FIRE:		m_tracker.setAttackLvXP(FIRE_0, level, experience);		break;
+				case ICE:		m_tracker.setAttackLvXP(ICE_0, level, experience);		break;
+				default:		m_tracker.setAttackLvXP(MELEE, level, experience);		break;
+				}
+				resetLevelWithBaseLeveler();
 			}
 		}
 		//returns Chip's various types
@@ -186,40 +225,21 @@ class Chip : public Entity
 		int centerAroundOwnerCenterX(){return getOwnerCenterX() - m_sprite->getWidthOffsetCenter();}
 		//returns y location to center around owner
 		int centerAroundOwnerCenterY(){return getOwnerCenterY() - m_sprite->getHeightOffsetCenter();}
-		//virtual func to update inherited-class variables
-		virtual void levelUpUniqueTwo(){}
 		//updates appropriate variables
 		void levelUpUnique()
 		{
-			switch(m_cType)
+			if(m_cType != ARMOR)
 			{
-			case MAGIC:
-			case WEAPON:
-				//if Magic or Weapon, update dmg & cost increase per level
-				m_dmgLv = 5 + m_cSubSubType;
-				if(m_cType == MAGIC)
-					m_costLv = 5 * (m_cSubSubType + 1);
-				else
-					m_costLv = 5 * m_cSubSubType;
-				break;
+				switch(m_cSubType)
+				{
+				case DIVINE:	m_tracker.levelUp(DIVINE_0);	break;
+				case LIGHTNING:	m_tracker.levelUp(STORM);		break;
+				case FIRE:		m_tracker.levelUp(FIRE_0);		break;
+				case ICE:		m_tracker.levelUp(ICE_0);		break;
+				default:		m_tracker.levelUp(MELEE);		break;
+				}
+				resetLevelWithBaseLeveler();
 			}
-			//update cost & dmg
-			//m_cost += m_costLv;
-			//m_dmg += m_dmgLv;
-			m_cost = m_costLv;
-			m_dmg = m_dmgLv;
-			switch(m_cSubType)
-			{
-			case LIGHTNING:
-			case BLUNT:
-				m_dmg = (int)((double)m_dmg *.75);
-				break;
-			case ICE:
-				m_dmg = (int)((double)m_dmg *.5);
-				break;
-			}
-			//update variables unique to inherited classes
-			levelUpUniqueTwo();
 		}
 		//virtual func to specially activate inherited classes
 		virtual void activateUnique(){}

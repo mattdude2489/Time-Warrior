@@ -5,15 +5,9 @@
 
 class Magic : public Chip
 {
-	protected:
-		//stats for combo bonuses
-		int m_dmgCombo, m_dmgComboLv;
 	public:
 		Magic(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
-			:Chip(MAGIC, a_subType, a_subSubType),
-			m_dmgCombo(0),m_dmgComboLv(0){}
-		int getComboBonus(){return m_dmgCombo;}
-		void levelUpUniqueTwo(){m_dmgCombo += m_dmgComboLv;}
+			:Chip(MAGIC, a_subType, a_subSubType){}
 		void activateUnique()
 		{
 			//adjust the target position
@@ -102,7 +96,7 @@ class Magic : public Chip
 			case FIRE:		break;
 			case ICE:		//activate freeze effect
 				if(a_entity->getType() != m_owner->getType())
-					a_entity->activateEffect(FREEZE, m_owner->getTotalDamageDealt(m_dmg,MAGIC), &SPoint(2,TIME_SECOND_MS));
+					a_entity->activateEffect(FREEZE, m_owner->getTotalDamageDealt(m_dmg,MAGIC), &SPoint(NUM_CHIP_LEVELS,TIME_SECOND_MS));
 				break;
 			}
 			//apply general effects based on type of spell

@@ -475,18 +475,18 @@ bool Player::loadPlayer(int saveToLoad)
 				}
 			}
 			iHopeThisWorks->setNewed(true);
-			//level (TODO - integrate w/BaseLeveler)
+			//level
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			if(hpenstrintexpsta > 0)
 			{
 				iHopeThisWorks->unlock();
-				for(int i = 0; i < hpenstrintexpsta; i++)
-					iHopeThisWorks->levelUp();
+				iHopeThisWorks->setLevelAndXP(hpenstrintexpsta, 0);
 			}
 			this->addToAttackInventory(iHopeThisWorks);
 			thisWorld->add(iHopeThisWorks);
 			//Xp (TODO - integrate w/BaseLeveler)
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
+			iHopeThisWorks->setLevelAndXP(iHopeThisWorks->getStatNumber(LEVEL), chipAndArmorHelper);
 			//equip
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			if(hpenstrintexpsta)
