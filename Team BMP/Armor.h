@@ -9,7 +9,6 @@ class Armor : public Chip
 		Armor(e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Chip(ARMOR, a_subType, a_subSubType)
 		{
-			m_stats[LEVEL] = 1;
 			int interval = 10;
 			/*
 			range based on m_cSubSubType

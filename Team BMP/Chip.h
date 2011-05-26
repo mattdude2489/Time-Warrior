@@ -39,7 +39,7 @@ class Chip : public Entity
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_cost(0),m_dmg(0),m_timeSinceLastAttack(0),
 			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0),m_isCritical(false)
-		{m_eType = CHIP; m_stats[LEVEL] = 0;}// m_tracker = new BaseLeveler();}
+		{m_eType = CHIP;}// m_tracker = new BaseLeveler();}
 		~Chip()
 		{
 			//free memory from allocated sprites
@@ -71,11 +71,11 @@ class Chip : public Entity
 			{
 				switch(m_cSubType)
 				{
-				case DIVINE:	m_tracker.getAttackXP(DIVINE_0);	break;
-				case LIGHTNING:	m_tracker.getAttackXP(STORM);		break;
-				case FIRE:		m_tracker.getAttackXP(FIRE_0);		break;
-				case ICE:		m_tracker.getAttackXP(ICE_0);		break;
-				default:		m_tracker.getAttackXP(MELEE);		break;
+				case DIVINE:	return m_tracker.getAttackXP(DIVINE_0);	break;
+				case LIGHTNING:	return m_tracker.getAttackXP(STORM);	break;
+				case FIRE:		return m_tracker.getAttackXP(FIRE_0);	break;
+				case ICE:		return m_tracker.getAttackXP(ICE_0);	break;
+				default:		return m_tracker.getAttackXP(MELEE);	break;
 				}
 			}
 			return 0;
@@ -92,6 +92,7 @@ class Chip : public Entity
 				case ICE:		m_stats[LEVEL] = m_tracker.getAttackLevel(ICE_0);		break;
 				default:		m_stats[LEVEL] = m_tracker.getAttackLevel(MELEE);		break;
 				}
+				printf("level: %d, xp: %d\n", m_stats[LEVEL], getXP());
 				setDamageWithLevel();
 			}
 		}

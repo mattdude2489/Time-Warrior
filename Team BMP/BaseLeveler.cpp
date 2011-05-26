@@ -1,4 +1,5 @@
 #include "BaseLeveler.h"
+#include <string.h>
 
 BaseLeveler::BaseLeveler(void)
 {
@@ -160,7 +161,7 @@ void BaseLeveler::GainMagicXP(int chipBaseType)
 			levelUp(STORM);
 		break;
 	case FIRE_0:
-		fireBlock.total_XP+=1;
+		fireBlock.total_XP +=1;
 		if(isLevelUp((int)FIRE_0))
 			levelUp(FIRE_0);
 		break;
@@ -281,11 +282,11 @@ bool BaseLeveler::isLevelUp(int type)
 {
 	switch(type)
 	{
-	case DIVINE_0:	return divineBlock.total_XP >= XP_KEY[divineBlock.attack_level + 1].xpRequired;		  break;
-	case STORM:		return lightningBlock.total_XP >= XP_KEY[lightningBlock.attack_level + 1].xpRequired; break;
-	case FIRE_0:	return fireBlock.total_XP >= XP_KEY[fireBlock.attack_level + 1].xpRequired;			  break;
-	case ICE_0:		return iceBlock.total_XP >= XP_KEY[iceBlock.attack_level + 1].xpRequired;			  break;
-	case MELEE:		return meleeBlock.total_XP >= XP_KEY[meleeBlock.attack_level + 1].xpRequired;		  break;
+	case DIVINE_0:	return divineBlock.total_XP >= XP_KEY[divineBlock.attack_level + 1].xpRequired;			break;
+	case STORM:		return lightningBlock.total_XP >= XP_KEY[lightningBlock.attack_level + 1].xpRequired;	break;
+	case FIRE_0:	return fireBlock.total_XP >= XP_KEY[fireBlock.attack_level + 1].xpRequired;				break;
+	case ICE_0:		return iceBlock.total_XP >= XP_KEY[iceBlock.attack_level + 1].xpRequired;				break;
+	case MELEE:		return meleeBlock.total_XP >= XP_KEY[meleeBlock.attack_level + 1].xpRequired;			break;
 	}//end switch
 	return false;
 }
