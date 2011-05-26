@@ -1,5 +1,4 @@
 #include "BaseLeveler.h"
-#include <string.h>
 
 BaseLeveler::BaseLeveler(void)
 {
@@ -273,13 +272,14 @@ void BaseLeveler::LS_Init()
 		else
 		{
 			XP_KEY[i].level = (i + 1);
-			XP_KEY[i].xpRequired += XP_KEY[i].level;
+			XP_KEY[i].xpRequired = XP_KEY[i-1].xpRequired + XP_KEY[i].level;
 		}//end else
 	}// end for
 }
 
 bool BaseLeveler::isLevelUp(int type)
 {
+	//this is probably why Chip is leveling up during each combat hit
 	switch(type)
 	{
 	case DIVINE_0:	return divineBlock.total_XP >= XP_KEY[divineBlock.attack_level + 1].xpRequired;			break;
