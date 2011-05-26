@@ -32,7 +32,7 @@ public:
 	{
 		m_target.set(a_player->getLocation());
 		m_hitLast += a_time;
-		if(this->withinRange(a_player, (int)(FRAME_SIZE*1.25))&&m_hitLast > HIT_DELAY)
+		if(this->centersWithinRange(a_player, (int)(FRAME_SIZE*1.25))&&m_hitLast > HIT_DELAY)
 		{
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;

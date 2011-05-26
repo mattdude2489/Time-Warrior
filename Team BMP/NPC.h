@@ -91,9 +91,9 @@ public:
 		{
 			int range = (int)(FRAME_SIZE*1.25);
 			//Player in the grid. I now have access to the player's location, AND ACTIVATION sequence.
-			if(this->withinRange(emptyPointer, range) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
+			if(this->centersWithinRange(emptyPointer, range) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
 				activateDialogue();
-			if(!(this->withinRange(emptyPointer, range)))
+			if(!(this->centersWithinRange(emptyPointer, range)))
 				deactivateDialogue();
 		}
 	}

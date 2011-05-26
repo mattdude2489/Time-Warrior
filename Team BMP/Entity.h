@@ -269,10 +269,14 @@ public:
 		else
 			return collideSimple(a_entity);
 	}
-	bool withinRange(Entity * a_entity, int range)
+	bool centersWithinRange(Entity * a_entity, int range)
 	{
 		if(a_entity->getFlag(FLAG_DRAW) && m_flags[FLAG_DRAW])
-			return getDeltaBetweenLocationAnd(&a_entity->getLocation()).getLength() < range;
+		{
+			SPoint myCenter = m_location.sum(SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()));
+			SPoint otherCenter = a_entity->getLocation().sum(SPoint(a_entity->getWidthOffsetCenter(),a_entity->getHeightOffsetCenter()));
+			return otherCenter.difference(myCenter).getLength() < range;
+		}
 		else
 			return false;
 	}
