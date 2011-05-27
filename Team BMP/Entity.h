@@ -269,17 +269,18 @@ public:
 		else
 			return collideSimple(a_entity);
 	}
-	bool centersWithinRange(Entity * a_entity, int range)
+	bool collideBoundingCircles(Entity * a_entity, int buffer)
 	{
 		if(a_entity->getFlag(FLAG_DRAW) && m_flags[FLAG_DRAW])
 		{
 			SPoint myCenter = m_location.sum(SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()));
 			SPoint otherCenter = a_entity->getLocation().sum(SPoint(a_entity->getWidthOffsetCenter(),a_entity->getHeightOffsetCenter()));
-			return otherCenter.difference(myCenter).getLength() < range;
+			return otherCenter.difference(myCenter).getLength() <= (m_location.difference(myCenter).getLength() + a_entity->getLocation().difference(otherCenter).getLength()  + buffer);
 		}
 		else
 			return false;
 	}
+	bool collideBoundingCircles(Entity * a_entity){return collideBoundingCircles(a_entity,0);}
 	char * getStatName(e_stats a_stat)
 	{
 		switch(a_stat)//once again sorry for the dirtyness just trying to get code that works

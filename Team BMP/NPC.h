@@ -89,11 +89,10 @@ public:
 		Entity * emptyPointer;
 		if((emptyPointer = a_world->getPlayer()))
 		{
-			int range = (int)(FRAME_SIZE*1.25);
 			//Player in the grid. I now have access to the player's location, AND ACTIVATION sequence.
-			if(this->centersWithinRange(emptyPointer, range) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
+			if(this->collideBoundingCircles(emptyPointer) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
 				activateDialogue();
-			if(!(this->centersWithinRange(emptyPointer, range)))
+			if(!(this->collideBoundingCircles(emptyPointer)))
 				deactivateDialogue();
 		}
 	}

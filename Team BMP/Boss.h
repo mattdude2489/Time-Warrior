@@ -49,7 +49,7 @@ public:
 	}
 	void isPlayerInRange(Entity *a_player)
 	{
-		if(centersWithinRange(a_player, BOSS_ENGAGE))
+		if(collideBoundingCircles(a_player, BOSS_ENGAGE))
 			m_state = CHASE;
 		else
 		{
@@ -63,12 +63,12 @@ public:
 		m_target.set(a_player->getLocation());
 		m_hitLast += a_time;
 		m_lastCast += a_time;
-		if(this->centersWithinRange(a_player, (int)(FRAME_SIZE*1.25))&&m_hitLast > HIT_DELAY)//if coliding and the time to hit is up hit
+		if(this->collideBoundingCircles(a_player)&&m_hitLast > HIT_DELAY)//if coliding and the time to hit is up hit
 		{
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
 		}
-		if(this->centersWithinRange(a_player, BOSS_ATK_RANGE) && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
+		if(this->collideBoundingCircles(a_player, BOSS_ATK_RANGE) && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
 		{
 			m_attack->setTarget(a_player->getLocation());
 			m_attack->activate();
