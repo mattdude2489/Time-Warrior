@@ -16,9 +16,9 @@ enum e_worldTileA		{TILE_PORTAL, TILE_DUNGEON, TILE_WATER, TILE_WATER_D, TILE_WA
 struct Tile
 {
 	SDL_Sprite * currentTexture;
-	bool collide, portal, dungeon, spawnLocation, bossLoc, playerSpawn, tree, door, ddoor, fdoor, stairs, animate, buildingh, buildingv;
+	bool collide, portal, dungeon, spawnLocation, bossLoc, playerSpawn, tree, door, ddoor, fdoor, stairs, buildingh, buildingv;
 	SPoint pos, *cam;
-	int indexOfSpriteRow, indexSpriteCol, animateUpdate;
+	int indexOfSpriteRow;
 	static int portalIndexNumber;
 	SPoint getLocationScreen(){return pos.difference(*cam);}
 	SRect collideBox;

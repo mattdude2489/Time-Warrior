@@ -31,10 +31,10 @@ World::World()
 	m_sprites[KNIGHT1].setSprite("Sprites/knight1.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 
 	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
-	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
+	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE/2, NUM_WORLD_TILE_A);
 	m_worldSprites[TREE_SPRITE] = new SDL_Sprite("Sprites/Tree.bmp", TREE_WIDTH, TREE_HEIGHT, FRAME_RATE, TREE_COUNT);
 	m_worldSprites[ROCK_SHRUB] = new SDL_Sprite("Sprites/RocksandShrubs.bmp", FRAME_SIZE,FRAME_SIZE, FRAME_RATE, NUM_ROCK_SHRUB); 
-	m_worldSprites[BUILDINGS] = new SDL_Sprite("Sprites/Buildings.bmp", BUILDING_W, BUILDING_H, FRAME_RATE, NUM_ROCK_SHRUB);
+	m_worldSprites[BUILDINGS] = new SDL_Sprite("Sprites/Buildings.bmp", BUILDING_W, BUILDING_H, FRAME_RATE, NUM_ROWS);
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
@@ -103,13 +103,12 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = hi.animate = hi.buildingh = hi.buildingv = false;
+				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = hi.buildingh = hi.buildingv = false;
 				x++;
 				hi.collideBox.x = hi.pos.x;
 				hi.collideBox.y = hi.pos.y;
 				hi.collideBox.w = hi.currentTexture->getWidth();
 				hi.collideBox.h = hi.currentTexture->getHeight();
-				hi.animateUpdate = 0;
 			}
 			else
 			{
@@ -207,44 +206,31 @@ bool World::setWorld(char * fileName)
 			case 'W':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_WATER;
-				hi.indexSpriteCol = 0;
-				hi.collide = hi.animate = true;
+				hi.collide = true;
 				break;
 			case 'U':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_WATER_D;
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case 'u':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_WATER_U;
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case 'L':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_WATER_R;
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case 'l':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_WATER_L;
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case '+':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_BRIDGE_V;
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case '=':
 				hi.currentTexture = m_worldSprites[ANIMATION];
 				hi.indexOfSpriteRow = TILE_BRIDGE_H;
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case ';':
 				hi.currentTexture = m_worldSprites[ANIMATION];
@@ -253,8 +239,6 @@ bool World::setWorld(char * fileName)
 				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_ANGLE_TR;		break;
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_ANGLE_DTR;		break;
 				}
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case '/':
 				hi.currentTexture = m_worldSprites[ANIMATION];
@@ -263,8 +247,6 @@ bool World::setWorld(char * fileName)
 				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_ANGLE_TL;		break;
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_ANGLE_DTL;		break;
 				}
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 				
 			case ')':
@@ -274,8 +256,6 @@ bool World::setWorld(char * fileName)
 				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_ANGLE_BR;		break;
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_ANGLE_DBR;		break;
 				}
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case '(':
 				hi.currentTexture = m_worldSprites[ANIMATION];
@@ -284,8 +264,6 @@ bool World::setWorld(char * fileName)
 				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_ANGLE_BL;		break;
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_ANGLE_DBL;		break;
 				}
-				hi.indexSpriteCol = 0;
-				hi.animate = true;
 				break;
 			case 'y':
 				hi.currentTexture = m_worldSprites[ANIMATION];
@@ -294,8 +272,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_CORNER_TR;		break;
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DTR;	break;
 				}
-				hi.indexSpriteCol = 0;
-				hi.collide = hi.animate = true;
+				hi.collide = true;
 				break;
 			case 'Y':
 				hi.currentTexture = m_worldSprites[ANIMATION];
@@ -304,8 +281,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_CORNER_TL;		break;
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DTL;	break;
 				}
-				hi.indexSpriteCol = 0;
-				hi.collide = hi.animate = true;
+				hi.collide = true;
 				break;
 				
 			case 'z':
@@ -315,8 +291,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_CORNER_BR;		break;
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DBR;	break;
 				}
-				hi.indexSpriteCol = 0;
-				hi.collide = hi.animate = true;
+				hi.collide = true;
 				break;
 				
 			case 'Z':
@@ -326,10 +301,8 @@ bool World::setWorld(char * fileName)
 				case WORLD_ENGLAND:		hi.indexOfSpriteRow = TILE_WATER_CORNER_BL;		break;
 				case WORLD_D1:			hi.indexOfSpriteRow = TILE_WATER_CORNER_DBL;	break;
 				}
-				hi.indexSpriteCol = 0;
-				hi.collide = hi.animate = true;
+				hi.collide = true;
 				break;
-				
 			case 'C':
 				hi.indexOfSpriteRow = TILE_CASTLE_GROUND;
 				break;
@@ -375,7 +348,7 @@ bool World::setWorld(char * fileName)
 				break;
 			case '@':
 				hi.currentTexture = m_worldSprites[ROCK_SHRUB];
-				hi.indexOfSpriteRow = rand()%2;
+				hi.indexOfSpriteRow = rand()%2+ROCK_BIG;
 				hi.collide = true;
 				break;
 			case '#':
@@ -760,7 +733,6 @@ void World::update(Uint32 a_timePassed)
 			}
 		}
 	}
-	
 	//Update entities based on where the current Camera is.
 	for(int i = 0; i < m_mapOfEntities.size(); i++) //Check the grids...
 	{
@@ -772,20 +744,7 @@ void World::update(Uint32 a_timePassed)
 		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc()))
 			m_mapOfEntities.get(i).clearDeadEntities(this);
 	}
-
-	for(int i = 0; i < m_mapOfWorld.size(); i++)
-	{
-		if(m_mapOfWorld.get(i).animate)
-		{
-			m_mapOfWorld.get(i).animateUpdate += a_timePassed;
-			if(m_mapOfWorld.get(i).animateUpdate >= FRAME_RATE)
-			{
-				m_mapOfWorld.get(i).indexSpriteCol ++;
-				m_mapOfWorld.get(i).indexSpriteCol%=3;
-				m_mapOfWorld.get(i).animateUpdate = 0;
-			}
-		}
-	}
+	m_worldSprites[ANIMATION]->update(a_timePassed);
 	//WARNING: EXTREMELY CPU TAXING PROCESS AHEAD.
 	//Make sure for each grid's sorting.
 	for(int i = 0; i < m_mapOfEntities.size(); ++i)
@@ -800,9 +759,6 @@ void World::draw(SDL_Surface * a_screen)
 		if(m_cCamera.intersects(m_mapOfWorld.get(i).collideBox))
 		{
 			m_mapOfWorld.get(i).currentTexture->setRIndex(m_mapOfWorld.get(i).indexOfSpriteRow);
-			if(m_mapOfWorld.get(i).animate){//only set the col index if it is animating
-				m_mapOfWorld.get(i).currentTexture->setCIndex(m_mapOfWorld.get(i).indexSpriteCol);
-			}
 			m_mapOfWorld.get(i).currentTexture->draw(a_screen, m_mapOfWorld.get(i).getLocationScreen().x, m_mapOfWorld.get(i).getLocationScreen().y);
 		}
 	}
