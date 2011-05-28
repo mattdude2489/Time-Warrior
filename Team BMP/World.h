@@ -47,6 +47,8 @@ public:
 	void setNPC();
 	void update(Uint32 a_timePassed);
 	void draw(SDL_Surface * a_screen);
+	void destroyWorld();
+	void initWorld();
 	bool setWorld(char * fileName);
 	bool getSuccess() {return m_success;}
 	int getGridWidth(){return maxWorldX/NUM_GRIDS_PER_ROW_COL;}

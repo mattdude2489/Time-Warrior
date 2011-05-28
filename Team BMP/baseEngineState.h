@@ -86,8 +86,18 @@ public:
 		be->getHUD()->draw(screen);
 		fps.printMessage(screen, 0, 0);
 		SDL_Flip(screen);
+		if(stateUI != NULL)
+			if(stateUI->getX())
+				exit(be);
+		SDL_Delay(SDLDELAY);
 	} //Input Logic Draw
-	void exit(baseEngine* be) {SDL_FreeSurface(screen);}
+	void exit(baseEngine* be) 
+	{
+		SDL_FreeSurface(screen);
+		be->getPlayer()->destroyPlayer();
+		be->getWorld()->destroyWorld();
+		be->goToTitleScreen();
+	}
 	static actualGameState* instance() {static actualGameState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}
 };
@@ -113,11 +123,13 @@ public:
 		saveFiles = 0;
 		FILE * hi;
 		hi = fopen("playerSave.txt", "r"); //Open the file for reading.
+		//if(hi == NULL)
+		//{
+		//	optionOfReturn = -1; //Go back to Title Screen if the FILE cannot be opened, for some odd weird reason.
+		//	exit(be);
+		//}
 		if(hi == NULL)
-		{
-			optionOfReturn = -1; //Go back to Title Screen if the FILE cannot be opened, for some odd weird reason.
-			exit(be);
-		}
+			hi = fopen("playerSave.txt", "w+"); //OPEN THE DAMN FILE.
 		fpos_t newPos;
 		fgetpos(hi, &newPos);
 		char c = fgetc(hi);
@@ -195,10 +207,15 @@ public:
 	void exit(baseEngine *be)
 	{
 		SDL_FreeSurface(screen);
-		delete [] loadRects; //I'm going to hell aren't I?
-		delete [] loadMessages; //Yes. Yes you are.
-		be->getPlayer()->loadPlayer(checkClick);
-		be->changeState(actualGameState::instance());
+		if(optionOfReturn == -1)
+			be->goToTitleScreen();
+		else
+		{
+			delete [] loadRects; //I'm going to hell aren't I?
+			delete [] loadMessages; //Yes. Yes you are.
+			be->getPlayer()->loadPlayer(checkClick);
+			be->changeState(actualGameState::instance());
+		}
 	}
 	static loadGameState* instance() {static loadGameState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}
@@ -304,13 +321,15 @@ private:
 	SRect loadGame;
 	SDL_Sprite titleScreen;
 	int choice;
-	SDL_Surface * screen;
+	SDL_Surface * screen2;
 	UserInput * stateUI;
 public:
 
 	void enter(baseEngine* be) 
 	{
-		titleScreen.setSprite("Sprites/posTitleScreen.bmp", 626, 470, 0, 1); //MAGIC NUMBAHS = BAD
+		screen2 = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
+		if(!titleScreen.isSprite())
+			titleScreen.setSprite("Sprites/posTitleScreen.bmp", 626, 470, 0, 1); //MAGIC NUMBAHS = BAD
 		choice = 0;
 		newGame.setPosition(SPoint(68, 292));
 		newGame.setDimension(SPoint(110, 137));
@@ -319,7 +338,6 @@ public:
 		loadGame.setDimension(SPoint(110, 137)); //These are debug numbers, btw. Not entirely accurate.
 		loadGame.setPosition(SPoint(443, 306)); //Setting up the stuffs...
 		//INCLUDE SDL STUFF HERE
-		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 		stateUI = NULL;
 	}
 	void execute(baseEngine* be) 
@@ -337,14 +355,18 @@ public:
 		if(choice != 0)
 			exit(be);
 
-		titleScreen.draw(screen, 0, 0);
-		SDL_Flip(screen);
+		SDL_FillRect(screen2, 0, SDL_MapRGB(screen2->format, 0, 0, 0));
+		titleScreen.draw(screen2, 0, 0);
+		SDL_Flip(screen2);
 		SDL_Delay(SDLDELAY);
+		if(stateUI != NULL)
+			if(stateUI->getX())
+				exit(be);
 	}//Title screen stuffs.
 	void exit(baseEngine* be) 
 	{
 		//Use the choice variable here, that's set during execute!
-		SDL_FreeSurface(screen);
+		SDL_FreeSurface(screen2);
 		switch(choice)
 		{
 		case 1:
@@ -360,6 +382,9 @@ public:
 			break;
 		}
 		//IT SHOULD NEVER MAKE IT TO HERE. IF IT DOES, THEN SOMETHING IS WRONG.
+		if(stateUI != NULL)
+			if(stateUI->getX())
+				SDL_Quit();
 		enter(be);
 	}
 	static titleScreenState* instance() {static titleScreenState instance; return &instance;}
@@ -375,3 +400,9 @@ public:
 	static splashScreenState* instance() {static splashScreenState instance; return &instance;}
 	void handleInput(UserInput * obj) {}
 };
+
+void baseEngine::goToTitleScreen()
+{
+	changeState(titleScreenState::instance());
+	this->cState->enter(this);
+}

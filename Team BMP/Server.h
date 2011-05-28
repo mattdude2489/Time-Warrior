@@ -5,7 +5,7 @@
 
 //Socket includes
 #include <winsock2.h>
-#include "winsockerrorhelp.h"
+//#include "winsockerrorhelp.h"
 #include "templateVector.h"
 
 //Game includes that will be necessary.
@@ -16,12 +16,22 @@
 //Defines
 #define BUFF_SIZE			512
 
+struct completeSocket
+{
+	SOCKET cSocket;
+	struct sockaddr_in clnt_addr;
+	char recv_buf[BUFF_SIZE];
+	char send_buf[BUFF_SIZE];
+	int bytesSentToServer;
+	int bytesRecFromServer;
+};
+
 class Server
 {
 private:
-	World * sWorld;
-	TemplateVector2<SOCKET> sSockets;
-	char buffer[BUFF_SIZE];
+	World * sWorld; //The server's pointer to the world. This will be used to alter stuff to the buffer.
+	TemplateVector2<completeSocket> listOfClients; //The list of clients currently connected.
+	char buffer[BUFF_SIZE]; //The buffer that you will send to the clients.
 public:
 	Server(); //Default constructor.
 	Server(World * world); //Constructor that sets the World.

@@ -12,6 +12,8 @@
 #include "SDL_Sprite.h"
 #include "NPC.h"
 #include "Hud.h"
+#include "Server.h"
+#include "Client.h"
 
 class baseEngine;
 
@@ -39,6 +41,7 @@ public:
 	AudioHandler * getAH() {return &cah;}
 	void init();
 	void changeState(State* newState) {cState = newState; cState->enter(this);}
+	void goToTitleScreen();
 	Hud * getHUD() {return &Ghud;}
 	baseEngine();
 	State* getState() {return cState;}

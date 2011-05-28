@@ -160,6 +160,11 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot)
 
 Player::~Player()
 {
+	destroyPlayer();
+}
+
+void Player::destroyPlayer()
+{
 	if(gamePlayed)
 		save(saveFile);
 	delete m_blankInventory;
@@ -239,6 +244,7 @@ void Player::save(int saveToSave)
 		charget = fgetc(outfile);
 		while(charget != '#' && charget != EOF)
 			charget = fgetc(outfile); //Get it to the next save...
+		charget = fgetc(outfile);
 		if(charget != EOF)
 		{
 			//charget = fgetc(outfile);

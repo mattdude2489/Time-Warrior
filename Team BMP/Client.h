@@ -5,22 +5,22 @@
 #pragma once
 //Winsock includes
 #include <winsock2.h>
-#include "winsockerrorhelp.h"
+//#include "winsockerrorhelp.h"
 
 //Game includes
 #include "World.h"
 #include "Entity.h"
 #include "Player.h"
 #include "UserInput.h"
+#include "Server.h"
 
 #define BUFFER_SIZE_IS			512
 
 class Client
 {
 private:
-	SOCKET sockToServer;
-	char buffer[BUFFER_SIZE_IS];
-	World * cWorld;
+	completeSocket sSocket; //The socket to the server.
+	World * cWorld;			//The client's World, which the info in sSocket changes.
 public:
 	Client();
 	Client(World * world);

@@ -92,4 +92,5 @@ public:
 	}
 	int getExpReq(){return m_expLvReq;}
 	double getCurExp(){return m_experience;}
+	void destroyPlayer();
 };

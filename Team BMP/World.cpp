@@ -11,6 +11,11 @@ using namespace std;
 
 World::World()
 {
+	initWorld();
+}
+
+void World::initWorld()
+{
 	clientPlayerIndex = 0; 
 	maxWorldX = m_cCamera.w = SCREEN_WIDTH;
 	maxWorldY = m_cCamera.h = SCREEN_HEIGHT;
@@ -45,10 +50,16 @@ World::World()
 	bossCount = 0;
 	castleCount = 0;
 }
+
 World::~World()
 {
+	destroyWorld();
+}
+
+void World::destroyWorld()
+{
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
-			delete m_worldSprites[i];
+		delete m_worldSprites[i];
 	delete m_closed;
 }
 
