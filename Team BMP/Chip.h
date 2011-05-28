@@ -170,8 +170,11 @@ class Chip : public Entity
 				m_isFlipV = false;
 			}
 			//un-rotate sprite if it has been rotated in any way
-			for(int i = 0; i < (360/90) - m_rotateDeg / 90; ++i)
-				m_sprite->rotate90();
+			switch(m_rotateDeg)
+			{
+			case 90:	m_sprite->rotate270();	break;
+			case 270:	m_sprite->rotate90();	break;
+			}
 			m_rotateDeg = 0;
 			int dir = m_direction;
 			if(m_cType == MAGIC || m_cSubType == RANGE)
@@ -406,8 +409,16 @@ class Chip : public Entity
 		void setSprite(char * a_fileName)
 		{
 			//create new sprites & init transparency
-			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+			int rows = NUM_ROWS;
+			switch(m_cSubType)
+			{
+			case BLUNT:
+			case SLASH:		rows = 2;	break;
+			case RANGE:
+			case PIERCE:	rows = 3;	break;
+			}
+			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, rows);
+			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, rows);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
 			switch(m_cType)
