@@ -54,16 +54,14 @@ class Weapon : public Chip
 				setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 			}
 			makeSpriteMatchDirection();
+			//due to different row sizes, sprite's row has to be re-set
+			if(m_cSubSubType != EXPERT || m_cSubType == RANGE || m_cSubType == PIERCE)
+				m_sprite->setRIndex(m_cSubSubType);
+			else
+				m_sprite->setRIndex(m_cSubSubType-1);
+			//set weapon's position based on facing direction
 			if(m_cSubType != RANGE)
-			{
-				//due to different row sizes, sprite's row has to be re-set
-				if(m_cSubSubType != EXPERT || m_cSubType == PIERCE)
-					m_sprite->setRIndex(m_cSubSubType);
-				else
-					m_sprite->setRIndex(m_cSubSubType-1);
-				//set weapon's position based on facing direction
 				setLocationUsingDirection();
-			}
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{

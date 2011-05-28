@@ -296,6 +296,7 @@ class Chip : public Entity
 						case LIGHTNING:
 						case ICE:
 							makeSpriteMatchDirection();
+							m_sprite->setRIndex(m_cSubSubType);
 							break;
 						}
 					}
