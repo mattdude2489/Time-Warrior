@@ -38,7 +38,7 @@ public:
 			case ICE:		m_attack = new Ice(a_subSubType);		break;
 			case BLUNT:		m_attack = new Blunt(a_subSubType);		break;
 			case RANGE:		m_attack = new Range(a_subSubType);		break;
-			//case PIERCE:	m_attack = new Pierce(a_subSubType);	break;
+			case PIERCE:	m_attack = new Pierce(a_subSubType);	break;
 			default:		m_attack = new Slash(a_subSubType);		break;
 			}
 			m_attack->setNewed(true);

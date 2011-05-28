@@ -422,10 +422,20 @@ class Chip : public Entity
 				break;
 				//if weapon, adjust frame size
 			case WEAPON:
-				if(m_cSubType != RANGE && m_cSubSubType != EXPERT)
+				switch(m_cSubType)
 				{
-					m_sprite->setFrame(FRAME_SIZE, FRAME_SIZE/2);
-					m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
+				case BLUNT:
+				case SLASH:
+					if(m_cSubSubType != EXPERT)
+					{
+						m_sprite->setFrame(FRAME_SIZE, FRAME_SIZE/2);
+						m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
+					}
+					break;
+				case PIERCE:
+					m_sprite->setFrame(FRAME_SIZE/2, FRAME_SIZE);
+					m_spriteHUD->setFrame(FRAME_SIZE/2, FRAME_SIZE);
+					break;
 				}
 				break;
 			}
@@ -438,7 +448,7 @@ class Chip : public Entity
 				break;
 			case MAGIC:
 			case WEAPON:
-				if(!(m_cType == WEAPON && m_cSubSubType == EXPERT) || m_cSubType == RANGE)
+				if(!(m_cType == WEAPON && m_cSubSubType == EXPERT) || m_cSubType == RANGE || m_cSubType == PIERCE)
 				{
 					m_sprite->setRIndex(m_cSubSubType);
 					m_spriteHUD->setRIndex(m_cSubSubType);

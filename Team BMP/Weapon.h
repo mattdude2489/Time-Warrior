@@ -19,26 +19,29 @@ class Weapon : public Chip
 				{
 				case BASIC:
 				case ADVANCED:
-					//Basic & Advanced weapons based on owner's direction
-					switch(m_direction)
+				case EXPERT:
+					if(m_cSubSubType != EXPERT || m_cSubType == PIERCE)
 					{
-					case KEY_UP:
-						setLocation(centerAroundOwnerCenterX(), m_owner->getCenter().y - m_sprite->getHeight());
-						break;
-					case KEY_LEFT:
-						setLocation(m_owner->getCenter().x - m_sprite->getWidth(), centerAroundOwnerCenterY());
-						break;
-					case KEY_DOWN:
-						setLocation(centerAroundOwnerCenterX(), m_owner->getCenter().y);
-						break;
-					case KEY_RIGHT:
-						setLocation(m_owner->getCenter().x, centerAroundOwnerCenterY());
-						break;
+						//Basic & Advanced weapons based on owner's direction
+						switch(m_direction)
+						{
+						case KEY_UP:
+							setLocation(centerAroundOwnerCenterX(), m_owner->getCenter().y - m_sprite->getHeight());
+							break;
+						case KEY_LEFT:
+							setLocation(m_owner->getCenter().x - m_sprite->getWidth(), centerAroundOwnerCenterY());
+							break;
+						case KEY_DOWN:
+							setLocation(centerAroundOwnerCenterX(), m_owner->getCenter().y);
+							break;
+						case KEY_RIGHT:
+							setLocation(m_owner->getCenter().x, centerAroundOwnerCenterY());
+							break;
+						}
 					}
+					else
+						setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 					break;
-				default:
-					//Expert weapons centered on owner
-					setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 				}
 			}
 		}
@@ -54,7 +57,7 @@ class Weapon : public Chip
 			if(m_cSubType != RANGE)
 			{
 				//due to different row sizes, sprite's row has to be re-set
-				if(m_cSubSubType != EXPERT)
+				if(m_cSubSubType != EXPERT || m_cSubType == PIERCE)
 					m_sprite->setRIndex(m_cSubSubType);
 				else
 					m_sprite->setRIndex(m_cSubSubType-1);
@@ -207,6 +210,29 @@ class Slash : public Weapon
 			case BASIC:		return "Slash attack.";				break;
 			case ADVANCED:	return "Double Slash attack.";		break;
 			case EXPERT:	return "360 Degree Slash attack.";	break;
+			default:		return getName();
+			}
+		}
+};
+class Pierce : public Weapon
+{
+	public:
+		Pierce(e_chipSubSubType a_subSubType):Weapon(PIERCE, a_subSubType){setSprite("Sprites/weapon_pierce.bmp");}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:		return "Pierce Stab";		break;
+			case ADVANCED:	return "Running Stab";		break;
+			case EXPERT:	return "Superpower Stab";	break;
+			default:		return "Pierce";
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:		return "Pierce attack.";				break;
+			case ADVANCED:	return "Charged Pierce attack.";		break;
+			case EXPERT:	return "Super-Charged Pierce attack.";	break;
 			default:		return getName();
 			}
 		}

@@ -70,7 +70,15 @@ int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory 
 			valid = test->getStatNumber(LEVEL) > 0;
 		if(test && valid)
 		{
+			int offset = 0;
+			if(test->getSubType() == PIERCE)
+			{
+				offset = (FRAME_SIZE/2)/2;
+				x += offset;
+			}
 			test->drawHUD(a_screen, x, y);
+			if(test->getSubType() == PIERCE)
+				x -= offset;
 			if(test->isEquipped() && a_type != INVENTORY_GAUNTLET)
 			{
 				m_blankInventory->setRIndex(1);
@@ -471,7 +479,7 @@ bool Player::loadPlayer(int saveToLoad)
 				case BLUNT:		iHopeThisWorks = new Blunt((e_chipSubSubType)hpenstrintexpsta);		break;
 				case RANGE:		iHopeThisWorks = new Range((e_chipSubSubType)hpenstrintexpsta);		break;
 				case SLASH:		iHopeThisWorks = new Slash((e_chipSubSubType)hpenstrintexpsta);		break;
-				//case PIERCE:	iHopeThisWorks = new Pierce((e_chipSubSubType)hpenstrintexpsta);	break;
+				case PIERCE:	iHopeThisWorks = new Pierce((e_chipSubSubType)hpenstrintexpsta);	break;
 				}
 			}
 			iHopeThisWorks->setNewed(true);
@@ -514,6 +522,9 @@ void Player::newGame()
 	Slash * s1 = new Slash(BASIC);
 	Slash * s2 = new Slash(ADVANCED);
 	Slash * s3 = new Slash(EXPERT);
+	Pierce * p1 = new Pierce(BASIC);
+	Pierce * p2 = new Pierce(ADVANCED);
+	Pierce * p3 = new Pierce(EXPERT);
 	Divine * d1 = new Divine(BASIC);
 	Divine * d2 = new Divine(ADVANCED);
 	Divine * d3 = new Divine(EXPERT);
@@ -536,6 +547,9 @@ void Player::newGame()
 	s1->setNewed(true);
 	s2->setNewed(true);
 	s3->setNewed(true);
+	p1->setNewed(true);
+	p2->setNewed(true);
+	p3->setNewed(true);
 	d1->setNewed(true);
 	d2->setNewed(true);
 	d3->setNewed(true);
@@ -558,6 +572,9 @@ void Player::newGame()
 	this->addToAttackInventory(s1);
 	this->addToAttackInventory(s2);
 	this->addToAttackInventory(s3);
+	this->addToAttackInventory(p1);
+	this->addToAttackInventory(p2);
+	this->addToAttackInventory(p3);
 	this->addToAttackInventory(d1);
 	this->addToAttackInventory(d2);
 	this->addToAttackInventory(d3);
@@ -580,6 +597,9 @@ void Player::newGame()
 	thisWorld->add(s1);
 	thisWorld->add(s2);
 	thisWorld->add(s3);
+	thisWorld->add(p1);
+	thisWorld->add(p2);
+	thisWorld->add(p3);
 	thisWorld->add(d1);
 	thisWorld->add(d2);
 	thisWorld->add(d3);
@@ -601,6 +621,9 @@ void Player::newGame()
 	s1->unlock();
 	s2->unlock();
 	s3->unlock();
+	p1->unlock();
+	p2->unlock();
+	p3->unlock();
 	d1->unlock();
 	d2->unlock();
 	d3->unlock();
