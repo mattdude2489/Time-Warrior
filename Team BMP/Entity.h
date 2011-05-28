@@ -272,11 +272,7 @@ public:
 	bool collideBoundingCircles(Entity * a_entity, int buffer)
 	{
 		if(a_entity->getFlag(FLAG_DRAW) && m_flags[FLAG_DRAW])
-		{
-			SPoint myCenter = m_location.sum(SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()));
-			SPoint otherCenter = a_entity->getLocation().sum(SPoint(a_entity->getWidthOffsetCenter(),a_entity->getHeightOffsetCenter()));
-			return otherCenter.difference(myCenter).getLength() <= (m_location.difference(myCenter).getLength() + a_entity->getLocation().difference(otherCenter).getLength()  + buffer);
-		}
+			return a_entity->getCenter().difference(getCenter()).getLength() <= (getRadius() + a_entity->getRadius() + buffer);
 		else
 			return false;
 	}
@@ -303,6 +299,8 @@ public:
 	int getType(){return (int)m_eType;}
 	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
+	double getRadius(){return SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()).getLength();}
+	SPoint getCenter(){return m_location.sum(SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()));}
 	int getStatNumber(e_stats a_stat){return m_stats[a_stat];}
 	int getPoints(){return m_statPoints;}
 	SPoint getLocation(){return m_location;}

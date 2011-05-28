@@ -156,22 +156,6 @@ class Chip : public Entity
 		}
 		//set the direction to base its location
 		void setDirection(char a_dir){m_direction = a_dir;}
-		//returns the horizontal center of its owner's sprite
-		int getOwnerCenterX()
-		{
-			if(m_owner)
-				return m_owner->getLocation().x + m_owner->getWidthOffsetCenter();
-			else
-				return 0;
-		}
-		//returns the vertical center of its owner's sprite
-		int getOwnerCenterY()
-		{
-			if(m_owner)
-				return m_owner->getLocation().y + m_owner->getHeightOffsetCenter();
-			else
-				return 0;
-		}
 		void makeSpriteMatchDirection()
 		{
 			//un-flip sprite if it has been flipped in any way
@@ -223,9 +207,9 @@ class Chip : public Entity
 			}
 		}
 		//returns x location to center around owner
-		int centerAroundOwnerCenterX(){return getOwnerCenterX() - m_sprite->getWidthOffsetCenter();}
+		int centerAroundOwnerCenterX(){return m_owner->getCenter().x - m_sprite->getWidthOffsetCenter();}
 		//returns y location to center around owner
-		int centerAroundOwnerCenterY(){return getOwnerCenterY() - m_sprite->getHeightOffsetCenter();}
+		int centerAroundOwnerCenterY(){return m_owner->getCenter().y - m_sprite->getHeightOffsetCenter();}
 		//updates appropriate variables
 		void levelUpUnique()
 		{

@@ -12,31 +12,34 @@ class Weapon : public Chip
 		//set the weapon's position based on whatever direction its owner is facing
 		void setLocationUsingDirection()
 		{
-			//set the weapon's position
-			switch(m_cSubSubType)
+			if(m_owner)
 			{
-			case BASIC:
-			case ADVANCED:
-				//Basic & Advanced weapons based on owner's direction
-				switch(m_direction)
+				//set the weapon's position
+				switch(m_cSubSubType)
 				{
-				case KEY_UP:
-					setLocation(centerAroundOwnerCenterX(), getOwnerCenterY() - m_sprite->getHeight());
+				case BASIC:
+				case ADVANCED:
+					//Basic & Advanced weapons based on owner's direction
+					switch(m_direction)
+					{
+					case KEY_UP:
+						setLocation(centerAroundOwnerCenterX(), m_owner->getCenter().y - m_sprite->getHeight());
+						break;
+					case KEY_LEFT:
+						setLocation(m_owner->getCenter().x - m_sprite->getWidth(), centerAroundOwnerCenterY());
+						break;
+					case KEY_DOWN:
+						setLocation(centerAroundOwnerCenterX(), m_owner->getCenter().y);
+						break;
+					case KEY_RIGHT:
+						setLocation(m_owner->getCenter().x, centerAroundOwnerCenterY());
+						break;
+					}
 					break;
-				case KEY_LEFT:
-					setLocation(getOwnerCenterX() - m_sprite->getWidth(), centerAroundOwnerCenterY());
-					break;
-				case KEY_DOWN:
-					setLocation(centerAroundOwnerCenterX(), getOwnerCenterY());
-					break;
-				case KEY_RIGHT:
-					setLocation(getOwnerCenterX(), centerAroundOwnerCenterY());
-					break;
+				default:
+					//Expert weapons centered on owner
+					setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 				}
-				break;
-			default:
-				//Expert weapons centered on owner
-				setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 			}
 		}
 		void activateUnique()

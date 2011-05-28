@@ -12,18 +12,21 @@ class Magic : public Chip
 		{
 			//adjust the target position
 			centerTarget();
-			//set the spell's initial position
-			switch(m_cSubSubType)
+			if(m_owner)
 			{
-			case BASIC:
-			case ADVANCED:
-				//Basic & Advanced spells centered on owner
-				setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
-				break;
-			case EXPERT:
-				//Expert spells @ target
-				setLocation(m_target);
-				break;
+				//set the spell's initial position
+				switch(m_cSubSubType)
+				{
+				case BASIC:
+				case ADVANCED:
+					//Basic & Advanced spells centered on owner
+					setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
+					break;
+				case EXPERT:
+					//Expert spells @ target
+					setLocation(m_target);
+					break;
+				}
 			}
 			switch(m_cSubType)
 			{
@@ -117,7 +120,7 @@ class Magic : public Chip
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
-			if(m_flags[FLAG_DRAW])
+			if(m_flags[FLAG_DRAW] && m_owner)
 			{
 				switch(m_cSubSubType)
 				{
