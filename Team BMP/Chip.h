@@ -174,7 +174,7 @@ class Chip : public Entity
 				m_sprite->rotate90();
 			m_rotateDeg = 0;
 			int dir = m_direction;
-			if(m_cType == MAGIC)
+			if(m_cType == MAGIC || m_cSubType == RANGE)
 				dir = getTargetDirection();
 			switch(dir)
 			{
@@ -279,12 +279,20 @@ class Chip : public Entity
 				else
 				{
 					//apply secondary cost to guide Basic spells
-					if(m_cType == MAGIC && m_cSubSubType == BASIC)
+					bool should = false;
+					switch(m_cType)
+					{
+					case MAGIC:		should = m_cSubSubType == BASIC;	break;
+					case WEAPON:	should = m_cSubType == RANGE;		break;
+					}
+					if(should)
 					{
 						m_owner->useEnergy(m_cost);
 						centerTarget();
 						switch(m_cSubType)
 						{
+						case RANGE:
+							setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
 						case LIGHTNING:
 						case ICE:
 							makeSpriteMatchDirection();
@@ -414,7 +422,7 @@ class Chip : public Entity
 				break;
 				//if weapon, adjust frame size
 			case WEAPON:
-				if(m_cSubSubType != EXPERT)
+				if(m_cSubType != RANGE && m_cSubSubType != EXPERT)
 				{
 					m_sprite->setFrame(FRAME_SIZE, FRAME_SIZE/2);
 					m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
@@ -430,7 +438,7 @@ class Chip : public Entity
 				break;
 			case MAGIC:
 			case WEAPON:
-				if(!(m_cType == WEAPON && m_cSubSubType == EXPERT))
+				if(!(m_cType == WEAPON && m_cSubSubType == EXPERT) || m_cSubType == RANGE)
 				{
 					m_sprite->setRIndex(m_cSubSubType);
 					m_spriteHUD->setRIndex(m_cSubSubType);

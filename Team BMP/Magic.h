@@ -120,7 +120,7 @@ class Magic : public Chip
 		}
 		void updateUniqueTwo(int a_timePassed)
 		{
-			if(m_flags[FLAG_DRAW] && m_owner)
+			if(m_flags[FLAG_DRAW])
 			{
 				switch(m_cSubSubType)
 				{
@@ -136,8 +136,11 @@ class Magic : public Chip
 					}
 					break;
 				case ADVANCED:
-					//adjust Advanced spells (self-radial) to maintain player-based location
-					setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
+					if(m_owner)
+					{
+						//adjust Advanced spells (self-radial) to maintain player-based location
+						setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
+					}
 					break;
 				}
 			}

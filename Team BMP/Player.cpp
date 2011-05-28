@@ -469,7 +469,7 @@ bool Player::loadPlayer(int saveToLoad)
 				switch(chipAndArmorHelper)
 				{
 				case BLUNT:		iHopeThisWorks = new Blunt((e_chipSubSubType)hpenstrintexpsta);		break;
-				//case RANGE:		iHopeThisWorks = new Ranged((e_chipSubSubType)hpenstrintexpsta);	break;
+				case RANGE:		iHopeThisWorks = new Range((e_chipSubSubType)hpenstrintexpsta);		break;
 				case SLASH:		iHopeThisWorks = new Slash((e_chipSubSubType)hpenstrintexpsta);		break;
 				//case PIERCE:	iHopeThisWorks = new Pierce((e_chipSubSubType)hpenstrintexpsta);	break;
 				}
@@ -508,6 +508,9 @@ void Player::newGame()
 	Blunt * b1 = new Blunt(BASIC);
 	Blunt * b2 = new Blunt(ADVANCED);
 	Blunt * b3 = new Blunt(EXPERT);
+	Range * r1 = new Range(BASIC);
+	Range * r2 = new Range(ADVANCED);
+	Range * r3 = new Range(EXPERT);
 	Slash * s1 = new Slash(BASIC);
 	Slash * s2 = new Slash(ADVANCED);
 	Slash * s3 = new Slash(EXPERT);
@@ -527,6 +530,9 @@ void Player::newGame()
 	b1->setNewed(true);
 	b2->setNewed(true);
 	b3->setNewed(true);
+	r1->setNewed(true);
+	r2->setNewed(true);
+	r3->setNewed(true);
 	s1->setNewed(true);
 	s2->setNewed(true);
 	s3->setNewed(true);
@@ -546,6 +552,9 @@ void Player::newGame()
 	this->addToAttackInventory(b1);
 	this->addToAttackInventory(b2);
 	this->addToAttackInventory(b3);
+	this->addToAttackInventory(r1);
+	this->addToAttackInventory(r2);
+	this->addToAttackInventory(r3);
 	this->addToAttackInventory(s1);
 	this->addToAttackInventory(s2);
 	this->addToAttackInventory(s3);
@@ -565,6 +574,9 @@ void Player::newGame()
 	thisWorld->add(b1);
 	thisWorld->add(b2);
 	thisWorld->add(b3);
+	thisWorld->add(r1);
+	thisWorld->add(r2);
+	thisWorld->add(r3);
 	thisWorld->add(s1);
 	thisWorld->add(s2);
 	thisWorld->add(s3);
@@ -583,6 +595,9 @@ void Player::newGame()
 	b1->unlock();
 	b2->unlock();
 	b3->unlock();
+	r1->unlock();
+	r2->unlock();
+	r3->unlock();
 	s1->unlock();
 	s2->unlock();
 	s3->unlock();

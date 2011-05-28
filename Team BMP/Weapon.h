@@ -44,14 +44,23 @@ class Weapon : public Chip
 		}
 		void activateUnique()
 		{
+			if(m_cSubType == RANGE)
+			{
+				//adjust the target position
+				centerTarget();
+				setLocation(centerAroundOwnerCenterX(), centerAroundOwnerCenterY());
+			}
 			makeSpriteMatchDirection();
-			//due to different row sizes, sprite's row has to be re-set
-			if(m_cSubSubType != EXPERT)
-				m_sprite->setRIndex(m_cSubSubType);
-			else
-				m_sprite->setRIndex(m_cSubSubType-1);
-			//set weapon's position based on facing direction
-			setLocationUsingDirection();
+			if(m_cSubType != RANGE)
+			{
+				//due to different row sizes, sprite's row has to be re-set
+				if(m_cSubSubType != EXPERT)
+					m_sprite->setRIndex(m_cSubSubType);
+				else
+					m_sprite->setRIndex(m_cSubSubType-1);
+				//set weapon's position based on facing direction
+				setLocationUsingDirection();
+			}
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
@@ -112,38 +121,24 @@ class Weapon : public Chip
 		{
 			if(m_flags[FLAG_DRAW])
 			{
-				switch(m_cSubSubType)
+				switch(m_cSubType)
 				{
-				case BASIC:
-				case ADVANCED:
-				case EXPERT:
+				case BLUNT:
+				case SLASH:
+				case PIERCE:
 					//adjust weapon's location based on player's direction
 					setLocationUsingDirection();
 					break;
+				case RANGE:
+					//move projectiles
+					if(moveToTarget((int)(SPEED_RANGE*a_timePassed)))
+					{
+						//end projectile if it has expired
+						if(m_timers[TIMER_GENERAL] >= TIME_SECOND_MS)
+							deactivate();
+					}
+					break;
 				}
-			}
-		}
-};
-class Slash : public Weapon
-{
-	public:
-		Slash(e_chipSubSubType a_subSubType):Weapon(SLASH, a_subSubType){setSprite("Sprites/weapon_slash.bmp");}
-		char * getName(){
-			switch(m_cSubSubType)
-			{
-			case BASIC:		return "Slash Strike";		break;
-			case ADVANCED:	return "X-Strike";			break;
-			case EXPERT:	return "Hurricane Strike";	break;
-			default:		return "Slash";
-			}
-		}
-		char * getDescription(){
-			switch(m_cSubSubType)
-			{
-			case BASIC:		return "Slash attack.";				break;
-			case ADVANCED:	return "Double Slash attack.";		break;
-			case EXPERT:	return "360 Degree Slash attack.";	break;
-			default:		return getName();
 			}
 		}
 };
@@ -166,6 +161,52 @@ class Blunt : public Weapon
 			case BASIC:		return "Blunt attack.";				break;
 			case ADVANCED:	return "Double Blunt attack.";		break;
 			case EXPERT:	return "360 Degree Blunt attack.";	break;
+			default:		return getName();
+			}
+		}
+};
+class Range : public Weapon
+{
+	public:
+		Range(e_chipSubSubType a_subSubType):Weapon(RANGE, a_subSubType){setSprite("Sprites/weapon_range.bmp");}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:		return "Ranged Shot";	break;
+			case ADVANCED:	return "Double Shot";	break;
+			case EXPERT:	return "Tri-Shot";		break;
+			default:		return "Range";
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:		return "Ranged attack.";		break;
+			case ADVANCED:	return "Double Ranged attack.";	break;
+			case EXPERT:	return "Triple Ranged attack.";	break;
+			default:		return getName();
+			}
+		}
+};
+class Slash : public Weapon
+{
+	public:
+		Slash(e_chipSubSubType a_subSubType):Weapon(SLASH, a_subSubType){setSprite("Sprites/weapon_slash.bmp");}
+		char * getName(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:		return "Slash Strike";		break;
+			case ADVANCED:	return "X-Strike";			break;
+			case EXPERT:	return "Hurricane Strike";	break;
+			default:		return "Slash";
+			}
+		}
+		char * getDescription(){
+			switch(m_cSubSubType)
+			{
+			case BASIC:		return "Slash attack.";				break;
+			case ADVANCED:	return "Double Slash attack.";		break;
+			case EXPERT:	return "360 Degree Slash attack.";	break;
 			default:		return getName();
 			}
 		}
