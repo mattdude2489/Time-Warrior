@@ -47,27 +47,10 @@ public:
 			a_world->add(m_attack);
 		}
 	}
-	void isPlayerInRange(Entity *a_player)
+	void isPlayerInRangeUnique(){m_location = m_start;}
+	void updateTargPlayerUnique(Entity * a_player, int a_time)
 	{
-		if(collideBoundingCircles(a_player, BOSS_ENGAGE))
-			m_state = CHASE;
-		else
-		{
-			//if the player runs too far away the boss will reset to its original position and guard
-			m_location = m_start;
-			m_state = GUARD;
-		}
-	}
-	void updateTargPlayer(Entity *a_player, int a_time)
-	{
-		m_target.set(a_player->getLocation());
-		m_hitLast += a_time;
 		m_lastCast += a_time;
-		if(this->collideBoundingCircles(a_player)&&m_hitLast > HIT_DELAY)//if coliding and the time to hit is up hit
-		{
-			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
-			m_hitLast = 0;
-		}
 		if(this->collideBoundingCircles(a_player, BOSS_ATK_RANGE) && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
 		{
 			m_attack->setTarget(a_player->getLocation());

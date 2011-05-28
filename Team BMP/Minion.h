@@ -28,14 +28,16 @@ public:
 	void checkState(int a_timePassed, World * a_world);
 	void respawn(){heal(getStatNumber(HEALTH_MAX));setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);m_state = WANDER;}
 	void updateUnique(int a_timePassed, World * a_world){checkState(a_timePassed, a_world);}
-	virtual void updateTargPlayer(Entity *a_player, int a_time)
+	virtual void updateTargPlayerUnique(Entity * a_player, int a_time){}
+	void updateTargPlayer(Entity * a_player, int a_time)
 	{
 		m_target.set(a_player->getLocation());
 		m_hitLast += a_time;
-		if(this->collideBoundingCircles(a_player)&&m_hitLast > HIT_DELAY)
+		if(this->collideBoundingCircles(a_player) && m_hitLast > HIT_DELAY)
 		{
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
+			updateTargPlayerUnique(a_player, a_time);
 		}
 	}
 	void hitFromPlayer(){m_playerTargeted = true;m_state = CHASE;}
@@ -52,13 +54,25 @@ public:
 			m_flags[FLAG_STOPPED] = false;
 		}
 	}
-	virtual void isPlayerInRange(Entity *a_player)
+	virtual void isPlayerInRangeUnique(){}
+	void isPlayerInRange(Entity *a_player)
 	{
-		double distance = getDeltaBetweenLocationAnd(&a_player->getLocation()).getLength();
-		if(distance < ENGAGE_RANGE)
+		int range = 0;
+		switch(m_eType)
+		{
+		case MINION:	range = ENGAGE_RANGE;	break;
+		case BOSS:		range = BOSS_ENGAGE;	break;
+		}
+		if(collideBoundingCircles(a_player, range))
 			m_state = CHASE;
 		else
-			m_state = WANDER;
+		{
+			switch(m_eType)
+			{
+			case MINION:	m_state = WANDER;	break;
+			case BOSS:		m_state = GUARD;	isPlayerInRangeUnique();	break;
+			}
+		}
 	}
 	void scaleToPlayer(Entity * a_player)
 	{
