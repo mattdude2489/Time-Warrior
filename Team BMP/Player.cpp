@@ -176,6 +176,7 @@ void Player::destroyPlayer()
 				delete m_armorInventory[i];
 		}
 	}
+	gamePlayed = false;
 }
 
 void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)

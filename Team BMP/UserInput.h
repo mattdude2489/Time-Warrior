@@ -45,7 +45,7 @@ class UserInput
 		bool getSpace() {return spaceBar;}
 		//Resetting the mouse. Used in order to prevent the mouse being held down.
 		void resetClick() {mouseClick = CLICK_NONE;}
-		bool getX() {return esc;}
+		bool getX() {bool cEsc = esc; esc = false; return cEsc;}
 		char getLastKey() 
 		{
 			char lastKey;

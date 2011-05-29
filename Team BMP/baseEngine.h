@@ -35,6 +35,7 @@ private:
 	Hud Ghud;
 	//c in front of any variables usually means "client."
 	State* cState;
+	SDL_Surface * screen;
 public:
 	World* getWorld() {return cWorld;}
 	Player* getPlayer() {return cPlayer;}
@@ -42,12 +43,17 @@ public:
 	void init();
 	void changeState(State* newState) {cState = newState; cState->enter(this);}
 	void goToTitleScreen();
+	SDL_Surface * getScreen() {return screen;}
 	Hud * getHUD() {return &Ghud;}
 	baseEngine();
 	State* getState() {return cState;}
 	~baseEngine();
 	void setPlayer(Player * play) {cPlayer = play;}
-	void updateState() {cState->execute(this);}
+	void updateState() 
+	{
+		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0)); //Resets the color scheme back to black.
+		cState->execute(this);
+	}
 	void setWorld(World * omg) {cWorld = omg;} //My...god...ok, this isn't so bad.
 	void handleInput(UserInput * obj) {cState->handleInput(obj);}
 	baseEngine * instance() {static baseEngine be; return &be;}

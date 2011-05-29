@@ -39,7 +39,6 @@ class actualGameState : public State
 {
 private:
 	//INCLUDE SDL STUFF HERES
-	SDL_Surface * screen;
 	UserInput * stateUI;
 	//Uint32 then = SDL_GetTicks(), now, passed, second = 0;
 	Uint32 then, now, passed, second;
@@ -50,7 +49,6 @@ private:
 public:
 	void enter(baseEngine* be) 
 	{
-		screen = SDL_SCREEN_STARTUP;
 		stateUI = NULL;
 		then = SDL_GetTicks();
 		now = passed = second = 0;
@@ -59,6 +57,14 @@ public:
 		ifps = 0;
 		fps.setMessage("0");
 		be->getPlayer()->setGamePlayed(true);
+		if(!be->getWorld()->getSuccess())
+		{
+			be->getWorld()->initWorld();
+		}
+		if(!be->getPlayer()->getGamePlayed())
+		{
+			be->getPlayer()->initPlayer(be->getWorld());
+		}
 	}
 	void execute(baseEngine* be) 
 	{
@@ -81,11 +87,11 @@ public:
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
 		}
 
-		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-		be->getWorld()->draw(screen);
-		be->getHUD()->draw(screen);
-		fps.printMessage(screen, 0, 0);
-		SDL_Flip(screen);
+		//SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 0, 0, 0));
+		be->getWorld()->draw(be->getScreen());
+		be->getHUD()->draw(be->getScreen());
+		fps.printMessage(be->getScreen(), 0, 0);
+		SDL_Flip(be->getScreen());
 		if(stateUI != NULL)
 			if(stateUI->getX())
 				exit(be);
@@ -93,7 +99,6 @@ public:
 	} //Input Logic Draw
 	void exit(baseEngine* be) 
 	{
-		SDL_FreeSurface(screen);
 		be->getPlayer()->destroyPlayer();
 		be->getWorld()->destroyWorld();
 		be->goToTitleScreen();
@@ -107,7 +112,7 @@ class loadGameState: public State
 {
 private:
 	UserInput * stateUI;	//The UserInput. We all know how this goes.
-	SDL_Surface * screen;	//The SDL_Surface of which this State writes to.
+//	SDL_Surface * screen;	//The SDL_Surface of which this State writes to.
 	int optionOfReturn;		//The erroring integer, or the saveFile that the user has selected.
 	int saveFiles;			//The number of Save Files located in the file.
 	SRect * loadRects;		//...The soon to be array of rectangles that allow the user to switch which save file.
@@ -117,7 +122,7 @@ private:
 public:
 	void enter(baseEngine *be)
 	{
-		screen = SDL_SCREEN_STARTUP;
+	//	screen = SDL_SCREEN_STARTUP;
 		optionOfReturn = 0; //Initialize the erroring integer.
 		checkClick = -1;
 		saveFiles = 0;
@@ -197,17 +202,17 @@ public:
 		{
 			newRect.x = loadRects[i].x; newRect.y = loadRects[i].y; newRect.h = loadRects[i].h; newRect.w = loadRects[i].w;
 			//cause of red flash @ load game
-			SDL_FillRect(screen, &newRect, 0xff0000);
-			loadMessages[i].printMessage(screen, loadRects[i].x, loadRects[i].y);
+			SDL_FillRect(be->getScreen(), &newRect, 0xff0000);
+			loadMessages[i].printMessage(be->getScreen(), loadRects[i].x, loadRects[i].y);
 		}
 
-		SDL_Flip(screen);
+		SDL_Flip(be->getScreen());
 		if(checkClick >= 0)
 			exit(be);
 	}
 	void exit(baseEngine *be)
 	{
-		SDL_FreeSurface(screen);
+		//SDL_FreeSurface(screen);
 		if(optionOfReturn == -1)
 			be->goToTitleScreen();
 		else
@@ -229,7 +234,7 @@ private:
 	char * enterNameMessage;
 	UserInput * stateUI;
 	SDL_Sprite newGameScreen;
-	SDL_Surface * screen;
+	//SDL_Surface * screen;
 	bool typing, finished, shift;
 	SRect type;
 	SDL_Rect newType;
@@ -247,7 +252,7 @@ public:
 		playerName[20] = 0; //Null terminator.
 		enterNameMessage = "Enter new name below: ";
 		stateUI = NULL;
-		screen = SDL_SCREEN_STARTUP;
+	//	screen = SDL_SCREEN_STARTUP;
 		newGameScreen.setSprite("Sprites/newGameScreen.bmp", 626, 470, 0, 1);
 		typing = finished = shift = false;
 		type.x = newType.x = 219;
@@ -297,15 +302,15 @@ public:
 		playerNewName.setMessage(playerName);
 		enterNewMessage.setMessage(enterNameMessage);
 		//Draw
-		newGameScreen.draw(screen, 0, 0);
-		enterNewMessage.printMessage(screen, 100, 100);
-		SDL_FillRect(screen, &newType , 0xff0000);
-		playerNewName.printMessage(screen, type.x, type.y+15);
-		SDL_Flip(screen);
+		newGameScreen.draw(be->getScreen(), 0, 0);
+		enterNewMessage.printMessage(be->getScreen(), 100, 100);
+		SDL_FillRect(be->getScreen(), &newType , 0xff0000);
+		playerNewName.printMessage(be->getScreen(), type.x, type.y+15);
+		SDL_Flip(be->getScreen());
 	}
 	void exit(baseEngine *be) 
 	{
-		SDL_FreeSurface(screen);
+	//	SDL_FreeSurface(screen);
 		be->getPlayer()->newGame();
 		be->getPlayer()->setName(playerName);
 		be->changeState(actualGameState::instance());
@@ -322,13 +327,13 @@ private:
 	SRect loadGame;
 	SDL_Sprite titleScreen;
 	int choice;
-	SDL_Surface * screen2;
+	//SDL_Surface * screen2;
 	UserInput * stateUI;
 public:
 
 	void enter(baseEngine* be) 
 	{
-		screen2 = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
+		//screen2 = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 		if(!titleScreen.isSprite())
 			titleScreen.setSprite("Sprites/posTitleScreen.bmp", 626, 470, 0, 1); //MAGIC NUMBAHS = BAD
 		choice = 0;
@@ -356,9 +361,9 @@ public:
 		if(choice != 0)
 			exit(be);
 
-		SDL_FillRect(screen2, 0, SDL_MapRGB(screen2->format, 0, 0, 0));
-		titleScreen.draw(screen2, 0, 0);
-		SDL_Flip(screen2);
+		SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 0, 0, 0));
+		titleScreen.draw(be->getScreen(), 0, 0);
+		SDL_Flip(be->getScreen());
 		SDL_Delay(SDLDELAY);
 		if(stateUI != NULL)
 			if(stateUI->getX())
@@ -367,7 +372,7 @@ public:
 	void exit(baseEngine* be) 
 	{
 		//Use the choice variable here, that's set during execute!
-		SDL_FreeSurface(screen2);
+	//	SDL_FreeSurface(screen2);
 		switch(choice)
 		{
 		case 1:

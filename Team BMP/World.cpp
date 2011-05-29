@@ -61,6 +61,7 @@ void World::destroyWorld()
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		delete m_worldSprites[i];
 	delete m_closed;
+	m_success = false; //Close off the world.
 }
 
 int Tile::portalIndexNumber = 0; //I have to use global scope on this in order to use a static. That's just SAD.
