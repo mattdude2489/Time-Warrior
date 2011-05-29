@@ -136,7 +136,8 @@ public:
 		while(c != EOF) //Get the amount of save Files within the playerSave.
 		{
 			if(c == '#')
-				saveFiles++;
+				if((c = fgetc(hi)) != '#')
+					saveFiles++;
 			c = fgetc(hi);
 		}
 		fsetpos(hi, &newPos);

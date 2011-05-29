@@ -244,7 +244,7 @@ void Player::save(int saveToSave)
 		charget = fgetc(outfile);
 		while(charget != '#' && charget != EOF)
 			charget = fgetc(outfile); //Get it to the next save...
-		charget = fgetc(outfile);
+		//charget = fgetc(outfile);
 		if(charget != EOF)
 		{
 			//charget = fgetc(outfile);
@@ -297,6 +297,11 @@ void Player::save(int saveToSave)
 		{
 			if(newArray[i] != 10 && newArray[i] != EOF) //Heh heh...oops? I was an idiot again.
 			{
+				if(newArray[i] == '#')
+				{
+					if(newArray[i+1] == '#')
+						i++;
+				}
 				fprintf(outfile, "%c", newArray[i]);
 			}
 		}
