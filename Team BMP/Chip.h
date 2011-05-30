@@ -112,11 +112,13 @@ class Chip : public Entity
 			}
 			switch(m_cSubType)
 			{
-			case LIGHTNING:	m_dmg = (int)((double)m_dmg * 1.25);	break;//total dmg (w/critical)	: 2.5
+			case LIGHTNING:
+			case PIERCE:	m_dmg = (int)((double)m_dmg * 1.25);	break;//total dmg (w/critical)	: 2.5
 			case FIRE:
 			case SLASH:		m_dmg = (int)((double)m_dmg * 2);		break;//total dmg (no effect)	: 2
 			case ICE:		m_dmg = (int)((double)m_dmg * .5);		break;//total dmg (w/freeze)	: 2
 			case BLUNT:		m_dmg = (int)((double)m_dmg * 1.5);		break;//total dmg (w/knockback)	: 1.5
+			case RANGE:		m_dmg = m_dmg * (m_cSubSubType + 1);	break;//total dmg (w/knockback)	: 1.5
 			}
 		}
 		void setLevelAndXP(int level, int experience)
@@ -413,9 +415,9 @@ class Chip : public Entity
 			switch(m_cSubType)
 			{
 			case BLUNT:
-			case SLASH:		rows = 2;	break;
+			case SLASH:		rows--;
 			case RANGE:
-			case PIERCE:	rows = 3;	break;
+			case PIERCE:	rows--;	break;
 			}
 			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, rows);
 			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, rows);
@@ -444,6 +446,7 @@ class Chip : public Entity
 						m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
 					}
 					break;
+				case RANGE:		m_sprite->stretch(50,50);	break;
 				case PIERCE:
 					m_sprite->setFrame(FRAME_SIZE/2, FRAME_SIZE);
 					m_spriteHUD->setFrame(FRAME_SIZE/2, FRAME_SIZE);

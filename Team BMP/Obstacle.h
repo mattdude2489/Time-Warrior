@@ -43,11 +43,6 @@ public:
 		door.setHeight(FRAME_SIZE/2);
 		door.setWidth(FRAME_SIZE/2);
 	}
-	bool colideWithDoor(Entity * a_player)
-	{
-		if(door.intersects(SRect(a_player->getLocation().getX(), a_player->getLocation().getY(), a_player->getSprite()->getWidth(), a_player->getSprite()->getHeight())));
-			return true;
-		return false;
-	}
+	bool colideWithDoor(Entity * a_player){return door.intersects(SRect(a_player->getLocation().getX(), a_player->getLocation().getY(), a_player->getSprite()->getWidth(), a_player->getSprite()->getHeight()));}
 
 };

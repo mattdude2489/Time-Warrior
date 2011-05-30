@@ -62,6 +62,17 @@ class Weapon : public Chip
 			//set weapon's position based on facing direction
 			if(m_cSubType != RANGE)
 				setLocationUsingDirection();
+			m_isCritical = false;
+			if(m_cSubType == PIERCE)
+			{
+				int chance = rand() % ((m_cSubSubType+1) * 25) + 1;
+				switch(m_cSubSubType)
+				{
+				case BASIC:		if(chance % 4 == 0){m_isCritical = true;}	break;//25%
+				case ADVANCED:	if(chance % 2 == 0){m_isCritical = true;}	break;//50%
+				case EXPERT:	if(chance % 4 != 0){m_isCritical = true;}	break;//75%
+				}
+			}
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{
@@ -112,6 +123,8 @@ class Weapon : public Chip
 			case RANGE:
 			case SLASH:
 			case PIERCE:
+				if(m_isCritical && a_entity->getType() != m_owner->getType())
+					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,WEAPON), m_cSubType);
 				//dmg entities of non owner-type
 				if(a_entity->getType() != m_owner->getType())
 					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,WEAPON), m_cSubType);
