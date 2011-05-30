@@ -375,12 +375,13 @@ public:
 	}
 	void useEffects(int a_timePassed);
 	bool isLastWSet(){return !m_lastWLoc.isZero();}
-	void setLastW(){m_lastWLoc.set(m_location.getX(), m_location.getY()+(2*FRAME_SIZE));}
+	void setLastW(){m_lastWLoc.set(m_location.getX(), m_location.getY()+(FRAME_SIZE));}
 	void setCurrentLocToLast(World * a_world);
 	virtual bool isObstacle(e_obstacleType a_type){return false;}
 	virtual void setStopped(){m_flags[FLAG_STOPPED] = true;};
 	virtual int getIndex(){return 0;}
 	virtual void levelUpUnique(){};
+	virtual bool colideWithDoor(Entity * a_player){return false;}
 	void levelUp()
 	{
 		m_statPoints++;

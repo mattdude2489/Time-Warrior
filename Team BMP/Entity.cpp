@@ -103,6 +103,15 @@ void Entity::update(int a_timePassed, World * a_world)
 						a_world->setCamera(this->m_camera);
 
 					}
+					if(a_world->getTile(m_location.x, m_location.y)->buildDoor
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->buildDoor
+						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->buildDoor
+						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight())->buildDoor
+						)
+					{
+						a_world->setWorld("Maps/MedEngMap.txt");
+						a_world->setCamera(this->m_camera);
+					}
 				}
 				
 		}
@@ -158,6 +167,21 @@ void Entity::update(int a_timePassed, World * a_world)
 										a_world->setCamera(this->m_camera);
 									}
 								}
+							}
+							else if(tmp->isObstacle(BUILDING))
+							{
+								if(m_eType == PLAYER)
+								{
+									if(tmp->colideWithDoor(this))
+									{
+										this->setLastW();
+										a_world->setWorld("Maps/Building2.txt");
+										a_world->setCamera(this->m_camera);
+									}
+									else
+										move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+								}
+								
 							}
 							else
 								move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);

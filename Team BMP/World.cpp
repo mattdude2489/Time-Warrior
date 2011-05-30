@@ -83,8 +83,11 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_FOREST;
 	else if(fileName == "Maps/Desert.txt")
 		currentWorld = WORLD_DESERT;
+	else if(fileName == "Maps/Building2.txt")
+		currentWorld = WORLD_TOWN2;
 	else if(strcmp(fileName ,"Maps/Castle0.txt")||strcmp(fileName, "Maps/Castle1.txt"))
 		currentWorld = WORLD_CASTLE;
+
 
 	
 
@@ -115,7 +118,7 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = hi.buildingh = hi.buildingv = false;
+				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = hi.buildingh = hi.buildingv = hi.buildDoor = false;
 				x++;
 				hi.collideBox.x = hi.pos.x;
 				hi.collideBox.y = hi.pos.y;
@@ -142,6 +145,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_DESERT:
 				case WORLD_FOREST:	hi.indexOfSpriteRow = TILE_GRASS;				break;
 				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
+				case WORLD_TOWN2:	hi.indexOfSpriteRow = TILE_BUILDING_GROUND;		break;
 				}
 				break;
 			case 'P':
@@ -159,6 +163,7 @@ bool World::setWorld(char * fileName)
 				case WORLD_FOREST:	hi.indexOfSpriteRow = TILE_GRASS;				break;
 				case WORLD_DESERT:	hi.indexOfSpriteRow = TILE_DUST;				break;
 				case WORLD_D1:		hi.indexOfSpriteRow = rand()%2 + TILE_DIRT1;	break;
+				case WORLD_TOWN2:	hi.indexOfSpriteRow = TILE_BUILDING_GROUND;		break;
 				}
 				switch(c)
 				{
@@ -175,7 +180,8 @@ bool World::setWorld(char * fileName)
 			case 'D':
 				switch(currentWorld)
 				{
-				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_L;	hi.collide = true;	break;
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL_L;	hi.collide = true;			break;
+				case WORLD_TOWN2:	hi.indexOfSpriteRow = TILE_BUILDING_DOOR; hi.buildDoor = true;	break;
 				default:			hi.indexOfSpriteRow = TILE_DUST;
 				}
 				break;
@@ -209,9 +215,11 @@ bool World::setWorld(char * fileName)
 			case 'B':
 				switch(currentWorld)
 				{
-				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL;				break;
-				case WORLD_ENGLAND:	hi.indexOfSpriteRow = TILE_BLANK;				break;
-				case WORLD_D1:		hi.indexOfSpriteRow = rand()%3 + TILE_SPIKE_LG;	break;
+				case WORLD_HUB:		hi.indexOfSpriteRow = TILE_METAL;							break;
+				case WORLD_ENGLAND:	hi.indexOfSpriteRow = TILE_BLANK;							break;
+				case WORLD_D1:		hi.indexOfSpriteRow = rand()%3 + TILE_SPIKE_LG;				break;
+				case WORLD_TOWN2:	hi.indexOfSpriteRow = TILE_BUILDING_WOOD;hi.collide = true;	break;
+				
 				}
 				hi.collide = true;
 				break;
@@ -715,12 +723,16 @@ void World::setMonsters()
 		}
 		if(m_mapOfWorld.get(i).buildingh)
 		{
+			int btype;
 			sprite = m_worldSprites[BUILDING];
 			Obstacle * obs = new Obstacle(sprite);
-			obs->setIndex((rand()%2)+2);
+			btype = BUILDING_WOOD_RIGHT;
+			obs->setIndex(btype);
 			obs->setObstacleType(BUILDING);
 			obs->setNewed(true);
 			obs->setLocation(m_mapOfWorld.get(i).pos);
+			obs->setBuildType(btype%2);//mod 2 cause if its a zero it will be wood otherwise stone
+			obs->setDoor();
 			this->add(obs);
 		}
 	}
