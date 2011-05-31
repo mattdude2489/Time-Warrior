@@ -15,6 +15,7 @@
 
 //Defines
 #define BUFF_SIZE			512
+#define PORT_NUM			7777 //Why not?
 
 struct completeSocket
 {
@@ -29,19 +30,123 @@ struct completeSocket
 class Server
 {
 private:
+	SOCKET listen_socket;
+	struct sockaddr_in srvr_addr; //Local address
+	int clntLen;
 	World * sWorld; //The server's pointer to the world. This will be used to alter stuff to the buffer.
 	TemplateVector2<completeSocket> listOfClients; //The list of clients currently connected.
 	char buffer[BUFF_SIZE]; //The buffer that you will send to the clients.
+	WSADATA wsaData;
+	timeval t; //The time for the timeout function of "Select".
+
 public:
-	Server(); //Default constructor.
-	Server(World * world); //Constructor that sets the World.
-	~Server(); //Destructor that calls the shutDown.
-	bool addSocket(char * ipAddress); //Adds a socket to the templateVector. Returns success.
-	void sendBufferToClients(); //Sends the current buffer to all the clients that are connected.
-	void shutDown(); //Shuts down Winsock.
-	bool startServer(); //Starts the server up. Initializes winSock. Returns success.
-	void updateBuffer(); //Updates the buffer through its connection to World.
-	void changeWorld(World * w); //Changes the sWorld to the w World. Use only once.
-	World * getWorld(); //Returns the world pointer.
-	SOCKET getSocketAt(int index); //Returns the socket at the index.
+	Server() //Default constructor.
+	{
+		//Nothing in particular needs to happen. Start server will do ALL INITIALIZING.
+	}
+	Server(World * world) //Constructor that sets the World.
+	{
+		sWorld = world;
+	}
+	~Server() {shutDown();} //Destructor that calls the shutDown.
+	bool addSocket(char * ipAddress) {return false;} //Adds a socket to the templateVector. Returns success.
+	void sendBufferToClients(int clientToSendTo) {} //Sends the current buffer to all the clients that are connected.
+	void receiveBufferFromClients(int receiveFromClient) {} //Receives the buffer from the client specified.
+	void shutDown() //Shuts down Winsock.
+	{
+		shutdown(listen_socket, SD_BOTH);
+		closesocket(listen_socket);
+		for(int i = 0; i < listOfClients.size(); i++)
+		{
+			shutdown(listOfClients.get(i).cSocket, SD_BOTH);
+			closesocket(listOfClients.get(i).cSocket);
+		}
+	}
+	bool startServer() //Starts the server up. Initializes winSock. Returns true if successful.
+	{
+		if(WSAStartup(MAKEWORD(2, 0), &wsaData) != 0)
+		{
+			printf("WSAStartup() failed\n");
+			return false;
+		}
+		//Initialize the listen socket.
+		if((listen_socket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
+		{
+			printf("socket() failed due to error %d\n", GetLastError());
+			return false;
+		}
+		//Construct local address structure.
+		memset(&srvr_addr, 0, sizeof(srvr_addr));
+		srvr_addr.sin_family = AF_INET;
+		srvr_addr.sin_addr.s_addr = INADDR_ANY;
+		srvr_addr.sin_port = htons(PORT_NUM);
+
+		//Bind to local address.
+		if(bind(listen_socket, (SOCKADDR*) &srvr_addr, sizeof(srvr_addr)) == SOCKET_ERROR)
+		{
+			printf("Bind() failed due to %d\n", GetLastError());
+			//Because we opened the socket, now we gotta let it fail.
+			shutdown(listen_socket, SD_BOTH);
+			closesocket(listen_socket);
+			return false;
+		}
+
+		unsigned long iMode = 1;
+		clntLen = ioctlsocket(listen_socket, FIONBIO, &iMode);
+		if(clntLen != NO_ERROR)
+			printf("ioctlsocket failed with error: %ld\n", clntLen);
+		clntLen = sizeof(srvr_addr);
+		t.tv_sec = 2; t.tv_usec = 900; //Nearly 3 seconds for timeout.
+		return true;
+	}	
+	void updateBuffer() {} //Updates the buffer through its connection to World.
+	void changeWorld(World * w) {sWorld = w;} //Changes the sWorld to the w World. Use only once.
+	void run() //Listens to accept new connections, sets the FD_SETS required for SendBufferToClients.
+	{
+		fd_set readfds, writefds;
+		FD_ZERO(&readfds);
+		FD_ZERO(&writefds);
+		//Create and Zero out the FD Sets.
+		//Then set the listening socket to accept new connections.
+		FD_SET(listen_socket, &readfds);
+		for(int i = 0; i < listOfClients.size(); i++)
+		{
+			FD_SET(listOfClients.get(i).cSocket, &readfds); //Sets the client sockets for read and write.
+			FD_SET(listOfClients.get(i).cSocket, &writefds);
+		}
+		int nfds = select(0, &readfds, &writefds, NULL, &t);
+		if(nfds == SOCKET_ERROR) //basic error catching.
+		{
+			//SOMETHING IS WRONG. I DON'T KNOW WHAT.
+			shutDown();
+			printf("This went wrong: %d\n", WSAGetLastError());
+			return;
+		}
+		for(int i = 0; i < nfds; i++)
+		{
+			if(FD_ISSET(listen_socket, &readfds))
+			{
+				completeSocket cs;
+				cs.cSocket = accept(listen_socket, (SOCKADDR*)&cs.clnt_addr, &clntLen);
+				printf("Player @ %s has connected.\n", inet_ntoa(cs.clnt_addr.sin_addr));
+				listOfClients.add(cs);
+			}
+			for(int k = 0; k < listOfClients.size(); k++)
+			{
+				//Wow, five tabs in.
+				if(FD_ISSET(listOfClients.get(k).cSocket, &readfds))
+				{
+					//Data from the client. Get it.
+					receiveBufferFromClients(k);
+				}
+				if(FD_ISSET(listOfClients.get(k).cSocket, &writefds))
+				{
+					//Data can be written to the client. Send it.
+					sendBufferToClients(k); //Send it to the client.
+				}
+			}
+		}
+	}
+	World * getWorld() {return sWorld;} //Returns the world pointer.
+	SOCKET getSocketAt(int index) {return 0;} //Returns the socket at the index.
 };
