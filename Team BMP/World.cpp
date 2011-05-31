@@ -29,11 +29,14 @@ void World::initWorld()
 	m_sprites[SLIME].setSprite("Sprites/slime.bmp", FRAME_SIZE -1, FRAME_SIZE -9, FRAME_RATE, NUM_ROWS);
 	m_sprites[SKELETON].setSprite("Sprites/skeleton.bmp", FRAME_SIZE -8, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[GHOST].setSprite("Sprites/ghost.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
-	m_sprites[BOSS1].setSprite("Sprites/demon0.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[BOSS0].setSprite("Sprites/demon0.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[BOSS1].setSprite("Sprites/demon1.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[DRAGON].setSprite("Sprites/dragon.bmp", DRAGON_FRAME, DRAGON_FRAME, FRAME_RATE, NUM_ROWS);
 	m_sprites[NPC1].setSprite("Sprites/greenguy.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[KNIGHT0].setSprite("Sprites/knight0.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[KNIGHT1].setSprite("Sprites/knight1.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[KNIGHT2].setSprite("Sprites/knight2.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[SHADOWDEMON].setSprite("Sprites/ShadowDemon.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
 
 	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE/2, NUM_WORLD_TILE_A);

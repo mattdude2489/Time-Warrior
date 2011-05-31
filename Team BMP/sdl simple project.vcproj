@@ -465,6 +465,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Maps\Castle1.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Maps\Castle2.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Maps\Castle3.txt"
+				>
+			</File>
+			<File
 				RelativePath=".\Maps\Desert.txt"
 				>
 			</File>
