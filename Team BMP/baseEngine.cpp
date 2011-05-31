@@ -19,7 +19,7 @@ baseEngine::~baseEngine()
 {
 	/*delete cWorld;
 	delete cPlayer;*/
-	SDL_FreeSurface(screen);
+//	SDL_FreeSurface(screen);
 }
 
 baseEngine::baseEngine()

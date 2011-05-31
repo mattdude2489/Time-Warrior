@@ -107,6 +107,153 @@ public:
 	void handleInput(UserInput * obj) {stateUI = obj;}
 };
 
+class clientGameState: public State
+{
+private:
+	UserInput * stateUI;
+public:
+	void enter(baseEngine *be) {}
+	void execute(baseEngine *be) {}
+	void exit(baseEngine *be) {}
+	static clientGameState * instance() {static clientGameState instance; return &instance;}
+	void handleInput(UserInput * obj) {stateUI = obj;}
+};
+
+class hostGameState: public State
+{
+private:
+	UserInput * stateUI;
+public:
+	void enter(baseEngine *be) {}
+	void execute(baseEngine *be) {}
+	void exit(baseEngine *be) {}
+	static hostGameState* instance() {static hostGameState instance; return &instance;}
+	void handleInput(UserInput * obj) {stateUI = obj;}
+};
+class networkStartState : public State
+{
+private:
+	UserInput * stateUI;
+	SDL_Rect hostGame;
+	SDL_Rect connectGame;
+	SDL_Rect enterIP;
+	TTtext hostAGame;
+	TTtext connectAGame;
+	TTtext enterIPAddr;
+	MyFont myfont;
+	int choiceOfGame;
+	SRect cGame;
+	SRect hGame; //Not that h.
+	SRect ipEnterBox;
+	int num;
+	bool exitToNextState, typing;
+	char ipEnter[15]; //The IP the user Enters. Something new I found out: You can have extra 0's and spaces and it won't matter.
+public:
+	void enter(baseEngine *be)
+	{
+		stateUI = NULL;
+		hostGame.x = 100; hostGame.y = 100; hostGame.w = 100; hostGame.h = 100;
+		connectGame.x = 400; connectGame.y = 100; connectGame.w = 200; connectGame.h = 100;
+		enterIP.x = 400; enterIP.y = 215; enterIP.w = 200; enterIP.h = 40;
+		myfont.setFont(20);
+		hostAGame.setFont(myfont.getFont());
+		connectAGame.setFont(myfont.getFont());
+		enterIPAddr.setFont(myfont.getFont());
+		hostAGame.setMessage("Host Game");
+		connectAGame.setMessage("Connect To A Game");
+		choiceOfGame = 0;
+		cGame.set(connectGame);
+		hGame.set(hostGame);
+		ipEnterBox.set(enterIP);
+		exitToNextState = typing = false;
+		for(int i = 0; i < 15; i++)
+		{
+			ipEnter[i] = ' ';
+		}
+		num = 0;
+	}
+	void execute(baseEngine *be)
+	{
+		if(stateUI != NULL)
+		{
+			if(typing)
+			{
+				char c = stateUI->getLastKey();
+				//char c = getch();
+				if(c > 0)
+				{
+					if(c == 8 || c == 7) //Backspace, bell, tab, and newline.
+						{
+							num--;
+							ipEnter[num] = ' ';
+						}
+					else if(c == 10 || c == 32 || c == 14 || c == 15 || c == 47 || c == 45)
+					{
+						//Do nothing.
+					}
+					else if(num < 15) //This one HAS TO BE lower than 15. I'm going to assume for now that the user KNOWS WHAT THEY'RE DOING.
+					{
+						ipEnter[num] = c;
+						num++;
+					}
+				}
+			}
+			
+			if(cGame.contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())) && stateUI->getClick() == 1)
+			{
+				choiceOfGame = 2;
+				exitToNextState = true;
+			}
+			if(hGame.contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())) && stateUI->getClick() == 1)
+			{
+				choiceOfGame = 1;
+				exitToNextState = true;
+			}
+			if(stateUI->getX())
+				exitToNextState = true;
+			if(ipEnterBox.contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())) && stateUI->getClick() == 1)
+				typing = true;
+			else if(stateUI->getClick() == 1) //If the user clicks OUTSIDE the typing box.
+				typing = false;
+		}
+		//That was input/logic. Now its draw.
+		
+		enterIPAddr.setMessage(ipEnter);
+
+		SDL_FillRect(be->getScreen(), &connectGame, 0xffffff); //I think that's white...?
+		SDL_FillRect(be->getScreen(), &hostGame, 0xffffff);
+		SDL_FillRect(be->getScreen(), &enterIP, 0xffffff);
+		hostAGame.printMessage(be->getScreen(), 100, 100);
+		connectAGame.printMessage(be->getScreen(), 400, 100);
+		enterIPAddr.printMessage(be->getScreen(), 400, 215);
+
+		SDL_Flip(be->getScreen());
+		if(exitToNextState)
+		{
+			exit(be);
+		}
+	}
+	void exit(baseEngine *be)
+	{
+		exitToNextState = false;
+		switch(choiceOfGame)
+		{
+		case 1:
+			//Host Game
+			break;
+		case 2:
+			//Connect Game
+			break;
+		case 0:
+			//...Break out.
+			break;
+		}
+		choiceOfGame = 0;
+		be->goToTitleScreen();
+	}
+	static networkStartState* instance() {static networkStartState instance; return &instance;}
+	void handleInput(UserInput * obj) {stateUI = obj;}
+};
 
 class loadGameState: public State
 {
@@ -196,6 +343,11 @@ public:
 					checkClick = i;
 				}
 			}
+			if(stateUI->getX())
+			{
+				optionOfReturn = -1;
+				checkClick = 1;
+			}
 		}
 		SDL_Rect newRect;
 		for(int i = 0; i < saveFiles; i++)
@@ -242,6 +394,7 @@ private:
 	MyFont hi;
 	TTtext playerNewName;
 	TTtext enterNewMessage;
+	bool exitToTitle;
 public:
 	void enter(baseEngine *be) 
 	{
@@ -254,7 +407,7 @@ public:
 		stateUI = NULL;
 	//	screen = SDL_SCREEN_STARTUP;
 		newGameScreen.setSprite("Sprites/newGameScreen.bmp", 626, 470, 0, 1);
-		typing = finished = shift = false;
+		typing = finished = exitToTitle = shift = false;
 		type.x = newType.x = 219;
 		type.y = newType.y = 224;
 		type.h = newType.h = 43;
@@ -298,6 +451,8 @@ public:
 			{
 				typing = true;
 			}
+			if(stateUI->getX())
+				exitToTitle = true;
 		}
 		playerNewName.setMessage(playerName);
 		enterNewMessage.setMessage(enterNameMessage);
@@ -307,13 +462,20 @@ public:
 		SDL_FillRect(be->getScreen(), &newType , 0xff0000);
 		playerNewName.printMessage(be->getScreen(), type.x, type.y+15);
 		SDL_Flip(be->getScreen());
+		if(exitToTitle == true)
+			exit(be);
 	}
 	void exit(baseEngine *be) 
 	{
 	//	SDL_FreeSurface(screen);
-		be->getPlayer()->newGame();
-		be->getPlayer()->setName(playerName);
-		be->changeState(actualGameState::instance());
+		if(exitToTitle == false)
+		{
+			be->getPlayer()->newGame();
+			be->getPlayer()->setName(playerName);
+			be->changeState(actualGameState::instance());
+		}
+		else
+			be->goToTitleScreen();
 	}
 	void handleInput(UserInput * obj) {stateUI = obj;}
 	static newGameState* instance() {static newGameState instance; return &instance;}
@@ -382,7 +544,7 @@ public:
 			be->changeState(loadGameState::instance());
 			break;
 		case 3:
-			be->changeState(actualGameState::instance());
+			be->changeState(networkStartState::instance());
 			break;
 		default:
 			break;

@@ -60,12 +60,6 @@ public:
 		sSocket.clnt_addr.sin_addr.s_addr = inet_addr(ipAddress);
 		sSocket.clnt_addr.sin_port = htons(PORT_NUM);
 		int err = 0;
-		unsigned long iMode = 1;
-		err = ioctlsocket(sSocket.cSocket, FIONBIO, &iMode);
-		if(err != NO_ERROR)
-		{
-			printf("ioctlsocket failed with error: %ld\n", err);
-		}
 		err = connect(sSocket.cSocket, (SOCKADDR*)&sSocket.clnt_addr, sizeof(sSocket.clnt_addr));
 		//I think I actually need to make this non-blocking first...
 		if(err == SOCKET_ERROR)
@@ -74,6 +68,12 @@ public:
 			shutdown(sSocket.cSocket, SD_BOTH);
 			closesocket(sSocket.cSocket);
 			return false;
+		}
+		unsigned long iMode = 1;
+		err = ioctlsocket(sSocket.cSocket, FIONBIO, &iMode);
+		if(err != NO_ERROR)
+		{
+			printf("ioctlsocket failed with error: %ld\n", err);
 		}
 		return true;
 	}
