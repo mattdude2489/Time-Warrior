@@ -1,91 +1,91 @@
-a	:	TOWN WALL H
-A	:	TOWN WALL V
-b	:	BOSS LOCATION
-B	:	HUB TILE GROUND, BLANK, DUNGEON WALLS, BUILDING WALLS
-c	:	TOWNDOOR
-C	:	CASTLE GROUND
-d	:	DUNGEON
-D	:	HUB WALL L, DUST/DESERT, BUILDING DOOR
-e	:	BUILDING V
-E	:	BUILDING H
-f	:	
-F	:	
-g	:	
-G	:	GROUND TILES - MEDEVIEL, HUB, DUNGEON, BULDING
-h	:	
-H	:	HUB WALL R, 
-i	:	
-I	:	
-j	:	
-J	:	
-k	:	
-K	:	
-l	:	WATER L
-L	:	WATER R
-m	:	
-M	:	HUB QUAD R, 
-n	:	ROAD TR
-N	:	ROAD TL
-o	:	ROAD BR
-O	:	ROAD BL
-p	:	PLAYER SPAWN
-P	:	PORTAL
-q	:	
-Q	:	DESERT WALL
-r	:	
-R	:	
-s	:	
-S	:	SPAWN LOCATION - MINION
-t	:	
-T	:	TREE
-u	:	WATER U
-U	:	WATER D
-v	:	
-V	:	HUB QUAD L, ROAD
-w	:	
-W	:	WATER
-x	:	
-X	:	
-y	:	WATER CORNER TR
-Y	:	WATER CORNER TL
-z	:	WATER CORNER BR
-Z	:	WATER CORNER BL
-1	:	
-2	:	
-3	:	
-4	:	
-5	:	
-6	:	
-7	:	
-8	:	
-9	:	
-0	:	
--	:	CASTLE WALL H
-=	:	BRIDGE H
-!	:	
-@	:	ROCKS
-#	:	BUSH
-$	:	CACTUS
-%	:	
-^	:	CASTLE STAIRS
-&	:	
-*	:	
-(	:	WATER ANGLE BL
-)	:	WATER ANGLE BR
-_	:	
-+	:	BRIDGE V
-[	:	CASTLE DOOR L
-]	:	CASTLE DOOR R
-{	:	DESERT ARCH L
-}	:	DESERT ARCH R
-;	:	WATER ANGLE TR
-:	:	
-,	:	
-.	:	
-<	:	FOREST ARCH L
->	:	FOREST ARCH R
-/	:	WATER ANGLE TL
-?	:	
-|	:	CASTLE WALL V
-`	:	
-~	:	
+a	:Colide	:	TOWN WALL H
+A	:Colide	:	TOWN WALL V
+b	:	:	BOSS LOCATION
+B	:Colide	:	HUB TILE GROUND, BLANK, DUNGEON WALLS, BUILDING WALLS
+c	:	:	TOWNDOOR
+C	:	:	CASTLE GROUND
+d	:	:	DUNGEON
+D	:	:	HUB WALL L, DUST/DESERT, BUILDING DOOR
+e	:Colide	:	BUILDING V
+E	:Colide	:	BUILDING H
+f	:	:	
+F	:	:	
+g	:	:	
+G	:	:	GROUND TILES - MEDEVIEL, HUB, DUNGEON, BULDING
+h	:	:	
+H	:Colide	:	HUB WALL R, 
+i	:	:	
+I	:	:	
+j	:	:	
+J	:	:	
+k	:	:	
+K	:	:	
+l	:	:	WATER L
+L	:	:	WATER R
+m	:	:	
+M	:Colide	:	HUB QUAD R, 
+n	:	:	ROAD TR
+N	:	:	ROAD TL
+o	:	:	ROAD BR
+O	:	:	ROAD BL
+p	:	:	PLAYER SPAWN
+P	:	:	PORTAL
+q	:	:	
+Q	:Colide	:	DESERT WALL
+r	:	:	
+R	:	:	
+s	:	:	
+S	:	:	SPAWN LOCATION - MINION
+t	:	:	
+T	:Colide	:	TREE
+u	:	:	WATER U
+U	:	:	WATER D
+v	:	:	
+V	:	:	HUB QUAD L, ROAD
+w	:	:	
+W	:Colide	:	WATER
+x	:	:	
+X	:	:	
+y	:Colide	:	WATER CORNER TR
+Y	:Colide	:	WATER CORNER TL
+z	:Colide	:	WATER CORNER BR
+Z	:Colide	:	WATER CORNER BL
+1	:	:	
+2	:	:	
+3	:	:	
+4	:	:	
+5	:	:	
+6	:	:	
+7	:	:	
+8	:	:	
+9	:	:	
+0	:	:	
+-	:Colide	:	CASTLE WALL H
+=	:	:	BRIDGE H
+!	:	:	
+@	:Colide	:	ROCKS
+#	:Colide	:	BUSH
+$	:Colide	:	CACTUS
+%	:	:	
+^	:	:	CASTLE STAIRS
+&	:	:	
+*	:	:	
+(	:	:	WATER ANGLE BL
+)	:	:	WATER ANGLE BR
+_	:	:	
++	:	:	BRIDGE V
+[	:	:	CASTLE DOOR L
+]	:	:	CASTLE DOOR R
+{	:	:	DESERT ARCH L
+}	:	:	DESERT ARCH R
+;	:	:	WATER ANGLE TR
+:	:	:	
+,	:	:	
+.	:	:	
+<	:	:	FOREST ARCH L
+>	:	:	FOREST ARCH R
+/	:	:	WATER ANGLE TL
+?	:	:	
+|	:Colide	:	CASTLE WALL V
+`	:	:	
+~	:	:	
