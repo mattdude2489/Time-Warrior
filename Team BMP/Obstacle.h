@@ -40,8 +40,8 @@ public:
 			door.setPosition(SPoint(this->getLocation().getX()+this->getSprite()->getWidth(),this->getLocation().getY()));
 		else
 			door.setPosition(SPoint(this->getLocation().getX(),this->getLocation().getY()+this->getSprite()->getHeight()));
-		door.setHeight(FRAME_SIZE/2);
-		door.setWidth(FRAME_SIZE/2);
+		door.setHeight(FRAME_SIZE);
+		door.setWidth(FRAME_SIZE);
 	}
 	bool colideWithDoor(Entity * a_player){return door.intersects(SRect(a_player->getLocation().getX(), a_player->getLocation().getY(), a_player->getSprite()->getWidth(), a_player->getSprite()->getHeight()));}
 

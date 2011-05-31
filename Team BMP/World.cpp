@@ -37,6 +37,7 @@ void World::initWorld()
 	m_sprites[KNIGHT1].setSprite("Sprites/knight1.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[KNIGHT2].setSprite("Sprites/knight2.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[SHADOWDEMON].setSprite("Sprites/ShadowDemon.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
+	m_sprites[DEMONKING].setSprite("Sprites/DemonKing.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 
 	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE/2, NUM_WORLD_TILE_A);
@@ -598,15 +599,34 @@ void World::setMonsters()
 					}
 					break;
 				case WORLD_CASTLE:
-					switch(spriteSheet)
+					switch(castleCount)
 					{
 					case 0:
-						sprite = &m_sprites[KNIGHT0];
-						mtrl = MTRL_METAL;
-						break;
 					case 1:
-						sprite = &m_sprites[KNIGHT1];
-						mtrl = MTRL_METAL;
+						switch(spriteSheet)
+						{
+						case 0:
+							sprite = &m_sprites[KNIGHT0];
+							mtrl = MTRL_METAL;
+							break;
+						case 1:
+							sprite = &m_sprites[KNIGHT1];
+							mtrl = MTRL_METAL;
+							break;
+						}
+						break;
+					case 2:
+						switch(spriteSheet)
+						{
+						case 0:
+							sprite = &m_sprites[KNIGHT2];
+							mtrl = MTRL_METAL;
+							break;
+						case 1:
+							sprite = &m_sprites[SHADOWDEMON];
+							mtrl = MTRL_DARK;
+							break;
+						}
 						break;
 					}
 					break;
@@ -648,22 +668,49 @@ void World::setMonsters()
 		if(m_mapOfWorld.get(i).bossLoc)
 		{
 			bossCount++;
+			int t_type = 0;
 			switch(currentWorld)
 			{
 			case WORLD_FOREST:
+			case WORLD_DESERT:
 				sprite = &m_sprites[DRAGON];
+				t_type = MTRL_AIR;
+				break;
+			case WORLD_CASTLE:
+				if(castleCount < 3){
+					sprite = &m_sprites[BOSS1];
+					t_type = MTRL_DARK;
+				}
+				else
+				{
+					sprite = &m_sprites[DEMONKING];
+					t_type = MTRL_DEFAULT;
+				}
 				break;
 			default:
-				sprite = &m_sprites[BOSS1];
+				sprite = &m_sprites[BOSS0];
+				t_type = MTRL_DARK;
 				break;
 			}
 			Boss * newBoss = new Boss(sprite);
-			newBoss->setMaterial(MTRL_FIRE);
+			newBoss->setMaterial((e_material)t_type);
 			newBoss->setNewed(true);
 			newBoss->scaleToPlayer(m_player);
 			newBoss->setBossLoc(m_mapOfWorld.get(i).pos);
 			this->add(newBoss);
-			newBoss->setChip(FIRE, BASIC, this);
+			switch(t_type)
+			{
+			case MTRL_AIR:
+				newBoss->setChip(LIGHTNING, ADVANCED, this);
+				break;
+			case MTRL_DEFAULT:
+				newBoss->setChip(DIVINE, EXPERT, this);
+				break;
+			case MTRL_DARK:
+			default:
+				newBoss->setChip(FIRE, BASIC, this);
+				break;
+			}
 		}
 		if(m_mapOfWorld.get(i).playerSpawn)
 		{
