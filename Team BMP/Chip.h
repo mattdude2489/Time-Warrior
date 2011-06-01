@@ -50,6 +50,32 @@ class Chip : public Entity
 			//if(m_tracker)
 			//	delete m_tracker;
 		}
+		void setCriticalWithChance(int a_percentage)
+		{
+			//only calc crit if a_percentage is not an extreme
+			if(a_percentage > 0 && a_percentage < 100)
+			{
+				//calc random percentage
+				int num = rand() % 100 + 1;
+				//if the percentage or remainder easily divides 100 (2, 4, 5, 10, 20, 25, 50), check each ms 
+				if(!(100 % a_percentage) || !(100 % (100 - a_percentage)))
+				{
+					if(a_percentage < 50)
+						m_isCritical = !(num % (100 / a_percentage));
+					else
+						m_isCritical = !(!(num % (100 / (100 - a_percentage))));
+				}
+				//else just check if the num is within range
+				else
+					m_isCritical = num <= a_percentage;
+			}
+			else if(a_percentage <= 0)
+				m_isCritical = false;
+			else
+				m_isCritical = true;
+			if(m_isCritical)
+				printf("crit w/%d chance\n", a_percentage);
+		}
 		void unlock()
 		{
 			if(m_cType != ARMOR)

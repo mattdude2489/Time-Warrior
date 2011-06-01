@@ -64,15 +64,7 @@ class Weapon : public Chip
 				setLocationUsingDirection();
 			m_isCritical = false;
 			if(m_cSubType == PIERCE)
-			{
-				int chance = rand() % ((m_cSubSubType+1) * 25) + 1;
-				switch(m_cSubSubType)
-				{
-				case BASIC:		if(chance % 4 == 0){m_isCritical = true;}	break;//25%
-				case ADVANCED:	if(chance % 2 == 0){m_isCritical = true;}	break;//50%
-				case EXPERT:	if(chance % 4 != 0){m_isCritical = true;}	break;//75%
-				}
-			}
+				setCriticalWithChance((m_cSubSubType+1) * 25);//Bas: 25%, Adv: 50%, Exp: 75%
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{

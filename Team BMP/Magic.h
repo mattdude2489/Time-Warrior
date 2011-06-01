@@ -41,13 +41,14 @@ class Magic : public Chip
 			switch(m_cSubType)
 			{
 			case DIVINE:	m_owner->heal(m_owner->getTotalDamageDealt(m_dmg,MAGIC));	break;
-			case LIGHTNING:	int chance = rand() % ((m_cSubSubType+1) * 25) + 1;
+			case LIGHTNING:	int chance = 0;
 							switch(m_cSubSubType)
 							{
-							case BASIC:		if(chance % 4 == 0){m_isCritical = true;}	break;//25%
-							case ADVANCED:	if(chance % 2 == 0){m_isCritical = true;}	break;//50%
-							case EXPERT:	if(chance % 4 != 0){m_isCritical = true;}	break;//75%
+							case BASIC:		chance = 5;		break;
+							case ADVANCED:	chance = 10;	break;
+							case EXPERT:	chance = 25;	break;
 							}
+							setCriticalWithChance(chance);
 							break;
 			}
 
