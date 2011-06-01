@@ -111,10 +111,84 @@ class clientGameState: public State
 {
 private:
 	UserInput * stateUI;
+	Client cClient;
+	Uint32 then, now, passed, second;
+	TTtext fps;
+	MyFont myfps;
+	char cfps[10];
+	int ifps;
 public:
-	void enter(baseEngine *be) {}
-	void execute(baseEngine *be) {}
-	void exit(baseEngine *be) {}
+	void enter(baseEngine *be) 
+	{
+		bool lolz = cClient.startClient();
+		if(!lolz)
+		{
+			printf("WinSock failed. Returning to Title Screen.");
+			be->goToTitleScreen();
+		}
+		else
+		{
+			cClient.setWorld(be->getWorld());
+			lolz = cClient.connectToServer("127.0.0.1");
+			if(!lolz)
+			{
+				printf("Could not connect. Return to Title Screen.");
+				be->goToTitleScreen();
+			}
+		}
+		stateUI = NULL;
+		then = SDL_GetTicks();
+		now = passed = second = 0;
+		myfps.setFont(FONTSIZE);
+		fps.setFont(myfps.getFont());
+		ifps = 0;
+		fps.setMessage("0");
+		be->getPlayer()->setGamePlayed(true);
+		if(!be->getWorld()->getSuccess())
+		{
+			be->getWorld()->initWorld();
+		}
+		if(!be->getPlayer()->getGamePlayed())
+		{
+			be->getPlayer()->initPlayer(be->getWorld());
+		}
+	}
+	void execute(baseEngine *be) 
+	{
+		cClient.run();
+		ifps++;
+		now = SDL_GetTicks();
+		passed = now - then;
+		then = now;
+		if(now - second > 1000)
+		{
+			sprintf_s(cfps, "%i", ifps);
+			fps.setMessage(cfps); //Set message? Could setMessage be causing a memory leak? I don't think so, but who knows?
+			ifps = 0;
+			second = now;
+		}
+		if(stateUI != NULL)
+		{
+			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
+			be->getWorld()->update(passed);
+			be->getAH()->update(be->getWorld()->getCurrentWorld());
+			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
+		}
+
+		//SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 0, 0, 0));
+		be->getWorld()->draw(be->getScreen());
+		be->getHUD()->draw(be->getScreen());
+		fps.printMessage(be->getScreen(), 0, 0);
+		SDL_Flip(be->getScreen());
+		if(stateUI != NULL)
+			if(stateUI->getX())
+				exit(be);
+		SDL_Delay(SDLDELAY);
+	}
+	void exit(baseEngine *be) 
+	{
+		cClient.shutDown();
+	}
 	static clientGameState * instance() {static clientGameState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}
 };
@@ -123,10 +197,82 @@ class hostGameState: public State
 {
 private:
 	UserInput * stateUI;
+	Server hostServer;
+	TemplateVector2<Player*> listOfPlayers;
+	Uint32 then, now, passed, second;
+	TTtext fps;
+	MyFont myfps;
+	char cfps[10];
+	int ifps;
 public:
-	void enter(baseEngine *be) {}
-	void execute(baseEngine *be) {}
-	void exit(baseEngine *be) {}
+	void enter(baseEngine *be) 
+	{
+		printf("Attempting to start server.\n");
+		bool serverRunning = hostServer.startServer();
+		printf("startServer has been passed. Success is 0. %d", serverRunning);
+		if(!serverRunning)
+		{
+			printf("Failed. Returning to title screen.");
+			be->goToTitleScreen();
+		}
+		else //The server starting was successful.
+		{
+			printf("Server is successul.\n");
+			hostServer.changeWorld(be->getWorld());
+		}
+		stateUI = NULL;
+		then = SDL_GetTicks();
+		now = passed = second = 0;
+		myfps.setFont(FONTSIZE);
+		fps.setFont(myfps.getFont());
+		ifps = 0;
+		fps.setMessage("0");
+		be->getPlayer()->setGamePlayed(true);
+		if(!be->getWorld()->getSuccess())
+		{
+			be->getWorld()->initWorld();
+		}
+		if(!be->getPlayer()->getGamePlayed())
+		{
+			be->getPlayer()->initPlayer(be->getWorld());
+		}
+	}
+	void execute(baseEngine *be) 
+	{
+//		printf("Server is running.\n");
+		hostServer.run();
+		ifps++;
+		now = SDL_GetTicks();
+		passed = now - then;
+		then = now;
+		if(now - second > 1000)
+		{
+			sprintf_s(cfps, "%i", ifps);
+			fps.setMessage(cfps); //Set message? Could setMessage be causing a memory leak? I don't think so, but who knows?
+			ifps = 0;
+			second = now;
+		}
+		if(stateUI != NULL)
+		{
+			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
+			be->getWorld()->update(passed);
+			be->getAH()->update(be->getWorld()->getCurrentWorld());
+			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
+		}
+		//SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 0, 0, 0));
+		be->getWorld()->draw(be->getScreen());
+		be->getHUD()->draw(be->getScreen());
+		fps.printMessage(be->getScreen(), 0, 0);
+		SDL_Flip(be->getScreen());
+		if(stateUI != NULL)
+			if(stateUI->getX())
+				exit(be);
+		SDL_Delay(SDLDELAY);
+	}
+	void exit(baseEngine *be) 
+	{
+		hostServer.shutDown();
+	}
 	static hostGameState* instance() {static hostGameState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}
 };
@@ -240,16 +386,19 @@ public:
 		{
 		case 1:
 			//Host Game
+			be->changeState(hostGameState::instance());
 			break;
 		case 2:
+			be->changeState(clientGameState::instance());
 			//Connect Game
 			break;
 		case 0:
+			be->goToTitleScreen();
 			//...Break out.
 			break;
 		}
-		choiceOfGame = 0;
-		be->goToTitleScreen();
+		//choiceOfGame = 0;
+//		be->goToTitleScreen();
 	}
 	static networkStartState* instance() {static networkStartState instance; return &instance;}
 	void handleInput(UserInput * obj) {stateUI = obj;}

@@ -32,6 +32,10 @@ public:
 	}
 	~Client()
 	{
+		shutDown();
+	}
+	void shutDown()
+	{
 		shutdown(sSocket.cSocket, SD_BOTH);
 		closesocket(sSocket.cSocket); //Shut down the sockets and release their data.
 	}
@@ -52,13 +56,14 @@ public:
 		}
 		//Construct local address. 
 		memset(&sSocket.clnt_addr, 0, sizeof(sSocket.clnt_addr));
-		t.tv_sec = 2; t.tv_usec = 900; //Again, 3 seconds. Why not?
+		t.tv_sec = 0; t.tv_usec = 100; //Again, 3 seconds. Why not?
 		return true;
 	}
 	bool connectToServer(char * ipAddress)
 	{
 		sSocket.clnt_addr.sin_addr.s_addr = inet_addr(ipAddress);
 		sSocket.clnt_addr.sin_port = htons(PORT_NUM);
+		sSocket.clnt_addr.sin_family = AF_INET; //I forgot to set this...
 		int err = 0;
 		err = connect(sSocket.cSocket, (SOCKADDR*)&sSocket.clnt_addr, sizeof(sSocket.clnt_addr));
 		//I think I actually need to make this non-blocking first...

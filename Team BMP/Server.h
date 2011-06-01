@@ -91,12 +91,19 @@ public:
 			return false;
 		}
 
+		int result = 0;
+		result = listen(listen_socket, SOMAXCONN);
+		if(result == SOCKET_ERROR)
+		{
+			printf("You failed a listen check. %d\n", GetLastError());
+			return false;
+		}
 		unsigned long iMode = 1;
 		clntLen = ioctlsocket(listen_socket, FIONBIO, &iMode);
 		if(clntLen != NO_ERROR)
 			printf("ioctlsocket failed with error: %ld\n", clntLen);
 		clntLen = sizeof(srvr_addr);
-		t.tv_sec = 2; t.tv_usec = 900; //Nearly 3 seconds for timeout.
+		t.tv_sec = 0; t.tv_usec = 100; //Nearly 3 seconds for timeout.
 		return true;
 	}	
 	void updateBuffer() {} //Updates the buffer through its connection to World.
@@ -109,6 +116,7 @@ public:
 		//Create and Zero out the FD Sets.
 		//Then set the listening socket to accept new connections.
 		FD_SET(listen_socket, &readfds);
+//		printf("Port number is: %d\n", ntohs(srvr_addr.sin_port));
 		for(int i = 0; i < listOfClients.size(); i++)
 		{
 			FD_SET(listOfClients.get(i).cSocket, &readfds); //Sets the client sockets for read and write.
