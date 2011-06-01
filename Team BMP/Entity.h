@@ -21,7 +21,7 @@ enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 100, DRAGON_FRAME = 65};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_effect {KNOCKBACK, FREEZE, NUM_EFFECTS};
 enum e_material {MTRL_DEFAULT, MTRL_WOOD, MTRL_FIRE, MTRL_EARTH, MTRL_METAL, MTRL_WATER, MTRL_AIR, MTRL_LIGHT, MTRL_DARK, MTRL_RUBBER};
-
+enum e_barrier {BARRIER_NONE, BARRIER_RED, BARRIER_GREEN, BARRIER_YELLOW};
 #define	SPEED_PLAYER	.1
 #define	SPEED_MAGIC		(SPEED_PLAYER*2)
 #define	SPEED_RANGE		(SPEED_PLAYER*3)
@@ -231,6 +231,9 @@ public:
 	virtual void updateUnique(int a_timePassed, World * a_world){}
 	virtual void drawUnique(SDL_Surface *a_screen){}
 	virtual void movePlayer(int a_timePassed){}
+	virtual int getKeyLevel(){return 0;}
+	virtual void setKeyLevel(int a_level){}
+	virtual int getDIndex(){return 0;}
 	//Due to the CPU intensive nature of the pixel Collision, this should rarely be used.
 	/*bool epicCollide(SDL_Sprite * a_sprite, int a_x, int a_y)
 	{

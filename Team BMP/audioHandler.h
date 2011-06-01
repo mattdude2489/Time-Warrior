@@ -6,8 +6,8 @@
 #include <time.h>
 
 #define NUM_SONGS				9
-#define NUM_EFFECTS				6
-enum	e_effects	{E_SLASH, E_BLUNT, E_FIRE, E_DIVINE, E_LIGHTNING, E_ICE};
+#define NUM_EFFECTS				8
+enum	e_effects	{E_SLASH, E_BLUNT, E_FIRE, E_DIVINE, E_LIGHTNING, E_ICE, E_PIERCE, E_BOW};
 
 class AudioHandler
 {

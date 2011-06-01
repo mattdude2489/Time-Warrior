@@ -12,7 +12,7 @@ class Obstacle : public Entity
 {
 private:
 	bool m_oType[NUM_OBSTACLE_TYPES];
-	int doorFace, buildingType;
+	int doorFace, buildingType, dngIndex;
 	SRect door;
 public:
 	Obstacle(SDL_Sprite *a_sprite):Entity(a_sprite)
@@ -21,9 +21,11 @@ public:
 		m_eType = OBSTACLE;
 		for(int i = 0; i < NUM_OBSTACLE_TYPES; ++i)
 			m_oType[i] = false;
-		m_index = 0;
+		m_index = dngIndex = 0;
 	}
 	bool isObstacle(e_obstacleType a_type){return m_oType[a_type];}
+	void setDIndex(int a_index){dngIndex = a_index;}
+	int getDIndex(){return dngIndex;}
 	int getIndex(){return m_index;}
 	void setIndex(int in){m_index = in;}
 	void setObstacleType(e_obstacleType a_type)

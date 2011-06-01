@@ -83,7 +83,13 @@ void Entity::update(int a_timePassed, World * a_world)
 						}
 						else if(a_world->getCurrentWorld() == WORLD_FOREST)
 						{
-							a_world->setWorld("Maps/MedEngMap.txt");
+							if(a_world->getBossCount() == 0){
+								setKeyLevel(BARRIER_GREEN);
+								a_world->setWorld("Maps/MedEngMap.txt");
+								
+							}
+							else
+								move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 						}
 						a_world->setCamera(this->m_camera);
 					}
@@ -99,7 +105,15 @@ void Entity::update(int a_timePassed, World * a_world)
 							a_world->setWorld("Maps/Desert.txt");
 						}
 						else if(a_world->getCurrentWorld() == WORLD_DESERT)
-							a_world->setWorld("Maps/MedEngMap.txt");
+						{
+							if(a_world->getBossCount()==0){
+								setKeyLevel(BARRIER_YELLOW);
+								a_world->setWorld("Maps/MedEngMap.txt");
+							}
+							else
+								move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+
+						}
 						a_world->setCamera(this->m_camera);
 
 					}
@@ -141,6 +155,11 @@ void Entity::update(int a_timePassed, World * a_world)
 									if(a_world->getBossCount() == 0){
 										if(a_world->getCurrentWorld() == WORLD_CASTLE)
 											a_world->setWorld("Maps/HubWorldMap.txt");
+										else if(a_world ->getCurrentWorld() == WORLD_D1)
+										{
+											setKeyLevel(BARRIER_RED);
+											a_world->setWorld("Maps/MedEngMap.txt");
+										}
 										else
 											a_world->setWorld("Maps/MedEngMap.txt");
 										a_world->setCamera(this->m_camera);
@@ -155,7 +174,7 @@ void Entity::update(int a_timePassed, World * a_world)
 										int dungeon = rand()%3;//picks a random dungeon 
 
 										this->setLastW();
-										a_world->setDClosed(tmp->getIndex());
+										a_world->setDClosed(tmp->getDIndex());
 										switch(dungeon){
 											case 0:
 												a_world->setWorld("Maps/Dungeon1.txt");

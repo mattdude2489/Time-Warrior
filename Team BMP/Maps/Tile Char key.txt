@@ -14,9 +14,9 @@ g	:	:
 G	:	:	GROUND TILES - MEDEVIEL, HUB, DUNGEON, BULDING
 h	:	:	
 H	:Colide	:	HUB WALL R, 
-i	:	:	
-I	:	:	
-j	:	:	
+i	:	:	BARRIER RED
+I	:	:	BARRIER GREEN
+j	:	:	BARRIER YELLOW
 J	:	:	
 k	:	:	
 K	:	:	

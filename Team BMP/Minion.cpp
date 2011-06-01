@@ -8,7 +8,7 @@ void Minion::checkState(int a_timePassed, World * a_world)
 	switch(m_state)
 	{
 	case WANDER:	wander(a_timePassed);										break;
-	case CHASE:		if(t_player){updateTargPlayer(t_player, a_timePassed);}		break;
+	case CHASE:		updateTargPlayer(t_player, a_timePassed);					break;
 	case GUARD:		break;
 	}
 	moveToTarget((int)(SPEED_MINION*a_timePassed));

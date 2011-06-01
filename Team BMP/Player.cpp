@@ -30,6 +30,7 @@ void Player::initPlayer(World * newWorld)
 	m_isStatWindowActive = false;
 	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 2);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
+	barrierKey = 0;
 }
 //draws & formats the display of specified Chip collection
 //param:
@@ -722,6 +723,8 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 			case ICE:		ah->playEffect(E_ICE);			break;
 			case BLUNT:		ah->playEffect(E_BLUNT);		break;
 			case SLASH:		ah->playEffect(E_SLASH);		break;
+			case PIERCE:	ah->playEffect(E_PIERCE);		break;
+			case RANGE:		ah->playEffect(E_BOW);			break;
 			}
 		}
 	}

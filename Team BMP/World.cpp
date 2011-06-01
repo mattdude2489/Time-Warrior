@@ -50,9 +50,12 @@ void World::initWorld()
 	m_worldSprites[ANIMATION]->start();
 
 	m_success = setWorld("Maps/HubWorldMap.txt");
-	m_closed = NULL;
 	bossCount = 0;
 	castleCount = 0;
+	for(int i = 0;  i < 8; i++)
+	{	
+		m_closed[i] = false;
+	}
 }
 
 World::~World()
@@ -64,7 +67,7 @@ void World::destroyWorld()
 {
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		delete m_worldSprites[i];
-	delete m_closed;
+	//delete m_closed;
 	m_success = false; //Close off the world.
 }
 
@@ -396,6 +399,37 @@ bool World::setWorld(char * fileName)
 			case 'c':
 				hi.indexOfSpriteRow = TILE_TOWN_DOOR;
 				break;
+				//the barrier tiles
+			case 'i':
+				if(m_player->getKeyLevel() > BARRIER_NONE)
+					hi.indexOfSpriteRow = TILE_GRASS;
+				else
+				{
+					hi.currentTexture = m_worldSprites[ANIMATION];
+					hi.indexOfSpriteRow = TILE_BARRIER_RED;
+					hi.collide = true;
+				}
+				break;
+			case 'I':
+				if(m_player->getKeyLevel() > BARRIER_NONE)
+					hi.indexOfSpriteRow = TILE_GRASS;
+				else
+				{
+					hi.currentTexture = m_worldSprites[ANIMATION];
+					hi.indexOfSpriteRow = TILE_BARRIER_GREEN;
+					hi.collide = true;
+				}
+				break;
+			case 'j':
+				if(m_player->getKeyLevel() > BARRIER_NONE)
+					hi.indexOfSpriteRow = TILE_GRASS;
+				else
+				{
+					hi.currentTexture = m_worldSprites[ANIMATION];
+					hi.indexOfSpriteRow = TILE_BARRIER_YELLOW;
+					hi.collide = true;
+				}
+				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;
 				hi.collide = true;
@@ -410,13 +444,7 @@ bool World::setWorld(char * fileName)
 	}
 	maxWorldX = tileX * FRAME_SIZE;
 	maxWorldY = tileY * FRAME_SIZE;
-	//this should only happen once if the world has never been created
-	if(!m_closed)
-	{
-		m_closed = new bool[dcount];
-		for(int i = 0; i < dcount; i++)//set them all to not be closed at first
-			m_closed[i] = false;
-	}
+	
 	//resize the grids
 	int x = 0, y = 0, w = 0, h = 0;
 	w = getGridWidth();
@@ -722,32 +750,35 @@ void World::setMonsters()
 				m_player->setLocation(m_mapOfWorld.get(i).pos);
 			}
 		}
-		if(m_mapOfWorld.get(i).portal || m_mapOfWorld.get(i).dungeon)
+		if(m_mapOfWorld.get(i).dungeon)
 		{
 			bool check = false;
-			if(m_closed && dcount)
-				check = m_closed[dcount];
+			check = m_closed[dcount];
 			if(check)
 				sprite = m_worldSprites[SINGLE];
 			else
 				sprite = m_worldSprites[ANIMATION];
 			Obstacle * obs = new Obstacle(sprite);
 			obs->setNewed(true);
-			obs->setIndex(dcount);
+			obs->setDIndex(dcount);
 			dcount++;
-			if(m_mapOfWorld.get(i).portal)
-			{
-				obs->setIndex(TILE_PORTAL);
-				obs->setObstacleType(PORTAL);
-			}
+
+			if(check)
+				obs->setIndex(TILE_DUNGEON_CLOSED);
 			else
-			{
-				if(check)
-					obs->setIndex(TILE_DUNGEON_CLOSED);
-				else
-					obs->setIndex(TILE_DUNGEON);
-				obs->setObstacleType(DUNGEON);
-			}
+				obs->setIndex(TILE_DUNGEON);
+			obs->setObstacleType(DUNGEON);
+		
+			obs->setLocation(m_mapOfWorld.get(i).pos);
+			this->add(obs);
+		}
+		if(m_mapOfWorld.get(i).portal )
+		{
+			sprite = m_worldSprites[ANIMATION];
+			Obstacle * obs = new Obstacle(sprite);
+			obs->setNewed(true);
+			obs->setIndex(TILE_PORTAL);
+			obs->setObstacleType(PORTAL);
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			this->add(obs);
 		}

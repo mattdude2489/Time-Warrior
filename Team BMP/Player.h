@@ -20,13 +20,14 @@ class Player : public Entity
 private:
 	Chip *m_gauntlet[NUM_SLOTS], *m_attackInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE][NUM_CHIP_LEVELS], *m_armorInventory[WEAPON*NUM_CHIP_SUBS_PER_TYPE];
 	SPoint m_cameraP;
-	int m_expLvReq, saveFile;
+	int m_expLvReq, saveFile, barrierKey;//barrier key will be a number just to make life easy
 	double m_experience;
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
 	bool loadedPlayer, m_isStatWindowActive, gamePlayed;
 	World * thisWorld;
 	SDL_Sprite * m_blankInventory;
 	char playerName[21];
+
 public:
 	void initPlayer(World * newWorld);
 	void setWindowStatus(bool a_isActive){m_isStatWindowActive = a_isActive;}
@@ -93,4 +94,6 @@ public:
 	int getExpReq(){return m_expLvReq;}
 	double getCurExp(){return m_experience;}
 	void destroyPlayer();
+	int getKeyLevel(){return barrierKey;}
+	void setKeyLevel(int a_level){barrierKey = a_level;}
 };
