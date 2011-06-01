@@ -48,7 +48,7 @@ void World::initWorld()
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
 	m_worldSprites[ANIMATION]->start();
-
+	fopen_s(&npc_loadNPCFile, "NPC Placements.txt", "r");
 	m_success = setWorld("Maps/HubWorldMap.txt");
 	bossCount = 0;
 	castleCount = 0;
@@ -69,6 +69,8 @@ void World::destroyWorld()
 		delete m_worldSprites[i];
 	//delete m_closed;
 	m_success = false; //Close off the world.
+	if(npc_loadNPCFile)
+		fclose(npc_loadNPCFile);
 }
 
 int Tile::portalIndexNumber = 0; //I have to use global scope on this in order to use a static. That's just SAD.
@@ -460,9 +462,9 @@ bool World::setWorld(char * fileName)
 		}
 	}
 	setMonsters();
-#ifdef NPC_ADD
-	setNPC();
-#endif
+	//SetNPC was here.
+	if(npc_loadNPCFile)
+		fclose(npc_loadNPCFile);
 	printf("World made\n");
 	return m_success;
 }
@@ -488,11 +490,10 @@ void World::sortOnYPosition()
 			clientPlayerIndex = z; //Which grid the Player's in. once we know that, we can just use getPlayer.
 	}
 }
-
 /**
-	The function that calls of the NPC's based on the current world, gets rid of the previous ones, and sets new ones.
+	The function that destroys all of the set NPC's. Call at the beginning of SetWorld.
 **/
-void World::setNPC()
+void World::destroyNPC()
 {
 	//If there are already NPC's in the World, remove them and clean up the memory.
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
@@ -507,61 +508,63 @@ void World::setNPC()
 			}
 		}
 	}
+}
+/**
+	The function that calls of the NPC's based on the current world, gets rid of the previous ones, and sets new ones.
+**/
+void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
+{
+	
 	//Now to open the file *, and abuse the atoi system.
-	FILE * infile;
-	fopen_s(&infile, "Maps/NPC Placements.txt", "r");
 	int c = 0, x = 0, y = 0;
 	//c = fgetc(infile);
 //	if(currentWorld != 0)
-		fscanf_s(infile, "%i", &c);
-	/*else
-	{
-		c = fgetc(infile);
-		c -= 48;
-	}*/
-	//c -= 48; //48 is the range between 0 ASCII and NULL.
-	//This system may work for the first few things...but then it'll blow up.
+	//Current World
+	if(npc_loadNPCFile == NULL)
+		fopen_s(&npc_loadNPCFile, "NPC Placements.txt", "r"); //To RESET the stream pointer.
+	fscanf_s(npc_loadNPCFile, "%i", &c);
+
 	while(c != currentWorld)
 	{
 		while(c != '#')
 		{
-			c = fgetc(infile);
+			c = fgetc(npc_loadNPCFile);
 			if(c == EOF) //Because this area is dangerous of becoming an infinite loop, give some escape code.
 			{
-				fclose(infile);
+				//fclose(npc_loadNPCFile);
 				return;
 			}
 		}
-		fscanf_s(infile,"%i",&x); //The two integers.
-		fscanf_s(infile,"%i",&y); //The two integers, x and y value.
-		c = fgetc(infile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
+		//fscanf_s(npc_loadNPCFile,"%i",&x); //The two integers.
+	//	fscanf_s(npc_loadNPCFile,"%i",&y); //The two integers, x and y value.
+		c = fgetc(npc_loadNPCFile); //Check to make sure that it's on the right world again. DANGEROUS OF INFINITE LOOP.
 		//c = fgetc(infile);
-		fscanf_s(infile, "%i", &c);
+		fscanf_s(npc_loadNPCFile, "%i", &c);
 	//	c -= 48;
 		if(c == EOF)
 		{
-			fclose(infile);
+			fclose(npc_loadNPCFile);
 			return;
 		}
 	}
 	char * charpoint = " ";
 	//char * buff; //I ONLY NEED ONE CHARACTER...but I needed a *...and it wouldn't let me just use char *.
 	//c = fgetc(infile);
-	c = fgetc(infile); //This SHOULD make it get an integer.
-	fscanf_s(infile, "%i", &c);
-	int forLoopNum = c;
+	c = fgetc(npc_loadNPCFile); //This SHOULD make it get an integer.
+	//fscanf_s(npc_loadNPCFile, "%i", &c);
+	int forLoopNum = NPCToGet;
 	for(int i = 0; i < forLoopNum; i++)
 	{
 		string s;
-		c = fgetc(infile);
+		c = fgetc(npc_loadNPCFile);
 		while(c != '#')
 		{
 			if(c == '\n') //IGNORING.
-				c = fgetc(infile);
+				c = fgetc(npc_loadNPCFile);
 
 			if(c == 92)
 			{
-				c = fgetc(infile);
+				c = fgetc(npc_loadNPCFile);
 				if(c == 'n')
 				{
 					c = 10; //The \n character.
@@ -571,20 +574,20 @@ void World::setNPC()
 			//itoa(c, charpoint, 10); //Convert it to a char*.
 			char buff = (char)c;
 			s.append(1, buff);
-			c = fgetc(infile);
+			c = fgetc(npc_loadNPCFile);
 		}
-		fscanf_s(infile, "%i", &x);
-		fscanf_s(infile, "%i", &y);
+		//fscanf_s(npc_loadNPCFile, "%i", &x);
+		//fscanf_s(npc_loadNPCFile, "%i", &y);
 		//charpoint = &s;
 		//strcpy_s(charpoint, strlen(s.c_str()) ,s.c_str());
 		const char * buf = s.c_str();
 		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[NPC1]);
 		newNPC->setNewed(true);
-		newNPC->setLocation(x*FRAME_SIZE, y*FRAME_SIZE);
+		newNPC->setLocation(npcX*FRAME_SIZE, npcY*FRAME_SIZE);
 		add(newNPC);
-		c = fgetc(infile);
+		c = fgetc(npc_loadNPCFile);
 	}
-	fclose(infile);
+	//fclose(infile);
 }
 
 /**

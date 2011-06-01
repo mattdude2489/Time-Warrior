@@ -1,14 +1,15 @@
-0 1
-Hi. Welcome to the Colosseum of Time. We hope you have a \n wonderful time.#6 5
-1 1
-WE ARE DOOMED.#32 32
-2 0
-#0 0
-3 0
-#0 0
-4 0
-#0 0
-5 0
-#0 0
-6 0
-#0 0
+0
+Hi. Welcome to the Colosseum of Time. We hope you have a \n wonderful time.#
+This is another NPC.#
+1
+WE ARE DOOMED.#
+2
+#
+3
+#
+4
+#
+5
+#
+6
+#

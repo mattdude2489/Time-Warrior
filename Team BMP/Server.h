@@ -35,6 +35,7 @@ private:
 	int clntLen;
 	World * sWorld; //The server's pointer to the world. This will be used to alter stuff to the buffer.
 	TemplateVector2<completeSocket> listOfClients; //The list of clients currently connected.
+	Entity * listOfAdditionalEntities[3]; //The "entities" (AKA players) that are from the other clients.
 	char buffer[BUFF_SIZE]; //The buffer that you will send to the clients.
 	WSADATA wsaData;
 	timeval t; //The time for the timeout function of "Select".
@@ -50,8 +51,18 @@ public:
 	}
 	~Server() {shutDown();} //Destructor that calls the shutDown.
 	bool addSocket(char * ipAddress) {return false;} //Adds a socket to the templateVector. Returns success.
-	void sendBufferToClients(int clientToSendTo) {} //Sends the current buffer to all the clients that are connected.
-	void receiveBufferFromClients(int receiveFromClient) {} //Receives the buffer from the client specified.
+	void sendMessage(char * chatMessage)
+	{
+
+	}
+	void sendBufferToClients(int clientToSendTo) //Sends the current buffer to all the clients that are connected.
+	{
+
+	} 
+	void receiveBufferFromClients(int receiveFromClient) //Receives the buffer from the client specified.
+	{
+
+	}
 	void shutDown() //Shuts down Winsock.
 	{
 		shutdown(listen_socket, SD_BOTH);
@@ -106,10 +117,18 @@ public:
 		t.tv_sec = 0; t.tv_usec = 100; //Nearly 3 seconds for timeout.
 		return true;
 	}	
-	void updateBuffer() {} //Updates the buffer through its connection to World.
+	void updateBuffer() //Updates the send_buf through its connection to World.
+	{
+
+	}
 	void changeWorld(World * w) {sWorld = w;} //Changes the sWorld to the w World. Use only once.
+	void updateWorld() //Update the world through the recv_buf.
+	{
+		
+	}
 	void run() //Listens to accept new connections, sets the FD_SETS required for SendBufferToClients.
 	{
+		updateBuffer(); //Update the send_buffer.
 		fd_set readfds, writefds;
 		FD_ZERO(&readfds);
 		FD_ZERO(&writefds);

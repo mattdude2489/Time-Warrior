@@ -39,6 +39,7 @@ private:
 	int clientPlayerIndex, currentWorld, maxWorldX, maxWorldY, tileX, tileY, bossCount, castleCount;
 	Entity * m_player;
 	SRect m_cCamera; //The client's camera.
+	FILE * npc_loadNPCFile;
 public:
 	World();
 	~World();
@@ -46,7 +47,8 @@ public:
 	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void setMonsters();
-	void setNPC();
+	void setNPC(int, int, int, int);
+	void destroyNPC();
 	void update(Uint32 a_timePassed);
 	void draw(SDL_Surface * a_screen);
 	void destroyWorld();

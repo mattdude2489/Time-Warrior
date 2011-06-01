@@ -24,6 +24,7 @@ private:
 	World * cWorld; //The client's World, which the info in sSocket changes.
 	WSADATA wsaData;
 	timeval t;
+	Entity * listOfOtherEntities[3]; //The list of other entities/players from the clients.
 public:
 	Client() {}
 	Client(World * world)
@@ -115,6 +116,27 @@ public:
 			sendBufferToServer();
 		}
 	}
-	void updateWorld() {}
-	void updateBuffer() {}
+	void updateWorld() 
+	{
+		//For now, I'll just try to get a chat set up.
+
+	}
+	void sendMessage(char * chatMessage)
+	{
+
+	}
+	void updateBuffer() 
+	{
+		int error = recv(sSocket.cSocket, sSocket.recv_buf, sizeof(sSocket.recv_buf), 0);
+		//receive the data and update the world with it. For now, just try...to...oh shit!
+		if(error == SOCKET_ERROR)
+		{
+			//Um...yeah. Something went wrong.
+			printf("What went wrong: %d\n", WSAGetLastError());
+		}
+		else
+		{
+			updateWorld();
+		}
+	}
 };
