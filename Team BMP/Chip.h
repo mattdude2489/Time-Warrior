@@ -265,6 +265,7 @@ class Chip : public Entity
 				default:		m_tracker.levelUp(MELEE);		break;
 				}
 				resetLevelWithBaseLeveler();
+				m_owner->unlockEarnedAttacks();
 			}
 		}
 		//virtual func to specially activate inherited classes

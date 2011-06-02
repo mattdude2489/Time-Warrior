@@ -109,8 +109,8 @@ public:
 		case KEY_DOWN:	setVelocity(m_vel.x, SPEED_PLAYER);		break;
 		}
 	}
-	void levelUpUnique(){
-		m_expLvReq += m_stats[LEVEL];
+	void unlockEarnedAttacks()
+	{
 		for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 		{
 			if(m_stats[LEVEL] >= 2 && m_attackInventory[i][BASIC]->getStatNumber(LEVEL) >= 2)
@@ -119,6 +119,7 @@ public:
 				m_attackInventory[i][EXPERT]->unlock();
 		}
 	}
+	void levelUpUnique(){m_expLvReq += m_stats[LEVEL];}
 	void gainExperience(double a_amount)
 	{
 		m_experience += a_amount;

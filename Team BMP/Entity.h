@@ -439,4 +439,5 @@ public:
 	void receiveEPot(){m_energyPots++;}
 	int getHPots(){return m_healthPots;}
 	int getEPots(){return m_energyPots;}
+	virtual void unlockEarnedAttacks(){}
 };
