@@ -25,8 +25,6 @@ void Player::initPlayer(World * newWorld)
 	setVelocity(0,0);
 	thisWorld = newWorld;
 	gamePlayed = false;
-	/*if(!loadPlayer(0))
-		newGame();*/
 	m_isStatWindowActive = false;
 	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 2);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
@@ -211,19 +209,8 @@ void Player::destroyPlayer()
 
 void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
 {
-	if(a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2)
-	{
-		if(a_slot == SLOT_ATK1)
-		{
-			if(m_gauntlet[SLOT_ATK2] != m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level])
-				setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level]);
-		}
-		else
-		{
-			if(m_gauntlet[SLOT_ATK1] != m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level])
-				setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level]);
-		}
-	}
+	if((a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2) && m_gauntlet[a_slot])
+		setGauntletSlot(a_slot, m_attackInventory[m_gauntlet[a_slot]->getSubType()-NUM_CHIP_SUBS_PER_TYPE][a_level]);
 }
 //Saves the current Player to a .txt file.
 //Saves the current experience, experience required for next level, stat points, max Hp, max Energy, str and int.
@@ -547,6 +534,7 @@ bool Player::loadPlayer(int saveToLoad)
 }
 void Player::newGame()
 {
+	//create all possible attacks
 	Blunt * b1 = new Blunt(BASIC);
 	Blunt * b2 = new Blunt(ADVANCED);
 	Blunt * b3 = new Blunt(EXPERT);
@@ -571,7 +559,7 @@ void Player::newGame()
 	Ice * i1 = new Ice(BASIC);
 	Ice * i2 = new Ice(ADVANCED);
 	Ice * i3 = new Ice(EXPERT);
-	Armor * gear = new Armor(HEAD, BASIC);
+	//set flag as to whether "new" was used for the creation
 	b1->setNewed(true);
 	b2->setNewed(true);
 	b3->setNewed(true);
@@ -596,7 +584,7 @@ void Player::newGame()
 	i1->setNewed(true);
 	i2->setNewed(true);
 	i3->setNewed(true);
-	gear->setNewed(true);
+	//put all attacks in attack inventory
 	this->addToAttackInventory(b1);
 	this->addToAttackInventory(b2);
 	this->addToAttackInventory(b3);
@@ -621,7 +609,7 @@ void Player::newGame()
 	this->addToAttackInventory(i1);
 	this->addToAttackInventory(i2);
 	this->addToAttackInventory(i3);
-	this->addToArmorInventory(gear);
+	//add all attacks to the world so they can be displayed
 	thisWorld->add(b1);
 	thisWorld->add(b2);
 	thisWorld->add(b3);
@@ -646,39 +634,18 @@ void Player::newGame()
 	thisWorld->add(i1);
 	thisWorld->add(i2);
 	thisWorld->add(i3);
+	//unlock starting attacks
 	b1->unlock();
-	b2->unlock();
-	b3->unlock();
 	r1->unlock();
-	r2->unlock();
-	r3->unlock();
 	s1->unlock();
-	s2->unlock();
-	s3->unlock();
 	p1->unlock();
-	p2->unlock();
-	p3->unlock();
 	d1->unlock();
-	d2->unlock();
-	d3->unlock();
 	l1->unlock();
-	l2->unlock();
-	l3->unlock();
 	f1->unlock();
-	f2->unlock();
-	f3->unlock();
 	i1->unlock();
-	i2->unlock();
-	i3->unlock();
+	//initialize gauntlet slots
 	this->setGauntletSlot(SLOT_ATK1, s1);
 	this->setGauntletSlot(SLOT_ATK2, f1);
-	switch(gear->getSubType())
-	{
-	case HEAD:			setGauntletSlot(SLOT_ARMOR_HEAD, gear);			break;
-	case TRUNK:			setGauntletSlot(SLOT_ARMOR_TRUNK, gear);		break;
-	case LIMB_UPPER:	setGauntletSlot(SLOT_ARMOR_LIMB_UPPER, gear);	break;
-	case LIMB_LOWER:	setGauntletSlot(SLOT_ARMOR_LIMB_LOWER, gear);	break;
-	}
 	loadedPlayer = false;
 }
 void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
@@ -690,9 +657,9 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 		{
 		case SLOT_ATK1:
 		case SLOT_ATK2:
-			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() != ARMOR)
+			//magic and weapons can be used to attack
+			if(a_chip->getStatNumber(LEVEL) > 0 && (a_chip->getType() == MAGIC || a_chip->getType() == WEAPON))
 			{
-				isValid = true;
 				switch(a_slot)
 				{
 				case SLOT_ATK1:	isValid = a_chip != m_gauntlet[SLOT_ATK2];	break;
@@ -701,20 +668,20 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 			}
 			break;
 		case SLOT_ARMOR_HEAD:
-			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == HEAD)
-				isValid = true;
-			break;
 		case SLOT_ARMOR_TRUNK:
-			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == TRUNK)
-				isValid = true;
-			break;
 		case SLOT_ARMOR_LIMB_UPPER:
-			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_UPPER)
-				isValid = true;
-			break;
 		case SLOT_ARMOR_LIMB_LOWER:
-			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == LIMB_LOWER)
-				isValid = true;
+			//each armor has a unique slot for what part of the body it protects
+			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR)
+			{
+				switch(a_slot)
+				{
+				case SLOT_ARMOR_HEAD:		isValid = a_chip->getSubType() == HEAD;			break;
+				case SLOT_ARMOR_TRUNK:		isValid = a_chip->getSubType() == TRUNK;		break;
+				case SLOT_ARMOR_LIMB_UPPER:	isValid = a_chip->getSubType() == LIMB_UPPER;	break;
+				case SLOT_ARMOR_LIMB_LOWER:	isValid = a_chip->getSubType() == LIMB_LOWER;	break;
+				}	
+			}
 			break;
 		}
 	}
@@ -737,6 +704,8 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 			m_gauntlet[a_slot]->setTarget(a_targetX, a_targetY);
 			m_gauntlet[a_slot]->setDirection(a_direction);
 			m_gauntlet[a_slot]->activate();
+			//should be put in Chip so that sounds only play once per activation,
+			//rather than once per click, because sounds play even if activation has already occurred
 			switch(m_gauntlet[a_slot]->getSubType())
 			{
 			case DIVINE:	ah->playEffect(E_DIVINE);		break;
@@ -744,9 +713,9 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 			case FIRE:		ah->playEffect(E_FIRE);			break;
 			case ICE:		ah->playEffect(E_ICE);			break;
 			case BLUNT:		ah->playEffect(E_BLUNT);		break;
+			case RANGE:		ah->playEffect(E_BOW);			break;
 			case SLASH:		ah->playEffect(E_SLASH);		break;
 			case PIERCE:	ah->playEffect(E_PIERCE);		break;
-			case RANGE:		ah->playEffect(E_BOW);			break;
 			}
 		}
 	}

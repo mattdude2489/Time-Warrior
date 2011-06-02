@@ -109,7 +109,16 @@ public:
 		case KEY_DOWN:	setVelocity(m_vel.x, SPEED_PLAYER);		break;
 		}
 	}
-	void levelUpUnique(){m_expLvReq += m_stats[LEVEL];}
+	void levelUpUnique(){
+		m_expLvReq += m_stats[LEVEL];
+		for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
+		{
+			if(m_stats[LEVEL] >= 2 && m_attackInventory[i][BASIC]->getStatNumber(LEVEL) >= 2)
+				m_attackInventory[i][ADVANCED]->unlock();
+			if(m_stats[LEVEL] >= 3 && (m_attackInventory[i][BASIC]->getStatNumber(LEVEL) >= 3 || m_attackInventory[i][ADVANCED]->getStatNumber(LEVEL) >= 2))
+				m_attackInventory[i][EXPERT]->unlock();
+		}
+	}
 	void gainExperience(double a_amount)
 	{
 		m_experience += a_amount;

@@ -62,7 +62,7 @@ class Chip : public Entity
 			{
 				//calc random percentage
 				int num = rand() % 100 + 1;
-				//if the percentage or remainder easily divides 100 (2, 4, 5, 10, 20, 25, 50), check each ms 
+				/*//if the percentage or remainder easily divides 100 (2, 4, 5, 10, 20, 25, 50), check each ms 
 				if(!(100 % a_percentage) || !(100 % (100 - a_percentage)))
 				{
 					if(a_percentage < 50)
@@ -71,7 +71,7 @@ class Chip : public Entity
 						m_isCritical = !(!(num % (100 / (100 - a_percentage))));
 				}
 				//else just check if the num is within range
-				else
+				else*/
 					m_isCritical = num <= a_percentage;
 			}
 			else if(a_percentage <= 0)
