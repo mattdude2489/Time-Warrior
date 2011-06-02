@@ -722,16 +722,10 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 	{
 		//take out current Chip
 		if(m_gauntlet[a_slot])
-		{
 			m_gauntlet[a_slot]->unequip();
-			m_gauntlet[a_slot]->deactivate();
-		}
 		//put in selected Chip
 		m_gauntlet[a_slot] = a_chip;
 		m_gauntlet[a_slot]->equip();
-		//buff stats gained from armor
-		if(a_chip->getType() == ARMOR)
-			m_gauntlet[a_slot]->activate();
 	}
 }
 void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction, AudioHandler * ah)

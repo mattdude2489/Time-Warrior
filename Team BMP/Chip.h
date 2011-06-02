@@ -178,8 +178,13 @@ class Chip : public Entity
 		//returns whether or not it's equipped to anyone
 		bool isEquipped(){return m_isEquipped;}
 		//toggle whether or not it's equipped
-		void equip(){m_isEquipped = true;}
-		void unequip(){m_isEquipped = false;}
+		void equip(){
+			m_isEquipped = true;
+			//buff stats gained from armor
+			if(m_cType == ARMOR)
+				activate();
+		}
+		void unequip(){m_isEquipped = false;deactivate();}
 		//set it's owner
 		void setOwner(Entity * a_owner)
 		{
@@ -486,6 +491,7 @@ class Chip : public Entity
 			case ARMOR:
 				m_sprite->setRIndex(m_cSubType);
 				m_spriteHUD->setRIndex(m_cSubType);
+				m_spriteRectHUD.setDimension(SPoint(FRAME_SIZE,FRAME_SIZE));
 				break;
 			case MAGIC:
 			case WEAPON:

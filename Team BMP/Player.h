@@ -63,6 +63,29 @@ public:
 		case LIMB_LOWER:	setGauntletSlot(SLOT_ARMOR_LIMB_LOWER, a_chip);	break;
 		}
 	}
+	void removeGauntletArmor(e_chipSubType a_type)
+	{
+		e_gauntletSlots a_slot = SLOT_ARMOR_HEAD;
+		switch(a_type)
+		{
+		case HEAD:
+		case TRUNK:
+		case LIMB_UPPER:
+		case LIMB_LOWER:
+			switch(a_type)
+			{
+			case HEAD:			a_slot = SLOT_ARMOR_HEAD;		break;
+			case TRUNK:			a_slot = SLOT_ARMOR_TRUNK;		break;
+			case LIMB_UPPER:	a_slot = SLOT_ARMOR_LIMB_UPPER;	break;
+			case LIMB_LOWER:	a_slot = SLOT_ARMOR_LIMB_LOWER;	break;
+			}
+			if(m_gauntlet[a_slot])
+			{
+				m_gauntlet[a_slot]->unequip();
+				m_gauntlet[a_slot] = NULL;
+			}
+		}
+	}
 	void setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip);
 	void setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level);
 	void activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a_targetY, char a_direction, AudioHandler * ah);

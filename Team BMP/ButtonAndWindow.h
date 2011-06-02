@@ -132,21 +132,26 @@ public:
 		}
 		SPoint t_tempPoint(ui->getMouseX(),ui->getMouseY()); 
 		Chip * clicked = NULL;
-		bool lf = ui->getClick() == CLICK_LEFT, rt = ui->getClick() == CLICK_RIGHT;
-		if(lf || rt)
+		bool cl = ui->getClick() == CLICK_LEFT, cr = ui->getClick() == CLICK_RIGHT;
+		if(cl || cr)
 		{
-			clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
+			clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
 			if(!clicked)
-				clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
+				clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
 			if(clicked)
 			{
 				if(clicked->getType() == ARMOR)
-					m_player->setGauntletArmor(clicked);
+				{
+					if(clicked->isEquipped())
+						m_player->removeGauntletArmor(clicked->getSubType());
+					else
+						m_player->setGauntletArmor(clicked);
+				}
 				else
 				{
-					if(lf)
+					if(cl)
 						m_player->setGauntletSlot(SLOT_ATK1, clicked);
-					else if(rt)
+					else if(cr)
 						m_player->setGauntletSlot(SLOT_ATK2, clicked);
 				}
 			}
