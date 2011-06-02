@@ -71,6 +71,7 @@ private:
 	Player * m_player;
 	SDL_Surface * m_window;
 	Button m_addStat[STATINC];
+	int m_yStartInvAttack, m_yStartInvArmor;
 public:
 	StatWindow()
 	{
@@ -80,6 +81,7 @@ public:
 			m_addStat[i].setPos(WINDOWXY.x + (m_window->w/2), WINDOWXY.y + ((i+STATOFF)*TEXTYOFF));
 			m_addStat[i].setImage("Sprites/button1.bmp");
 		}
+		m_yStartInvAttack = m_yStartInvArmor = 0;
 	}
 	void InitText(TTF_Font * a_font)
 	{
@@ -128,6 +130,27 @@ public:
 				}
 			}
 		}
+		SPoint t_tempPoint(ui->getMouseX(),ui->getMouseY()); 
+		Chip * clicked = NULL;
+		bool lf = ui->getClick() == CLICK_LEFT, rt = ui->getClick() == CLICK_RIGHT;
+		if(lf || rt)
+		{
+			clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
+			if(!clicked)
+				clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
+			if(clicked)
+			{
+				if(clicked->getType() == ARMOR)
+					m_player->setGauntletArmor(clicked);
+				else
+				{
+					if(lf)
+						m_player->setGauntletSlot(SLOT_ATK1, clicked);
+					else if(rt)
+						m_player->setGauntletSlot(SLOT_ATK2, clicked);
+				}
+			}
+		}
 	}
 	void draw(SDL_Surface * a_screen)
 	{
@@ -157,6 +180,11 @@ public:
 		{
 			m_inventory[i].printMessage(a_screen, t_x, t_y);
 			t_y += TEXTYOFF;
+			switch((e_inventory)i)
+			{
+			case INVENTORY_ATTACK:	m_yStartInvAttack = t_y;	break;
+			case INVENTORY_ARMOR:	m_yStartInvArmor = t_y;		break;
+			}
 			t_y += m_player->drawInventory(a_screen, WINDOWXY.x, t_y, (e_inventory)i, m_window->w/FRAME_SIZE, 0, 0) * FRAME_SIZE;
 		}
 	}

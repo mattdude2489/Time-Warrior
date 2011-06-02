@@ -107,6 +107,60 @@ int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory 
 	//return # of rows it took to draw the inventory with the given format
 	return rows;
 }
+//checks if point is within Chip rect of specified Chip collection
+//param:
+//	int a_x, a_y		: location of upper-left corner to start drawing
+//	e_inventory a_type	: which collection to draw (INVENTORY_ATTACK, INVENTORY_ARMOR, INVENTORY_GAUNTLET)
+//	int a_maxColumns	: formats # of columns to display (0 for unlimited columns - a.k.a. as many as it takes)
+//	int a_maxNum		: formats # of Chips to draw (0 to draw all)
+//	int a_startIndex	: specifies index of which Chip to start drawing process (which to draw 1st)
+//returns pointer to Chip that contains point, or NULL if point isn't within any chip
+Chip * Player::getHUDClickedChip(SPoint a_click, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex)
+{
+	bool valid = false;
+	int amt = 0, x = a_x, y = a_y;
+	Chip * test = NULL;
+	//get size of specified inventory
+	switch(a_type)
+	{
+		case INVENTORY_ATTACK:	amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE*NUM_CHIP_LEVELS;	break;
+		default:				amt = WEAPON*NUM_CHIP_SUBS_PER_TYPE;					break;
+	}
+	//check if the starting index is valid
+	if(a_startIndex < 0 || a_startIndex >= amt)
+		a_startIndex = 0;
+	//draw contents, starting @ specified index
+	for(int i = a_startIndex; i < amt; ++i)
+	{
+		//get Chip from inventory to test
+		switch(a_type)
+		{
+			case INVENTORY_ATTACK:	test = m_attackInventory[i/NUM_CHIP_LEVELS][i%NUM_CHIP_LEVELS];	break;
+			default:				test = m_armorInventory[i];										break;
+		}
+		//draw Chip if it exists & can be used, or draw blank
+		valid = false;
+		if(test)
+			valid = test->getStatNumber(LEVEL) > 0;
+		if(test && valid)
+		{
+			if(test->isWithinSpriteRect(x,y, a_click))
+				return test;
+		}
+		//update position for next iteration
+		x += FRAME_SIZE;
+		if((x-a_x)/FRAME_SIZE >= a_maxColumns && a_maxColumns > 0)
+		{
+			x = a_x;
+			y += FRAME_SIZE;
+		}
+		//check if # restriction has been met
+		if((i-a_startIndex)+1 >= a_maxNum && a_maxNum > 0)
+			break;
+	}
+	//return NULL if no Chip contains the point
+	return NULL;
+}
 void Player::addToAttackInventory(Chip * a_chip)
 {
 	switch(a_chip->getType())
@@ -134,31 +188,6 @@ void Player::addToArmorInventory(Chip * a_chip)
 		}
 	}
 }
-void Player::setGauntletSlot(e_gauntletSlots a_slot)
-{
-	static int sub1 = m_gauntlet[SLOT_ATK1]->getSubType();
-	static int sub2 = m_gauntlet[SLOT_ATK2]->getSubType();
-	if(a_slot == SLOT_ATK1 || a_slot == SLOT_ATK2)
-	{
-		if(a_slot == SLOT_ATK1)
-		{
-			sub1++;
-			if(sub1 > PIERCE)
-				sub1 = DIVINE;
-			if(m_gauntlet[SLOT_ATK2] != m_attackInventory[sub1-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()])
-				setGauntletSlot(a_slot, m_attackInventory[sub1-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()]);
-		}
-		else
-		{
-			sub2++;
-			if(sub2 > PIERCE)
-				sub2 = DIVINE;
-			if(m_gauntlet[SLOT_ATK1] != m_attackInventory[sub2-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()])
-				setGauntletSlot(a_slot, m_attackInventory[sub2-NUM_CHIP_SUBS_PER_TYPE][m_gauntlet[a_slot]->getSubSubType()]);
-		}
-	}
-}
-
 Player::~Player()
 {
 	destroyPlayer();
@@ -451,15 +480,7 @@ bool Player::loadPlayer(int saveToLoad)
 			//equip
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			if(hpenstrintexpsta)
-			{
-				switch(gear->getSubType())
-				{
-				case HEAD:			setGauntletSlot(SLOT_ARMOR_HEAD, gear);			break;
-				case TRUNK:			setGauntletSlot(SLOT_ARMOR_TRUNK, gear);		break;
-				case LIMB_UPPER:	setGauntletSlot(SLOT_ARMOR_LIMB_UPPER, gear);	break;
-				case LIMB_LOWER:	setGauntletSlot(SLOT_ARMOR_LIMB_LOWER, gear);	break;
-				}
-			}
+				setGauntletArmor(gear);
 		}
 		//If it's reading the Chips...
 		else if(charget == 'C')
@@ -670,7 +691,14 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, Chip * a_chip)
 		case SLOT_ATK1:
 		case SLOT_ATK2:
 			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() != ARMOR)
+			{
 				isValid = true;
+				switch(a_slot)
+				{
+				case SLOT_ATK1:	isValid = a_chip != m_gauntlet[SLOT_ATK2];	break;
+				case SLOT_ATK2:	isValid = a_chip != m_gauntlet[SLOT_ATK1];	break;
+				}
+			}
 			break;
 		case SLOT_ARMOR_HEAD:
 			if(a_chip->getStatNumber(LEVEL) > 0 && a_chip->getType() == ARMOR && a_chip->getSubType() == HEAD)
@@ -774,14 +802,12 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 	case KEY_HOT_ATK1_BAS:	setGauntletSlot(SLOT_ATK1, BASIC);		break;
 	case KEY_HOT_ATK1_ADV:	setGauntletSlot(SLOT_ATK1, ADVANCED);	break;
 	case KEY_HOT_ATK1_EXP:	setGauntletSlot(SLOT_ATK1, EXPERT);		break;
-	case KEY_HOT_ATK1_LEG:	setGauntletSlot(SLOT_ATK1);				break;
 	}
 	switch(ui->getHKeyR())
 	{
 	case KEY_HOT_ATK2_BAS:	setGauntletSlot(SLOT_ATK2, BASIC);		break;
 	case KEY_HOT_ATK2_ADV:	setGauntletSlot(SLOT_ATK2, ADVANCED);	break;
 	case KEY_HOT_ATK2_EXP:	setGauntletSlot(SLOT_ATK2, EXPERT);		break;
-	case KEY_HOT_ATK2_LEG:	setGauntletSlot(SLOT_ATK2);				break;
 	}
 	mouse.set(ui->getMouseX(),  ui->getMouseY());
 	validClick = !hud.contains(mouse) && (!m_isStatWindowActive || !window.contains(mouse));

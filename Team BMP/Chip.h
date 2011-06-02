@@ -26,6 +26,8 @@ class Chip : public Entity
 		int m_cost, m_dmg, m_timeSinceLastAttack, m_lastSpriteFrame, m_rotateDeg;
 		//sprite to display on HUD
 		SDL_Sprite * m_spriteHUD;
+		//input rect for HUD sprite
+		SRect m_spriteRectHUD;
 		//owner of this Chip
 		Entity * m_owner;
 		//Chip Leveler
@@ -499,8 +501,14 @@ class Chip : public Entity
 				}
 				//dispaly last available frame as "symbol" for HUD sprite
 				m_spriteHUD->setCIndex(m_spriteHUD->getMaxFrames()-1);
+				//set up input rect for HUD sprite
+				m_spriteRectHUD.setDimension(SPoint(FRAME_SIZE,FRAME_SIZE));
 				break;
 			}
+		}
+		bool isWithinSpriteRect(int a_rectLocX, int a_rectLocY, SPoint a_point){
+			m_spriteRectHUD.setPosition(SPoint(a_rectLocX,a_rectLocY));
+			return m_spriteRectHUD.contains(a_point);
 		}
 		//draws HUD sprite @ specified location
 		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){m_spriteHUD->draw(a_screen, a_x, a_y);}
