@@ -33,13 +33,20 @@ class Chip : public Entity
 		//flags for sprite's flip(s) & rotation
 		bool m_isFlipH, m_isFlipV;
 		int m_rotateDeg;
-		bool m_isCritical;
+		bool m_isCritical, m_onlyAnimateOnce;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
 			m_cost(0),m_dmg(0),m_timeSinceLastAttack(0),
-			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0),m_isCritical(false)
-		{m_eType = CHIP;}// m_tracker = new BaseLeveler();}
+			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0),m_isCritical(false),m_onlyAnimateOnce(false)
+		{
+			m_eType = CHIP;
+			switch(m_cType)
+			{
+			case MAGIC:		m_onlyAnimateOnce = m_cSubSubType != BASIC;	break;
+			case WEAPON:	m_onlyAnimateOnce = m_cSubType != RANGE;	break;
+			}
+		}// m_tracker = new BaseLeveler();}
 		~Chip()
 		{
 			//free memory from allocated sprites
@@ -342,13 +349,8 @@ class Chip : public Entity
 			//update last-atk timer
 			m_timeSinceLastAttack += a_timePassed;
 			//auto-end if not a continuous atk & 1st iteration has finished
-			bool notContinuous = false;
-			switch(m_cType)
-			{
-			case MAGIC:		notContinuous = m_cSubSubType != BASIC;	break;
-			case WEAPON:	notContinuous = m_cSubType != RANGE;	break;
-			}
-			if(notContinuous)
+			
+			if(m_onlyAnimateOnce)
 			{
 				if(!m_firstIteration && m_sprite->getFrame() == 0)
 					deactivate();
@@ -379,7 +381,7 @@ class Chip : public Entity
 					case 2:	grid = dl;	check = grid != ul && grid != ur;				break;
 					case 3:	grid = dr;	check = grid != ul && grid != ur && grid != dl;	break;
 					}
-					if(check && m_lastSpriteFrame != m_sprite->getFrame())
+					if(check && m_lastSpriteFrame != m_sprite->getFrame() && (!m_onlyAnimateOnce || (m_onlyAnimateOnce && m_sprite->getFrame() == m_sprite->getMaxFrames()-1)))
 					{
 						for(int i = 0; i < a_world->getGrid(grid)->getNumberOfEntities(); ++i)
 						{
@@ -423,7 +425,7 @@ class Chip : public Entity
 				}
 				m_lastSpriteFrame = m_sprite->getFrame();
 				//auto-end if projectiles collided
-				if(!notContinuous && collisionMade)
+				if(!m_onlyAnimateOnce && collisionMade)
 					deactivate();
 			}
 		}

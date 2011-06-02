@@ -37,8 +37,8 @@ public:
 		{
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
-			updateTargPlayerUnique(a_player, a_time);
 		}
+		updateTargPlayerUnique(a_player, a_time);
 	}
 	void hitFromPlayer(){m_playerTargeted = true;m_state = CHASE;}
 	void wander(int a_timePassed)
