@@ -284,6 +284,7 @@ class Chip : public Entity
 			{
 				a_entity->setDrawOff();
 				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
+				m_owner->unlockEarnedAttacks();
 				if((rand()%100)<20)//20 % chance to get a health pot
 					m_owner->receiveHPot();
 				if((rand()%100)<10)//10 % chance to get a energy pot
@@ -420,6 +421,7 @@ class Chip : public Entity
 										break;
 									}//end type Switch
 									resetLevelWithBaseLeveler();
+									m_owner->unlockEarnedAttacks();
 								}// end collision if
 								collisionMade = true;
 							}//end shouldApplyEffect
