@@ -18,22 +18,18 @@ class Chip : public Entity
 		e_chipType m_cType;
 		e_chipSubType m_cSubType;
 		e_chipSubSubType m_cSubSubType;
-		//whether or not it's equipped
-		bool m_isEquipped, m_firstIteration;
+		//whether or not it's equipped/crit, flags for sprite stuff
+		bool m_isEquipped, m_isCritical, m_isFlipH, m_isFlipV, m_firstIteration, m_onlyAnimateOnce;
 		//direction owner is facing
 		char m_direction;
-		//stats for energy cost, dmg, & time since last atk
-		int m_cost, m_dmg, m_timeSinceLastAttack, m_lastSpriteFrame;
+		//stats for energy-cost/dmg/time, sprite info
+		int m_cost, m_dmg, m_timeSinceLastAttack, m_lastSpriteFrame, m_rotateDeg;
 		//sprite to display on HUD
 		SDL_Sprite * m_spriteHUD;
 		//owner of this Chip
 		Entity * m_owner;
 		//Chip Leveler
 		BaseLeveler m_tracker;
-		//flags for sprite's flip(s) & rotation
-		bool m_isFlipH, m_isFlipV;
-		int m_rotateDeg;
-		bool m_isCritical, m_onlyAnimateOnce;
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
