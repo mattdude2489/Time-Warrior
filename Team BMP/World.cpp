@@ -142,6 +142,7 @@ bool World::setWorld(char * fileName)
 			}
 			tileY = y+1;
 			int r_tile = 0;
+			int tempInt = 0;
 			//"Anything else in particular" switch
 			//Creations of entities & any particulars of the map
 			switch(c)
@@ -431,6 +432,26 @@ bool World::setWorld(char * fileName)
 					hi.indexOfSpriteRow = TILE_BARRIER_YELLOW;
 					hi.collide = true;
 				}
+				break;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+				setNPC(currentWorld, c-49 , x, y );
+				
+				switch(currentWorld)
+				{
+				case WORLD_ENGLAND:		tempInt = TILE_GRASS;			break;
+				case WORLD_DESERT:		tempInt = TILE_DUST;			break;
+				case WORLD_HUB:			tempInt = TILE_METAL_QUAD;		break;
+				case WORLD_CASTLE:		tempInt	= TILE_CASTLE_GROUND;	break;
+				case WORLD_TOWN2:		tempInt = TILE_BUILDING_GROUND;	break;
+				}
+				hi.indexOfSpriteRow = tempInt;
 				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;

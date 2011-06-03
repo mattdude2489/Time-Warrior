@@ -51,7 +51,7 @@ public:
 	void updateTargPlayerUnique(Entity * a_player, int a_time)
 	{
 		m_lastCast += a_time;
-		if(this->collideBoundingCircles(a_player, BOSS_ATK_RANGE) && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
+		if(this->collideBoundingCircles(a_player, BOSS_ENGAGE) && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
 		{
 			m_attack->setTarget(a_player->getLocation());
 			m_attack->activate();

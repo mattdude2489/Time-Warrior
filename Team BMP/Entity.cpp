@@ -188,6 +188,8 @@ void Entity::update(int a_timePassed, World * a_world)
 										}
 										a_world->setCamera(this->m_camera);
 									}
+									else
+										move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 								}
 							}
 							else if(tmp->isObstacle(BUILDING))

@@ -125,6 +125,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 					break;
 				case SDL_KEYDOWN: //This will work until we can get it without using a switch statement.
 					ui.setKey(e.key.keysym.sym);
+
 	//				printf("Key Pressed: %c \n", e.key.keysym.sym);
 					ui.updateUI(false);
 					break;
