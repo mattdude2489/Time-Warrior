@@ -25,11 +25,20 @@ private:
 	WSADATA wsaData;
 	timeval t;
 	Entity * listOfOtherEntities[3]; //The list of other entities/players from the clients.
+	bool chatMessageWaiting;
+	char messageWaiting[41];
 public:
-	Client() {}
+	Client() {init();}
 	Client(World * world)
 	{
 		cWorld = world;
+		init();
+	}
+	void init()
+	{
+		chatMessageWaiting = false;
+		for(int i = 0; i < 41; i++)
+			messageWaiting[i] = ' ';
 	}
 	~Client()
 	{
@@ -86,6 +95,20 @@ public:
 	void setWorld(World * world) {cWorld = world;}
 	World * getWorld() {return cWorld;}
 	bool sendBufferToServer() {return false;}
+	void getChatMessage(int start, int end)
+	{
+		//The message is in the recv_buf of sSocket. Get it and grab it.
+		for(int i = start; i < end; i++) //To get rid of the C and the ' ' characters.
+		{
+			messageWaiting[i-start] = sSocket.recv_buf[i];
+		}
+		chatMessageWaiting = true;
+	}
+	char * getChat() //I guess I'll just have to remember to call clearChat immediately after getChat.
+	{
+		return messageWaiting;
+	}
+	void clearChat() {init();}
 	void run() //Sends and Received data from the server. Because this is a client, it needs no FD_SET(listen_socket).
 	{
 		fd_set readfds, writefds;
@@ -121,10 +144,25 @@ public:
 		//For now, I'll just try to get a chat set up.
 
 	}
-	void sendMessage(char * chatMessage)
+	void sendMessage(char * chatMessage) //Mostly used for chat messages only.
 	{
 
 	}
+	/**
+	Buffer Key:
+	P - Player Update
+	M - Minion/Boss Update.
+	E - Entity Update/Creation
+	Y - ACK to update Yourself.
+	C - Chat Message
+
+	Buffer Style:
+	C:		C "Insert Message Here"/
+	P:		P CurrentWorld XCoord YCoord HP/ 
+	Y:		Y/
+	M:		M CurrentWorld ID XCoord YCoord HP currentTarget/
+	E:		E CurrentWorld ID XCoord YCoord Type SubType SubSubType currentTarget/
+	**/
 	void updateBuffer() 
 	{
 		int error = recv(sSocket.cSocket, sSocket.recv_buf, sizeof(sSocket.recv_buf), 0);
@@ -136,7 +174,33 @@ public:
 		}
 		else
 		{
-			updateWorld();
+			int s = 0, e = 0;
+			char c = sSocket.recv_buf[s];
+			while(c != 0)
+			{
+				switch(c)
+				{
+				case 'C':
+					e = s;
+					c = sSocket.recv_buf[s];
+					while(c != '/')
+					{
+						e++;
+						c = sSocket.recv_buf[e];
+					}
+					getChatMessage(s, e);
+					s = e;
+					break;
+				case 'P':
+					break;
+				case 'Y':
+					break;
+				case 'M':
+					break;
+				case 'E':
+					break;
+				}
+			}
 		}
 	}
 };

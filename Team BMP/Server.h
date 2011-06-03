@@ -25,6 +25,7 @@ struct completeSocket
 	char send_buf[BUFF_SIZE];
 	int bytesSentToServer;
 	int bytesRecFromServer;
+	int currentBufferSize;
 };
 
 class Server
@@ -39,6 +40,7 @@ private:
 	char buffer[BUFF_SIZE]; //The buffer that you will send to the clients.
 	WSADATA wsaData;
 	timeval t; //The time for the timeout function of "Select".
+	
 
 public:
 	Server() //Default constructor.
@@ -53,15 +55,38 @@ public:
 	bool addSocket(char * ipAddress) {return false;} //Adds a socket to the templateVector. Returns success.
 	void sendMessage(char * chatMessage)
 	{
-
+		
 	}
-	void sendBufferToClients(int clientToSendTo) //Sends the current buffer to all the clients that are connected.
+	void sendBufferToClients(int clientToSendTo) //Sends the current buffer to the client specified, if there is still a connection.
 	{
+		completeSocket * clientSock;
+		if(listOfClients.get(clientToSendTo).cSocket != SOCKET_ERROR)
+		{
+			clientSock = &listOfClients.get(clientToSendTo);
+			clientSock->bytesSentToServer = send(clientSock->cSocket, clientSock->send_buf, sizeof(clientSock->send_buf), 0);
+			//INSERT ERROR CHECKING.
+		}
+		else
+		{
 
+		}
+			//Do nothing. YOU FAIL. Eventually there might be some error checking to say "Hai...Yeah I no here."
 	} 
 	void receiveBufferFromClients(int receiveFromClient) //Receives the buffer from the client specified.
 	{
-
+		completeSocket * clientSock;
+		if(listOfClients.get(receiveFromClient).cSocket != SOCKET_ERROR)
+		{
+			clientSock = &listOfClients.get(receiveFromClient);
+			clientSock->bytesRecFromServer = recv(clientSock->cSocket, clientSock->recv_buf, sizeof(clientSock->recv_buf), 0);
+			if(clientSock->bytesRecFromServer == WSAEWOULDBLOCK) //INSERT ERROR CHECKING HERE.
+			{
+				//Hai, the socket is dead. Shut it down, close it, and then remove it from the templateVector.
+				shutdown(clientSock->cSocket, SD_BOTH);
+				closesocket(clientSock->cSocket);
+				listOfClients.remove(receiveFromClient);
+			}
+		}
 	}
 	void shutDown() //Shuts down Winsock.
 	{

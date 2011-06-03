@@ -5,6 +5,7 @@
 
 //SDL includes and defines
 #define SDLDELAY		17
+#define CHAT_MESSAGE_CAP	4
 #include "sdl/sdl.h"
 #include <stdio.h>
 #include <conio.h>
@@ -117,10 +118,15 @@ private:
 	MyFont myfps;
 	char cfps[10];
 	int ifps;
+	char * chatMessages[CHAT_MESSAGE_CAP]; //This can be changed easily.
+	TTtext chatLog[CHAT_MESSAGE_CAP];
+	char chatMessageToSend[41]; //40 character cap.
+	bool typing; 
 public:
 	void enter(baseEngine *be) 
 	{
 		bool lolz = cClient.startClient();
+		typing = false;
 		if(!lolz)
 		{
 			printf("WinSock failed. Returning to Title Screen.");
@@ -140,6 +146,13 @@ public:
 		then = SDL_GetTicks();
 		now = passed = second = 0;
 		myfps.setFont(FONTSIZE);
+		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
+		{
+			chatLog[i].setFont(myfps.getFont());
+			chatMessages[i] = NULL; //Set them to...null. For ease of use later.
+		}
+		for(int i = 0; i < 41; i++)
+			chatMessageToSend[i] = ' ';
 		fps.setFont(myfps.getFont());
 		ifps = 0;
 		fps.setMessage("0");
@@ -151,6 +164,8 @@ public:
 		if(!be->getPlayer()->getGamePlayed())
 		{
 			be->getPlayer()->initPlayer(be->getWorld());
+			if(!be->getPlayer()->loadPlayer(0)) //Force the player to be the first game in their list. We can change this later.
+				be->getPlayer()->newGame(); //If they don't HAVE a game...then create one.
 		}
 	}
 	void execute(baseEngine *be) 
@@ -204,6 +219,9 @@ private:
 	MyFont myfps;
 	char cfps[10];
 	int ifps;
+	char * chatMessages[CHAT_MESSAGE_CAP];
+	TTtext chatLog[CHAT_MESSAGE_CAP];
+	char currentMessageToSend[41];
 public:
 	void enter(baseEngine *be) 
 	{
@@ -224,6 +242,13 @@ public:
 		then = SDL_GetTicks();
 		now = passed = second = 0;
 		myfps.setFont(FONTSIZE);
+		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
+		{
+			chatLog[i].setFont(myfps.getFont());
+			chatMessages[i] = NULL;
+		}
+		for(int k = 0; k < 41; k++)
+			currentMessageToSend[k] = ' ';
 		fps.setFont(myfps.getFont());
 		ifps = 0;
 		fps.setMessage("0");

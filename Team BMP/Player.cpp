@@ -255,6 +255,8 @@ void Player::save(int saveToSave)
 		while(saveToSave != 0)
 		{
 			charget = fgetc(outfile);
+			if(charget == EOF)
+				return; //GET OUT OF HERE.
 			if(charget == '#')
 				saveToSave--;
 		}
