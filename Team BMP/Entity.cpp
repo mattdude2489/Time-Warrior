@@ -282,13 +282,12 @@ void Entity::reallocateResistancesAccordingToMaterial()
 		{
 		case MTRL_WOOD://solidifies when cold, burns with fire
 		case MTRL_AIR://Thunder
-		case MTRL_DARK://things are colder in shadows, fire is continuous light source
+		case MTRL_DARK://things are colder in shadows, fire is continuous light source (opposite of LIGHT)
 			strongest = RESISTANCE_ICE;
 			weakest = RESISTANCE_FIRE;
 			break;
 		case MTRL_FIRE:
 		case MTRL_RUBBER://doesn't conduct electricity, brittle when cold
-		case MTRL_LIGHT://heavenly/sky dietites often attributed with lightning, water can put out light sources
 			strongest = RESISTANCE_LIGHTNING;
 			weakest = RESISTANCE_ICE;
 			break;
@@ -296,19 +295,18 @@ void Entity::reallocateResistancesAccordingToMaterial()
 			strongest = RESISTANCE_LIGHTNING;
 			weakest = RESISTANCE_FIRE;
 			break;
-		case MTRL_METAL://absorbs thermal energy, conducts electricity
+		case MTRL_METAL://often feels cold (conducts thermal energy), conducts electricity
+			strongest = RESISTANCE_ICE;
+			weakest = RESISTANCE_LIGHTNING;
+			break;
 		case MTRL_WATER:
 			strongest = RESISTANCE_FIRE;
 			weakest = RESISTANCE_LIGHTNING;
 			break;
-		/*case :
-			strongest = RESISTANCE_ICE;
-			weakest = RESISTANCE_LIGHTNING;
-			break;*/
-		/*case :
+		case MTRL_LIGHT://fire is continuous light source, water can put out fire-like light sources (opposite of DARK)
 			strongest = RESISTANCE_FIRE;
 			weakest = RESISTANCE_ICE;
-			break;*/
+			break;
 		}
 		int amtMoved = (int)(m_stats[weakest] * .5);
 		m_stats[weakest] -= amtMoved;
