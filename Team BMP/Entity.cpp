@@ -272,35 +272,43 @@ void Entity::reallocateResistancesAccordingToMaterial()
 		culminates in 6 possible combos:
 			strong:	R_F		R_F		R_I		R_I		R_L		R_L
 			weak:	R_I		R_L		R_F		R_L		R_F		R_I
+
+			Tri-element Cycle:
+				-Thunder	-strong Water	-weak Fire
+				-Fire		-strong Thunder	-weak Water
+				-Water		-strong Fire	-weak Thunder
 		*/
 		switch(m_mtrl)
 		{
+		case MTRL_WOOD://solidifies when cold, burns with fire
+		case MTRL_AIR://Thunder
+		case MTRL_DARK://things are colder in shadows, fire is continuous light source
+			strongest = RESISTANCE_ICE;
+			weakest = RESISTANCE_FIRE;
+			break;
 		case MTRL_FIRE:
-			strongest = RESISTANCE_FIRE;
+		case MTRL_RUBBER://doesn't conduct electricity, brittle when cold
+		case MTRL_LIGHT://heavenly/sky dietites often attributed with lightning, water can put out light sources
+			strongest = RESISTANCE_LIGHTNING;
 			weakest = RESISTANCE_ICE;
 			break;
-		case MTRL_METAL:
-			strongest = RESISTANCE_FIRE;
-			weakest = RESISTANCE_LIGHTNING;
-			break;
-		case MTRL_WOOD:
-		case MTRL_DARK:
-			strongest = RESISTANCE_ICE;
+		case MTRL_EARTH://grounds electricity, burns with fire
+			strongest = RESISTANCE_LIGHTNING;
 			weakest = RESISTANCE_FIRE;
 			break;
+		case MTRL_METAL://absorbs thermal energy, conducts electricity
 		case MTRL_WATER:
-			strongest = RESISTANCE_ICE;
+			strongest = RESISTANCE_FIRE;
 			weakest = RESISTANCE_LIGHTNING;
 			break;
-		case MTRL_EARTH:
-			strongest = RESISTANCE_LIGHTNING;
-			weakest = RESISTANCE_FIRE;
-			break;
-		case MTRL_AIR:
-		case MTRL_LIGHT:
-		case MTRL_RUBBER:
-			strongest = RESISTANCE_LIGHTNING;
+		/*case :
+			strongest = RESISTANCE_ICE;
+			weakest = RESISTANCE_LIGHTNING;
+			break;*/
+		/*case :
+			strongest = RESISTANCE_FIRE;
 			weakest = RESISTANCE_ICE;
+			break;*/
 		}
 		int amtMoved = (int)(m_stats[weakest] * .5);
 		m_stats[weakest] -= amtMoved;

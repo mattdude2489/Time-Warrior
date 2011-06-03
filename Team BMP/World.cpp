@@ -720,7 +720,7 @@ void World::setMonsters()
 		if(m_mapOfWorld.get(i).bossLoc)
 		{
 			bossCount++;
-			int t_type = 0;
+			e_material t_type;
 			switch(currentWorld)
 			{
 			case WORLD_FOREST:
@@ -733,10 +733,9 @@ void World::setMonsters()
 					sprite = &m_sprites[BOSS1];
 					t_type = MTRL_DARK;
 				}
-				else
-				{
+				else{
 					sprite = &m_sprites[DEMONKING];
-					t_type = MTRL_DEFAULT;
+					t_type = MTRL_LIGHT;
 				}
 				break;
 			default:
@@ -745,23 +744,17 @@ void World::setMonsters()
 				break;
 			}
 			Boss * newBoss = new Boss(sprite);
-			newBoss->setMaterial((e_material)t_type);
+			newBoss->setMaterial(t_type);
 			newBoss->setNewed(true);
 			newBoss->scaleToPlayer(m_player);
 			newBoss->setBossLoc(m_mapOfWorld.get(i).pos);
 			this->add(newBoss);
 			switch(t_type)
 			{
-			case MTRL_AIR:
-				newBoss->setChip(LIGHTNING, ADVANCED, this);
-				break;
-			case MTRL_DEFAULT:
-				newBoss->setChip(DIVINE, EXPERT, this);
-				break;
+			case MTRL_AIR:		newBoss->setChip(LIGHTNING, ADVANCED, this);	break;
+			case MTRL_LIGHT:	newBoss->setChip(DIVINE, EXPERT, this);			break;
 			case MTRL_DARK:
-			default:
-				newBoss->setChip(FIRE, BASIC, this);
-				break;
+			default:			newBoss->setChip(FIRE, BASIC, this);			break;
 			}
 		}
 		if(m_mapOfWorld.get(i).playerSpawn)
