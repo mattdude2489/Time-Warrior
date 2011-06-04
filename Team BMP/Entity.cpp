@@ -273,37 +273,55 @@ void Entity::reallocateResistancesAccordingToMaterial()
 			strong:	R_F		R_F		R_I		R_I		R_L		R_L
 			weak:	R_I		R_L		R_F		R_L		R_F		R_I
 
-			Tri-element Cycle:
-				-Thunder	-strong Water	-weak Fire
-				-Fire		-strong Thunder	-weak Water
-				-Water		-strong Fire	-weak Thunder
+		Tri-element Cycle:
+			-Lightning	-strong Water		-weak Fire
+			-Fire		-strong Lightning	-weak Water
+			-Water		-strong Fire		-weak Lightning
 		*/
 		switch(m_mtrl)
 		{
-		case MTRL_WOOD://solidifies when cold, burns with fire
-		case MTRL_AIR://Thunder
-		case MTRL_DARK://things are colder in shadows, fire is continuous light source (opposite of LIGHT)
+		case MTRL_WOOD:		//flora, plants, vegetation, etc.
+								//wood absorbs water
+								//wood feeds fire
+		case MTRL_AIR:		//gases, wind, lightning, etc.			(same for RESISTANCE_LIGHTNING)
+								//water conducts electricity
+								//lightning generates fire
+		case MTRL_DARK:		//dark, undead, shadows, etc.
+								//darkness brings coldness
+								//fire illuminates darkness
 			strongest = RESISTANCE_ICE;
 			weakest = RESISTANCE_FIRE;
 			break;
-		case MTRL_FIRE:
-		case MTRL_RUBBER://doesn't conduct electricity, brittle when cold
+		case MTRL_FIRE:		//fire, magma/lava, etc.				(same for RESISTANCE_FIRE)
+								//lightning generates fire
+								//water extinguishes fire
+		case MTRL_RUBBER:	//rubber, elastic, etc.
+								//rubber poorly conducts electricity
+								//ice cools/shatters rubber
 			strongest = RESISTANCE_LIGHTNING;
 			weakest = RESISTANCE_ICE;
 			break;
-		case MTRL_EARTH://grounds electricity, burns with fire
+		case MTRL_EARTH:	//ground/dirt, mud, sand, rock, etc.
+								//earth grounds lightning
+								//fire burns earth (creates ash)
 			strongest = RESISTANCE_LIGHTNING;
 			weakest = RESISTANCE_FIRE;
 			break;
-		case MTRL_METAL://often feels cold (conducts thermal energy), conducts electricity
+		case MTRL_METAL:	//metal, gold, silver, etc.
+								//metal conducts thermal-energy/heat (leaving coldness)
+								//metal conducts electricity
 			strongest = RESISTANCE_ICE;
 			weakest = RESISTANCE_LIGHTNING;
 			break;
-		case MTRL_WATER:
+		case MTRL_WATER:	//water, ice, water-vapor/steam, etc.	(same for RESISTANCE_ICE)
+								//water extinguishes fire
+								//water conducts electricity
 			strongest = RESISTANCE_FIRE;
 			weakest = RESISTANCE_LIGHTNING;
 			break;
-		case MTRL_LIGHT://fire is continuous light source, water can put out fire-like light sources (opposite of DARK)
+		case MTRL_LIGHT:	//light, heavenly/angelic, divine, etc.
+								//fire provides light
+								//darkness brings coldness
 			strongest = RESISTANCE_FIRE;
 			weakest = RESISTANCE_ICE;
 			break;
