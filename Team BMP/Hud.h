@@ -93,7 +93,7 @@ public:
 		bars[BAR_EXP].setWidth((int)(p->getCurExp()/(double)p->getExpReq() * ONE_HUNDRED_PERCENT));
 		m_statWin.setPlayer(p);
 		p->setWindowStatus(m_showStats);
-		char temp[4];
+		char temp[3];
 		sprintf_s(temp, "%i",  p->getPots(POT_HEALTH));
 		m_potText[POT_HEALTH].setMessage(temp);
 		sprintf_s(temp, "%i",  p->getPots(POT_ENERGY));

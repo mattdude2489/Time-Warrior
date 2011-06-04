@@ -274,7 +274,7 @@ class Chip : public Entity
 		virtual bool shouldApplyEffect(Entity * a_entity){return false;}
 		//virtual func to specially apply effect from inherited classes
 		virtual void applyEffect(Entity * a_entity){}
-		void applyEffectAndStuffForKill(Entity * a_entity)
+		void applyEffectAndStuffFor(Entity * a_entity)
 		{
 			applyEffect(a_entity);
 			//erase & gain experience from killed entities
@@ -283,10 +283,16 @@ class Chip : public Entity
 				a_entity->setDrawOff();
 				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
 				m_owner->unlockEarnedAttacks();
-				if(isChanceSuccessful(20))//20 % chance to get a health pot
-					m_owner->receivePot(POT_HEALTH);
-				if(isChanceSuccessful(10))//10 % chance to get a energy pot
-					m_owner->receivePot(POT_ENERGY);
+				if(m_owner->getPots(POT_HEALTH) < MAX_POTS)
+				{
+					if(isChanceSuccessful(20))//20 % chance to get a health pot
+						m_owner->receivePot(POT_HEALTH);
+				}
+				if(m_owner->getPots(POT_ENERGY) < MAX_POTS)
+				{
+					if(isChanceSuccessful(10))//10 % chance to get a energy pot
+						m_owner->receivePot(POT_ENERGY);
+				}
 			}
 		}
 		//adjusts the target to be centered

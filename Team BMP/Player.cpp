@@ -390,6 +390,14 @@ bool Player::loadPlayer(int saveToLoad)
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->m_pots[POT_ENERGY] = hpenstrintexpsta;
 
+			for(int i = 0; i < NUM_POTS; ++i)
+			{
+				if(m_pots[i] < 0)
+					m_pots[i] = 0;
+				else if(m_pots[i] > MAX_POTS)
+					m_pots[i] = MAX_POTS;
+			}
+
 			//Strength
 				//make sure stored value is valid
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
