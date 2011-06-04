@@ -224,6 +224,7 @@ void Player::save(int saveToSave)
 	//#'s are spaces, for use of fscanf.
 
 	FILE * outfile;
+	int numCharsInFileFromSavePoint = 0; //NCIFFSP. Wow that's a long name.
 	if(loadedPlayer)
 	{
 		outfile = fopen("playerSave.txt", "r+");
@@ -262,8 +263,12 @@ void Player::save(int saveToSave)
 		}
 		fgetpos(outfile, &pos);
 		charget = fgetc(outfile);
+		numCharsInFileFromSavePoint++;
 		while(charget != '#' && charget != EOF)
+		{
 			charget = fgetc(outfile); //Get it to the next save...
+			numCharsInFileFromSavePoint++;
+		}
 		//charget = fgetc(outfile);
 		if(charget != EOF)
 		{
@@ -272,6 +277,7 @@ void Player::save(int saveToSave)
 			{
 				newArray[arrIndex] = charget = fgetc(outfile);
 				arrIndex++;
+				numCharsInFileFromSavePoint++;
 			}
 		}
 		else
@@ -279,6 +285,13 @@ void Player::save(int saveToSave)
 			//Do nothing.
 		}
 		fsetpos(outfile, &pos); //Reset the cursor to prepare to overwrite.
+
+		//INPUT FOR LOOP HERE TO RESET EVERY CHARACTER AFTERWARDS. EVERY. SINGLE. ONE.
+		for(int i = 0; i < numCharsInFileFromSavePoint; i++)
+		{
+			fprintf(outfile, " "); //RESET EVERY BLOODY CHARACTER.
+		}
+		fsetpos(outfile, &pos); //Reset the cursor.
 	}
 	//else if(!loadedPlayer)
 	//{
@@ -380,6 +393,7 @@ bool Player::loadPlayer(int saveToLoad)
 			for(int i = 0; i < 20; i++)
 				name[i] = fgetc(infile);
 			name[20] = 0; //NULL FUCKING TERMINATOR.
+			//Level, which we apparently do nothing with. Why do we have it? Besides the obvious.
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 
 			//HP pots
