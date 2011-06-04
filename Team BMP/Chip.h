@@ -274,7 +274,7 @@ class Chip : public Entity
 		virtual bool shouldApplyEffect(Entity * a_entity){return false;}
 		//virtual func to specially apply effect from inherited classes
 		virtual void applyEffect(Entity * a_entity){}
-		void applyEffectAndStuffFor(Entity * a_entity)
+		void applyEffectAndStuffForKill(Entity * a_entity)
 		{
 			applyEffect(a_entity);
 			//erase & gain experience from killed entities
