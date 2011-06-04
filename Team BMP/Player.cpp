@@ -72,7 +72,7 @@ int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory 
 			int offset = 0;
 			if(test->getSubType() == PIERCE)
 			{
-				offset = (FRAME_SIZE/2) - test->getWidthOffsetCenter();
+				offset = (FRAME_SIZE/2) - test->getWidthOffsetCenterHUD();
 				x += offset;
 			}
 			test->drawHUD(a_screen, x, y);

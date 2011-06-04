@@ -525,4 +525,6 @@ class Chip : public Entity
 		}
 		//draws HUD sprite @ specified location
 		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){m_spriteHUD->draw(a_screen, a_x, a_y);}
+		int getWidthOffsetCenterHUD(){return m_spriteHUD->getWidthOffsetCenter();}
+		int getHeightOffsetCenterHUD(){return m_spriteHUD->getHeightOffsetCenter();}
 };

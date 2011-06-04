@@ -140,7 +140,7 @@ class Weapon : public Chip
 					if(moveToTarget((int)(SPEED_RANGE*a_timePassed)))
 					{
 						//end projectile if it has expired
-						if(m_timers[TIMER_GENERAL] >= TIME_SECOND_MS/2)
+						if(m_timers[TIMER_GENERAL] >= TIME_INACTIVE)
 							deactivate();
 					}
 					break;
