@@ -4,8 +4,8 @@
 #pragma once //Almost forgot this!
 
 
-enum e_mouseClick {CLICK_NONE, CLICK_LEFT, CLICK_MIDDLE, CLICK_RIGHT};
-enum e_keyboardKey {KEY_NONE = 'n', KEY_UP = 'w', KEY_LEFT = 'a', KEY_DOWN = 's', KEY_RIGHT = 'd', KEY_HOT_ATK1_BAS = '1', KEY_HOT_ATK1_ADV = '2', KEY_HOT_ATK1_EXP = '3', KEY_HOT_ATK1_LEG = '4' ,KEY_HOT_ATK2_BAS = '5', KEY_HOT_ATK2_ADV = '6', KEY_HOT_ATK2_EXP = '7', KEY_HOT_ATK2_LEG = '8', KEY_TRUE_NONE = 10};
+enum e_mouseClick	{CLICK_NONE, CLICK_LEFT, CLICK_MIDDLE, CLICK_RIGHT};
+enum e_keyboardKey	{KEY_NONE = 'n', KEY_UP = 'w', KEY_LEFT = 'a', KEY_DOWN = 's', KEY_RIGHT = 'd', KEY_HOT_ATK1_BAS = '1', KEY_HOT_ATK1_ADV = '2', KEY_HOT_ATK1_EXP = '3', KEY_HOT_ATK1_LEG = '4' ,KEY_HOT_ATK2_BAS = '5', KEY_HOT_ATK2_ADV = '6', KEY_HOT_ATK2_EXP = '7', KEY_HOT_ATK2_LEG = '8', KEY_TRUE_NONE = 10};
 
 class UserInput
 {
