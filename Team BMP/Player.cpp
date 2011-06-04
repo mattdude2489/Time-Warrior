@@ -289,7 +289,7 @@ void Player::save(int saveToSave)
 	//	fflush(outfile); //To switch the operation to writing.
 	//}
 
-	fprintf(outfile, " P %s %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_stats[HEALTH_MAX], m_stats[ENERGY_MAX], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	fprintf(outfile, " P %s %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_pots[POT_HEALTH], m_pots[POT_ENERGY], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{
@@ -382,11 +382,13 @@ bool Player::loadPlayer(int saveToLoad)
 			name[20] = 0; //NULL FUCKING TERMINATOR.
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 
-			//HP (IGNORE)
+			//HP pots
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
+			this->m_pots[POT_HEALTH] = hpenstrintexpsta;
 
-			//Energy (IGNORE)
+			//Energy pots
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
+			this->m_pots[POT_ENERGY] = hpenstrintexpsta;
 
 			//Strength
 				//make sure stored value is valid
@@ -785,9 +787,9 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 	switch(ui->getLastKey())
 	{
 	case 'h':
-	case 'H':	this->useHealthPot();	break;
+	case 'H':	this->usePot(POT_HEALTH);	break;
 	case 'e':
-	case 'E':	this->useEnergyPot();	break;
+	case 'E':	this->usePot(POT_ENERGY);	break;
 	}
 
 }

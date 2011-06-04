@@ -16,6 +16,7 @@ enum e_colors {COLOR_HEALTH = 0xff0000, COLOR_ENERGY = 0x00ff00, COLOR_BACK = 0x
 enum e_screen {SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600, SCREEN_CENTER_X = SCREEN_WIDTH/2, SCREEN_CENTER_Y = SCREEN_HEIGHT/2, SCREEN_BPP = 32};
 enum e_time {TIME_SECOND_MS = 1000, TIME_REGEN = TIME_SECOND_MS, TIME_INACTIVE = TIME_SECOND_MS/5, TIME_EXPIRE = TIME_SECOND_MS*5, TIME_WANDER = TIME_SECOND_MS*3};
 enum e_timer {TIMER_GENERAL, TIMER_REGEN, NUM_TIMERS};
+enum e_pots{POT_HEALTH, POT_ENERGY, NUM_POTS};
 enum e_flags {FLAG_DRAW, FLAG_ACTIVE, FLAG_OWNER_PLAYER, FLAG_NUDE, FLAG_STOPPED, NUM_FLAGS};
 enum e_frame {FRAME_SIZE = 32, FRAME_RATE = 100, DRAGON_FRAME = 65};
 enum e_rows {ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
@@ -34,7 +35,7 @@ class Entity
 {
 protected:
 	bool m_flags[NUM_FLAGS];
-	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_statPoints, m_index, m_healthPots, m_energyPots;
+	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_pots[NUM_POTS], m_statPoints, m_index;
 	e_entityType m_eType;
 	e_material m_mtrl;
 	SPoint m_location, m_prevLoc, *m_camera, m_target, m_lastWLoc;
@@ -80,7 +81,8 @@ public:
 		m_eType = DUMMY;
 		m_mtrl = MTRL_DEFAULT;
 		m_statPoints = 0;
-		m_healthPots = m_energyPots = 0;
+		for(int i = 0; i < NUM_POTS; ++i)
+			m_pots[i] = 0;
 	}
 	void initSprite(SDL_Sprite * a_sprite)
 	{
@@ -417,27 +419,28 @@ public:
 			m_stats[i]++;
 		decreasePoints();
 	}
-	void useHealthPot()
+	void usePot(e_pots a_pot)
 	{
-		if(m_healthPots > 0)
+		switch(a_pot)
 		{
-			m_healthPots--;
-			heal(m_stats[HEALTH_MAX]/4);
+		case POT_HEALTH:
+		case POT_ENERGY:
+			if(m_pots[a_pot] > 0)
+			{
+				m_pots[a_pot]--;
+				if(a_pot == POT_HEALTH)
+					heal(m_stats[HEALTH_MAX]/4);
+				else
+				{
+					m_stats[ENERGY_CURRENT]+= (m_stats[ENERGY_MAX]/4);
+					if(m_stats[ENERGY_CURRENT]>m_stats[ENERGY_MAX])
+						m_stats[ENERGY_CURRENT]=m_stats[ENERGY_MAX];
+				}
+			}
+			break;
 		}
 	}
-	void useEnergyPot()
-	{
-		if(m_energyPots > 0)
-		{
-			m_energyPots--;
-			m_stats[ENERGY_CURRENT]+= (m_stats[ENERGY_MAX]/4);
-			if(m_stats[ENERGY_CURRENT]>m_stats[ENERGY_MAX])
-				m_stats[ENERGY_CURRENT]=m_stats[ENERGY_MAX];
-		}
-	}
-	void receiveHPot(){m_healthPots++;}
-	void receiveEPot(){m_energyPots++;}
-	int getHPots(){return m_healthPots;}
-	int getEPots(){return m_energyPots;}
+	void receivePot(e_pots a_pot){m_pots[a_pot]++;}
+	int getPots(e_pots a_pot){return m_pots[a_pot];}
 	virtual void unlockEarnedAttacks(){}
 };

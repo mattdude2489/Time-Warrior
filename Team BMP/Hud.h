@@ -9,7 +9,6 @@
 
 enum e_bars {HUD_BASE, BAR_BACK, BAR_HEALTH, BAR_ENERGY, BAR_EXP,  NUM_BARS, NUM_STAT_BARS = NUM_BARS-2};
 enum e_bar {BAR_WIDTH = ONE_HUNDRED_PERCENT, BAR_HEIGHT = HUD_HEIGHT/NUM_STAT_BARS, BAR_X = HUD_X, BAR_Y = HUD_Y};
-enum e_pots{POT_HEALTH, POT_ENERGY, NUM_POTS};
 
 class Hud
 {
@@ -72,8 +71,8 @@ public:
 		m_text[0].setMessage("Health");
 		m_text[1].setMessage("Energy");
 		m_text[2].setMessage("Experience");
-		m_potText[0].setMessage("0");
-		m_potText[1].setMessage("0");
+		m_potText[POT_HEALTH].setMessage("0");
+		m_potText[POT_ENERGY].setMessage("0");
 		pots.setSprite("Sprites/Pots.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS-2);
 		pots.setTransparency(COLOR_TRANSPARENT);
 	}
@@ -94,10 +93,10 @@ public:
 		bars[BAR_EXP].setWidth((int)(p->getCurExp()/(double)p->getExpReq() * ONE_HUNDRED_PERCENT));
 		m_statWin.setPlayer(p);
 		p->setWindowStatus(m_showStats);
-		char temp[3];
-		sprintf_s(temp, "%i",  p->getHPots());
+		char temp[4];
+		sprintf_s(temp, "%i",  p->getPots(POT_HEALTH));
 		m_potText[POT_HEALTH].setMessage(temp);
-		sprintf_s(temp, "%i",  p->getEPots());
+		sprintf_s(temp, "%i",  p->getPots(POT_ENERGY));
 		m_potText[POT_ENERGY].setMessage(temp);
 		if(p->getPoints()>0)
 			m_statButton.update(a_time);

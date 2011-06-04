@@ -55,31 +55,29 @@ class Chip : public Entity
 			//if(m_tracker)
 			//	delete m_tracker;
 		}
-		void setCriticalWithChance(int a_percentage)
+		bool isChanceSuccessful(int a_percentage)
 		{
 			//only calc crit if a_percentage is not an extreme
 			if(a_percentage > 0 && a_percentage < 100)
 			{
 				//calc random percentage
 				int num = rand() % 100 + 1;
-				/*//if the percentage or remainder easily divides 100 (2, 4, 5, 10, 20, 25, 50), check each ms 
+				//if the percentage or remainder easily divides 100 (2, 4, 5, 10, 20, 25, 50), check again
 				if(!(100 % a_percentage) || !(100 % (100 - a_percentage)))
 				{
 					if(a_percentage < 50)
-						m_isCritical = !(num % (100 / a_percentage));
+						return !(num % (100 / a_percentage));
 					else
-						m_isCritical = !(!(num % (100 / (100 - a_percentage))));
+						return !(!(num % (100 / (100 - a_percentage))));
 				}
 				//else just check if the num is within range
-				else*/
-					m_isCritical = num <= a_percentage;
+				else
+					return num <= a_percentage;
 			}
-			else if(a_percentage <= 0)
-				m_isCritical = false;
+			else if(a_percentage >= 100)
+				return true;
 			else
-				m_isCritical = true;
-			if(m_isCritical)
-				printf("crit w/%d chance\n", a_percentage);
+				return false;
 		}
 		void unlock()
 		{
@@ -285,10 +283,10 @@ class Chip : public Entity
 				a_entity->setDrawOff();
 				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
 				m_owner->unlockEarnedAttacks();
-				if((rand()%100)<20)//20 % chance to get a health pot
-					m_owner->receiveHPot();
-				if((rand()%100)<10)//10 % chance to get a energy pot
-					m_owner->receiveEPot();
+				if(isChanceSuccessful(20))//20 % chance to get a health pot
+					m_owner->receivePot(POT_HEALTH);
+				if(isChanceSuccessful(10))//10 % chance to get a energy pot
+					m_owner->receivePot(POT_ENERGY);
 			}
 		}
 		//adjusts the target to be centered

@@ -64,7 +64,7 @@ class Weapon : public Chip
 				setLocationUsingDirection();
 			m_isCritical = false;
 			if(m_cSubType == PIERCE)
-				setCriticalWithChance((m_cSubSubType+1) * 25);//Bas: 25%, Adv: 50%, Exp: 75%
+				m_isCritical = isChanceSuccessful((m_cSubSubType+1) * 25);//Bas: 25%, Adv: 50%, Exp: 75%
 		}
 		bool shouldApplyEffect(Entity * a_entity)
 		{

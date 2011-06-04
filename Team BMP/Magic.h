@@ -48,7 +48,7 @@ class Magic : public Chip
 							case ADVANCED:	chance = 10;	break;
 							case EXPERT:	chance = 25;	break;
 							}
-							setCriticalWithChance(chance);
+							m_isCritical = isChanceSuccessful(chance);
 							break;
 			}
 
