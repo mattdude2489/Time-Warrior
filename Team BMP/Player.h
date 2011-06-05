@@ -130,12 +130,17 @@ public:
 	}
 	void destroyPlayer();
 	void setKeyLevel(int a_level){barrierKey = a_level;}
-	void sellArmor(Armor * a_chip)
+	void sellArmor(Chip * a_chip)
 	{
 		if(a_chip->getType() == ARMOR)
 		{
 			a_chip->setOwner(this);
 			a_chip->sell();
+			for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
+			{
+				if(m_armorInventory[i] == a_chip)
+					m_armorInventory[i] = NULL;
+			}
 			if(a_chip->getFlag(FLAG_NUDE))
 				delete a_chip;
 		}

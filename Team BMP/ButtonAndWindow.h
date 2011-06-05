@@ -142,10 +142,19 @@ public:
 			{
 				if(clicked->getType() == ARMOR)
 				{
-					if(clicked->isEquipped())
-						m_player->removeGauntletArmor(clicked->getSubType());
-					else
-						m_player->setGauntletArmor(clicked);
+					if(cl)
+					{
+						if(clicked->isEquipped())
+							m_player->removeGauntletArmor(clicked->getSubType());
+						else
+							m_player->setGauntletArmor(clicked);
+					}
+					else if(cr)
+					{
+						if(clicked->isEquipped())
+							m_player->removeGauntletArmor(clicked->getSubType());
+						m_player->sellArmor(clicked);
+					}
 				}
 				else
 				{
