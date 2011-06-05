@@ -22,7 +22,7 @@ class Chip : public Entity
 		//direction owner is facing
 		char m_direction;
 		//stats for energy-cost/dmg/time, sprite info
-		int m_cost, m_dmg, m_timeSinceLastAttack, m_lastSpriteFrame, m_rotateDeg;
+		int m_cost, m_dmg, m_timeSinceLastAttack, m_lastSpriteFrame, m_rotateDeg, m_stretchFactor;
 		//sprite to display on HUD
 		SDL_Sprite * m_spriteHUD;
 		//input rect for HUD sprite
@@ -34,8 +34,9 @@ class Chip : public Entity
 	public:
 		Chip(e_chipType a_type, e_chipSubType a_subType, e_chipSubSubType a_subSubType)
 			:Entity(),m_cType(a_type),m_cSubType(a_subType),m_cSubSubType(a_subSubType),
-			m_cost(0),m_dmg(0),m_timeSinceLastAttack(0),
-			m_isEquipped(false), m_owner(NULL), m_spriteHUD(NULL), m_isFlipH(false), m_isFlipV(false), m_rotateDeg(0),m_isCritical(false),m_onlyAnimateOnce(false)
+			m_isEquipped(false),m_isFlipH(false),m_isFlipV(false),m_isCritical(false),m_onlyAnimateOnce(false),
+			m_cost(0),m_dmg(0),m_timeSinceLastAttack(0), m_rotateDeg(0), m_stretchFactor(1),
+			m_owner(NULL), m_spriteHUD(NULL)
 		{
 			m_eType = CHIP;
 			switch(m_cType)
@@ -188,6 +189,27 @@ class Chip : public Entity
 			m_owner = a_owner;
 			if(m_owner->getType() == PLAYER)
 				m_flags[FLAG_OWNER_PLAYER] = true;
+			switch(m_cType)
+			{
+			case MAGIC:
+				switch(m_cSubType)
+				{
+				case DIVINE:	setSprite("Sprites/magic_divine.bmp");		break;
+				case LIGHTNING:	setSprite("Sprites/magic_lightning.bmp");	break;
+				case FIRE:		setSprite("Sprites/magic_fire.bmp");		break;
+				case ICE:		setSprite("Sprites/magic_ice.bmp");			break;
+				}
+				break;
+			case WEAPON:
+				switch(m_cSubType)
+				{
+				case BLUNT:		setSprite("Sprites/weapon_blunt.bmp");		break;
+				case RANGE:		setSprite("Sprites/weapon_range.bmp");		break;
+				case SLASH:		setSprite("Sprites/weapon_slash.bmp");		break;
+				case PIERCE:	setSprite("Sprites/weapon_pierce.bmp");		break;
+				}
+				break;
+			}
 		}
 		//set the direction to base its location
 		void setDirection(char a_dir){m_direction = a_dir;}
@@ -488,32 +510,47 @@ class Chip : public Entity
 			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, rows);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
+			//adjust size to be appropriate to owner
+			if(m_owner)
+			{
+				int dim;
+				if(m_owner->getHeightOffsetCenter()*2 > FRAME_SIZE)
+					dim = m_owner->getHeightOffsetCenter()*2;
+				else
+					dim = m_owner->getWidthOffsetCenter()*2;
+				if(dim % FRAME_SIZE == 0)
+					m_stretchFactor = dim / FRAME_SIZE;
+				else
+					m_stretchFactor = (dim / FRAME_SIZE) + 1;
+			}
+			float fullSize = float(m_stretchFactor * 100);
 			switch(m_cType)
 			{
 				//if spell, adjust size based in level
 			case MAGIC:
 				switch(m_cSubSubType)
 				{
-				case BASIC:		m_sprite->stretch(50,50);	break;
-				case ADVANCED:	m_sprite->stretch(200,200);	break;
-				case EXPERT:	m_sprite->stretch(300,300);	break;
+				case BASIC:		m_sprite->stretch(fullSize/2,fullSize/2);	break;
+				case ADVANCED:	m_sprite->stretch(fullSize*2,fullSize*2);	break;
+				case EXPERT:	m_sprite->stretch(fullSize*3,fullSize*3);	break;
 				}
 				break;
 				//if weapon, adjust frame size
 			case WEAPON:
+				m_sprite->stretch(fullSize,fullSize);
 				switch(m_cSubType)
 				{
 				case BLUNT:
 				case SLASH:
 					if(m_cSubSubType != EXPERT)
 					{
-						m_sprite->setFrame(FRAME_SIZE, FRAME_SIZE/2);
+						m_sprite->setFrame(FRAME_SIZE*m_stretchFactor, (FRAME_SIZE/2)*m_stretchFactor);
 						m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
 					}
 					break;
-				case RANGE:		m_sprite->stretch(50,50);	break;
+				case RANGE:		m_sprite->stretch(fullSize/2,fullSize/2);	break;
 				case PIERCE:
-					m_sprite->setFrame(FRAME_SIZE/2, FRAME_SIZE);
+					m_sprite->setFrame((FRAME_SIZE/2)*m_stretchFactor, FRAME_SIZE*m_stretchFactor);
 					m_spriteHUD->setFrame(FRAME_SIZE/2, FRAME_SIZE);
 					break;
 				}

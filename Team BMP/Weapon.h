@@ -151,7 +151,7 @@ class Weapon : public Chip
 class Blunt : public Weapon
 {
 	public:
-		Blunt(e_chipSubSubType a_subSubType):Weapon(BLUNT, a_subSubType){setSprite("Sprites/weapon_blunt.bmp");}
+		Blunt(e_chipSubSubType a_subSubType):Weapon(BLUNT, a_subSubType){}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -174,7 +174,7 @@ class Blunt : public Weapon
 class Range : public Weapon
 {
 	public:
-		Range(e_chipSubSubType a_subSubType):Weapon(RANGE, a_subSubType){setSprite("Sprites/weapon_range.bmp");}
+		Range(e_chipSubSubType a_subSubType):Weapon(RANGE, a_subSubType){}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -197,7 +197,7 @@ class Range : public Weapon
 class Slash : public Weapon
 {
 	public:
-		Slash(e_chipSubSubType a_subSubType):Weapon(SLASH, a_subSubType){setSprite("Sprites/weapon_slash.bmp");}
+		Slash(e_chipSubSubType a_subSubType):Weapon(SLASH, a_subSubType){}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -220,7 +220,7 @@ class Slash : public Weapon
 class Pierce : public Weapon
 {
 	public:
-		Pierce(e_chipSubSubType a_subSubType):Weapon(PIERCE, a_subSubType){setSprite("Sprites/weapon_pierce.bmp");}
+		Pierce(e_chipSubSubType a_subSubType):Weapon(PIERCE, a_subSubType){}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
