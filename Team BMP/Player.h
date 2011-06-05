@@ -46,7 +46,7 @@ public:
 	void setLocationUnique(int a_x, int a_y){m_cameraP.set(a_x - SCREEN_CENTER_X, a_y - SCREEN_CENTER_Y);}
 	void moveUnique(int a_deltaX, int a_deltaY){m_cameraP.x += a_deltaX;m_cameraP.y += a_deltaY;}
 	void addToAttackInventory(Chip * a_chip);
-	void addToArmorInventory(Chip * a_chip);
+	bool addToArmorInventory(Chip * a_chip);
 	void save(int saveToSave);
 	void setWorld(World * currWorld) {thisWorld = currWorld;}
 	void setGamePlayed(bool game) {gamePlayed = game;}
@@ -130,4 +130,21 @@ public:
 	}
 	void destroyPlayer();
 	void setKeyLevel(int a_level){barrierKey = a_level;}
+	void sellArmor(Armor * a_chip)
+	{
+		if(a_chip->getType() == ARMOR)
+		{
+			a_chip->setOwner(this);
+			a_chip->sell();
+			if(a_chip->getFlag(FLAG_NUDE))
+				delete a_chip;
+		}
+	}
+	void pickUpArmor()
+	{
+		Armor * gear = new Armor(e_chipSubType(rand()%NUM_CHIP_SUBS_PER_TYPE), e_chipSubSubType(0));
+		gear->setNewed(true);
+		if(!this->addToArmorInventory(gear))
+			sellArmor(gear);
+	}
 };

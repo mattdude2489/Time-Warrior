@@ -292,6 +292,15 @@ class Chip : public Entity
 					if(isChanceSuccessful(10))//10 % chance to get a energy pot
 						m_owner->receivePot(POT_ENERGY);
 				}
+				//chance for armor drop
+				int chance = 0;
+				switch(a_entity->getType())
+				{
+				case MINION:	chance = 5;		break;
+				case BOSS:		chance = 20;	break;
+				}
+				if(isChanceSuccessful(chance))
+					m_owner->pickUpArmor();
 			}
 		}
 		//adjusts the target to be centered
@@ -545,4 +554,28 @@ class Chip : public Entity
 		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){m_spriteHUD->draw(a_screen, a_x, a_y);}
 		int getWidthOffsetCenterHUD(){return m_spriteHUD->getWidthOffsetCenter();}
 		int getHeightOffsetCenterHUD(){return m_spriteHUD->getHeightOffsetCenter();}
+		void sell()
+		{
+			if(m_cType == ARMOR)
+			{
+				int resist = 0;
+				for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+				{
+					if(m_stats[i] > resist)
+						resist = m_stats[i];
+				}
+				//sell for health pot if buffs are equal or def is more
+				if(m_stats[DEFENSE] >= resist)
+				{
+					if(m_owner->getPots(POT_HEALTH) < MAX_POTS)
+						m_owner->receivePot(POT_HEALTH);
+				}
+				//sell for energy pot if buffs are equal or resist is more
+				if(resist >= m_stats[DEFENSE])
+				{
+					if(m_owner->getPots(POT_ENERGY) < MAX_POTS)
+						m_owner->receivePot(POT_ENERGY);
+				}
+			}
+		}
 };

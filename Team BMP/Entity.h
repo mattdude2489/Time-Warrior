@@ -432,4 +432,5 @@ public:
 	virtual void drawUnique(SDL_Surface *a_screen){}
 	virtual void movePlayer(int a_timePassed){}
 	virtual void setKeyLevel(int a_level){}
+	virtual void pickUpArmor(){}
 };

@@ -170,7 +170,7 @@ void Player::addToAttackInventory(Chip * a_chip)
 		break;
 	}
 }
-void Player::addToArmorInventory(Chip * a_chip)
+bool Player::addToArmorInventory(Chip * a_chip)
 {
 	bool slotFound = false;
 	if(a_chip->getType() == ARMOR)
@@ -185,6 +185,7 @@ void Player::addToArmorInventory(Chip * a_chip)
 			}
 		}
 	}
+	return slotFound;
 }
 Player::~Player()
 {
@@ -480,7 +481,8 @@ bool Player::loadPlayer(int saveToLoad)
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
 			for(int k = 0; k < chipAndArmorHelper; k++)
 				gear->levelUp();
-			this->addToArmorInventory(gear);
+			if(!this->addToArmorInventory(gear))
+				sellArmor(gear);
 			//Defense.
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			gear->setDefense(hpenstrintexpsta);
