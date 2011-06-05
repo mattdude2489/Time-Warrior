@@ -333,7 +333,7 @@ class Chip : public Entity
 						else
 							m_sprite->restart(m_cSubSubType-1);
 						m_sprite->setLoopToBegin(true);
-
+						
 						//add sound
 						playSoundEffect(ah);
 					}

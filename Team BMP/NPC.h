@@ -83,7 +83,7 @@ public:
 			}
 		}
 	}
-	void updateUnique(int a_timePassed, World *a_world)
+	void updateUnique(int a_timePassed, World *a_world, AudioHandler * ah)
 	{
 		//Search for a PLAYER in its grid, if they're colliding, check to see if spacebar is pressed. If so, activate its dialogue.
 		Entity * emptyPointer;

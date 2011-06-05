@@ -8,7 +8,6 @@
 #include "Magic.h"
 #include "Weapon.h"
 #include "World.h"
-#include "audioHandler.h"
 
 enum e_inventory		{INVENTORY_ATTACK, INVENTORY_ARMOR, INVENTORY_GAUNTLET, NUM_INVENTORY};
 enum e_gauntletSlots	{SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
