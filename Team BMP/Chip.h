@@ -27,6 +27,7 @@ class Chip : public Entity
 		SDL_Sprite * m_spriteHUD;
 		//input rect for HUD sprite
 		SRect m_spriteRectHUD;
+		SRect m_collisionCheck;
 		//owner of this Chip
 		Entity * m_owner;
 		//Chip Leveler
@@ -370,6 +371,8 @@ class Chip : public Entity
 					}
 					//handle special activate for inherited classes
 					activateUnique();
+					//set up collision rect
+					m_collisionCheck.setDimension(SPoint(m_sprite->getWidthOffsetCenter()*2,m_sprite->getHeightOffsetCenter()*2));
 				}
 				else
 				{
@@ -422,34 +425,23 @@ class Chip : public Entity
 				updateUniqueTwo(a_timePassed);
 				//check grids for entity collision
 				bool collisionMade = false, check = false;
-				//@ most, check 4 surrounding grids (specified by each of sprite's corners)
-				int ul, ur, dl, dr, grid;
-				ul = a_world->getLocationGrid(m_location.x, m_location.y);
-				ur = a_world->getLocationGrid(m_location.x+m_sprite->getWidth(), m_location.y);
-				dl = a_world->getLocationGrid(m_location.x, m_location.y+m_sprite->getHeight());
-				dr = a_world->getLocationGrid(m_location.x+m_sprite->getWidth(), m_location.y+m_sprite->getHeight());
 				//checks the specified grids
-				for(int g = 0; g < 4; ++g)
+				for(int g = 0; g < NUM_GRIDS; ++g)
 				{
 					//only check the grid if it should & has NOT been checked yet
-					switch(g)
-					{
-					case 0:	grid = ul;	check = true;									break;
-					case 1:	grid = ur;	check = grid != ul;								break;
-					case 2:	grid = dl;	check = grid != ul && grid != ur;				break;
-					case 3:	grid = dr;	check = grid != ul && grid != ur && grid != dl;	break;
-					}
+					m_collisionCheck.setPosition(m_location);
+					check = m_collisionCheck.intersects(a_world->getGrid(g)->getLoc());
 					if(check && m_lastSpriteFrame != m_sprite->getFrame() && (!m_onlyAnimateOnce || (m_onlyAnimateOnce && m_sprite->getFrame() == m_sprite->getMaxFrames()-1)))
 					{
-						for(int i = 0; i < a_world->getGrid(grid)->getNumberOfEntities(); ++i)
+						for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
 						{
 							//check against each entity in grid
-							if(shouldApplyEffect(a_world->getEntity(i, grid)))
+							if(shouldApplyEffect(a_world->getEntity(i, g)))
 							{
 								//detect collision with Obstacles, but don't apply effect in such case
-								if(a_world->getEntity(i, grid)->getType() != OBSTACLE)
+								if(a_world->getEntity(i, g)->getType() != OBSTACLE)
 								{
-									applyEffectAndStuffForKill(a_world->getEntity(i, grid));
+									applyEffectAndStuffForKill(a_world->getEntity(i, g));
 									switch(m_cType)
 									{
 									case WEAPON:
