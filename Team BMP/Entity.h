@@ -3,6 +3,7 @@
 #include "spoint.h"
 #include "UserInput.h"
 #include "srect.h"
+#include "audioHandler.h"
 
 class World;
 struct Tile;
@@ -125,7 +126,7 @@ public:
 	SPoint getCenter(){return m_location.sum(SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()));}
 	SDL_Sprite * getSprite() {return m_sprite;}
 	//game loop
-	void update(int a_timePassed, World * a_world);
+	void update(int a_timePassed, World * a_world, AudioHandler * ah);
 	void draw(SDL_Surface * a_screen)
 	{
 		if(m_flags[FLAG_DRAW] && m_camera)
@@ -427,7 +428,7 @@ public:
 	virtual void isPlayerInRange(Entity *a_player, int a_time){}
 	virtual void setLocationUnique(int a_x, int a_y){}
 	virtual void moveUnique(int a_deltaX, int a_deltaY){}
-	virtual void updateUnique(int a_timePassed, World * a_world){}
+	virtual void updateUnique(int a_timePassed, World * a_world, AudioHandler * ah){}
 	virtual void drawUnique(SDL_Surface *a_screen){}
 	virtual void movePlayer(int a_timePassed){}
 	virtual void setKeyLevel(int a_level){}

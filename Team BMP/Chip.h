@@ -6,7 +6,6 @@
 #include "World.h"
 #include "Obstacle.h"
 
-
 enum e_chipType			{ARMOR, MAGIC, WEAPON, NUM_CHIP_TYPES};
 enum e_chipSubType		{HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE, NUM_TOTAL_CHIP_SUBS, NUM_CHIP_SUBS_PER_TYPE = NUM_TOTAL_CHIP_SUBS/NUM_CHIP_TYPES};
 enum e_chipSubSubType	{BASIC, ADVANCED, EXPERT, NUM_CHIP_LEVELS};
@@ -180,7 +179,7 @@ class Chip : public Entity
 			m_isEquipped = true;
 			//buff stats gained from armor
 			if(m_cType == ARMOR)
-				activate();
+				activate(NULL);
 		}
 		void unequip(){m_isEquipped = false;deactivate();}
 		//set it's owner
@@ -297,8 +296,23 @@ class Chip : public Entity
 		}
 		//adjusts the target to be centered
 		void centerTarget(){m_target.subtract(SPoint(m_sprite->getWidthOffsetCenter(), m_sprite->getHeightOffsetCenter()));}
+		//plays sound effect
+		void playSoundEffect(AudioHandler * ah)
+		{
+			switch(m_cSubType)
+			{
+			case DIVINE:	ah->playEffect(E_DIVINE);		break;
+			case LIGHTNING:	ah->playEffect(E_LIGHTNING);	break;
+			case FIRE:		ah->playEffect(E_FIRE);			break;
+			case ICE:		ah->playEffect(E_ICE);			break;
+			case BLUNT:		ah->playEffect(E_BLUNT);		break;
+			case RANGE:		ah->playEffect(E_BOW);			break;
+			case SLASH:		ah->playEffect(E_SLASH);		break;
+			case PIERCE:	ah->playEffect(E_PIERCE);		break;
+			}
+		}
 		//activates current Chip
-		void activate()
+		void activate(AudioHandler * ah)
 		{
 			if(m_owner && m_stats[LEVEL] > 0)
 			{
@@ -319,6 +333,9 @@ class Chip : public Entity
 						else
 							m_sprite->restart(m_cSubSubType-1);
 						m_sprite->setLoopToBegin(true);
+
+						//add sound
+						playSoundEffect(ah);
 					}
 					//handle special activate for inherited classes
 					activateUnique();
@@ -335,6 +352,7 @@ class Chip : public Entity
 					if(should)
 					{
 						m_owner->useEnergy(m_cost);
+						playSoundEffect(ah);
 						centerTarget();
 						switch(m_cSubType)
 						{
@@ -353,7 +371,7 @@ class Chip : public Entity
 		//2nd virtual func to specially update inherited classes
 		virtual void updateUniqueTwo(int a_timePassed){}
 		//virtual func to specially update inherited classes
-		void updateUnique(int a_timePassed, World * a_world)
+		void updateUnique(int a_timePassed, World * a_world, AudioHandler * ah)
 		{
 			//update last-atk timer
 			m_timeSinceLastAttack += a_timePassed;

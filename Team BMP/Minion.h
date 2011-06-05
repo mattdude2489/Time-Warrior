@@ -25,11 +25,11 @@ public:
 		m_playerTargeted = false;
 		m_lastDirectionChange = m_hitLast = 0;
 	}
-	void checkState(int a_timePassed, World * a_world);
+	void checkState(int a_timePassed, World * a_world, AudioHandler * ah);
 	void respawn(){heal(getStatNumber(HEALTH_MAX));setLocation(SCREEN_CENTER_X, SCREEN_CENTER_Y);m_state = WANDER;}
-	void updateUnique(int a_timePassed, World * a_world){checkState(a_timePassed, a_world);}
-	virtual void updateTargPlayerUnique(Entity * a_player, int a_time){}
-	void updateTargPlayer(Entity * a_player, int a_time)
+	void updateUnique(int a_timePassed, World * a_world, AudioHandler * ah){checkState(a_timePassed, a_world, ah);}
+	virtual void updateTargPlayerUnique(Entity * a_player, int a_time, AudioHandler * ah){}
+	void updateTargPlayer(Entity * a_player, int a_time, AudioHandler * ah)
 	{
 		m_target.set(a_player->getLocation());
 		m_hitLast += a_time;
@@ -38,7 +38,7 @@ public:
 			a_player->hit(this->getStatNumber(STRENGTH), BLUNT);
 			m_hitLast = 0;
 		}
-		updateTargPlayerUnique(a_player, a_time);
+		updateTargPlayerUnique(a_player, a_time, ah);
 	}
 	void hitFromPlayer(){m_playerTargeted = true;m_state = CHASE;}
 	void wander(int a_timePassed)

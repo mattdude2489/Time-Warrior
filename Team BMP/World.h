@@ -49,7 +49,7 @@ public:
 	void setMonsters();
 	void setNPC(int, int, int, int);
 	void destroyNPC();
-	void update(Uint32 a_timePassed);
+	void update(Uint32 a_timePassed, AudioHandler * ah);
 	void draw(SDL_Surface * a_screen);
 	void destroyWorld();
 	void initWorld();

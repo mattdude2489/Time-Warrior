@@ -729,20 +729,7 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 		{
 			m_gauntlet[a_slot]->setTarget(a_targetX, a_targetY);
 			m_gauntlet[a_slot]->setDirection(a_direction);
-			m_gauntlet[a_slot]->activate();
-			//should be put in Chip so that sounds only play once per activation,
-			//rather than once per click, because sounds play even if activation has already occurred
-			switch(m_gauntlet[a_slot]->getSubType())
-			{
-			case DIVINE:	ah->playEffect(E_DIVINE);		break;
-			case LIGHTNING:	ah->playEffect(E_LIGHTNING);	break;
-			case FIRE:		ah->playEffect(E_FIRE);			break;
-			case ICE:		ah->playEffect(E_ICE);			break;
-			case BLUNT:		ah->playEffect(E_BLUNT);		break;
-			case RANGE:		ah->playEffect(E_BOW);			break;
-			case SLASH:		ah->playEffect(E_SLASH);		break;
-			case PIERCE:	ah->playEffect(E_PIERCE);		break;
-			}
+			m_gauntlet[a_slot]->activate(ah);
 		}
 	}
 }

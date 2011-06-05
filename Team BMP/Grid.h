@@ -85,10 +85,10 @@ public:
 			}
 		}
 	}
-	void update(Uint32 timePassed, World * a_world) 
+	void update(Uint32 timePassed, World * a_world, AudioHandler * ah) 
 	{
 		for(int i = 0; i < m_mapOfEntities.size(); i++)
-			m_mapOfEntities.get(i)->update(timePassed, a_world);
+			m_mapOfEntities.get(i)->update(timePassed, a_world, ah);
 	}
 	void clearEntity(int a_index)
 	{

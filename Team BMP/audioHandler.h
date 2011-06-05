@@ -6,14 +6,14 @@
 #include <time.h>
 
 #define NUM_SONGS				9
-#define NUM_EFFECTS				8
-enum e_effects	{E_SLASH, E_BLUNT, E_FIRE, E_DIVINE, E_LIGHTNING, E_ICE, E_PIERCE, E_BOW};
+#define NUM_SEFFECTS			8
+enum e_seffects	{E_SLASH, E_BLUNT, E_FIRE, E_DIVINE, E_LIGHTNING, E_ICE, E_PIERCE, E_BOW};
 
 class AudioHandler
 {
 private:
 	Mix_Music * m_music[NUM_SONGS];
-	Mix_Chunk * m_effects[NUM_EFFECTS];
+	Mix_Chunk * m_seffects[NUM_SEFFECTS];
 	int currentTrack, m_currentWorld;;
 public:
 	AudioHandler()
@@ -26,10 +26,10 @@ public:
 			sprintf_s(temp, "Music/Track%i.wav", i);
 			m_music[i] = Mix_LoadMUS(temp);
 		}
-		for(int i = 0; i < NUM_EFFECTS; i++)
+		for(int i = 0; i < NUM_SEFFECTS; i++)
 		{
 			sprintf_s(temp, "Music/Effect%i.wav", i);
-			m_effects[i] = Mix_LoadWAV(temp);
+			m_seffects[i] = Mix_LoadWAV(temp);
 		}
 	}
 	void playMusic()
@@ -72,7 +72,7 @@ public:
 	}
 	void playEffect(int a_track)
 	{
-		Mix_PlayChannel(-1, m_effects[a_track], 0);
+		Mix_PlayChannel(-1, m_seffects[a_track], 0);
 	}
 	~AudioHandler()
 	{
@@ -80,9 +80,9 @@ public:
 		{
 			Mix_FreeMusic(m_music[i]);
 		}
-		for(int i =0 ; i < NUM_EFFECTS; i++)
+		for(int i =0 ; i < NUM_SEFFECTS; i++)
 		{
-			Mix_FreeChunk(m_effects[i]);
+			Mix_FreeChunk(m_seffects[i]);
 		}
 	}
 };

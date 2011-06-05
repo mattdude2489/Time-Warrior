@@ -83,7 +83,7 @@ public:
 		if(stateUI != NULL)
 		{
 			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
-			be->getWorld()->update(passed);
+			be->getWorld()->update(passed, be->getAH());
 			be->getAH()->update(be->getWorld()->getCurrentWorld());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
 		}
@@ -185,7 +185,7 @@ public:
 		if(stateUI != NULL)
 		{
 			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
-			be->getWorld()->update(passed);
+			be->getWorld()->update(passed, be->getAH());
 			be->getAH()->update(be->getWorld()->getCurrentWorld());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
 		}
@@ -280,7 +280,7 @@ public:
 		if(stateUI != NULL)
 		{
 			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
-			be->getWorld()->update(passed);
+			be->getWorld()->update(passed, be->getAH());
 			be->getAH()->update(be->getWorld()->getCurrentWorld());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
 		}

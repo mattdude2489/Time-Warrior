@@ -3,7 +3,7 @@
 #include "Chip.h"
 #include "Obstacle.h"
 
-void Entity::update(int a_timePassed, World * a_world)
+void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 {
 	//Update position.
 	movePlayer(a_timePassed);
@@ -219,7 +219,7 @@ void Entity::update(int a_timePassed, World * a_world)
 	if(!m_prevLoc.equals(m_location))
 		m_prevLoc = m_location;
 
-	updateUnique(a_timePassed, a_world);
+	updateUnique(a_timePassed, a_world, ah);
 	useEffects(a_timePassed);
 }
 int Entity::getTotalDamageDealt(int a_amount, e_chipType a_type)

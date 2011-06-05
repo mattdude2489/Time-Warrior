@@ -836,7 +836,7 @@ void World::setMonsters()
 	}
 }
 
-void World::update(Uint32 a_timePassed)
+void World::update(Uint32 a_timePassed, AudioHandler * ah)
 {
 	//Making sure that the entities are all in their correct grids.
 	Entity * cE = NULL; //Empty entity pointer...
@@ -859,7 +859,7 @@ void World::update(Uint32 a_timePassed)
 	for(int i = 0; i < m_mapOfEntities.size(); i++) //Check the grids...
 	{
 		if(m_cCamera.intersects(m_mapOfEntities.get(i).getLoc())) //If the grids intersect, update them.
-			m_mapOfEntities.get(i).update(a_timePassed, this);
+			m_mapOfEntities.get(i).update(a_timePassed, this, ah);
 	}
 	for(int i = 0; i < m_mapOfEntities.size(); i++)
 	{

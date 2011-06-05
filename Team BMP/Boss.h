@@ -48,13 +48,13 @@ public:
 		}
 	}
 	void isPlayerInRangeUnique(){m_location = m_start;}
-	void updateTargPlayerUnique(Entity * a_player, int a_time)
+	void updateTargPlayerUnique(Entity * a_player, int a_time, AudioHandler * ah)
 	{
 		m_lastCast += a_time;
 		if(this->collideBoundingCircles(a_player, BOSS_ENGAGE) && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
 		{
 			m_attack->setTarget(a_player->getLocation());
-			m_attack->activate();
+			m_attack->activate(ah);
 			m_lastCast = 0;
 		}
 	}
