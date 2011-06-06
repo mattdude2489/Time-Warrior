@@ -40,7 +40,8 @@ private:
 	char buffer[BUFF_SIZE]; //The buffer that you will send to the clients.
 	WSADATA wsaData;
 	timeval t; //The time for the timeout function of "Select".
-	
+	char currentMessage[41];
+	bool chatMessageWaiting;
 
 public:
 	Server() //Default constructor.
@@ -53,9 +54,25 @@ public:
 	}
 	~Server() {shutDown();} //Destructor that calls the shutDown.
 	bool addSocket(char * ipAddress) {return false;} //Adds a socket to the templateVector. Returns success.
+	//Get message returns success if there is a message. If there isn't, it returns false. The parameter becomes the message if true.
+	bool getMessage(char * message) {if(chatMessageWaiting) { message = currentMessage; return true;} else return false;}
+	void reinitChat() {for(int i = 0; i < 41; i++) currentMessage[i] = ' '; chatMessageWaiting = false;}
 	void sendMessage(char * chatMessage)
 	{
-		
+		//Takes a message, puts it in the sendbuf for all connected clients. When they next receive packets, it will be in one of them.
+		for(int i = 0; i < listOfClients.size(); i++)
+		{
+			//completeSocket * cs = &listOfClients.get(i);
+			//Use a second for loop to append the chatMessage into each of the clients send_buffer.
+			//Because the index can be different for each buffer, use each clients own currentBufferSize, server-side.
+			int var = 0; //A random integer variable that will be used to determine the chatMessage's current index.
+			for(int k = listOfClients.get(i).currentBufferSize; k < (sizeof(chatMessage)+listOfClients.get(i).currentBufferSize); k++)
+			{
+				listOfClients.get(i).send_buf[k] = chatMessage[var];
+				var++;
+			}
+			listOfClients.get(i).currentBufferSize += sizeof(chatMessage); //Set the currentBufferSize to its higher amount.
+		}
 	}
 	void sendBufferToClients(int clientToSendTo) //Sends the current buffer to the client specified, if there is still a connection.
 	{
@@ -85,6 +102,22 @@ public:
 				shutdown(clientSock->cSocket, SD_BOTH);
 				closesocket(clientSock->cSocket);
 				listOfClients.remove(receiveFromClient);
+			}
+			//This would do all the main checking for messages, right here. This would also call sendMessage.
+			int currentBuffer = 0;
+			while(clientSock->recv_buf[currentBuffer] != '#') //The ending symbol.
+			{
+				if(clientSock->recv_buf[currentBuffer] == 'C')
+				{
+					int totalAmount = 0;
+					while(clientSock->recv_buf[currentBuffer] != '/') //The ending character for chat messages.
+					{
+						currentMessage[totalAmount] = clientSock->recv_buf[currentBuffer];
+						currentBuffer++; totalAmount++;
+					}
+					sendMessage(currentMessage); //Send the message to ALL of the clients.
+					chatMessageWaiting = true;
+				}
 			}
 		}
 	}

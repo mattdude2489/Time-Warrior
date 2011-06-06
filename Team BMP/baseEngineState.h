@@ -96,7 +96,7 @@ public:
 		if(stateUI != NULL)
 			if(stateUI->getX())
 				exit(be);
-		SDL_Delay(SDLDELAY);
+		//SDL_Delay(SDLDELAY);
 	} //Input Logic Draw
 	void exit(baseEngine* be) 
 	{
@@ -198,7 +198,7 @@ public:
 		if(stateUI != NULL)
 			if(stateUI->getX())
 				exit(be);
-		SDL_Delay(SDLDELAY);
+	//	SDL_Delay(SDLDELAY);
 	}
 	void exit(baseEngine *be) 
 	{
@@ -292,7 +292,7 @@ public:
 		if(stateUI != NULL)
 			if(stateUI->getX())
 				exit(be);
-		SDL_Delay(SDLDELAY);
+	//	SDL_Delay(SDLDELAY);
 	}
 	void exit(baseEngine *be) 
 	{
