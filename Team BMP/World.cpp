@@ -52,9 +52,9 @@ void World::initWorld()
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
 	m_worldSprites[ANIMATION]->start();
+	bossCount = fadeAmount = 0;
 	fopen_s(&npc_loadNPCFile, "Maps/NPC Placements.txt", "r");
 	m_success = setWorld("Maps/HubWorldMap.txt");
-	bossCount = fadeAmount = 0;
 	castleCount = 0;
 	for(int i = 0;  i < 8; i++)
 	{	
@@ -108,7 +108,7 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_CASTLE;
 
 
-	if(fadeAmount != m_localTime->tm_hour&& (currentWorld == WORLD_ENGLAND || currentWorld == WORLD_FOREST || currentWorld == WORLD_DESERT))
+	if(fadeAmount != m_localTime->tm_hour && (currentWorld == WORLD_ENGLAND || currentWorld == WORLD_FOREST || currentWorld == WORLD_DESERT))
 	{
 		fadeAmount = m_localTime->tm_hour;
 		fadeWorld(fadeAmount);
@@ -969,20 +969,11 @@ void World::fadeWorld(int amount)
 {
 	int fade = 0;
 	if(amount < 12)
-	{
 		fade = (11 - amount) * 2;
-	}
 	else
-	{
 		fade = (amount - 12) * 2;
-	}
-	for(int i = 0; i < NUM_SPRITES; i++)
-	{
-		m_sprites[i].fade(fade);
-	}
+	//for(int i = 0; i < NUM_SPRITES; i++)
+	//	m_sprites[i].fade(fade);
 	for(int i = 0; i < NUM_SPRITES_WORLD; i++)
-	{
-		m_worldSprites[i]->fade(fade);
-	}
-
+		m_worldSprites[i]->fade(fade); 
 }
