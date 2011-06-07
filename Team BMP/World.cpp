@@ -52,9 +52,9 @@ void World::initWorld()
 		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
 	m_worldSprites[ANIMATION]->start();
-	bossCount = fadeAmount = 0;
 	fopen_s(&npc_loadNPCFile, "Maps/NPC Placements.txt", "r");
 	m_success = setWorld("Maps/HubWorldMap.txt");
+	bossCount = fadeAmount = 0;
 	castleCount = 0;
 	for(int i = 0;  i < 8; i++)
 	{	
