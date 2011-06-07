@@ -108,7 +108,7 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_CASTLE;
 
 
-	if(fadeAmount != m_localTime->tm_hour&& (currentWorld == WORLD_ENGLAND || currentWorld = WORLD_FOREST || currentWorld = WORLD_DESERT))
+	if(fadeAmount != m_localTime->tm_hour&& (currentWorld == WORLD_ENGLAND || currentWorld == WORLD_FOREST || currentWorld == WORLD_DESERT))
 	{
 		fadeAmount = m_localTime->tm_hour;
 		fadeWorld(fadeAmount);
