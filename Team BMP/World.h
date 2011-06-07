@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "templatevector.h"
 #include "srect.h"
+#include <time.h>
 
 enum e_sprites			{SLIME, SKELETON, GHOST, BOSS0, BOSS1, DRAGON, NPC1, KNIGHT0, KNIGHT1, KNIGHT2, SHADOWDEMON, DEMONKING, NUM_SPRITES};
 enum e_player_sprites	{P_WIDTH = 17, P_HEIGHT = 27};
@@ -24,6 +25,7 @@ struct Tile
 	static int portalIndexNumber;
 	SPoint getLocationScreen(){return pos.difference(*cam);}
 	SRect collideBox;
+	
 };
 
 
@@ -36,10 +38,12 @@ private:
 	SDL_Sprite * m_worldSprites[NUM_SPRITES_WORLD];
 
 	bool m_success, m_closed[8];//m_closed to determine if dungeon is closed
-	int clientPlayerIndex, currentWorld, maxWorldX, maxWorldY, tileX, tileY, bossCount, castleCount;
+	int clientPlayerIndex, currentWorld, maxWorldX, maxWorldY, tileX, tileY, bossCount, castleCount, fadeAmount;
 	Entity * m_player;
 	SRect m_cCamera; //The client's camera.
 	FILE * npc_loadNPCFile;
+	time_t m_worldTime;
+	tm * m_localTime;
 public:
 	World();
 	~World();
@@ -53,6 +57,7 @@ public:
 	void draw(SDL_Surface * a_screen);
 	void destroyWorld();
 	void initWorld();
+	void fadeWorld(int amount);
 	bool setWorld(char * fileName);
 	bool getSuccess() {return m_success;}
 	int getGridWidth(){return maxWorldX/NUM_GRIDS_PER_ROW_COL;}

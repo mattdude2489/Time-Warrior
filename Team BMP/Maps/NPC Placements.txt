@@ -1,8 +1,9 @@
-0
 Hi. Welcome to the Colosseum of Time. We hope you have a \n wonderful time.#
 This is another NPC.#
-1
+0
 WE ARE DOOMED.#
+1
+#
 2
 #
 3

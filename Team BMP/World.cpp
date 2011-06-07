@@ -38,6 +38,10 @@ void World::initWorld()
 	m_sprites[KNIGHT2].setSprite("Sprites/knight2.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[SHADOWDEMON].setSprite("Sprites/ShadowDemon.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
 	m_sprites[DEMONKING].setSprite("Sprites/DemonKing.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	for(int i = 0; i < NUM_SPRITES; i++)
+	{
+		m_sprites[i].setTransparency(COLOR_TRANSPARENT);
+	}
 
 	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
 	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE/2, NUM_WORLD_TILE_A);
@@ -50,7 +54,7 @@ void World::initWorld()
 	m_worldSprites[ANIMATION]->start();
 	fopen_s(&npc_loadNPCFile, "Maps/NPC Placements.txt", "r");
 	m_success = setWorld("Maps/HubWorldMap.txt");
-	bossCount = 0;
+	bossCount = fadeAmount = 0;
 	castleCount = 0;
 	for(int i = 0;  i < 8; i++)
 	{	
@@ -77,7 +81,13 @@ int Tile::portalIndexNumber = 0; //I have to use global scope on this in order t
 
 bool World::setWorld(char * fileName)
 {
-	
+	m_worldTime = time(0);
+	m_localTime = localtime(&m_worldTime);
+	if(fadeAmount != m_localTime->tm_hour)
+	{
+		fadeAmount = m_localTime->tm_hour;
+		fadeWorld(fadeAmount);
+	}
 	FILE * infile;
 	fopen_s(&infile, fileName, "r");
 
@@ -98,7 +108,11 @@ bool World::setWorld(char * fileName)
 		currentWorld = WORLD_CASTLE;
 
 
-	
+	if(fadeAmount != m_localTime->tm_hour&& (currentWorld == WORLD_ENGLAND || currentWorld = WORLD_FOREST || currentWorld = WORLD_DESERT))
+	{
+		fadeAmount = m_localTime->tm_hour;
+		fadeWorld(fadeAmount);
+	}
 
 		
 	//Clear the previous map of the world, in order to create a better one.
@@ -537,7 +551,7 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 {
 	
 	//Now to open the file *, and abuse the atoi system.
-	int c = 0, x = 0, y = 0;
+	int c = 1, x = 0, y = 0;
 	//c = fgetc(infile);
 //	if(currentWorld != 0)
 	//Current World
@@ -950,4 +964,25 @@ void World::convertFromServer(char * omgServerInfo)
 			b = -1;//this has to be done or it will set to 0 then be ++ right away and set the first diget to 0 and it throws it off by one = no bueno
 		}
 	}
+}
+void World::fadeWorld(int amount)
+{
+	int fade = 0;
+	if(amount < 12)
+	{
+		fade = (11 - amount) * 2;
+	}
+	else
+	{
+		fade = (amount - 12) * 2;
+	}
+	for(int i = 0; i < NUM_SPRITES; i++)
+	{
+		m_sprites[i].fade(fade);
+	}
+	for(int i = 0; i < NUM_SPRITES_WORLD; i++)
+	{
+		m_worldSprites[i]->fade(fade);
+	}
+
 }
