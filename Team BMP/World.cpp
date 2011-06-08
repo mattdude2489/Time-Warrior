@@ -739,7 +739,7 @@ void World::setMonsters()
 			{
 			case WORLD_FOREST:
 			case WORLD_DESERT:
-				sprite = &m_sprites[DRAGON];
+				sprite = &m_sprites[BOSS0];
 				t_type = MTRL_AIR;
 				break;
 			case WORLD_CASTLE:
@@ -765,7 +765,7 @@ void World::setMonsters()
 			this->add(newBoss);
 			switch(t_type)
 			{
-			case MTRL_AIR:		newBoss->setChip(LIGHTNING, ADVANCED, this);	break;
+			case MTRL_AIR:		newBoss->setChip(FIRE, BASIC, this);			break;
 			case MTRL_LIGHT:	newBoss->setChip(DIVINE, EXPERT, this);			break;
 			case MTRL_DARK:
 			default:			newBoss->setChip(FIRE, BASIC, this);			break;

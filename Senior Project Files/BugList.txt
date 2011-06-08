@@ -1,0 +1,11 @@
+6/7
+#Minions/boss not chasing after hit
+#also sometimes glichs on each other and no movment
+#Slime broke program after arrows
+#Killed in dungeon gets rid of sprite/breaks it
+#NPC not loading
+#Loading glitch no loading second armor
+#go back to titlle screen crash game
+#Scaling/ balnce minions/bosses
+#Bosses not using magic given to them
+#frame rate/speed limet needed

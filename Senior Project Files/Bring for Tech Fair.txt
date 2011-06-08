@@ -1,0 +1,5 @@
+#Banner
+#Aframe display or table stanee(3 fold board)
+#Binder - Title page w/ group project, all of part of gdd/tdd
+		code, overveiw page, candy/drinks
+		spower stips, computers, contact info/resumes

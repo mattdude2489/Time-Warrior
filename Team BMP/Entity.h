@@ -24,10 +24,12 @@ enum e_rows			{ROW_UP, ROW_RIGHT, ROW_DOWN, ROW_LEFT, NUM_ROWS};
 enum e_effect		{KNOCKBACK, FREEZE, NUM_EFFECTS};
 enum e_material		{MTRL_DEFAULT, MTRL_WOOD, MTRL_FIRE, MTRL_EARTH, MTRL_METAL, MTRL_WATER, MTRL_AIR, MTRL_RUBBER, MTRL_LIGHT, MTRL_DARK};
 enum e_barrier		{BARRIER_NONE, BARRIER_RED, BARRIER_GREEN, BARRIER_YELLOW};
-#define	SPEED_PLAYER	.1
+#define	SPEED_PLAYER	.25
 #define	SPEED_MAGIC		(SPEED_PLAYER*2)
 #define	SPEED_RANGE		(SPEED_PLAYER*3)
 #define	SPEED_MINION	SPEED_PLAYER
+#define LAST_FLAGDOWN	1
+#define LAST_FLAGUP		-1
 
 struct v2D {double x, y;};//PLEASE DONT HATE ME
 struct effect {bool active; SPoint target; int timer, timeLimit, dmg;};
@@ -326,7 +328,10 @@ public:
 	}
 	//world
 	bool isLastWSet(){return !m_lastWLoc.isZero();}
-	void setLastW(){m_lastWLoc.set(m_location.getX(), m_location.getY()+(FRAME_SIZE));}
+	void setLastW(int i)
+	{
+		m_lastWLoc.set(m_location.getX(), m_location.getY()+(i*FRAME_SIZE));
+	}
 	void setCurrentLocToLast(World * a_world);
 	//effects
 	void useEffects(int a_timePassed);

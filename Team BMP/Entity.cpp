@@ -78,7 +78,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 					{
 						if(a_world->getCurrentWorld() == WORLD_ENGLAND)
 						{
-							this->setLastW();
+							this->setLastW(LAST_FLAGDOWN);
 							a_world->setWorld("Maps/Forest.txt");
 						}
 						else if(a_world->getCurrentWorld() == WORLD_FOREST)
@@ -101,7 +101,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 					{
 						if(a_world->getCurrentWorld() == WORLD_ENGLAND)
 						{
-							this->setLastW();
+							this->setLastW(LAST_FLAGUP);
 							a_world->setWorld("Maps/Desert.txt");
 						}
 						else if(a_world->getCurrentWorld() == WORLD_DESERT)
@@ -173,7 +173,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 									if(!a_world->isDClosed(tmp->getIndex())){//if the dungeon is not closed open it
 										int dungeon = rand()%3;//picks a random dungeon 
 
-										this->setLastW();
+										this->setLastW(LAST_FLAGDOWN);
 										a_world->setDClosed(tmp->getDIndex());
 										switch(dungeon){
 											case 0:
@@ -198,7 +198,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 								{
 									if(tmp->colideWithDoor(this))
 									{
-										this->setLastW();
+										this->setLastW(LAST_FLAGDOWN);
 										a_world->setWorld("Maps/Building2.txt");
 										a_world->setCamera(this->m_camera);
 									}

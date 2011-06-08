@@ -14,7 +14,7 @@
 //#include "NPC.h"
 #include "baseEngine.h"
 //#define WITH_NETWORKING
-#define SDLDELAY		10
+#define SDLDELAY		17
 
 //Some debugging includes
 #include <stdio.h>
