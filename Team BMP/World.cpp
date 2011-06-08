@@ -455,7 +455,7 @@ bool World::setWorld(char * fileName)
 			case '5':
 			case '6':
 			case '7':
-				setNPC(currentWorld, c-49 , x, y );
+				setNPC(currentWorld, c-48 , x, y );
 				
 				switch(currentWorld)
 				{
@@ -475,6 +475,13 @@ bool World::setWorld(char * fileName)
 			if(c != '\n')
 				m_mapOfWorld.add(hi);
 			c = fgetc(infile);
+		}
+	for(int i = 0; i < m_mapOfEntities.size(); i++)
+		{
+			for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
+			{
+				printf("Entity type is: %d", m_mapOfEntities.get(i).getEntity(k)->getType());
+			}
 		}
 		m_success = true;
 		fclose(infile);
@@ -588,7 +595,7 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 	c = fgetc(npc_loadNPCFile); //This SHOULD make it get an integer.
 	//fscanf_s(npc_loadNPCFile, "%i", &c);
 	int forLoopNum = NPCToGet;
-	for(int i = 0; i < forLoopNum; i++)
+	for(int i = 0; i <= forLoopNum; i++)
 	{
 		string s;
 		c = fgetc(npc_loadNPCFile);
@@ -619,6 +626,7 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[NPC1]);
 		newNPC->setNewed(true);
 		newNPC->setLocation(npcX*FRAME_SIZE, npcY*FRAME_SIZE);
+		printf("NPC in Hub World created.\n");
 		add(newNPC);
 		c = fgetc(npc_loadNPCFile);
 	}

@@ -128,12 +128,15 @@ private:
 	char cfps[10];
 	int ifps;
 	char * chatMessages[CHAT_MESSAGE_CAP]; //This can be changed easily.
+	char * messageReceiver;
 	TTtext chatLog[CHAT_MESSAGE_CAP];
 	char chatMessageToSend[41]; //40 character cap.
-	bool typing; 
+	bool typing;
+	int num;
 public:
 	void enter(baseEngine *be) 
 	{
+		num = 0;
 		bool lolz = cClient.startClient();
 		typing = false;
 		if(!lolz)
@@ -193,7 +196,38 @@ public:
 		}
 		if(stateUI != NULL)
 		{
-			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
+			if(typing)
+			{
+				char c = stateUI->getLastKey();
+				//char c = getch();
+				if(c > 0)
+				{
+					if(c == 8 || c == 7) //Backspace, bell, tab, and newline.
+						{
+							num--;
+							chatMessageToSend[num] = ' ';
+						}
+					else if(c == 10 || c == 32 || c == 14 || c == 15 || c == 47 || c == 45)
+					{
+						//Do nothing.
+					}
+					else if(num < 40) //This one HAS TO BE lower than 15. I'm going to assume for now that the user KNOWS WHAT THEY'RE DOING.
+					{
+						chatMessageToSend[num] = c;
+						num++;
+					}
+				}
+				if(c == 13)
+				{
+					cClient.sendMessage(chatMessageToSend);
+					num = 0;
+					for(int i = 0; i < 41; i++)
+						chatMessageToSend[i] = ' ';
+					typing = false;
+				}
+			}
+			else
+				be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
 			be->getWorld()->update(passed, be->getAH());
 			be->getAH()->update(be->getWorld()->getCurrentWorld());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
@@ -203,6 +237,14 @@ public:
 		be->getWorld()->draw(be->getScreen());
 		be->getHUD()->draw(be->getScreen());
 		fps.printMessage(be->getScreen(), 0, 0);
+
+		//Insert chat Stuff here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		if(typing)
+		{
+
+		}
+//		if(cClient.g
+
 		SDL_Flip(be->getScreen());
 		if(stateUI != NULL)
 			if(stateUI->getX())
@@ -220,20 +262,33 @@ public:
 class hostGameState: public State
 {
 private:
+
+	//Basic State stuff
 	UserInput * stateUI;
 	Server hostServer;
 	TemplateVector2<Player*> listOfPlayers;
 	Uint32 then, now, passed, second;
+
+	//FPS stuff
 	TTtext fps;
 	MyFont myfps;
 	char cfps[10];
 	int ifps;
+
+	//Chat stuff
 	char * chatMessages[CHAT_MESSAGE_CAP];
+	char * messageReceiver;
+	bool typing;
 	TTtext chatLog[CHAT_MESSAGE_CAP];
+	TTtext chatToSend;
 	char currentMessageToSend[41];
+	int num;
+
 public:
 	void enter(baseEngine *be) 
 	{
+		//Starting the server stuff
+
 		printf("Attempting to start server.\n");
 		bool serverRunning = hostServer.startServer();
 		printf("startServer has been passed. Success is 0. %d", serverRunning);
@@ -247,21 +302,32 @@ public:
 			printf("Server is successul.\n");
 			hostServer.changeWorld(be->getWorld());
 		}
+		//Ending the server stuff, starting FPS
+
 		stateUI = NULL;
 		then = SDL_GetTicks();
 		now = passed = second = 0;
 		myfps.setFont(FONTSIZE);
+
+		//Ending FPS. Starting Chat.
+		for(int k = 0; k < 41; k++)
+		{
+			currentMessageToSend[k] = ' ';
+		}
 		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
 		{
 			chatLog[i].setFont(myfps.getFont());
 			chatMessages[i] = NULL;
 		}
-		for(int k = 0; k < 41; k++)
-			currentMessageToSend[k] = ' ';
+		chatToSend.setFont(myfps.getFont());
+		messageReceiver = NULL;
+		//Ending chat, finishing up FPS
 		fps.setFont(myfps.getFont());
 		ifps = 0;
 		fps.setMessage("0");
+		//Engine game played is set to true, which will tell the game to save.
 		be->getPlayer()->setGamePlayed(true);
+		//Initializes the world and player, if it was ESCed out earlier.
 		if(!be->getWorld()->getSuccess())
 		{
 			be->getWorld()->initWorld();
@@ -270,6 +336,9 @@ public:
 		{
 			be->getPlayer()->initPlayer(be->getWorld());
 		}
+		//Setting the final chat things to false and 0.
+		typing = false;
+		num = 0;
 	}
 	void execute(baseEngine *be) 
 	{
@@ -288,7 +357,47 @@ public:
 		}
 		if(stateUI != NULL)
 		{
-			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
+			if(typing)
+			{
+				char c = stateUI->getLastKey();
+				//char c = getch();
+				if(c > 0)
+				{
+					if(c == 8 || c == 7) //Backspace, bell, tab, and newline.
+					{
+						num--;
+						currentMessageToSend[num] = ' ';
+					}
+					else if(c == 10 || c == 32 || c == 14 || c == 15 || c == 47 || c == 45)
+					{
+						//Do nothing.
+					}
+					else if(num < 41)
+					{
+						currentMessageToSend[num] = c;
+						num++;
+					}
+				}
+				if(c == 13)
+				{
+					hostServer.sendMessage(currentMessageToSend);
+					num = 0;
+					for(int i = 0; i < 41; i++)
+						currentMessageToSend[i] = ' ';
+					typing = false;
+					for(int i = 3; i > 0; i--)
+					{
+						chatMessages[i] = chatMessages[i-1];
+					}
+				}
+			}
+			else
+			{
+				be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
+				if(stateUI->getLastKey() == 13) //Enter key.
+					typing = true;
+			}
+			//Update the world, audiohandler, and HUD.
 			be->getWorld()->update(passed, be->getAH());
 			be->getAH()->update(be->getWorld()->getCurrentWorld());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
@@ -297,6 +406,27 @@ public:
 		be->getWorld()->draw(be->getScreen());
 		be->getHUD()->draw(be->getScreen());
 		fps.printMessage(be->getScreen(), 0, 0);
+
+		//Input chat system stuff here!!!!!!
+		if(typing)
+		{
+			chatToSend.setMessage(currentMessageToSend);
+			chatToSend.printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-20);
+		}
+
+		if(hostServer.getMessage(messageReceiver))
+		{
+			for(int i = 3; i > 0; i--)
+				chatMessages[i] = chatMessages[i-1];
+			chatMessages[0] = messageReceiver;
+		}
+
+		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
+		{
+			chatLog[i].setMessage(chatMessages[i]);
+			if(chatLog[i].messageAvailable())
+				chatLog[i].printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-(i*30));
+		}
 		SDL_Flip(be->getScreen());
 		if(stateUI != NULL)
 			if(stateUI->getX())
@@ -696,6 +826,7 @@ public:
 			be->getPlayer()->newGame();
 			be->getPlayer()->setName(playerName);
 			be->getPlayer()->initSprite(&playerSprites[p_num]);
+			be->getPlayer()->setSpriteNum(p_num);
 			be->changeState(actualGameState::instance());
 		}
 		else

@@ -303,7 +303,7 @@ void Player::save(int saveToSave)
 	//	fflush(outfile); //To switch the operation to writing.
 	//}
 
-	fprintf(outfile, " P %s %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_pots[POT_HEALTH], m_pots[POT_ENERGY], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	fprintf(outfile, " P %s %i %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_pSpriteNum, m_pots[POT_HEALTH], m_pots[POT_ENERGY], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{
@@ -396,6 +396,24 @@ bool Player::loadPlayer(int saveToLoad)
 			name[20] = 0; //NULL FUCKING TERMINATOR.
 			//Level, which we apparently do nothing with. Why do we have it? Besides the obvious.
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
+
+			//The player sprite Num.
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
+			SDL_Sprite * playerNum;
+			switch(hpenstrintexpsta)
+			{
+			case 0:
+				playerNum = new SDL_Sprite("Sprites/player0.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
+				break;
+			case 1:
+				playerNum = new SDL_Sprite("Sprites/player1.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
+				break;
+			case 2:
+				playerNum = new SDL_Sprite("Sprites/player2.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
+				break;
+			}
+			this->initSprite(playerNum);
+			this->setSpriteNum(hpenstrintexpsta);
 
 			//HP pots
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
