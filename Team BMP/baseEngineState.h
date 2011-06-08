@@ -12,6 +12,15 @@
 
 //THIS NEXT LINE IS OMGWTFDANGEROUS, BE CAREFUL WHEN USING THIS LINE.
 #define SDL_SCREEN_STARTUP			SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE)
+//player sprite stuff
+#define P_SPRITES					3
+#define P_OFFSETS					4
+#define P_X							300
+#define	P_Y							100
+#define	P_OFFX						150
+#define	P_OFFY						250
+
+
 
 class baseEngine;
 
@@ -559,12 +568,12 @@ private:
 	char playerName[21];
 	char * enterNameMessage;
 	UserInput * stateUI;
-	SDL_Sprite newGameScreen;
+	SDL_Sprite newGameScreen, playerSprites[P_SPRITES];
 	//SDL_Surface * screen;
-	bool typing, finished, shift;
-	SRect type;
+	bool typing, finished, shift, drawBoarder;
+	SRect type , boarder, playerArea[P_SPRITES];
 	SDL_Rect newType;
-	int num;
+	int num, p_num;
 	MyFont hi;
 	TTtext playerNewName;
 	TTtext enterNewMessage;
@@ -578,9 +587,26 @@ public:
 		}
 		playerName[20] = 0; //Null terminator.
 		enterNameMessage = "Enter new name below: ";
+		drawBoarder = false;
 		stateUI = NULL;
 	//	screen = SDL_SCREEN_STARTUP;
 		newGameScreen.setSprite("Sprites/newGameScreen.bmp", 626, 470, 0, 1);
+		char temp[32];
+		for(int i = 0;  i < P_SPRITES; i++)
+		{
+			sprintf(temp, "Sprites/player%i.bmp", i);
+			playerSprites[i].setSprite(temp, P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
+			playerSprites[i].setTransparency(COLOR_TRANSPARENT);
+			
+			playerSprites[i].stretch(200, 200);
+			playerArea[i].set(P_X, P_Y, playerSprites[i].getWidth(), playerSprites[i].getHeight());
+		}
+		boarder.h = playerSprites[0].getHeight() + P_OFFSETS;
+		boarder.w = playerSprites[0].getWidth() + P_OFFSETS;
+		//force the other 2 at different locations
+		playerArea[1].setPosition(SPoint(P_X - P_OFFX, P_Y + P_OFFY));
+		playerArea[2].setPosition(SPoint(P_X + P_OFFX, P_Y + P_OFFY));
+
 		typing = finished = exitToTitle = shift = false;
 		type.x = newType.x = 219;
 		type.y = newType.y = 224;
@@ -627,6 +653,18 @@ public:
 			}
 			if(stateUI->getX())
 				exitToTitle = true;
+			if(stateUI->getClick())
+			{
+				for(int i = 0; i < P_SPRITES; i++)
+				{
+					if(playerArea[i].contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())))
+					{
+						drawBoarder = true;
+						boarder.setPosition(SPoint(playerArea[i].getX() - (P_OFFSETS/2), playerArea[i].getY() - (P_OFFSETS/2)));
+						p_num = i;
+					}
+				}
+			}
 		}
 		playerNewName.setMessage(playerName);
 		enterNewMessage.setMessage(enterNameMessage);
@@ -635,17 +673,29 @@ public:
 		enterNewMessage.printMessage(be->getScreen(), 100, 100);
 		SDL_FillRect(be->getScreen(), &newType , 0xff0000);
 		playerNewName.printMessage(be->getScreen(), type.x, type.y+15);
+		if(drawBoarder)
+		{
+			SDL_FillRect(be->getScreen(), &boarder, 0xffffff);
+		}
+		for(int i = 0; i < P_SPRITES; i++)
+		{
+			playerSprites[i].setRIndex(2);
+			playerSprites[i].draw(be->getScreen(), playerArea[i].getX(),playerArea[i].getY()); 
+		}
 		SDL_Flip(be->getScreen());
-		if(exitToTitle == true)
+		if(exitToTitle == true && drawBoarder)
 			exit(be);
 	}
 	void exit(baseEngine *be) 
 	{
 	//	SDL_FreeSurface(screen);
+		for(int i = 0;  i < P_SPRITES; i++)
+			playerSprites[i].stretch(50, 50);
 		if(exitToTitle == false)
 		{
 			be->getPlayer()->newGame();
 			be->getPlayer()->setName(playerName);
+			be->getPlayer()->initSprite(&playerSprites[p_num]);
 			be->changeState(actualGameState::instance());
 		}
 		else

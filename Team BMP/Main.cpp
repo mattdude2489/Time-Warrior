@@ -57,7 +57,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	Hud Ghud;
 	World world;
-	SDL_Sprite test("Sprites/SpriteTest.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
+	SDL_Sprite test("Sprites/player0.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
 	//SDL_Sprite test("Sprites/dragon.bmp", DRAGON_FRAME, DRAGON_FRAME, FRAME_RATE, NUM_ROWS);
 	Player eTest(ONE_HUNDRED_PERCENT, ONE_HUNDRED_PERCENT, false, false, false, false, false, false, &test, &world);
 	world.add(&eTest);

@@ -38,7 +38,7 @@ class Entity
 {
 protected:
 	bool m_flags[NUM_FLAGS];
-	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_pots[NUM_POTS], m_statPoints, m_index;
+	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_pots[NUM_POTS], m_statPoints, m_index, m_pSpriteNum;//m_pSpriteNum is needed to load same sprite from load
 	e_entityType m_eType;
 	e_material m_mtrl;
 	SPoint m_location, m_prevLoc, *m_camera, m_target, m_lastWLoc;
@@ -99,6 +99,7 @@ public:
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes);
 		initSprite(a_sprite);
 	}
+	void setSpriteNum(int a_in){m_pSpriteNum = a_in;}
 	void setNewed(bool newed){m_flags[FLAG_NUDE] = newed;}
 	//flags, type, material
 	bool getFlag(e_flags a_flag){return m_flags[a_flag];}
@@ -124,6 +125,7 @@ public:
 	//sprite
 	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
+	int getSpriteNum(){return m_pSpriteNum;}
 	double getRadius(){return SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()).getLength();}
 	SPoint getCenter(){return m_location.sum(SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()));}
 	SDL_Sprite * getSprite() {return m_sprite;}
