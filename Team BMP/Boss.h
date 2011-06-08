@@ -26,10 +26,8 @@ public:
 	}
 	void setChip(e_chipSubType a_subType, e_chipSubSubType a_subSubType, World * a_world)
 	{
-		static bool called = false;
-		if(!called)
+		if(!m_attack)
 		{
-			called = true;
 			switch(a_subType)
 			{
 			case DIVINE:	m_attack = new Divine(a_subSubType);	break;
@@ -46,6 +44,9 @@ public:
 			m_attack->unlock();
 			a_world->add(m_attack);
 		}
+		printf("Boss mtrl %d\n", m_mtrl);
+		if(m_attack)
+			printf("Boss has %d w/lv %d\n", m_attack->getSubType(), m_attack->getSubSubType());
 	}
 	void isPlayerInRangeUnique(){m_location = m_start;}
 	void updateTargPlayerUnique(Entity * a_player, int a_time, AudioHandler * ah)
