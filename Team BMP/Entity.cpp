@@ -261,10 +261,8 @@ int Entity::getTotalDamageTaken(int a_amount, e_chipSubType a_type)
 void Entity::reallocateResistancesAccordingToMaterial()
 {
 	//because it changes stats, this func should only be caused ONCE per Entity instance
-	static bool called = false;
-	if(!called && m_mtrl != MTRL_DEFAULT)
+	if(m_mtrl != MTRL_DEFAULT)
 	{
-		called = true;
 		e_stats strongest, weakest;
 		/*
 		should only store known resistances (RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING)
