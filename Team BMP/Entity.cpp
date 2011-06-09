@@ -266,10 +266,8 @@ void Entity::reallocateResistancesAccordingToMaterial()
 		e_stats strongest, weakest;
 		/*
 		should only store known resistances (RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING)
-			abbreviated R_F, R_I, R_L
-		culminates in 6 possible combos:
-			strong:	R_F		R_F		R_I		R_I		R_L		R_L
-			weak:	R_I		R_L		R_F		R_L		R_F		R_I
+			3 resistances = 3 factorial (3! = 6) combos or permutations
+				order matters because AB means A is strongest & B is weaknest, while BA is vice versa
 
 		Tri-element Cycle:
 			-Lightning	-strong Water		-weak Fire

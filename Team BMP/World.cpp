@@ -53,8 +53,9 @@ void World::initWorld()
 	m_worldSprites[ANIMATION]->setLoopToBegin(true);
 	m_worldSprites[ANIMATION]->start();
 	fopen_s(&npc_loadNPCFile, "Maps/NPC Placements.txt", "r");
+	fadeAmount = 2;
 	m_success = setWorld("Maps/HubWorldMap.txt");
-	bossCount = fadeAmount = 0;
+	bossCount = 0;
 	castleCount = 0;
 	for(int i = 0;  i < 8; i++)
 	{	
@@ -83,14 +84,8 @@ bool World::setWorld(char * fileName)
 {
 	m_worldTime = time(0);
 	m_localTime = localtime(&m_worldTime);
-	if(fadeAmount != m_localTime->tm_hour)
-	{
-		fadeAmount = m_localTime->tm_hour;
-		fadeWorld(fadeAmount);
-	}
 	FILE * infile;
 	fopen_s(&infile, fileName, "r");
-
 
 	if(fileName == "Maps/HubWorldMap.txt")
 		currentWorld = WORLD_HUB;
@@ -107,13 +102,17 @@ bool World::setWorld(char * fileName)
 	else if(strcmp(fileName ,"Maps/Castle0.txt")||strcmp(fileName, "Maps/Castle1.txt"))
 		currentWorld = WORLD_CASTLE;
 
-
-	if(fadeAmount != m_localTime->tm_hour && (currentWorld == WORLD_ENGLAND || currentWorld == WORLD_FOREST || currentWorld == WORLD_DESERT))
+	//TODO: re-create sprites so dark->light process is correct (& so only certain worlds fade)
+		//keep in mind that all worlds use the same sprite sheet,
+		//so as soon as one world fades it, all other worlds will also be faded
+	switch(currentWorld)
 	{
-		fadeAmount = m_localTime->tm_hour;
-		fadeWorld(fadeAmount);
+	case WORLD_ENGLAND:
+	case WORLD_FOREST:
+	case WORLD_DESERT:
+		fadeWorld();
+		break;
 	}
-
 		
 	//Clear the previous map of the world, in order to create a better one.
 	if(m_mapOfWorld.size() != 0)
@@ -480,7 +479,7 @@ bool World::setWorld(char * fileName)
 		{
 			for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
 			{
-				printf("Entity type is: %d", m_mapOfEntities.get(i).getEntity(k)->getType());
+				printf("Entity type is: %d\n", m_mapOfEntities.get(i).getEntity(k)->getType());
 			}
 		}
 		m_success = true;
@@ -973,15 +972,22 @@ void World::convertFromServer(char * omgServerInfo)
 		}
 	}
 }
-void World::fadeWorld(int amount)
+void World::fadeWorld()
 {
-	int fade = 0;
-	if(amount < 12)
-		fade = (11 - amount) * 2;
+	int fade, hour = m_localTime->tm_hour;
+	if(fadeAmount < 1)
+		fadeAmount = 1;
+	hour %= TIME_DAY_HOURS;
+	if(hour < TIME_DAY_HALF)
+		fade = ((TIME_DAY_HALF-1) - hour) * fadeAmount;
 	else
-		fade = (amount - 12) * 2;
-	//for(int i = 0; i < NUM_SPRITES; i++)
-	//	m_sprites[i].fade(fade);
-	for(int i = 0; i < NUM_SPRITES_WORLD; i++)
-		m_worldSprites[i]->fade(fade); 
+		fade = (hour - TIME_DAY_HALF) * fadeAmount;
+	printf("hour: %d, fade: %d\n", hour, fade);
+	if(fade > 0)
+	{
+		//for(int i = 0; i < NUM_SPRITES; i++)
+		//	m_sprites[i].fade(fade);
+		for(int i = 0; i < NUM_SPRITES_WORLD; i++)
+			m_worldSprites[i]->fade(fade); 
+	}
 }

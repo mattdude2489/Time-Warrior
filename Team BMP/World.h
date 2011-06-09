@@ -57,7 +57,7 @@ public:
 	void draw(SDL_Surface * a_screen);
 	void destroyWorld();
 	void initWorld();
-	void fadeWorld(int amount);
+	void fadeWorld();
 	bool setWorld(char * fileName);
 	bool getSuccess() {return m_success;}
 	int getGridWidth(){return maxWorldX/NUM_GRIDS_PER_ROW_COL;}
