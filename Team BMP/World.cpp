@@ -39,19 +39,9 @@ void World::initWorld()
 	m_sprites[SHADOWDEMON].setSprite("Sprites/ShadowDemon.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
 	m_sprites[DEMONKING].setSprite("Sprites/DemonKing.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	for(int i = 0; i < NUM_SPRITES; i++)
-	{
 		m_sprites[i].setTransparency(COLOR_TRANSPARENT);
-	}
-
-	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
-	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE/2, NUM_WORLD_TILE_A);
-	m_worldSprites[TREE_SPRITE] = new SDL_Sprite("Sprites/Tree.bmp", TREE_WIDTH, TREE_HEIGHT, FRAME_RATE, TREE_COUNT);
-	m_worldSprites[ROCK_SHRUB] = new SDL_Sprite("Sprites/RocksandShrubs.bmp", FRAME_SIZE,FRAME_SIZE, FRAME_RATE, NUM_ROCK_SHRUB); 
-	m_worldSprites[BUILDINGS] = new SDL_Sprite("Sprites/Buildings.bmp", BUILDING_W, BUILDING_H, FRAME_RATE, NUM_ROWS);
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
-		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
-	m_worldSprites[ANIMATION]->setLoopToBegin(true);
-	m_worldSprites[ANIMATION]->start();
+		m_worldSprites[i] = NULL;
 	fopen_s(&npc_loadNPCFile, "Maps/NPC Placements.txt", "r");
 	fadeAmount = 2;
 	m_success = setWorld("Maps/HubWorldMap.txt");
@@ -71,7 +61,10 @@ World::~World()
 void World::destroyWorld()
 {
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
-		delete m_worldSprites[i];
+	{
+		if(m_worldSprites[i])
+			delete m_worldSprites[i];
+	}
 	//delete m_closed;
 	m_success = false; //Close off the world.
 	if(npc_loadNPCFile)
@@ -102,9 +95,23 @@ bool World::setWorld(char * fileName)
 	else if(strcmp(fileName ,"Maps/Castle0.txt")||strcmp(fileName, "Maps/Castle1.txt"))
 		currentWorld = WORLD_CASTLE;
 
-	//TODO: re-create sprites so dark->light process is correct (& so only certain worlds fade)
+	//re-create sprites so dark->light process is correct (& so only certain worlds fade)
 		//keep in mind that all worlds use the same sprite sheet,
 		//so as soon as one world fades it, all other worlds will also be faded
+	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
+	{
+		if(m_worldSprites[i])
+			delete m_worldSprites[i];
+	}
+	m_worldSprites[SINGLE] = new SDL_Sprite("Sprites/world_single.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_S);
+	m_worldSprites[ANIMATION] = new SDL_Sprite("Sprites/world_animate.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_WORLD_TILE_A);
+	m_worldSprites[TREE_SPRITE] = new SDL_Sprite("Sprites/Tree.bmp", TREE_WIDTH, TREE_HEIGHT, FRAME_RATE, TREE_COUNT);
+	m_worldSprites[ROCK_SHRUB] = new SDL_Sprite("Sprites/RocksandShrubs.bmp", FRAME_SIZE,FRAME_SIZE, FRAME_RATE, NUM_ROCK_SHRUB); 
+	m_worldSprites[BUILDINGS] = new SDL_Sprite("Sprites/Buildings.bmp", BUILDING_W, BUILDING_H, FRAME_RATE, NUM_ROWS);
+	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
+		m_worldSprites[i]->setTransparency(COLOR_TRANSPARENT);
+	m_worldSprites[ANIMATION]->setLoopToBegin(true);
+	m_worldSprites[ANIMATION]->start();
 	switch(currentWorld)
 	{
 	case WORLD_ENGLAND:
@@ -977,11 +984,10 @@ void World::fadeWorld()
 	int fade, hour = m_localTime->tm_hour;
 	if(fadeAmount < 1)
 		fadeAmount = 1;
-	hour %= TIME_DAY_HOURS;
-	if(hour < TIME_DAY_HALF)
-		fade = ((TIME_DAY_HALF-1) - hour) * fadeAmount;
+	if(hour < HOURS_HALF_DAY)
+		fade = ((HOURS_HALF_DAY-1) - hour) * fadeAmount;
 	else
-		fade = (hour - TIME_DAY_HALF) * fadeAmount;
+		fade = (hour - HOURS_HALF_DAY) * fadeAmount;
 	printf("hour: %d, fade: %d\n", hour, fade);
 	if(fade > 0)
 	{

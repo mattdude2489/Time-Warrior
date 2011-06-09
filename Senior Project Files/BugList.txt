@@ -9,3 +9,13 @@
 #Scaling/ balnce minions/bosses
 #Bosses not using magic given to them
 #frame rate/speed limet needed
+
+6/9
+#Minions/boss not chasing after hit
+#also sometimes glichs on each other and no movment
+#Slime broke program after arrows
+#NPC not loading
+#Loading glitch no loading second armor
+#go back to titlle screen crash game
+#Scaling/ balnce minions/bosses
+#frame rate/speed limet needed

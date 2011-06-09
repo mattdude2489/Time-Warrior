@@ -302,7 +302,8 @@ class Chip : public Entity
 			//erase & gain experience from killed entities
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
 			{
-				a_entity->setDrawOff();
+				if(a_entity->getType() != PLAYER)
+					a_entity->setDrawOff();
 				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
 				m_owner->unlockEarnedAttacks();
 				if(m_owner->getPots(POT_HEALTH) < MAX_POTS)
