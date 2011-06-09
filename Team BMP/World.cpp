@@ -981,7 +981,7 @@ void World::convertFromServer(char * omgServerInfo)
 }
 void World::fadeWorld()
 {
-	int fade, hour = 0;//m_localTime->tm_hour;
+	int fade, hour = m_localTime->tm_hour;
 	if(fadeAmount < 1)
 		fadeAmount = 1;
 	if(hour < HOURS_HALF_DAY)
