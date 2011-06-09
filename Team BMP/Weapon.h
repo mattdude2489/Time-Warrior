@@ -224,9 +224,9 @@ class Pierce : public Weapon
 		char * getName(){
 			switch(m_cSubSubType)
 			{
-			case BASIC:		return "Pierce Stab";		break;
-			case ADVANCED:	return "Running Stab";		break;
-			case EXPERT:	return "Superpower Stab";	break;
+			case BASIC:		return "Pierce Stab";	break;
+			case ADVANCED:	return "Running Stab";	break;
+			case EXPERT:	return "Stabby-Stabby";	break;
 			default:		return "Pierce";
 			}
 		}
