@@ -147,7 +147,8 @@ bool World::setWorld(char * fileName)
 				hi.currentTexture = m_worldSprites[SINGLE];
 				hi.pos.x = x * hi.currentTexture->getWidth();
 				hi.pos.y = y * hi.currentTexture->getHeight();
-				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = hi.buildingh = hi.buildingv = hi.buildDoor = false;
+				hi.collide = hi.portal = hi.dungeon = hi.spawnLocation = hi.bossLoc = hi.npcLoc = hi.playerSpawn = hi.tree = hi.door = hi.stairs = hi.ddoor = hi.fdoor = hi.buildingh = hi.buildingv = hi.buildDoor = false;
+				hi.npcNum = 0;
 				x++;
 				hi.collideBox.x = hi.pos.x;
 				hi.collideBox.y = hi.pos.y;
@@ -461,8 +462,6 @@ bool World::setWorld(char * fileName)
 			case '5':
 			case '6':
 			case '7':
-				setNPC(currentWorld, c-48 , x, y );
-				
 				switch(currentWorld)
 				{
 				case WORLD_ENGLAND:		tempInt = TILE_GRASS;			break;
@@ -472,6 +471,8 @@ bool World::setWorld(char * fileName)
 				case WORLD_TOWN2:		tempInt = TILE_BUILDING_GROUND;	break;
 				}
 				hi.indexOfSpriteRow = tempInt;
+				hi.npcLoc = true;
+				hi.npcNum = c-48;
 				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;
@@ -486,7 +487,13 @@ bool World::setWorld(char * fileName)
 		{
 			for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
 			{
-				printf("Entity type is: %d\n", m_mapOfEntities.get(i).getEntity(k)->getType());
+				switch(m_mapOfEntities.get(i).getEntity(k)->getType())
+				{
+				case PLAYER:	printf("Entity type is: PLAYER\n");	break;
+				case NPC:		printf("Entity type is: NPC\n");
+					//printf("Entity type is: %d\n", m_mapOfEntities.get(i).getEntity(k)->getType());
+				break;
+				}
 			}
 		}
 		m_success = true;
@@ -571,7 +578,6 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 	if(npc_loadNPCFile == NULL)
 		fopen_s(&npc_loadNPCFile, "NPC Placements.txt", "r"); //To RESET the stream pointer.
 	fscanf_s(npc_loadNPCFile, "%i", &c);
-
 	while(c != currentWorld)
 	{
 		while(c != '#')
@@ -591,6 +597,7 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 	//	c -= 48;
 		if(c == EOF)
 		{
+			printf("");
 			fclose(npc_loadNPCFile);
 			return;
 		}
@@ -632,8 +639,8 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[NPC1]);
 		newNPC->setNewed(true);
 		newNPC->setLocation(npcX*FRAME_SIZE, npcY*FRAME_SIZE);
-		printf("NPC in Hub World created.\n");
-		add(newNPC);
+		printf("NPC @ (%d,%d)\n", newNPC->getLocation().x, newNPC->getLocation().y);
+		this->add(newNPC);
 		c = fgetc(npc_loadNPCFile);
 	}
 	//fclose(infile);
@@ -861,6 +868,8 @@ void World::setMonsters()
 			obs->setDoor();
 			this->add(obs);
 		}
+		if(m_mapOfWorld.get(i).npcLoc)
+			setNPC(currentWorld, m_mapOfWorld.get(i).npcNum, m_mapOfWorld.get(i).pos.x/FRAME_SIZE, m_mapOfWorld.get(i).pos.y/FRAME_SIZE);
 	}
 }
 
@@ -988,7 +997,7 @@ void World::fadeWorld()
 		fade = ((HOURS_HALF_DAY-1) - hour) * fadeAmount;
 	else
 		fade = (hour - HOURS_HALF_DAY) * fadeAmount;
-	printf("hour: %d, fade: %d\n", hour, fade);
+	//printf("hour: %d, fade: %d\n", hour, fade);
 	if(fade > 0)
 	{
 		//for(int i = 0; i < NUM_SPRITES; i++)

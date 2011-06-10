@@ -44,9 +44,6 @@ public:
 			m_attack->unlock();
 			a_world->add(m_attack);
 		}
-		printf("Boss mtrl %d\n", m_mtrl);
-		if(m_attack)
-			printf("Boss has %d w/lv %d\n", m_attack->getSubType(), m_attack->getSubSubType());
 	}
 	void isPlayerInRangeUnique(){m_location = m_start;}
 	void updateTargPlayerUnique(Entity * a_player, int a_time, AudioHandler * ah)
