@@ -49,8 +49,9 @@ class UserInput
 		char getLastKey() 
 		{
 			char lastKey;
-			lastKey = lastKeyPressed; 
-			lastKeyPressed = 10; 
+			lastKey = lastKeyPressed;
+			printf("Last key pressed int: %i\n", lastKey);
+			lastKeyPressed = 10;
 			if(shift) 
 				lastKey-=32;
 			if(lastKey < 32 && shift)

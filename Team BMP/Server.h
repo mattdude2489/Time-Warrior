@@ -72,6 +72,8 @@ public:
 				var++;
 			}
 			listOfClients.get(i).currentBufferSize += sizeof(chatMessage); //Set the currentBufferSize to its higher amount.
+			if(listOfClients.get(i).currentBufferSize >= BUFF_SIZE)
+				listOfClients.get(i).currentBufferSize = listOfClients.get(i).currentBufferSize % BUFF_SIZE;
 		}
 	}
 	void sendBufferToClients(int clientToSendTo) //Sends the current buffer to the client specified, if there is still a connection.
@@ -102,6 +104,15 @@ public:
 				shutdown(clientSock->cSocket, SD_BOTH);
 				closesocket(clientSock->cSocket);
 				listOfClients.remove(receiveFromClient);
+			}
+			if(clientSock->bytesRecFromServer == SOCKET_ERROR)
+			{
+				//Figure out...something.
+				shutdown(clientSock->cSocket, SD_BOTH);
+				closesocket(clientSock->cSocket);
+				listOfClients.remove(receiveFromClient);
+				printf("Error: %i\n", WSAGetLastError());
+				return;
 			}
 			//This would do all the main checking for messages, right here. This would also call sendMessage.
 			int currentBuffer = 0;
@@ -214,6 +225,7 @@ public:
 				completeSocket cs;
 				cs.cSocket = accept(listen_socket, (SOCKADDR*)&cs.clnt_addr, &clntLen);
 				printf("Player @ %s has connected.\n", inet_ntoa(cs.clnt_addr.sin_addr));
+				cs.currentBufferSize = 0;
 				listOfClients.add(cs);
 			}
 			for(int k = 0; k < listOfClients.size(); k++)

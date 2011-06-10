@@ -67,6 +67,11 @@ public:
 		//Construct local address. 
 		memset(&sSocket.clnt_addr, 0, sizeof(sSocket.clnt_addr));
 		t.tv_sec = 0; t.tv_usec = 100; //Again, 3 seconds. Why not?
+		for(int i = 0; i < BUFFER_SIZE_IS; i++)
+		{
+			sSocket.recv_buf[i] = ' ';
+			sSocket.send_buf[i] = ' ';
+		}
 		return true;
 	}
 	bool connectToServer(char * ipAddress)
@@ -104,6 +109,7 @@ public:
 		}
 		chatMessageWaiting = true;
 	}
+	bool isChatMessageWaiting() {return chatMessageWaiting;}
 	char * getChat() //I guess I'll just have to remember to call clearChat immediately after getChat.
 	{
 		return messageWaiting;
@@ -200,6 +206,8 @@ public:
 				case 'E':
 					break;
 				}
+				s++;
+				c = sSocket.recv_buf[s];
 			}
 		}
 	}

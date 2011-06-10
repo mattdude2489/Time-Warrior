@@ -128,8 +128,8 @@ private:
 	char cfps[10];
 	int ifps;
 	char * chatMessages[CHAT_MESSAGE_CAP]; //This can be changed easily.
-	char * messageReceiver;
 	TTtext chatLog[CHAT_MESSAGE_CAP];
+	TTtext chatLogToSend;
 	char chatMessageToSend[41]; //40 character cap.
 	bool typing;
 	int num;
@@ -161,10 +161,11 @@ public:
 		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
 		{
 			chatLog[i].setFont(myfps.getFont());
-			chatMessages[i] = NULL; //Set them to...null. For ease of use later.
+			chatMessages[i] = "                 ";
 		}
 		for(int i = 0; i < 41; i++)
 			chatMessageToSend[i] = ' ';
+		chatLogToSend.setFont(myfps.getFont());
 		fps.setFont(myfps.getFont());
 		ifps = 0;
 		fps.setMessage("0");
@@ -227,7 +228,11 @@ public:
 				}
 			}
 			else
+			{
 				be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
+				if(stateUI->getLastKey() == 13)
+					typing = true;
+			}
 			be->getWorld()->update(passed, be->getAH());
 			be->getAH()->update(be->getWorld()->getCurrentWorld());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
@@ -241,9 +246,24 @@ public:
 		//Insert chat Stuff here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if(typing)
 		{
-
+			chatLogToSend.setMessage(chatMessageToSend);
+			chatLogToSend.printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT - 20);
 		}
-//		if(cClient.g
+		if(cClient.isChatMessageWaiting())
+		{
+			//There is a chat message waiting. Get it after waiting all this stuff...
+			for(int i = 3; i > 0; i--)
+			{
+				chatMessages[i] = chatMessages[i-1];
+			}
+			chatMessages[0] = cClient.getChat();
+			cClient.clearChat();
+		}
+		for(int i = 0; i < 4; i++)
+		{
+			chatLog[i].setMessage(chatMessages[i]);
+			chatLog[i].printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-((i*20)+20));
+		}
 
 		SDL_Flip(be->getScreen());
 		if(stateUI != NULL)
@@ -317,7 +337,7 @@ public:
 		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
 		{
 			chatLog[i].setFont(myfps.getFont());
-			chatMessages[i] = NULL;
+			chatMessages[i] = "                  ";
 		}
 		chatToSend.setFont(myfps.getFont());
 		messageReceiver = NULL;
@@ -378,6 +398,7 @@ public:
 						num++;
 					}
 				}
+				//If typing is already active, and the enter key was pressed.
 				if(c == 13)
 				{
 					hostServer.sendMessage(currentMessageToSend);
@@ -393,8 +414,9 @@ public:
 			}
 			else
 			{
+				char c = stateUI->getLastKey();
 				be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
-				if(stateUI->getLastKey() == 13) //Enter key.
+				if(c == 13)
 					typing = true;
 			}
 			//Update the world, audiohandler, and HUD.
@@ -411,7 +433,7 @@ public:
 		if(typing)
 		{
 			chatToSend.setMessage(currentMessageToSend);
-			chatToSend.printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-20);
+			chatToSend.printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-50);
 		}
 
 		if(hostServer.getMessage(messageReceiver))
@@ -425,7 +447,7 @@ public:
 		{
 			chatLog[i].setMessage(chatMessages[i]);
 			if(chatLog[i].messageAvailable())
-				chatLog[i].printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-(i*30));
+				chatLog[i].printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-((i*30)+50));
 		}
 		SDL_Flip(be->getScreen());
 		if(stateUI != NULL)
