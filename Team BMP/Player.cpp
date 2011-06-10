@@ -3,7 +3,7 @@
 #include "UserInput.h"
 #include "ButtonAndWIndow.h"
 #include <stdio.h>
-
+#define B_OFF			2//the off set for having the player start with stats
 void Player::initPlayer(World * newWorld)
 {
 	m_eType = PLAYER;
@@ -472,7 +472,7 @@ bool Player::loadPlayer(int saveToLoad)
 				this->m_statPoints = 0;
 				//make sure level is valid
 					//lv = default level (1) + strength + intellect + leftover stat points
-			int lvShould = this->m_stats[LEVEL] + this->m_stats[STRENGTH] + this->m_stats[INTELLECT] + this->m_statPoints;
+			int lvShould = this->m_stats[LEVEL] + this->m_stats[STRENGTH] + this->m_stats[INTELLECT] + this->m_statPoints - B_OFF;
 			int ptsBeforeLeveling = this->m_statPoints;
 			for(int i = this->m_stats[LEVEL]; i < lvShould; ++i)
 				this->levelUp();

@@ -67,11 +67,12 @@ public:
 class StatWindow
 {
 private:
-	TTtext m_text[NUM_STATS],  m_lvlPts, m_inventory[NUM_INVENTORY], m_playerName;
+	TTtext m_text[NUM_STATS],  m_lvlPts, m_inventory[NUM_INVENTORY], m_playerName, m_chipInfo;
 	Player * m_player;
 	SDL_Surface * m_window;
 	Button m_addStat[STATINC];
 	int m_yStartInvAttack, m_yStartInvArmor;
+	bool m_drawInfo;
 public:
 	StatWindow()
 	{
@@ -82,6 +83,7 @@ public:
 			m_addStat[i].setImage("Sprites/button1.bmp");
 		}
 		m_yStartInvAttack = m_yStartInvArmor = 0;
+		m_drawInfo = false;
 	}
 	void InitText(TTF_Font * a_font)
 	{
@@ -91,6 +93,7 @@ public:
 		m_playerName.setFont(a_font);
 		for(int i = 0; i < NUM_INVENTORY; i++)
 			m_inventory[i].setFont(a_font);
+		m_chipInfo.setFont(a_font);
 	}
 	Player * getPlayer(){return m_player;}
 	void setPlayer(Player * a_player)
@@ -165,6 +168,25 @@ public:
 				}
 			}
 		}
+		clicked =  m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
+		if(!clicked)
+				clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
+		if(clicked)//not really clicking
+		{
+			char temp[32];
+			switch(clicked->getType())
+			{
+			case MAGIC:		sprintf(temp, "Magic: %02i", clicked->getDamage());				break;
+			case WEAPON:	sprintf(temp, "Weapon: %02i", clicked->getDamage());			break;
+			case ARMOR:		sprintf(temp, "Armor: %02i", clicked->getStatNumber(DEFENSE));	break;
+			}
+			m_chipInfo.setMessageBackground(temp);
+			m_chipInfo.setLoc(ui->getMouseX(), ui->getMouseY());
+			m_drawInfo = true;
+			
+		}
+		else
+			m_drawInfo = false;
 	}
 	void draw(SDL_Surface * a_screen)
 	{
@@ -200,6 +222,10 @@ public:
 			case INVENTORY_ARMOR:	m_yStartInvArmor = t_y;		break;
 			}
 			t_y += m_player->drawInventory(a_screen, WINDOWXY.x, t_y, (e_inventory)i, m_window->w/FRAME_SIZE, 0, 0) * FRAME_SIZE;
+		}
+		if(m_drawInfo)
+		{
+			m_chipInfo.printMessage(a_screen);
 		}
 	}
 	~StatWindow(){}

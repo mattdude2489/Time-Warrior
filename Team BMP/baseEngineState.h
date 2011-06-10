@@ -849,6 +849,21 @@ public:
 			be->getPlayer()->setName(playerName);
 			be->getPlayer()->initSprite(&playerSprites[p_num]);
 			be->getPlayer()->setSpriteNum(p_num);
+			switch(p_num)
+			{
+			case HYBRID:
+				be->getPlayer()->incInt();
+				be->getPlayer()->incStr();
+				break;
+			case CASTER:
+				be->getPlayer()->incInt();
+				be->getPlayer()->incInt();
+				break;
+			case TANK:
+				be->getPlayer()->incStr();
+				be->getPlayer()->incStr();
+				break;
+			}
 			be->changeState(actualGameState::instance());
 		}
 		else

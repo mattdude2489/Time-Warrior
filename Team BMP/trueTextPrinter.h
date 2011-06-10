@@ -40,6 +40,7 @@ private:
 	TTF_Font * m_font;
 	SDL_Color m_textColor;
 	SDL_Color m_backColor;
+	SPoint m_loc;
 
 public:
 	TTtext()//inits everything to print text
@@ -51,6 +52,7 @@ public:
 		m_backColor.r = 255;
 		m_backColor.g = 255;
 		m_message = NULL;
+		m_loc.set(0,0);
 	}
 	//Sets the text color, but not the background.
 	void setTextColor(Uint32 color)
@@ -67,6 +69,18 @@ public:
 		m_backColor.g = color >> 8;
 		m_backColor.b = color;
 	}
+	void setLoc(int x, int y)
+	{
+		m_loc.set(x,y);
+	}
+	void setMessageBackground(char * a_message)
+	{
+		if(m_message != NULL)
+		{
+			SDL_FreeSurface(m_message);
+		}
+		m_message = TTF_RenderText(m_font, a_message, m_textColor, m_backColor );
+	}
 	void setMessage(char * a_message)//sets the text to print, this will need to be done every message
 	{
 		if(m_message != NULL)
@@ -75,7 +89,10 @@ public:
 		}
 		m_message = TTF_RenderText_Blended(m_font, a_message, m_textColor);
 	}
-
+	void printMessage(SDL_Surface * a_screen)
+	{
+		apply_surface(m_loc.getX(), m_loc.getY(), m_message, a_screen);
+	}
 	void printMessage(SDL_Surface * a_screen, int a_x, int a_y)//pritns it to the screen with the location passed by x and y
 	{
 		apply_surface(a_x, a_y, m_message, a_screen);
