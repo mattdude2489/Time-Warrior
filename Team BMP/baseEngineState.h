@@ -6,6 +6,7 @@
 //SDL includes and defines
 #define SDLDELAY		17
 #define CHAT_MESSAGE_CAP	4
+#define CHAT_CHARACTER_CAP	41
 #include "sdl/sdl.h"
 #include <stdio.h>
 #include <conio.h>
@@ -127,10 +128,10 @@ private:
 	MyFont myfps;
 	char cfps[10];
 	int ifps;
-	char * chatMessages[CHAT_MESSAGE_CAP]; //This can be changed easily.
+	char chatMessages[CHAT_MESSAGE_CAP][CHAT_CHARACTER_CAP]; //This can be changed easily.
 	TTtext chatLog[CHAT_MESSAGE_CAP];
 	TTtext chatLogToSend;
-	char chatMessageToSend[41]; //40 character cap.
+	char chatMessageToSend[CHAT_CHARACTER_CAP]; //40 character cap.
 	bool typing;
 	int num;
 public:
@@ -161,9 +162,12 @@ public:
 		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
 		{
 			chatLog[i].setFont(myfps.getFont());
-			chatMessages[i] = "                 ";
+			for(int k = 0; k < CHAT_CHARACTER_CAP; k++)
+			{
+				chatMessages[i][k] = ' ';
+			}
 		}
-		for(int i = 0; i < 41; i++)
+		for(int i = 0; i < CHAT_CHARACTER_CAP; i++)
 			chatMessageToSend[i] = ' ';
 		chatLogToSend.setFont(myfps.getFont());
 		fps.setFont(myfps.getFont());
@@ -208,7 +212,7 @@ public:
 							num--;
 							chatMessageToSend[num] = ' ';
 						}
-					else if(c == 10 || c == 32 || c == 14 || c == 15 || c == 47 || c == 45)
+					else if(c == 10 || c == 14 || c == 15 || c == 47 || c == 45)
 					{
 						//Do nothing.
 					}
@@ -222,15 +226,16 @@ public:
 				{
 					cClient.sendMessage(chatMessageToSend);
 					num = 0;
-					for(int i = 0; i < 41; i++)
+					for(int i = 0; i < CHAT_CHARACTER_CAP; i++)
 						chatMessageToSend[i] = ' ';
 					typing = false;
 				}
 			}
 			else
 			{
+				char newC = stateUI->getLastKey();
 				be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
-				if(stateUI->getLastKey() == 13)
+				if(newC == 13)
 					typing = true;
 			}
 			be->getWorld()->update(passed, be->getAH());
@@ -247,22 +252,25 @@ public:
 		if(typing)
 		{
 			chatLogToSend.setMessage(chatMessageToSend);
-			chatLogToSend.printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT - 20);
+			chatLogToSend.printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT - 50);
 		}
 		if(cClient.isChatMessageWaiting())
 		{
 			//There is a chat message waiting. Get it after waiting all this stuff...
 			for(int i = 3; i > 0; i--)
 			{
-				chatMessages[i] = chatMessages[i-1];
+				for(int k = 0; k < CHAT_CHARACTER_CAP; k++)
+					chatMessages[i][k] = chatMessages[i-1][k];
 			}
-			chatMessages[0] = cClient.getChat();
+			char * lololol = cClient.getChat();
+			for(int k = 0; k < CHAT_CHARACTER_CAP; k++)
+				chatMessages[0][k] = lololol[k];
 			cClient.clearChat();
 		}
 		for(int i = 0; i < 4; i++)
 		{
 			chatLog[i].setMessage(chatMessages[i]);
-			chatLog[i].printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-((i*20)+20));
+			chatLog[i].printMessage(be->getScreen(), SCREEN_WIDTH-150, SCREEN_HEIGHT-((i*15)+80));
 		}
 
 		SDL_Flip(be->getScreen());
@@ -296,12 +304,13 @@ private:
 	int ifps;
 
 	//Chat stuff
-	char * chatMessages[CHAT_MESSAGE_CAP];
+	//FUCK YOU STRING. FUCK YOU AND EVERYTHING YOU STAND FOR.
+	char chatMessages[CHAT_MESSAGE_CAP][CHAT_CHARACTER_CAP];
 	char * messageReceiver;
 	bool typing;
 	TTtext chatLog[CHAT_MESSAGE_CAP];
 	TTtext chatToSend;
-	char currentMessageToSend[41];
+	char currentMessageToSend[CHAT_CHARACTER_CAP];
 	int num;
 
 public:
@@ -330,14 +339,17 @@ public:
 		myfps.setFont(FONTSIZE);
 
 		//Ending FPS. Starting Chat.
-		for(int k = 0; k < 41; k++)
+		for(int k = 0; k < CHAT_CHARACTER_CAP; k++)
 		{
 			currentMessageToSend[k] = ' ';
 		}
 		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
 		{
 			chatLog[i].setFont(myfps.getFont());
-			chatMessages[i] = "                  ";
+			for(int k = 0; k < CHAT_CHARACTER_CAP; k++)
+			{
+				chatMessages[i][k] = ' ';
+			}
 		}
 		chatToSend.setFont(myfps.getFont());
 		messageReceiver = NULL;
@@ -388,11 +400,11 @@ public:
 						num--;
 						currentMessageToSend[num] = ' ';
 					}
-					else if(c == 10 || c == 32 || c == 14 || c == 15 || c == 47 || c == 45)
+					else if(c == 10 || c == 14 || c == 15 || c == 47 || c == 45)
 					{
 						//Do nothing.
 					}
-					else if(num < 41)
+					else if(num < CHAT_CHARACTER_CAP)
 					{
 						currentMessageToSend[num] = c;
 						num++;
@@ -403,12 +415,19 @@ public:
 				{
 					hostServer.sendMessage(currentMessageToSend);
 					num = 0;
-					for(int i = 0; i < 41; i++)
-						currentMessageToSend[i] = ' ';
 					typing = false;
 					for(int i = 3; i > 0; i--)
 					{
-						chatMessages[i] = chatMessages[i-1];
+						for(int k = 0; k < CHAT_CHARACTER_CAP; k++)
+						{
+							chatMessages[i][k] = chatMessages[i-1][k];
+						}
+					}
+					//Get the currentMessageToSend and...ECHO it back to the player.
+					for(int i = 0; i < CHAT_CHARACTER_CAP; i++)
+					{
+						chatMessages[0][i] = currentMessageToSend[i];
+						currentMessageToSend[i] = ' ';
 					}
 				}
 			}
@@ -439,15 +458,19 @@ public:
 		if(hostServer.getMessage(messageReceiver))
 		{
 			for(int i = 3; i > 0; i--)
-				chatMessages[i] = chatMessages[i-1];
-			chatMessages[0] = messageReceiver;
+			{
+				for(int k = 0; k < CHAT_CHARACTER_CAP; k++)
+					chatMessages[i][k] = chatMessages[i-1][k];
+			}
+			for(int i = 0; i < CHAT_CHARACTER_CAP; i++)
+				chatMessages[0][i] = messageReceiver[i];
 		}
 
 		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
 		{
 			chatLog[i].setMessage(chatMessages[i]);
 			if(chatLog[i].messageAvailable())
-				chatLog[i].printMessage(be->getScreen(), SCREEN_WIDTH-100, SCREEN_HEIGHT-((i*30)+50));
+				chatLog[i].printMessage(be->getScreen(), SCREEN_WIDTH-150, SCREEN_HEIGHT-((i*15)+80));
 		}
 		SDL_Flip(be->getScreen());
 		if(stateUI != NULL)
@@ -640,7 +663,7 @@ public:
 			loadRects[i].setDimension(SPoint(200, 15));
 			loadRects[i].setPosition(SPoint(100, (i*15)+100));
 			//Save Files will be reconstructed: Name, Level, and then character P.
-			char point[41];
+			char point[CHAT_CHARACTER_CAP];
 			for(int lol = 0; lol < 40; lol++)
 				point[lol] = ' ';
 			point[40] = 0; //NULL TERMINATOR

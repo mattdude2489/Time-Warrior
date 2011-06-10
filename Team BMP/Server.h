@@ -66,12 +66,14 @@ public:
 			//Use a second for loop to append the chatMessage into each of the clients send_buffer.
 			//Because the index can be different for each buffer, use each clients own currentBufferSize, server-side.
 			int var = 0; //A random integer variable that will be used to determine the chatMessage's current index.
-			for(int k = listOfClients.get(i).currentBufferSize; k < (sizeof(chatMessage)+listOfClients.get(i).currentBufferSize); k++)
+			listOfClients.get(i).send_buf[listOfClients.get(i).currentBufferSize] = 'C';
+			for(int k = listOfClients.get(i).currentBufferSize+1; k < (sizeof(chatMessage)+listOfClients.get(i).currentBufferSize)+1; k++)
 			{
 				listOfClients.get(i).send_buf[k] = chatMessage[var];
 				var++;
 			}
 			listOfClients.get(i).currentBufferSize += sizeof(chatMessage); //Set the currentBufferSize to its higher amount.
+			listOfClients.get(i).send_buf[listOfClients.get(i).currentBufferSize] = '/';
 			if(listOfClients.get(i).currentBufferSize >= BUFF_SIZE)
 				listOfClients.get(i).currentBufferSize = listOfClients.get(i).currentBufferSize % BUFF_SIZE;
 		}
@@ -129,6 +131,7 @@ public:
 					sendMessage(currentMessage); //Send the message to ALL of the clients.
 					chatMessageWaiting = true;
 				}
+				currentBuffer++;
 			}
 		}
 	}

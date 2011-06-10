@@ -96,10 +96,25 @@ public:
 			printf("ioctlsocket failed with error: %ld\n", err);
 		}
 		return true;
+		sSocket.currentBufferSize = 0;
 	}
 	void setWorld(World * world) {cWorld = world;}
 	World * getWorld() {return cWorld;}
-	bool sendBufferToServer() {return false;}
+
+	bool sendBufferToServer() 
+	{
+		sSocket.send_buf[511] = '#';
+		sSocket.bytesSentToServer = send(sSocket.cSocket, sSocket.send_buf, BUFF_SIZE, 0);
+		if(sSocket.bytesSentToServer == SOCKET_ERROR)
+		{
+			printf("SOMETHING WENT WRONG: %i\n", WSAGetLastError());
+			return false;
+			//Since I don't know what went wrong yet.
+		}
+		return true;
+	}
+
+
 	void getChatMessage(int start, int end)
 	{
 		//The message is in the recv_buf of sSocket. Get it and grab it.
@@ -152,7 +167,10 @@ public:
 	}
 	void sendMessage(char * chatMessage) //Mostly used for chat messages only.
 	{
-
+		sSocket.send_buf[0] = 'C';
+		for(int i = 1; i < sizeof(chatMessage)+1; i++)
+			sSocket.send_buf[i-1] = chatMessage[i];
+		sSocket.send_buf[sizeof(chatMessage)+1] = '/';
 	}
 	/**
 	Buffer Key:
@@ -181,6 +199,7 @@ public:
 		else
 		{
 			int s = 0, e = 0;
+			s = sSocket.currentBufferSize;
 			char c = sSocket.recv_buf[s];
 			while(c != 0)
 			{
@@ -196,6 +215,7 @@ public:
 					}
 					getChatMessage(s, e);
 					s = e;
+					sSocket.currentBufferSize = e;
 					break;
 				case 'P':
 					break;
