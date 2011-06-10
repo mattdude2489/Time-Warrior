@@ -40,12 +40,13 @@ class Chip : public Entity
 			m_owner(NULL), m_spriteHUD(NULL)
 		{
 			m_eType = CHIP;
+			resetLevelWithBaseLeveler();
 			switch(m_cType)
 			{
 			case MAGIC:		m_onlyAnimateOnce = m_cSubSubType != BASIC;	break;
 			case WEAPON:	m_onlyAnimateOnce = m_cSubType != RANGE;	break;
 			}
-		}// m_tracker = new BaseLeveler();}
+		}
 		~Chip()
 		{
 			//free memory from allocated sprites
@@ -53,8 +54,6 @@ class Chip : public Entity
 				delete m_sprite;
 			if(m_spriteHUD)
 				delete m_spriteHUD;
-			//if(m_tracker)
-			//	delete m_tracker;
 		}
 		bool isChanceSuccessful(int a_percentage)
 		{
@@ -82,8 +81,10 @@ class Chip : public Entity
 		}
 		void unlock()
 		{
-			if(m_cType != ARMOR)
+			switch(m_cType)
 			{
+			case MAGIC:
+			case WEAPON:
 				switch(m_cSubType)
 				{
 				case DIVINE:	m_tracker.unlock(DIVINE_0);	break;
@@ -93,12 +94,15 @@ class Chip : public Entity
 				default:		m_tracker.unlock(MELEE);	break;
 				}
 				resetLevelWithBaseLeveler();
+				break;
 			}
 		}
 		int getXP()
 		{
-			if(m_cType != ARMOR)
+			switch(m_cType)
 			{
+			case MAGIC:
+			case WEAPON:
 				switch(m_cSubType)
 				{
 				case DIVINE:	return m_tracker.getAttackXP(DIVINE_0);	break;
@@ -107,13 +111,16 @@ class Chip : public Entity
 				case ICE:		return m_tracker.getAttackXP(ICE_0);	break;
 				default:		return m_tracker.getAttackXP(MELEE);	break;
 				}
+				break;
 			}
 			return 0;
 		}
 		void resetLevelWithBaseLeveler()
 		{
-			if(m_cType != ARMOR)
+			switch(m_cType)
 			{
+			case MAGIC:
+			case WEAPON:
 				switch(m_cSubType)
 				{
 				case DIVINE:	m_stats[LEVEL] = m_tracker.getAttackLevel(DIVINE_0);	break;
@@ -124,6 +131,7 @@ class Chip : public Entity
 				}
 				//printf("level: %d, xp: %d\n", m_stats[LEVEL], getXP());
 				setDamageWithLevel();
+				break;
 			}
 		}
 		void setDamageWithLevel()
@@ -153,8 +161,10 @@ class Chip : public Entity
 		}
 		void setLevelAndXP(int level, int experience)
 		{
-			if(m_cType != ARMOR)
+			switch(m_cType)
 			{
+			case MAGIC:
+			case WEAPON:
 				switch(m_cSubType)
 				{
 				case DIVINE:	m_tracker.setAttackLvXP(DIVINE_0, level, experience);	break;
@@ -164,6 +174,7 @@ class Chip : public Entity
 				default:		m_tracker.setAttackLvXP(MELEE, level, experience);		break;
 				}
 				resetLevelWithBaseLeveler();
+				break;
 			}
 		}
 		//returns Chip's various types
@@ -274,8 +285,10 @@ class Chip : public Entity
 		//updates appropriate variables
 		void levelUpUnique()
 		{
-			if(m_cType != ARMOR)
+			switch(m_cType)
 			{
+			case MAGIC:
+			case WEAPON:
 				switch(m_cSubType)
 				{
 				case DIVINE:	m_tracker.levelUp(DIVINE_0);	break;
@@ -286,6 +299,7 @@ class Chip : public Entity
 				}
 				resetLevelWithBaseLeveler();
 				m_owner->unlockEarnedAttacks();
+				break;
 			}
 		}
 		//virtual func to specially activate inherited classes
@@ -354,9 +368,11 @@ class Chip : public Entity
 				{
 					//apply cost to activate
 					m_owner->useEnergy(m_cost);
-					//init sprite stuff for non-Armor types
-					if(m_cType != ARMOR)
+					//init sprite stuff for attacks
+					switch(m_cType)
 					{
+					case MAGIC:
+					case WEAPON:
 						m_firstIteration = true;
 						m_lastSpriteFrame = -1;
 						m_flags[FLAG_DRAW] = true;
@@ -369,6 +385,7 @@ class Chip : public Entity
 						
 						//add sound
 						playSoundEffect(ah);
+						break;
 					}
 					//handle special activate for inherited classes
 					activateUnique();
@@ -377,7 +394,7 @@ class Chip : public Entity
 				}
 				else
 				{
-					//apply secondary cost to guide Basic spells
+					//apply secondary cost to guide/re-shoot projectiles
 					bool should = false;
 					switch(m_cType)
 					{
@@ -420,7 +437,7 @@ class Chip : public Entity
 					m_firstIteration = false;
 			}
 			//check if should be updated
-			if(m_flags[FLAG_DRAW] && m_owner && m_cType != ARMOR)
+			if(m_flags[FLAG_DRAW] && m_owner && (m_cType == MAGIC || m_cType == WEAPON))
 			{
 				//update stuff unique to inherited classes
 				updateUniqueTwo(a_timePassed);
@@ -535,10 +552,13 @@ class Chip : public Entity
 				{
 				case BLUNT:
 				case SLASH:
-					if(m_cSubSubType != EXPERT)
+					switch(m_cSubSubType)
 					{
+					case BASIC:
+					case ADVANCED:
 						m_sprite->setFrame(FRAME_SIZE*m_stretchFactor, (FRAME_SIZE/2)*m_stretchFactor);
 						m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
+						break;
 					}
 					break;
 				case RANGE:		m_sprite->stretch(fullSize/2,fullSize/2);	break;

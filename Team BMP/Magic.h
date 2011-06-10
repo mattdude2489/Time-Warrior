@@ -150,7 +150,7 @@ class Magic : public Chip
 class Divine : public Magic
 {
 	public:
-		Divine(e_chipSubSubType a_subSubType):Magic(DIVINE, a_subSubType){resetLevelWithBaseLeveler();}
+		Divine(e_chipSubSubType a_subSubType):Magic(DIVINE, a_subSubType){}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -173,7 +173,7 @@ class Divine : public Magic
 class Lightning : public Magic
 {
 	public:
-		Lightning(e_chipSubSubType a_subSubType):Magic(LIGHTNING, a_subSubType){resetLevelWithBaseLeveler();}
+		Lightning(e_chipSubSubType a_subSubType):Magic(LIGHTNING, a_subSubType){}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -196,7 +196,7 @@ class Lightning : public Magic
 class Fire : public Magic
 {
 	public:
-		Fire(e_chipSubSubType a_subSubType):Magic(FIRE, a_subSubType){resetLevelWithBaseLeveler();}
+		Fire(e_chipSubSubType a_subSubType):Magic(FIRE, a_subSubType){}
 		char * getName(){
 			switch(m_cSubSubType)
 			{
@@ -219,7 +219,7 @@ class Fire : public Magic
 class Ice : public Magic
 {
 	public:
-		Ice(e_chipSubSubType a_subSubType):Magic(ICE, a_subSubType){resetLevelWithBaseLeveler();}
+		Ice(e_chipSubSubType a_subSubType):Magic(ICE, a_subSubType){}
 		char * getName(){
 			switch(m_cSubSubType)
 			{

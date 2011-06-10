@@ -373,7 +373,7 @@ bool Player::loadPlayer(int saveToLoad)
 	int hpenstrintexpsta; //The various Player stats.
 	int chipAndArmorHelper;
 	float exp;
-	static int gauntletSlotSetter = SLOT_ATK1;
+	e_gauntletSlots gauntletSlotSetter = SLOT_ATK1;
 	char charget;
 	char name[21];
 	while(saveToLoad != 0) //Why can't save be this simple?
@@ -559,15 +559,15 @@ bool Player::loadPlayer(int saveToLoad)
 			}
 			this->addToAttackInventory(iHopeThisWorks);
 			thisWorld->add(iHopeThisWorks);
-			//Xp (TODO - integrate w/BaseLeveler)
+			//Xp
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
 			iHopeThisWorks->setLevelAndXP(iHopeThisWorks->getStatNumber(LEVEL), chipAndArmorHelper);
 			//equip
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			if(hpenstrintexpsta)
 			{
-				this->setGauntletSlot((e_gauntletSlots)gauntletSlotSetter, iHopeThisWorks);
-				gauntletSlotSetter++;
+				this->setGauntletSlot(gauntletSlotSetter, iHopeThisWorks);
+				gauntletSlotSetter = SLOT_ATK2;
 			}
 		}
 		//To get rid of the slash
