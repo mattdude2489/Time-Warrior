@@ -173,12 +173,35 @@ public:
 				clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
 		if(clicked)//not really clicking
 		{
-			char temp[32];
-			switch(clicked->getType())
+			char temp[40];
+			switch(clicked->getType()) 
 			{
-			case MAGIC:		sprintf(temp, "Magic: %02i", clicked->getDamage());				break;
-			case WEAPON:	sprintf(temp, "Weapon: %02i", clicked->getDamage());			break;
-			case ARMOR:		sprintf(temp, "Armor: %02i", clicked->getStatNumber(DEFENSE));	break;
+			case ARMOR:
+				switch(clicked->getResistType())
+				{
+				case RESISTANCE_FIRE:		sprintf_s(temp, "Armor: %02i def (Fire, Res: %02i)", clicked->getStatNumber(DEFENSE), clicked->getStatNumber(clicked->getResistType()));		break;
+				case RESISTANCE_ICE:		sprintf_s(temp, "Armor: %02i def (Ice, Res: %02i)", clicked->getStatNumber(DEFENSE), clicked->getStatNumber(clicked->getResistType()));			break;
+				case RESISTANCE_LIGHTNING:	sprintf_s(temp, "Armor: %02i def (Lightning, Res: %02i)", clicked->getStatNumber(DEFENSE), clicked->getStatNumber(clicked->getResistType()));	break;
+				}
+				break;
+			case MAGIC:
+				switch(clicked->getSubType())
+				{
+				case DIVINE:	sprintf_s(temp, "Magic: %02i dmg (Divine, EP: %02i)", clicked->getDamage(), clicked->getCost());	break;
+				case LIGHTNING:	sprintf_s(temp, "Magic: %02i dmg (Lightning, EP: %02i)", clicked->getDamage(), clicked->getCost());	break;
+				case FIRE:		sprintf_s(temp, "Magic: %02i dmg (Fire, EP: %02i)", clicked->getDamage(), clicked->getCost());		break;
+				case ICE:		sprintf_s(temp, "Magic: %02i dmg (Ice, EP: %02i)", clicked->getDamage(), clicked->getCost());		break;
+				}
+				break;
+			case WEAPON:
+				switch(clicked->getSubType())
+				{
+				case BLUNT:		sprintf_s(temp, "Weapon: %02i dmg (Blunt, EP: %02i)", clicked->getDamage(), clicked->getCost());	break;
+				case RANGE:		sprintf_s(temp, "Weapon: %02i dmg (Range, EP: %02i)", clicked->getDamage(), clicked->getCost());	break;
+				case SLASH:		sprintf_s(temp, "Weapon: %02i dmg (Slash, EP: %02i)", clicked->getDamage(), clicked->getCost());	break;
+				case PIERCE:	sprintf_s(temp, "Weapon: %02i dmg (Pierce, EP: %02i)", clicked->getDamage(), clicked->getCost());	break;
+				}
+				break;
 			}
 			m_chipInfo.setMessageBackground(temp);
 			m_chipInfo.setLoc(ui->getMouseX(), ui->getMouseY());

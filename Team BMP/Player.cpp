@@ -3,7 +3,7 @@
 #include "UserInput.h"
 #include "ButtonAndWIndow.h"
 #include <stdio.h>
-#define B_OFF			2//the off set for having the player start with stats
+
 void Player::initPlayer(World * newWorld)
 {
 	m_eType = PLAYER;
@@ -303,6 +303,10 @@ void Player::save(int saveToSave)
 	//	fflush(outfile); //To switch the operation to writing.
 	//}
 
+	for(int i = 0; i < getClassBonus(m_pSpriteNum, STRENGTH); ++i)
+		m_stats[STRENGTH]--;
+	for(int i = 0; i < getClassBonus(m_pSpriteNum, INTELLECT); ++i)
+		m_stats[INTELLECT]--;
 	fprintf(outfile, " P %s %i %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_pSpriteNum, m_pots[POT_HEALTH], m_pots[POT_ENERGY], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
@@ -389,12 +393,13 @@ bool Player::loadPlayer(int saveToLoad)
 		//if it's reading the Player...
 		if(charget == 'P')
 		{
-			//Level (IGNORE)
+			//Name
 			charget = fgetc(infile); //Gets rid of the space.
 			for(int i = 0; i < 20; i++)
 				name[i] = fgetc(infile);
 			name[20] = 0; //NULL FUCKING TERMINATOR.
-			//Level, which we apparently do nothing with. Why do we have it? Besides the obvious.
+
+			//Level (IGNORE)
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 
 			//The player sprite Num.
@@ -402,18 +407,12 @@ bool Player::loadPlayer(int saveToLoad)
 			SDL_Sprite * playerNum;
 			switch(hpenstrintexpsta)
 			{
-			case 0:
-				playerNum = new SDL_Sprite("Sprites/player0.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
-				break;
-			case 1:
-				playerNum = new SDL_Sprite("Sprites/player1.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
-				break;
-			case 2:
-				playerNum = new SDL_Sprite("Sprites/player2.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
-				break;
+			case HYBRID:	playerNum = new SDL_Sprite("Sprites/player0.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);	break;
+			case CASTER:	playerNum = new SDL_Sprite("Sprites/player1.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);	break;
+			case TANK:		playerNum = new SDL_Sprite("Sprites/player2.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);	break;
 			}
 			this->initSprite(playerNum);
-			this->setSpriteNum(hpenstrintexpsta);
+			this->setSpriteNum((e_classType)hpenstrintexpsta);
 
 			//HP pots
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
@@ -435,9 +434,9 @@ bool Player::loadPlayer(int saveToLoad)
 				//make sure stored value is valid
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			this->setName(name);
-			this->m_stats[STRENGTH] = hpenstrintexpsta;
-			if(this->m_stats[STRENGTH] < 0)
-				this->m_stats[STRENGTH] = 0;
+			if(hpenstrintexpsta < 0)
+				hpenstrintexpsta = 0;
+			this->m_stats[STRENGTH] += hpenstrintexpsta;
 				//update related stats
 			this->m_stats[HEALTH_MAX] += this->m_stats[STRENGTH];
 			this->m_stats[DEFENSE] += this->m_stats[STRENGTH];
@@ -445,7 +444,9 @@ bool Player::loadPlayer(int saveToLoad)
 			//Intelligence
 				//make sure stored value is valid
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
-			this->m_stats[INTELLECT] = hpenstrintexpsta;
+			if(hpenstrintexpsta < 0)
+				hpenstrintexpsta = 0;
+			this->m_stats[INTELLECT] += hpenstrintexpsta;
 			if(this->m_stats[INTELLECT] < 0)
 				this->m_stats[INTELLECT] = 0;
 				//update related stats
@@ -472,7 +473,7 @@ bool Player::loadPlayer(int saveToLoad)
 				this->m_statPoints = 0;
 				//make sure level is valid
 					//lv = default level (1) + strength + intellect + leftover stat points
-			int lvShould = this->m_stats[LEVEL] + this->m_stats[STRENGTH] + this->m_stats[INTELLECT] + this->m_statPoints - B_OFF;
+			int lvShould = this->m_stats[LEVEL] + (this->m_stats[STRENGTH] - this->getClassBonus(m_pSpriteNum, STRENGTH)) + (this->m_stats[INTELLECT] - this->getClassBonus(m_pSpriteNum, INTELLECT)) + this->m_statPoints;
 			int ptsBeforeLeveling = this->m_statPoints;
 			for(int i = this->m_stats[LEVEL]; i < lvShould; ++i)
 				this->levelUp();

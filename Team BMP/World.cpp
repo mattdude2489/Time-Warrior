@@ -597,7 +597,6 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 	//	c -= 48;
 		if(c == EOF)
 		{
-			printf("");
 			fclose(npc_loadNPCFile);
 			return;
 		}

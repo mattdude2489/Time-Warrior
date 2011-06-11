@@ -29,8 +29,7 @@ enum e_classType	{HYBRID, CASTER, TANK};
 #define	SPEED_MAGIC		(SPEED_PLAYER*2)
 #define	SPEED_RANGE		(SPEED_PLAYER*3)
 #define	SPEED_MINION	SPEED_PLAYER
-#define LAST_FLAGDOWN	1
-#define LAST_FLAGUP		-1
+#define B_OFF			2//the off set for having the player start with stats
 
 struct v2D {double x, y;};//PLEASE DONT HATE ME
 struct effect {bool active; SPoint target; int timer, timeLimit, dmg;};
@@ -39,9 +38,10 @@ class Entity
 {
 protected:
 	bool m_flags[NUM_FLAGS];
-	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_pots[NUM_POTS], m_statPoints, m_index, m_pSpriteNum;//m_pSpriteNum is needed to load same sprite from load
+	int m_stats[NUM_STATS], m_timers[NUM_TIMERS], m_pots[NUM_POTS], m_statPoints, m_index;//m_pSpriteNum is needed to load same sprite from load
 	e_entityType m_eType;
 	e_material m_mtrl;
+	e_classType m_pSpriteNum;
 	SPoint m_location, m_prevLoc, *m_camera, m_target, m_lastWLoc;
 	v2D m_vel; //The velocity. - ONLY for player movement
 	SDL_Sprite * m_sprite;
@@ -100,7 +100,6 @@ public:
 		init(a_health, a_energy, a_str, a_int, a_def, a_fRes, a_iRes, a_lRes);
 		initSprite(a_sprite);
 	}
-	void setSpriteNum(int a_in){m_pSpriteNum = a_in;}
 	void setNewed(bool newed){m_flags[FLAG_NUDE] = newed;}
 	//flags, type, material
 	bool getFlag(e_flags a_flag){return m_flags[a_flag];}
@@ -127,9 +126,38 @@ public:
 	int getWidthOffsetCenter(){return m_sprite->getWidthOffsetCenter();}
 	int getHeightOffsetCenter(){return m_sprite->getHeightOffsetCenter();}
 	int getSpriteNum(){return m_pSpriteNum;}
+	int getClassBonus(e_classType a_class, e_stats a_stat)
+	{
+		switch(a_stat)
+		{
+		case STRENGTH:
+			switch(a_class)
+			{
+			case HYBRID:	return B_OFF/2;	break;
+			case TANK:		return B_OFF;	break;
+			}
+			break;
+		case INTELLECT:
+			switch(a_class)
+			{
+			case HYBRID:	return B_OFF/2;	break;
+			case CASTER:	return B_OFF;	break;
+			}
+			break;
+		}
+		return 0;
+	}
 	double getRadius(){return SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()).getLength();}
 	SPoint getCenter(){return m_location.sum(SPoint(getWidthOffsetCenter(),getHeightOffsetCenter()));}
 	SDL_Sprite * getSprite() {return m_sprite;}
+	void setSpriteNum(e_classType a_in)
+	{
+		m_pSpriteNum = a_in;
+		for(int i = 0; i < getClassBonus(a_in, STRENGTH); ++i)
+			this->incStr();
+		for(int i = 0; i < getClassBonus(a_in, INTELLECT); ++i)
+			this->incInt();
+	}
 	//game loop
 	void update(int a_timePassed, World * a_world, AudioHandler * ah);
 	void draw(SDL_Surface * a_screen)
@@ -331,10 +359,7 @@ public:
 	}
 	//world
 	bool isLastWSet(){return !m_lastWLoc.isZero();}
-	void setLastW(int i)
-	{
-		m_lastWLoc.set(m_location.getX(), m_location.getY()+(i*FRAME_SIZE));
-	}
+	void setLastW(){m_lastWLoc.set(m_prevLoc);}
 	void setCurrentLocToLast(World * a_world);
 	//effects
 	void useEffects(int a_timePassed);

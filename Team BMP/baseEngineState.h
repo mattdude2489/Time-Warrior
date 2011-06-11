@@ -746,9 +746,10 @@ private:
 	SDL_Sprite newGameScreen, playerSprites[P_SPRITES];
 	//SDL_Surface * screen;
 	bool typing, finished, shift, drawBoarder;
+	int num;
+	e_classType p_num;
 	SRect type , boarder, playerArea[P_SPRITES];
 	SDL_Rect newType;
-	int num, p_num;
 	MyFont hi;
 	TTtext playerNewName;
 	TTtext enterNewMessage;
@@ -769,7 +770,7 @@ public:
 		char temp[32];
 		for(int i = 0;  i < P_SPRITES; i++)
 		{
-			sprintf(temp, "Sprites/player%i.bmp", i);
+			sprintf_s(temp, "Sprites/player%i.bmp", i);
 			playerSprites[i].setSprite(temp, P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS);
 			playerSprites[i].setTransparency(COLOR_TRANSPARENT);
 			
@@ -836,7 +837,7 @@ public:
 					{
 						drawBoarder = true;
 						boarder.setPosition(SPoint(playerArea[i].getX() - (P_OFFSETS/2), playerArea[i].getY() - (P_OFFSETS/2)));
-						p_num = i;
+						p_num = (e_classType)i;
 					}
 				}
 			}
@@ -872,21 +873,6 @@ public:
 			be->getPlayer()->setName(playerName);
 			be->getPlayer()->initSprite(&playerSprites[p_num]);
 			be->getPlayer()->setSpriteNum(p_num);
-			switch(p_num)
-			{
-			case HYBRID:
-				be->getPlayer()->incInt();
-				be->getPlayer()->incStr();
-				break;
-			case CASTER:
-				be->getPlayer()->incInt();
-				be->getPlayer()->incInt();
-				break;
-			case TANK:
-				be->getPlayer()->incStr();
-				be->getPlayer()->incStr();
-				break;
-			}
 			be->changeState(actualGameState::instance());
 		}
 		else

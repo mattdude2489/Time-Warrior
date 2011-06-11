@@ -79,6 +79,7 @@ class Chip : public Entity
 			else
 				return false;
 		}
+		virtual e_stats getResistType(){return DEFENSE;}
 		void unlock()
 		{
 			switch(m_cType)

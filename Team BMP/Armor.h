@@ -26,6 +26,15 @@ class Armor : public Chip
 			}
 			setSprite("Sprites/armor.bmp");
 		}
+		e_stats getResistType()
+		{
+			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
+			{
+				if(m_stats[i] > 0)
+					return (e_stats)i;
+			}
+			return DEFENSE;
+		}
 		void activateUnique()
 		{
 			//add to owner's defense & resistances
