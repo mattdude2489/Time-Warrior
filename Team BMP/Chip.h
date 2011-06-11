@@ -27,7 +27,6 @@ class Chip : public Entity
 		SDL_Sprite * m_spriteHUD;
 		//input rect for HUD sprite
 		SRect m_spriteRectHUD;
-		SRect m_collisionCheck;
 		//owner of this Chip
 		Entity * m_owner;
 		//Chip Leveler
@@ -390,8 +389,6 @@ class Chip : public Entity
 					}
 					//handle special activate for inherited classes
 					activateUnique();
-					//set up collision rect
-					m_collisionCheck.setDimension(SPoint(m_sprite->getWidthOffsetCenter()*2,m_sprite->getHeightOffsetCenter()*2));
 				}
 				else
 				{
@@ -448,9 +445,7 @@ class Chip : public Entity
 				for(int g = 0; g < NUM_GRIDS; ++g)
 				{
 					//only check the grid if it should & has NOT been checked yet
-					m_collisionCheck.setPosition(m_location);
-					check = m_collisionCheck.intersects(a_world->getGrid(g)->getLoc());
-					if(check && m_lastSpriteFrame != m_sprite->getFrame() && (!m_onlyAnimateOnce || (m_onlyAnimateOnce && m_sprite->getFrame() == m_sprite->getMaxFrames()-1)))
+					if(a_world->isGridVisible(g) && m_lastSpriteFrame != m_sprite->getFrame() && (!m_onlyAnimateOnce || (m_onlyAnimateOnce && m_sprite->getFrame() == m_sprite->getMaxFrames()-1)))
 					{
 						for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
 						{

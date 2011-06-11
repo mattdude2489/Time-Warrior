@@ -134,13 +134,12 @@ public:
 			}
 		}
 		SPoint t_tempPoint(ui->getMouseX(),ui->getMouseY()); 
-		Chip * clicked = NULL;
 		bool cl = ui->getClick() == CLICK_LEFT, cr = ui->getClick() == CLICK_RIGHT;
+		Chip * clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
+		if(!clicked)
+			clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
 		if(cl || cr)
 		{
-			clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
-			if(!clicked)
-				clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
 			if(clicked)
 			{
 				if(clicked->getType() == ARMOR)
@@ -168,10 +167,7 @@ public:
 				}
 			}
 		}
-		clicked =  m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
-		if(!clicked)
-				clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
-		if(clicked)//not really clicking
+		else if(clicked)//not really clicking
 		{
 			char temp[40];
 			switch(clicked->getType()) 

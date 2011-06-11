@@ -635,7 +635,7 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 		//charpoint = &s;
 		//strcpy_s(charpoint, strlen(s.c_str()) ,s.c_str());
 		const char * buf = s.c_str();
-		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[NPC1]);
+		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[DRAGON]);
 		newNPC->setNewed(true);
 		newNPC->setLocation(npcX*FRAME_SIZE, npcY*FRAME_SIZE);
 		printf("NPC @ (%d,%d)\n", newNPC->getLocation().x, newNPC->getLocation().y);

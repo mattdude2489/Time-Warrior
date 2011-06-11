@@ -135,13 +135,13 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 		case MINION:
 		case BOSS:
 			//Search through the entities in that particular grid. If there are any, check for collision with them.
-			for(int i = 0; i < a_world->getGrid(m_location.x, m_location.y)->getNumberOfEntities(); i++)
+			for(int g = 0; g < NUM_GRIDS; ++g){
+				if(a_world->isGridVisible(g)){
+			for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); i++)
 			{
-				if(collide(a_world->getEntity(i, m_location.x, m_location.y)))
+				if(collide(a_world->getEntity(i, g)))
 				{
-					//if(epicCollide(a_world->getEntity(i, m_location.x, m_location.y)))
-					//{
-						Entity * tmp = a_world->getEntity(i, m_location.x, m_location.y);
+						Entity * tmp = a_world->getEntity(i, g);
 						if(tmp->getType() != OBSTACLE)
 							move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 						else
@@ -210,7 +210,8 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 							else
 								move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 						}
-					//}
+				}
+				}
 				}
 			}
 		}

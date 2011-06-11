@@ -632,14 +632,14 @@ public:
 		checkClick = -1;
 		saveFiles = 0;
 		FILE * hi;
-		hi = fopen("playerSave.txt", "r"); //Open the file for reading.
+		fopen_s(&hi, "playerSave.txt", "r"); //Open the file for reading.
 		//if(hi == NULL)
 		//{
 		//	optionOfReturn = -1; //Go back to Title Screen if the FILE cannot be opened, for some odd weird reason.
 		//	exit(be);
 		//}
 		if(hi == NULL)
-			hi = fopen("playerSave.txt", "w+"); //OPEN THE DAMN FILE.
+			fopen_s(&hi, "playerSave.txt", "w+"); //OPEN THE DAMN FILE.
 		fpos_t newPos;
 		fgetpos(hi, &newPos);
 		char c = fgetc(hi);
