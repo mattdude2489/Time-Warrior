@@ -42,15 +42,17 @@ private:
 	timeval t; //The time for the timeout function of "Select".
 	char currentMessage[41];
 	bool chatMessageWaiting;
-
+	bool messageChanged;
 public:
 	Server() //Default constructor.
 	{
 		//Nothing in particular needs to happen. Start server will do ALL INITIALIZING.
+		messageChanged = false;
 	}
 	Server(World * world) //Constructor that sets the World.
 	{
 		sWorld = world;
+		messageChanged = false;
 	}
 	~Server() {shutDown();} //Destructor that calls the shutDown.
 	bool addSocket(char * ipAddress) {return false;} //Adds a socket to the templateVector. Returns success.

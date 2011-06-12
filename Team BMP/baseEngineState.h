@@ -76,6 +76,7 @@ public:
 		{
 			be->getPlayer()->initPlayer(be->getWorld());
 		}
+		be->getWorld()->setCamera(be->getPlayer()->getCamera());
 	}
 	void execute(baseEngine* be) 
 	{

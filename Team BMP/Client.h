@@ -27,6 +27,7 @@ private:
 	Entity * listOfOtherEntities[3]; //The list of other entities/players from the clients.
 	bool chatMessageWaiting;
 	char messageWaiting[41];
+	bool messageChanged;
 public:
 	Client() {init();}
 	Client(World * world)
@@ -36,6 +37,7 @@ public:
 	}
 	void init()
 	{
+		messageChanged = false;
 		chatMessageWaiting = false;
 		for(int i = 0; i < 41; i++)
 			messageWaiting[i] = ' ';
@@ -157,7 +159,8 @@ public:
 		if(FD_ISSET(sSocket.cSocket, &writefds))
 		{
 			//There can be information in the buffer to write to. Do so.
-			sendBufferToServer();
+			if(messageChanged)
+				sendBufferToServer();
 		}
 	}
 	void updateWorld() 
@@ -167,6 +170,7 @@ public:
 	}
 	void sendMessage(char * chatMessage) //Mostly used for chat messages only.
 	{
+		messageChanged = true;
 		sSocket.send_buf[0] = 'C';
 		for(int i = 1; i < sizeof(chatMessage)+1; i++)
 			sSocket.send_buf[i-1] = chatMessage[i];
