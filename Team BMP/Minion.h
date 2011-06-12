@@ -120,6 +120,7 @@ public:
 		}
 		while(a_player->getTotalDamageTaken(this->getStatNumber(INTELLECT), resistAtk) < 1)
 			incInt();
+		m_statPoints = 0;
 		//alter resists based on material/substance
 		reallocateResistancesAccordingToMaterial();
 	}
