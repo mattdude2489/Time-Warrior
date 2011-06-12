@@ -151,12 +151,10 @@ class Chip : public Entity
 			switch(m_cSubType)
 			{
 			case LIGHTNING:
-			case PIERCE:	m_dmg = (int)((double)m_dmg * 1.25);	break;//total dmg (w/critical)	: 2.5
-			case FIRE:
-			case SLASH:		m_dmg = (int)((double)m_dmg * 2);		break;//total dmg (no effect)	: 2
-			case ICE:		m_dmg = (int)((double)m_dmg * .5);		break;//total dmg (w/freeze)	: 2
-			case BLUNT:		m_dmg = (int)((double)m_dmg * 1.5);		break;//total dmg (w/knockback)	: 1.5
-			case RANGE:		m_dmg = m_dmg * (m_cSubSubType + 1);	break;//total dmg (w/knockback)	: 1.5
+			case PIERCE:	m_dmg = (int)((double)m_dmg * .75);		break;//total % (w/crit)	: 150
+			case ICE:		m_dmg = (int)((double)m_dmg * .25);		break;//total % (w/freeze)	: 100
+			case BLUNT:		m_dmg = (int)((double)m_dmg * .75);		break;//total % (w/knckbck)	: 75
+			default:												break;//total %				: 100
 			}
 		}
 		void setLevelAndXP(int level, int experience)

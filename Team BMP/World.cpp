@@ -483,19 +483,6 @@ bool World::setWorld(char * fileName)
 				m_mapOfWorld.add(hi);
 			c = fgetc(infile);
 		}
-	for(int i = 0; i < m_mapOfEntities.size(); i++)
-		{
-			for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
-			{
-				switch(m_mapOfEntities.get(i).getEntity(k)->getType())
-				{
-				case PLAYER:	printf("Entity type is: PLAYER\n");	break;
-				case NPC:		printf("Entity type is: NPC\n");
-					//printf("Entity type is: %d\n", m_mapOfEntities.get(i).getEntity(k)->getType());
-				break;
-				}
-			}
-		}
 		m_success = true;
 		fclose(infile);
 	}
@@ -516,7 +503,7 @@ bool World::setWorld(char * fileName)
 			x = 0;
 		}
 	}
-	setMonsters();
+	setEntities();
 	//SetNPC was here.
 	if(npc_loadNPCFile)
 		fclose(npc_loadNPCFile);
@@ -529,7 +516,11 @@ void World::setCamera(SPoint * a_camera)
 	for(int i = 0; i < NUM_GRIDS; ++i)
 	{
 		for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
+		{
 			m_mapOfEntities.get(i).getEntity(k)->setCamera(a_camera);
+			if(m_mapOfEntities.get(i).getEntity(k)->getType() == CHIP)
+				printf("found chip %d\n", k);
+		}
 	}
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 		m_mapOfWorld.get(i).cam = a_camera;
@@ -648,7 +639,7 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 /**
 	The function that sets the world to have monsters and updates the Entity list of the grid to add them into.
 **/
-void World::setMonsters()
+void World::setEntities()
 {
 	int numMinions = 0;
 	for(int g = 0; g < m_mapOfEntities.size(); g++)
