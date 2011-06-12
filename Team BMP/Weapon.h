@@ -100,7 +100,7 @@ class Weapon : public Chip
 			switch(m_cSubType)
 			{
 			case BLUNT:
-				//knockback entities of non owner-type
+				//activate knockback effect
 				if(a_entity->getType() != m_owner->getType())
 				{
 					//apply knockback distance based on last successful hit & weapon level
@@ -114,7 +114,7 @@ class Weapon : public Chip
 				}
 			case RANGE:
 			case SLASH:
-			case PIERCE:
+			case PIERCE://if critical, do additional hit
 				if(m_isCritical && a_entity->getType() != m_owner->getType())
 					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,WEAPON), m_cSubType);
 				//dmg entities of non owner-type

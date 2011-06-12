@@ -313,6 +313,9 @@ class Chip : public Entity
 		void applyEffectAndStuffForKill(Entity * a_entity)
 		{
 			applyEffect(a_entity);
+			//let other entity know who it has been hit by
+			if(m_owner->getType() == PLAYER)
+				a_entity->hitFromPlayer();
 			//erase & gain experience from killed entities
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
 			{
@@ -458,6 +461,15 @@ class Chip : public Entity
 									applyEffectAndStuffForKill(a_world->getEntity(i, g));
 									switch(m_cType)
 									{
+									case MAGIC:
+										switch(m_cSubType)
+										{
+										case DIVINE:	m_tracker.GainMagicXP(DIVINE_0);	break;
+										case LIGHTNING:	m_tracker.GainMagicXP(STORM);		break;
+										case FIRE:		m_tracker.GainMagicXP(FIRE_0);		break;
+										case ICE:		m_tracker.GainMagicXP(ICE_0);		break;
+										}//end magic subtype
+										break;
 									case WEAPON:
 										switch(m_cSubType)
 										{
@@ -468,15 +480,6 @@ class Chip : public Entity
 											m_tracker.GainMeleeXP();
 											break;
 										}//end weapon subtype
-										break;
-									case MAGIC:
-										switch(m_cSubType)
-										{
-										case DIVINE:	m_tracker.GainMagicXP(DIVINE_0);	break;
-										case LIGHTNING:	m_tracker.GainMagicXP(STORM);		break;
-										case FIRE:		m_tracker.GainMagicXP(FIRE_0);		break;
-										case ICE:		m_tracker.GainMagicXP(ICE_0);		break;
-										}//end magic subtype
 										break;
 									}//end type Switch
 									resetLevelWithBaseLeveler();

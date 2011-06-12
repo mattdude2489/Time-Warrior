@@ -76,7 +76,7 @@ public:
 	}
 	void scaleToPlayer(Entity * a_player)
 	{
-		int highest, lowest;
+		int highest, num = 0;
 		double scaler = 0;
 		switch(m_eType)
 		{
@@ -101,15 +101,12 @@ public:
 				incInt();
 		}
 		//check to make sure dmg is always done
-		while(m_stats[STRENGTH] < a_player->getStatNumber(DEFENSE) || m_stats[STRENGTH] <= 0)
-			incStr();
-		lowest = a_player->getStatNumber(RESISTANCE_FIRE);
-		for(int i = RESISTANCE_FIRE+1; i < RESISTANCE_FIRE+3; ++i)
+		while(a_player->getTotalDamageTaken(this->getStatNumber(STRENGTH), BLUNT) < 1)
 		{
-			if(lowest > a_player->getStatNumber((e_stats)i))
-				lowest = a_player->getStatNumber((e_stats)i);
+			incStr();
+			num++;
 		}
-		while(m_stats[INTELLECT] < lowest || m_stats[INTELLECT] <= 0)
+		for(int i = 0; i < num; ++i)
 			incInt();
 		m_statPoints = 0;
 		//alter resists based on material/substance

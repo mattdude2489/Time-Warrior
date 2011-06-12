@@ -19,3 +19,9 @@
 #go back to titlle screen crash game
 #Scaling/ balnce minions/bosses
 #frame rate/speed limet needed
+
+6/11
+#also sometimes glichs on each other and no movment
+#Slime broke program after arrows
+#go back to titlle screen crash game
+#frame rate/speed limet needed

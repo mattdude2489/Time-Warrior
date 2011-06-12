@@ -635,7 +635,7 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 		//charpoint = &s;
 		//strcpy_s(charpoint, strlen(s.c_str()) ,s.c_str());
 		const char * buf = s.c_str();
-		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[DRAGON]);
+		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[NPC1]);
 		newNPC->setNewed(true);
 		newNPC->setLocation(npcX*FRAME_SIZE, npcY*FRAME_SIZE);
 		printf("NPC @ (%d,%d)\n", newNPC->getLocation().x, newNPC->getLocation().y);
@@ -1002,6 +1002,6 @@ void World::fadeWorld()
 		//for(int i = 0; i < NUM_SPRITES; i++)
 		//	m_sprites[i].fade(fade);
 		for(int i = 0; i < NUM_SPRITES_WORLD; i++)
-			m_worldSprites[i]->fade(fade); 
+			m_worldSprites[i]->fade((float)fade); 
 	}
 }

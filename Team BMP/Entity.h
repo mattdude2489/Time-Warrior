@@ -103,7 +103,7 @@ public:
 	void setNewed(bool newed){m_flags[FLAG_NUDE] = newed;}
 	//flags, type, material
 	bool getFlag(e_flags a_flag){return m_flags[a_flag];}
-	int getType(){return (int)m_eType;}
+	e_entityType getType(){return m_eType;}
 	void setMaterial(e_material a_mtrl){m_mtrl = a_mtrl;}
 	void reallocateResistancesAccordingToMaterial();
 	//camera / location
@@ -295,6 +295,11 @@ public:
 	}
 	bool collideBoundingCircles(Entity * a_entity, int buffer)
 	{
+		if(buffer < 0)
+			buffer = 0;
+		//give small extra buffer in case corners are barely (or almost) touching
+			//sprites collided, but buffer would otherwise not detect circle collision
+		buffer += 5;
 		if(a_entity->getFlag(FLAG_DRAW) && m_flags[FLAG_DRAW])
 			return a_entity->getCenter().difference(getCenter()).getLength() <= (getRadius() + a_entity->getRadius() + buffer);
 		else

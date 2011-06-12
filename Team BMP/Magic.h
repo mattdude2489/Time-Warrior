@@ -113,9 +113,6 @@ class Magic : public Chip
 				//dmg entities of non owner-type
 				if(a_entity->getType() != m_owner->getType())
 					a_entity->hit(m_owner->getTotalDamageDealt(m_dmg,MAGIC), m_cSubType);
-				//let other entity know who it has been hit by
-				if(a_entity->getType()!= m_owner->getType())
-					a_entity->hitFromPlayer();
 				break;
 			}
 		}
