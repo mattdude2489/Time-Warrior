@@ -50,7 +50,7 @@ class UserInput
 		{
 			char lastKey;
 			lastKey = lastKeyPressed;
-			printf("Last key pressed int: %i\n", lastKey);
+			//printf("Last key pressed int: %i\n", lastKey);
 			lastKeyPressed = 10;
 			if(shift) 
 				lastKey-=32;

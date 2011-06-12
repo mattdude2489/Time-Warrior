@@ -507,7 +507,7 @@ bool World::setWorld(char * fileName)
 	//SetNPC was here.
 	if(npc_loadNPCFile)
 		fclose(npc_loadNPCFile);
-	printf("World made\n");
+	//printf("World made\n");
 	return m_success;
 }
 //sets up a camera for each entity & tile, so they correctly move relative to the player
@@ -516,11 +516,7 @@ void World::setCamera(SPoint * a_camera)
 	for(int i = 0; i < NUM_GRIDS; ++i)
 	{
 		for(int k = 0; k < m_mapOfEntities.get(i).getNumberOfEntities(); k++)
-		{
 			m_mapOfEntities.get(i).getEntity(k)->setCamera(a_camera);
-			if(m_mapOfEntities.get(i).getEntity(k)->getType() == CHIP)
-				printf("found chip %d\n", k);
-		}
 	}
 	for(int i = 0; i < m_mapOfWorld.size(); ++i)
 		m_mapOfWorld.get(i).cam = a_camera;
@@ -629,7 +625,6 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[NPC1]);
 		newNPC->setNewed(true);
 		newNPC->setLocation(npcX*FRAME_SIZE, npcY*FRAME_SIZE);
-		printf("NPC @ (%d,%d)\n", newNPC->getLocation().x, newNPC->getLocation().y);
 		this->add(newNPC);
 		c = fgetc(npc_loadNPCFile);
 	}
