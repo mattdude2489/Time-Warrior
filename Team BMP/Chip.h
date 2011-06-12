@@ -48,6 +48,10 @@ class Chip : public Entity
 		}
 		~Chip()
 		{
+			destroyChip();
+		}
+		void destroyChip()
+		{
 			//free memory from allocated sprites
 			if(m_sprite)
 				delete m_sprite;
@@ -496,7 +500,11 @@ class Chip : public Entity
 			}
 		}
 		//de-activates current Chip
-		void deactivate(){setDrawOff();deactivateUnique();}
+		void deactivate()
+		{
+			setDrawOff();
+			this->deactivateUnique();
+		}
 		//returns name of Magic spell or Weapon
 		virtual char * getName(){return "Chip";}
 		//returns description of Magic spell or Weapon

@@ -60,15 +60,19 @@ World::~World()
 
 void World::destroyWorld()
 {
-	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
+	if(m_success)
 	{
-		if(m_worldSprites[i])
-			delete m_worldSprites[i];
+		for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
+		{
+			if(m_worldSprites[i])
+				delete m_worldSprites[i];
+		}
+		m_mapOfEntities.release();
+		//delete m_closed;
+		m_success = false; //Close off the world.
+		if(npc_loadNPCFile)
+			fclose(npc_loadNPCFile);
 	}
-	//delete m_closed;
-	m_success = false; //Close off the world.
-	if(npc_loadNPCFile)
-		fclose(npc_loadNPCFile);
 }
 
 int Tile::portalIndexNumber = 0; //I have to use global scope on this in order to use a static. That's just SAD.

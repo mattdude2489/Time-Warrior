@@ -49,6 +49,7 @@ public:
 	bool addToArmorInventory(Chip * a_chip);
 	void save(int saveToSave);
 	void setWorld(World * currWorld) {thisWorld = currWorld;}
+	//Set the gamePlayed variable, which tracks if the game has been played.
 	void setGamePlayed(bool game) {gamePlayed = game;}
 	void newGame();
 	void setName(char newName[21]) {for(int i = 0; i < 21; i++) {playerName[i] = newName[i];}}

@@ -191,21 +191,26 @@ Player::~Player()
 {
 	destroyPlayer();
 }
-
+//This function deletes all the data used by the player.
 void Player::destroyPlayer()
 {
 	if(gamePlayed)
-		save(saveFile);
-	delete m_blankInventory;
-	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{
-		if(m_armorInventory[i])
+		save(saveFile); 
+		delete m_blankInventory;
+
+		for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 		{
-			if(m_armorInventory[i]->getFlag(FLAG_NUDE))
-				delete m_armorInventory[i];
+			if(m_armorInventory[i])
+			{
+				if(m_armorInventory[i]->isEquipped())
+					m_armorInventory[i]->unequip();
+				if(m_armorInventory[i]->getFlag(FLAG_NUDE))
+					delete m_armorInventory[i];
+			}
 		}
+//		gamePlayed = false;
 	}
-	gamePlayed = false;
 }
 
 void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)

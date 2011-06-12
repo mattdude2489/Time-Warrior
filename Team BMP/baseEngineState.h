@@ -730,6 +730,8 @@ public:
 		{
 			delete [] loadRects; //I'm going to hell aren't I?
 			delete [] loadMessages; //Yes. Yes you are.
+			if(be->getPlayer()->getGamePlayed())
+				be->getPlayer()->initPlayer(be->getWorld());
 			be->getPlayer()->loadPlayer(checkClick);
 			be->changeState(actualGameState::instance());
 		}
@@ -870,6 +872,8 @@ public:
 			playerSprites[i].stretch(50, 50);
 		if(exitToTitle == false)
 		{
+			if(be->getPlayer()->getGamePlayed())
+				be->getPlayer()->initPlayer(be->getWorld());
 			be->getPlayer()->newGame();
 			be->getPlayer()->setName(playerName);
 			be->getPlayer()->initSprite(&playerSprites[p_num]);
