@@ -22,7 +22,7 @@ private:
 	int m_expLvReq, saveFile, barrierKey;//barrier key will be a number just to make life easy
 	double m_experience;
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
-	bool loadedPlayer, m_isStatWindowActive, gamePlayed;
+	bool loadedPlayer, m_isStatWindowActive, gamePlayed, deleted;
 	World * thisWorld;
 	SDL_Sprite * m_blankInventory;
 	char playerName[21];
@@ -34,6 +34,7 @@ public:
 	~Player();
 	bool loadPlayer(int saveToLoad);
 	bool getGamePlayed() {return gamePlayed;}
+	bool getDeleted() {return deleted;}
 	char * getName() {return playerName;}
 	int getExpReq(){return m_expLvReq;}
 	int getKeyLevel(){return barrierKey;}

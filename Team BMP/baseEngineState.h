@@ -68,14 +68,14 @@ public:
 		ifps = 0;
 		fps.setMessage("0");
 		be->getPlayer()->setGamePlayed(true);
-		if(!be->getWorld()->getSuccess())
+		/*if(!be->getWorld()->getSuccess())
 		{
 			be->getWorld()->initWorld();
 		}
-		if(!be->getPlayer()->getGamePlayed())
+		if(be->getPlayer()->getDeleted())
 		{
 			be->getPlayer()->initPlayer(be->getWorld());
-		}
+		}*/
 		be->getWorld()->setCamera(be->getPlayer()->getCamera());
 	}
 	void execute(baseEngine* be) 
@@ -730,8 +730,11 @@ public:
 		{
 			delete [] loadRects; //I'm going to hell aren't I?
 			delete [] loadMessages; //Yes. Yes you are.
-			if(be->getPlayer()->getGamePlayed())
+			if(be->getPlayer()->getDeleted())
+			{
+				be->getWorld()->initWorld();
 				be->getPlayer()->initPlayer(be->getWorld());
+			}
 			be->getPlayer()->loadPlayer(checkClick);
 			be->changeState(actualGameState::instance());
 		}
@@ -872,8 +875,11 @@ public:
 			playerSprites[i].stretch(50, 50);
 		if(exitToTitle == false)
 		{
-			if(be->getPlayer()->getGamePlayed())
+			if(be->getPlayer()->getDeleted())
+			{
+				be->getWorld()->initWorld();
 				be->getPlayer()->initPlayer(be->getWorld());
+			}
 			be->getPlayer()->newGame();
 			be->getPlayer()->setName(playerName);
 			be->getPlayer()->initSprite(&playerSprites[p_num]);

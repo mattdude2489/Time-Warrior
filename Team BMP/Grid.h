@@ -22,12 +22,28 @@ private:
 	SRect m_rectLoc;
 public:
 	//The public functions. Constructors, sets, gets, and modifiers.
-	Grid() {}
-	Grid(Entity * newEntity) {m_mapOfEntities.add(newEntity);} //Starting off with an original entity.
+	Grid() 
+	{
+		m_mapOfEntities.init();
+	}
+
+	//Starting off with an original entity.
+	/*Grid(Entity * newEntity) 
+	{
+		m_mapOfEntities.add(newEntity);
+	}*/
+
+	//Set up the grids again.
+	void init()
+	{
+		m_mapOfEntities.init();
+
+	}
 	~Grid()
 	{
 		deleteGrids();
 	}
+	//delete the grids.
 	void deleteGrids()
 	{
 		for(int i = 0; i < m_mapOfEntities.size(); i++)
@@ -36,12 +52,22 @@ public:
 				delete m_mapOfEntities.get(i);
 		}
 		m_mapOfEntities.release();
+		//Re-initialize the template vector.
+		m_mapOfEntities.init();
 	}
+
 	SRect getLoc() {return m_rectLoc;}
 	void setLoc(int x, int y, int h, int w){m_rectLoc.x = x; m_rectLoc.y = y; m_rectLoc.h = h; m_rectLoc.w = w;}
 	//Sets and gets.
 	//@param: The entity to add to the grid.
-	void setEntity(Entity * newEntity) {m_mapOfEntities.add(newEntity);}
+	void setEntity(Entity * newEntity) 
+	{
+		/*if(m_mapOfEntities.size() <= 0)
+		{
+			m_mapOfEntities.init();
+		}*/
+		m_mapOfEntities.add(newEntity);
+	}
 	//@param: The index of the returning Entity. NO ERROR DETECTION...SO DON'T BE WRONG.
 	Entity * getEntity(int index) 
 	{

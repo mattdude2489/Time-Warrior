@@ -23,6 +23,7 @@ void World::initWorld()
 	for(int i = 0; i < NUM_GRIDS; i++)
 	{
 		Grid gridSys;
+		gridSys.init();
 		m_mapOfEntities.add(gridSys);
 	}
 

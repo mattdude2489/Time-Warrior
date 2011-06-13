@@ -6,6 +6,7 @@
 
 void Player::initPlayer(World * newWorld)
 {
+	deleted = false;
 	m_eType = PLAYER;
 	for(int i = 0; i < NUM_SLOTS; ++i)
 		m_gauntlet[i] = NULL;
@@ -209,7 +210,8 @@ void Player::destroyPlayer()
 					delete m_armorInventory[i];
 			}
 		}
-//		gamePlayed = false;
+		gamePlayed = false;
+		deleted = true;
 	}
 }
 
@@ -312,6 +314,7 @@ void Player::save(int saveToSave)
 		m_stats[STRENGTH]--;
 	for(int i = 0; i < getClassBonus(m_pSpriteNum, INTELLECT); ++i)
 		m_stats[INTELLECT]--;
+	//In order: Name, Level, SpriteNum, Health Potions, Energy Potions, Strength, Intelligence, Experience, Experience Required, Stat Points.
 	fprintf(outfile, " P %s %i %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_pSpriteNum, m_pots[POT_HEALTH], m_pots[POT_ENERGY], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
 	//The Armor
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
