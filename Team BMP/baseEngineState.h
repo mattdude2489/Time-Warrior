@@ -7,6 +7,8 @@
 #define SDLDELAY		17
 #define CHAT_MESSAGE_CAP	4
 #define CHAT_CHARACTER_CAP	41
+#define CENTERSTUFFX		+87
+#define CENTERSTUFFY		+65
 #include "sdl/sdl.h"
 #include <stdio.h>
 #include <conio.h>
@@ -77,6 +79,7 @@ public:
 			be->getPlayer()->initPlayer(be->getWorld());
 		}*/
 		be->getWorld()->setCamera(be->getPlayer()->getCamera());
+		be->getAH()->playRandom();
 	}
 	void execute(baseEngine* be) 
 	{
@@ -895,6 +898,41 @@ public:
 	static newGameState* instance() {static newGameState instance; return &instance;}
 };
 
+class creditScreenState : public State
+{
+private:
+	UserInput * stateUI;
+	SDL_Sprite creditScreen;
+	bool exitToTitle;
+public:
+	void enter(baseEngine *be)
+	{
+		exitToTitle = false;
+		if(!creditScreen.isSprite())
+			creditScreen.setSprite("Sprites/creditsScreen.bmp", 800, 600, 0, 0);
+		stateUI = NULL;
+	}
+	void execute(baseEngine *be)
+	{
+		if(stateUI != NULL)
+		{
+			if(stateUI->getX())
+				exitToTitle = true;
+		}
+		creditScreen.draw(be->getScreen(), 0, 0);
+		SDL_Flip(be->getScreen());
+		SDL_Delay(SDLDELAY);
+		if(exitToTitle)
+			exit(be);
+	}
+	void exit(baseEngine *be)
+	{
+		be->goToTitleScreen();
+	}
+	void handleInput(UserInput * obj) {stateUI = obj;}
+	static creditScreenState * instance() {static creditScreenState instance; return &instance;}
+};
+
 class titleScreenState : public State
 {
 private:
@@ -911,14 +949,17 @@ public:
 	{
 		//screen2 = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 		if(!titleScreen.isSprite())
-			titleScreen.setSprite("Sprites/posTitleScreen.bmp", 626, 470, 0, 1); //MAGIC NUMBAHS = BAD
+			titleScreen.setSprite("Sprites/posTitleScreenTechFair.bmp", 626, 470, 0, 1); //MAGIC NUMBAHS = BAD
 		choice = 0;
-		newGame.setPosition(SPoint(68, 292));
-		newGame.setDimension(SPoint(110, 137));
-		networkGame.setDimension(SPoint(170, 117));
-		networkGame.setPosition(SPoint(235, 58));
-		loadGame.setDimension(SPoint(110, 137)); //These are debug numbers, btw. Not entirely accurate.
-		loadGame.setPosition(SPoint(443, 306)); //Setting up the stuffs...
+		//New Game rectangle.
+		newGame.setPosition(SPoint(68 CENTERSTUFFX, 292 CENTERSTUFFY));
+		newGame.setDimension(SPoint(110 CENTERSTUFFX, 137 CENTERSTUFFY));
+		//Network Game/Credit Screen rectangle
+		networkGame.setDimension(SPoint(170 CENTERSTUFFX, 117 CENTERSTUFFY));
+		networkGame.setPosition(SPoint(235 CENTERSTUFFX, 58 CENTERSTUFFY));
+		//Load Game rectangle.
+		loadGame.setDimension(SPoint(110 CENTERSTUFFX, 137 CENTERSTUFFY)); //These are debug numbers, btw. Not entirely accurate.
+		loadGame.setPosition(SPoint(443 CENTERSTUFFX, 306 CENTERSTUFFY)); //Setting up the stuffs...
 		//INCLUDE SDL STUFF HERE
 		stateUI = NULL;
 	}
@@ -937,8 +978,8 @@ public:
 		if(choice != 0)
 			exit(be);
 
-		SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 0, 0, 0));
-		titleScreen.draw(be->getScreen(), 0, 0);
+		SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 128, 128, 128));
+		titleScreen.draw(be->getScreen(), 87, 65);
 		SDL_Flip(be->getScreen());
 		SDL_Delay(SDLDELAY);
 		if(stateUI != NULL)
@@ -958,7 +999,8 @@ public:
 			be->changeState(loadGameState::instance());
 			break;
 		case 3:
-			be->changeState(networkStartState::instance());
+			//be->changeState(networkStartState::instance());
+			be->changeState(creditScreenState::instance());
 			break;
 		default:
 			break;

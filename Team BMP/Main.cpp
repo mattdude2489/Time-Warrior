@@ -65,7 +65,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	//printf("%d %d %d\n", sizeof(test), sizeof(world), sizeof(eTest));
 	//music test stuff
 	AudioHandler ah;
-	ah.playRandom();
+	//ah.playRandom();
 	
 	be.setWorld(&world);
 	be.setPlayer(&eTest);
