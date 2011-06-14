@@ -471,4 +471,5 @@ public:
 	virtual void movePlayer(int a_timePassed){}
 	virtual void setKeyLevel(int a_level){}
 	virtual void pickUpArmor(){}
+	virtual void stopAttack(){}
 };

@@ -316,8 +316,11 @@ class Chip : public Entity
 		{
 			applyEffect(a_entity);
 			//let other entity know who it has been hit by
-			if(m_owner->getType() == PLAYER)
-				a_entity->hitFromPlayer();
+			switch(m_owner->getType())
+			{
+			case PLAYER:	a_entity->hitFromPlayer();	break;
+			case BOSS:		a_entity->stopAttack();		break;
+			}
 			//erase & gain experience from killed entities
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0)
 			{
