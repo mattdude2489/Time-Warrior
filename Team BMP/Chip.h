@@ -349,8 +349,6 @@ class Chip : public Entity
 					m_owner->pickUpArmor();
 			}
 		}
-		//adjusts the target to be centered
-		void centerTarget(){m_target.subtract(SPoint(m_sprite->getWidthOffsetCenter(), m_sprite->getHeightOffsetCenter()));}
 		//plays sound effect
 		void playSoundEffect(AudioHandler * ah)
 		{

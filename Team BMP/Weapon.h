@@ -25,15 +25,19 @@ class Weapon : public Chip
 						//Basic & Advanced weapons based on owner's direction
 						switch(m_direction)
 						{
+						case ROW_UP:
 						case KEY_UP:
 							setLocation(centerAroundOwnerCenterX(), m_owner->getCenter().y - m_sprite->getHeight());
 							break;
+						case ROW_LEFT:
 						case KEY_LEFT:
 							setLocation(m_owner->getCenter().x - m_sprite->getWidth(), centerAroundOwnerCenterY());
 							break;
+						case ROW_DOWN:
 						case KEY_DOWN:
 							setLocation(centerAroundOwnerCenterX(), m_owner->getCenter().y);
 							break;
+						case ROW_RIGHT:
 						case KEY_RIGHT:
 							setLocation(m_owner->getCenter().x, centerAroundOwnerCenterY());
 							break;

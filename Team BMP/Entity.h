@@ -267,6 +267,7 @@ public:
 		return a_point->difference(m_location);
 	}
 	void setTarget(int a_x, int a_y){m_target.set(a_x, a_y);}
+	void centerTarget(){m_target.subtract(SPoint(m_sprite->getWidthOffsetCenter(), m_sprite->getHeightOffsetCenter()));}
 	void setTarget(SPoint a_point){m_target.set(a_point);}
 	//collision
 	bool collideSimple(SDL_Sprite * a_sprite, int a_x, int a_y)
