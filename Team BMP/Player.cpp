@@ -26,6 +26,7 @@ void Player::initPlayer(World * newWorld)
 	setVelocity(0,0);
 	thisWorld = newWorld;
 	gamePlayed = false;
+	m_flags[FLAG_DRAW] = true;
 	m_isStatWindowActive = false;
 	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 2);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);

@@ -734,6 +734,7 @@ public:
 			{
 				be->getWorld()->initWorld();
 				be->getPlayer()->initPlayer(be->getWorld());
+				be->getWorld()->add(be->getPlayer());
 			}
 			be->getPlayer()->loadPlayer(checkClick);
 			be->changeState(actualGameState::instance());
@@ -879,6 +880,7 @@ public:
 			{
 				be->getWorld()->initWorld();
 				be->getPlayer()->initPlayer(be->getWorld());
+				be->getWorld()->add(be->getPlayer());
 			}
 			be->getPlayer()->newGame();
 			be->getPlayer()->setName(playerName);
