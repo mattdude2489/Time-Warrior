@@ -840,5 +840,5 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 	case 'e':
 	case 'E':	this->usePot(POT_ENERGY);	break;
 	}
-
+	
 }

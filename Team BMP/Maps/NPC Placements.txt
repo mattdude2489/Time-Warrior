@@ -1,10 +1,9 @@
 9
-Hi. Welcome to the Colosseum of Time. We hope you have a \n wonderful time.#
-This is another NPC.#
-0
-WE ARE DOOMED.#
-1
 #
+0
+Hi. Welcome to the Colosseum of Time. We hope you survive.#
+1
+Demons Have taken over. Please help.\nThere are two small towns to the west of here. \nThey might have information to help you.#
 2
 #
 3
@@ -15,3 +14,9 @@ WE ARE DOOMED.#
 #
 6
 #
+7
+The castle, desert, and forest all have barriers.#
+Dungeons do not. I would start there.# 
+Someone for the love of god help us.#
+The Battalion of Magi Protection has \nfallen to the demon king. \nHe resides at the heart of the castle.#
+What you looking at? \nGo save us "Hero."#

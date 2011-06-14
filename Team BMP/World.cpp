@@ -33,7 +33,10 @@ void World::initWorld()
 	m_sprites[BOSS0].setSprite("Sprites/demon0.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[BOSS1].setSprite("Sprites/demon1.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[DRAGON].setSprite("Sprites/dragon.bmp", DRAGON_FRAME, DRAGON_FRAME, FRAME_RATE, NUM_ROWS);
-	m_sprites[NPC1].setSprite("Sprites/greenguy.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[NPC0].setSprite("Sprites/greenguy.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[NPC1].setSprite("Sprites/npc1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[NPC2].setSprite("Sprites/npc2.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
+	m_sprites[NPC3].setSprite("Sprites/npc3.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[KNIGHT0].setSprite("Sprites/knight0.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[KNIGHT1].setSprite("Sprites/knight1.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
 	m_sprites[KNIGHT2].setSprite("Sprites/knight2.bmp", FRAME_SIZE , FRAME_SIZE, FRAME_RATE, NUM_ROWS);
@@ -43,7 +46,7 @@ void World::initWorld()
 		m_sprites[i].setTransparency(COLOR_TRANSPARENT);
 	for(int i = 0; i < NUM_SPRITES_WORLD; ++i)
 		m_worldSprites[i] = NULL;
-	fopen_s(&npc_loadNPCFile, "Maps/NPC Placements.txt", "r");
+	
 	fadeAmount = 2;
 	m_success = setWorld("Maps/HubWorldMap.txt");
 	bossCount = 0;
@@ -83,7 +86,9 @@ bool World::setWorld(char * fileName)
 	m_worldTime = time(0);
 	m_localTime = localtime(&m_worldTime);
 	FILE * infile;
+	//open the files
 	fopen_s(&infile, fileName, "r");
+	fopen_s(&npc_loadNPCFile, "Maps/NPC Placements.txt", "r");
 
 	if(fileName == "Maps/HubWorldMap.txt")
 		currentWorld = WORLD_HUB;
@@ -477,7 +482,10 @@ bool World::setWorld(char * fileName)
 				}
 				hi.indexOfSpriteRow = tempInt;
 				hi.npcLoc = true;
-				hi.npcNum = c-48;
+				if(currentWorld == WORLD_TOWN2)
+					hi.npcNum = rand()%5;
+				else
+					hi.npcNum = c-48;
 				break;
 			default:
 				hi.indexOfSpriteRow = TILE_BLANK;
@@ -510,8 +518,9 @@ bool World::setWorld(char * fileName)
 	}
 	setEntities();
 	//SetNPC was here.
-	if(npc_loadNPCFile)
-		fclose(npc_loadNPCFile);
+
+	fclose(npc_loadNPCFile);
+
 	//printf("World made\n");
 	return m_success;
 }
@@ -563,14 +572,15 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 {
 	
 	//Now to open the file *, and abuse the atoi system.
-	int c = 1, x = 0, y = 0;
+	int c = 99, x = 0, y = 0;
+
 	//c = fgetc(infile);
 //	if(currentWorld != 0)
 	//Current World
 	if(npc_loadNPCFile == NULL)
 		fopen_s(&npc_loadNPCFile, "NPC Placements.txt", "r"); //To RESET the stream pointer.
 	fscanf_s(npc_loadNPCFile, "%i", &c);
-	while(c != currentWorld)
+	while(c != cWorld)
 	{
 		while(c != '#')
 		{
@@ -578,7 +588,7 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 			if(c == EOF) //Because this area is dangerous of becoming an infinite loop, give some escape code.
 			{
 				//fclose(npc_loadNPCFile);
-				return;
+				break;
 			}
 		}
 		//fscanf_s(npc_loadNPCFile,"%i",&x); //The two integers.
@@ -627,7 +637,16 @@ void World::setNPC(int cWorld, int NPCToGet , int npcX, int npcY)
 		//charpoint = &s;
 		//strcpy_s(charpoint, strlen(s.c_str()) ,s.c_str());
 		const char * buf = s.c_str();
-		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), &m_sprites[NPC1]);
+		SDL_Sprite * temp;
+		int itemp = NPC1 + (rand()%3);
+
+		switch(cWorld)
+		{
+		case WORLD_HUB:		temp = &m_sprites[KNIGHT2];				break;
+		case WORLD_ENGLAND:	temp = &m_sprites[NPC0];				break;
+		case WORLD_TOWN2:	temp = &m_sprites[itemp];				break;
+		}
+		NonPlayerChar * newNPC = new NonPlayerChar(const_cast<char*>(buf), temp);
 		newNPC->setNewed(true);
 		newNPC->setLocation(npcX*FRAME_SIZE, npcY*FRAME_SIZE);
 		this->add(newNPC);
@@ -855,11 +874,14 @@ void World::setEntities()
 			obs->setNewed(true);
 			obs->setLocation(m_mapOfWorld.get(i).pos);
 			obs->setBuildType(btype%2);//mod 2 cause if its a zero it will be wood otherwise stone
+			obs->setDoorFace(DOOR_RIGHT);
 			obs->setDoor();
 			this->add(obs);
 		}
 		if(m_mapOfWorld.get(i).npcLoc)
+		{
 			setNPC(currentWorld, m_mapOfWorld.get(i).npcNum, m_mapOfWorld.get(i).pos.x/FRAME_SIZE, m_mapOfWorld.get(i).pos.y/FRAME_SIZE);
+		}
 	}
 }
 

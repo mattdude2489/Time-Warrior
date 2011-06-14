@@ -5,10 +5,11 @@
 #include "stdio.h"
 #include <time.h>
 
+
 #define NUM_SONGS				9
 #define NUM_SEFFECTS			8
 enum e_seffects	{E_SLASH, E_BLUNT, E_FIRE, E_DIVINE, E_LIGHTNING, E_ICE, E_PIERCE, E_BOW};
-
+enum e_music	{M_ENGLAND, M_DESERT, M_DUNGEON1, M_HUB, M_FINALBOSS, M_FOREST, M_CASTLE, M_DUNGEON2, M_MENU};
 class AudioHandler
 {
 private:
@@ -62,11 +63,35 @@ public:
 		currentTrack = a_index;
 		playMusic();
 	}
-	void update(int a_currentWorld)
+	void update(int a_currentWorld, int castleNum)
 	{
-		if(m_currentWorld!= a_currentWorld)
+		if(a_currentWorld != m_currentWorld)
 		{
-			nextTrack();
+			switch(a_currentWorld)
+			{
+			case 0: playThisTrack(M_HUB);		break;
+			case 1:
+			case 6:
+			case 7: 
+				playThisTrack(M_ENGLAND);	break;
+			case 2: 
+				switch(rand()%2)
+				{
+					case 0:playThisTrack(M_DUNGEON1);	break;
+					case 1:playThisTrack(M_DUNGEON2);	break;
+				}
+				break;
+			case 3: 
+				if(castleNum == 3)
+					playThisTrack(M_FINALBOSS);
+				else
+					playThisTrack(M_CASTLE);
+					break;
+			case 4: playThisTrack(M_FOREST);	break;
+			case 5: playThisTrack(M_DESERT);	break;
+
+
+			}
 			m_currentWorld = a_currentWorld;
 		}
 	}

@@ -98,7 +98,7 @@ public:
 		{
 			be->getPlayer()->handleInput(stateUI, be->getWorld(), be->getAH());
 			be->getWorld()->update(passed, be->getAH());
-			be->getAH()->update(be->getWorld()->getCurrentWorld());
+			be->getAH()->update(be->getWorld()->getCurrentWorld(), be->getWorld()->getCastleCount());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
 		}
 
@@ -243,7 +243,7 @@ public:
 					typing = true;
 			}
 			be->getWorld()->update(passed, be->getAH());
-			be->getAH()->update(be->getWorld()->getCurrentWorld());
+			be->getAH()->update(be->getWorld()->getCurrentWorld(), be->getWorld()->getCastleCount());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
 		}
 
@@ -444,7 +444,7 @@ public:
 			}
 			//Update the world, audiohandler, and HUD.
 			be->getWorld()->update(passed, be->getAH());
-			be->getAH()->update(be->getWorld()->getCurrentWorld());
+			be->getAH()->update(be->getWorld()->getCurrentWorld(), be->getWorld()->getCastleCount());
 			be->getHUD()->updateHud(be->getPlayer(), stateUI, passed);
 		}
 		//SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 0, 0, 0));
