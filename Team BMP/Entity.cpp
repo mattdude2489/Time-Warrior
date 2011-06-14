@@ -18,6 +18,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 	}
 	//update timer
 	m_timers[TIMER_GENERAL] += a_timePassed;
+	m_timers[TIMER_NO_CLICK] += a_timePassed;
 	switch(m_eType)
 	{
 	case CHIP:

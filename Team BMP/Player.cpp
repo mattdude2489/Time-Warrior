@@ -757,6 +757,7 @@ void Player::activateGauntletAttack(e_gauntletSlots a_slot, int a_targetX, int a
 	{
 		if(m_stats[ENERGY_CURRENT] >= m_gauntlet[a_slot]->getCost())
 		{
+			m_timers[TIMER_NO_CLICK] = 0;
 			m_gauntlet[a_slot]->setTarget(a_targetX, a_targetY);
 			setTarget(a_targetX, a_targetY);
 			centerTarget();
@@ -778,28 +779,32 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 	//This is where the UI goes to get handled by the Player class. Well...it would've been world class, but we dun have one of them yet.
 	if(ui->getKeyUD() == KEY_UP)
 	{
-		//m_sprite->setRIndex(ROW_UP);
+		if(m_timers[TIMER_NO_CLICK] > TIME_INACTIVE)
+			m_sprite->setRIndex(ROW_UP);
 		setVelocity(m_vel.x, -SPEED_PLAYER);
 		lastKey = KEY_UP;
 		m_flags[FLAG_ACTIVE] = false;
 	}
 	if(ui->getKeyLR() == KEY_RIGHT)
 	{
-		//m_sprite->setRIndex(ROW_RIGHT);
+		if(m_timers[TIMER_NO_CLICK] > TIME_INACTIVE)
+			m_sprite->setRIndex(ROW_RIGHT);
 		setVelocity(SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_RIGHT;
 		m_flags[FLAG_ACTIVE] = false;
 	}
 	if(ui->getKeyUD() == KEY_DOWN)
 	{
-		//m_sprite->setRIndex(ROW_DOWN);
+		if(m_timers[TIMER_NO_CLICK] > TIME_INACTIVE)
+			m_sprite->setRIndex(ROW_DOWN);
 		setVelocity(m_vel.x, SPEED_PLAYER);
 		lastKey = KEY_DOWN;
 		m_flags[FLAG_ACTIVE] = false;
 	}
 	if(ui->getKeyLR() == KEY_LEFT)
 	{
-		//m_sprite->setRIndex(ROW_LEFT);
+		if(m_timers[TIMER_NO_CLICK] > TIME_INACTIVE)
+			m_sprite->setRIndex(ROW_LEFT);
 		setVelocity(-SPEED_PLAYER, m_vel.y);
 		lastKey = KEY_LEFT;
 		m_flags[FLAG_ACTIVE] = false;
