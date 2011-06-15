@@ -144,7 +144,10 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 				{
 						Entity * tmp = a_world->getEntity(i, g);
 						if(tmp->getType() != OBSTACLE)
-							move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+						{
+							if(!(m_eType == BOSS && tmp->getType() == MINION)||!(m_eType == MINION && tmp->getType() == BOSS))
+								move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
+						}
 						else
 						{
 							if(tmp->isObstacle(PORTAL))
@@ -211,7 +214,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 							else
 								move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 						}
-				}
+					}
 				}
 				}
 			}

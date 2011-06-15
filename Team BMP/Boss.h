@@ -51,7 +51,6 @@ public:
 		m_lastCast += a_time;
 		if(this->collideBoundingCircles(a_player, BOSS_ENGAGE) && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
 		{
-			printf("atk %d\n", m_attack->getSubType());
 			m_attack->setTarget(a_player->getLocation());
 			m_attack->activate(ah);
 			m_lastCast = 0;

@@ -56,7 +56,7 @@ class Magic : public Chip
 		bool shouldApplyEffect(Entity * a_entity)
 		{
 			//do not apply spell's dmg/effect to certain entities
-			if(a_entity == m_owner)
+			if(a_entity == m_owner || (a_entity->getType() == MINION && m_owner->getType() == BOSS))
 				return false;
 			switch(a_entity->getType())
 			{

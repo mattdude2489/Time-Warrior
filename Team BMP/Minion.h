@@ -111,7 +111,6 @@ public:
 		//check to make sure dmg is always done
 		while(a_player->getTotalDamageTaken(this->getStatNumber(STRENGTH), BLUNT) < (a_player->getStatNumber(LEVEL)/2)+1)
 			incStr();
-		printf("Str: %i\n", a_player->getTotalDamageTaken(this->getStatNumber(STRENGTH), BLUNT));
 		resist = RESISTANCE_FIRE;
 		for(int i = RESISTANCE_FIRE+1; i < RESISTANCE_FIRE+3; ++i)
 		{

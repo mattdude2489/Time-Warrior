@@ -145,11 +145,11 @@ class Chip : public Entity
 			case MAGIC:
 			case WEAPON:
 				//if Magic or Weapon, update dmg & cost increase per level
-				m_dmg = 5 * (m_cSubSubType + 1);// + m_stats[LEVEL];
+				m_dmg = 5 * (m_cSubSubType + 1) + m_stats[LEVEL]/2;
 				if(m_cType == MAGIC)
-					m_cost = 5 * (m_cSubSubType + 1);// + m_stats[LEVEL];
+					m_cost = 5 * (m_cSubSubType + 1) + m_stats[LEVEL]/2;
 				else
-					m_cost = 5 * m_cSubSubType;// + m_stats[LEVEL];
+					m_cost = 5 * m_cSubSubType + m_stats[LEVEL]/2;
 				break;
 			}
 			switch(m_cSubType)
@@ -456,7 +456,7 @@ class Chip : public Entity
 						for(int i = 0; i < a_world->getGrid(g)->getNumberOfEntities(); ++i)
 						{
 							//check against each entity in grid
-							if(shouldApplyEffect(a_world->getEntity(i, g)))
+							if(shouldApplyEffect(a_world->getEntity(i, g)) )
 							{
 								//detect collision with Obstacles, but don't apply effect in such case
 								if(a_world->getEntity(i, g)->getType() != OBSTACLE)

@@ -186,6 +186,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 #endif
 //		SDL_Flip(screen);
 		SDL_Delay(SDLDELAY);
+		
 	}
 	SDL_FreeSurface(screen);
 	SDL_Quit();//must do to free the memory that was used for init	

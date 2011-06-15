@@ -169,7 +169,7 @@ public:
 		}
 		else if(clicked)//not really clicking
 		{
-			char temp[40];
+			char temp[50];
 			switch(clicked->getType()) 
 			{
 			case ARMOR:
@@ -183,19 +183,19 @@ public:
 			case MAGIC:
 				switch(clicked->getSubType())
 				{
-				case DIVINE:	sprintf_s(temp, "Magic: %2i dmg (Divine, EP: %2i)", clicked->getDamage(), clicked->getCost());	break;
-				case LIGHTNING:	sprintf_s(temp, "Magic: %2i dmg (Lightning, EP: %2i)", clicked->getDamage(), clicked->getCost());	break;
-				case FIRE:		sprintf_s(temp, "Magic: %2i dmg (Fire, EP: %2i)", clicked->getDamage(), clicked->getCost());		break;
-				case ICE:		sprintf_s(temp, "Magic: %2i dmg (Ice, EP: %2i)", clicked->getDamage(), clicked->getCost());		break;
+				case DIVINE:	sprintf_s(temp, "Magic: %2i dmg (Level : %2i, Divine, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());		break;
+				case LIGHTNING:	sprintf_s(temp, "Magic: %2i dmg (Level : %2i, Lightning, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
+				case FIRE:		sprintf_s(temp, "Magic: %2i dmg (Level : %2i, Fire, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());		break;
+				case ICE:		sprintf_s(temp, "Magic: %2i dmg (Level : %2i, Ice, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());			break;
 				}
 				break;
 			case WEAPON:
 				switch(clicked->getSubType())
 				{
-				case BLUNT:		sprintf_s(temp, "Weapon: %2i dmg (Blunt, EP: %2i)", clicked->getDamage(), clicked->getCost());	break;
-				case RANGE:		sprintf_s(temp, "Weapon: %2i dmg (Range, EP: %2i)", clicked->getDamage(), clicked->getCost());	break;
-				case SLASH:		sprintf_s(temp, "Weapon: %2i dmg (Slash, EP: %2i)", clicked->getDamage(), clicked->getCost());	break;
-				case PIERCE:	sprintf_s(temp, "Weapon: %2i dmg (Pierce, EP: %2i)", clicked->getDamage(), clicked->getCost());	break;
+				case BLUNT:		sprintf_s(temp, "Weapon: %2i dmg (Level : %2i, Blunt, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
+				case RANGE:		sprintf_s(temp, "Weapon: %2i dmg (Level : %2i, Range, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
+				case SLASH:		sprintf_s(temp, "Weapon: %2i dmg (Level : %2i, Slash, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
+				case PIERCE:	sprintf_s(temp, "Weapon: %2i dmg (Level : %2i, Pierce, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
 				}
 				break;
 			}

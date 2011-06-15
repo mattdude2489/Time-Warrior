@@ -236,12 +236,12 @@ void Player::save(int saveToSave)
 	int numCharsInFileFromSavePoint = 0; //NCIFFSP. Wow that's a long name.
 	if(loadedPlayer)
 	{
-		outfile = fopen("Save/playerSave.txt", "r+");
+		outfile = fopen("playerSave.txt", "r+");
 		if(outfile == NULL)
-			outfile = fopen("Save/playerSave.txt", "w+");
+			outfile = fopen("playerSave.txt", "w+");
 	}
 	else
-		outfile = fopen("Save/playerSave.txt", "a+");
+		outfile = fopen("playerSave.txt", "a+");
 
 	fpos_t pos = 0;
 	char newArray[10000]; //Please don't kill me.
@@ -377,7 +377,7 @@ bool Player::loadPlayer(int saveToLoad)
 	//							C#(Type)#(SubType)#(SubSubType)#(Level)#(Xp)#(isEquipped)#/
 	
 	FILE * infile;
-	infile = fopen("Save/playerSave.txt", "r");
+	infile = fopen("playerSave.txt", "r");
 	//check to see if playerSave.txt exists, if it doesn't, break out.
 	if(infile == NULL)
 		return false;
