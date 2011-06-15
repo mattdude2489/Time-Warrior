@@ -59,9 +59,12 @@ public:
 	}
 	void playThisTrack(int a_index)
 	{
-		Mix_HaltMusic();
-		currentTrack = a_index;
-		playMusic();
+		if(a_index != currentTrack)
+		{
+			Mix_HaltMusic();
+			currentTrack = a_index;
+			playMusic();
+		}
 	}
 	void update(int a_currentWorld, int castleNum)
 	{

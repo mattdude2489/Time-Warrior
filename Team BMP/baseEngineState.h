@@ -111,6 +111,8 @@ public:
 			if(stateUI->getX())
 				exit(be);
 		//SDL_Delay(SDLDELAY);
+		if(be->getPlayer()->getStatNumber(HEALTH_CURRENT) <= 0)
+			exit(be);
 	} //Input Logic Draw
 	void exit(baseEngine* be) 
 	{
@@ -855,6 +857,7 @@ public:
 		playerNewName.setMessage(playerName);
 		enterNewMessage.setMessage(enterNameMessage);
 		//Draw
+		SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 128, 128, 128)); //Reset the screen.
 		newGameScreen.draw(be->getScreen(), 0, 0);
 		enterNewMessage.printMessage(be->getScreen(), 100, 100);
 		SDL_FillRect(be->getScreen(), &newType , 0xff0000);
@@ -933,12 +936,50 @@ public:
 	static creditScreenState * instance() {static creditScreenState instance; return &instance;}
 };
 
+class controlScreenState : public State
+{
+private:
+	UserInput * stateUI;
+	SDL_Sprite controlScreen;
+	bool exitToTitle;
+public:
+	void enter(baseEngine *be)
+	{
+		exitToTitle = false;
+		if(!controlScreen.isSprite())
+			controlScreen.setSprite("Sprites/controlScreen.bmp", 800, 600, 0, 0);
+		stateUI = NULL;
+	}
+	void execute(baseEngine *be)
+	{
+		if(stateUI != NULL)
+		{
+			if(stateUI->getX())
+				exitToTitle = true;
+		}
+		controlScreen.draw(be->getScreen(), 0, 0);
+		SDL_Flip(be->getScreen());
+		SDL_Delay(SDLDELAY);
+		if(exitToTitle)
+			exit(be);
+	}
+	void exit(baseEngine *be)
+	{
+		be->goToTitleScreen();
+	}
+	void handleInput(UserInput * obj) {stateUI = obj;}
+	static controlScreenState * instance() {static controlScreenState instance; return &instance;}
+};
+
 class titleScreenState : public State
 {
 private:
 	SRect newGame;
 	SRect networkGame;
 	SRect loadGame;
+	SRect controls;
+	TTtext controlText;
+	MyFont myfont;
 	SDL_Sprite titleScreen;
 	int choice;
 	//SDL_Surface * screen2;
@@ -960,8 +1001,16 @@ public:
 		//Load Game rectangle.
 		loadGame.setDimension(SPoint(110 CENTERSTUFFX, 137 CENTERSTUFFY)); //These are debug numbers, btw. Not entirely accurate.
 		loadGame.setPosition(SPoint(443 CENTERSTUFFX, 306 CENTERSTUFFY)); //Setting up the stuffs...
+		//Control state rectangle
+		controls.setDimension(SPoint(100, 100));
+		controls.setPosition(SPoint(20, 500));
 		//INCLUDE SDL STUFF HERE
 		stateUI = NULL;
+		be->getAH()->playThisTrack(8);
+		//True Text Font stuff is set here.
+		myfont.changeSizeTo(20);
+		controlText.setFont(myfont.getFont());
+		controlText.setMessage("Control Scheme");
 	}
 	void execute(baseEngine* be) 
 	{
@@ -974,12 +1023,15 @@ public:
 				choice = 2;
 			else if(networkGame.contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY()))&& stateUI->getClick() == 1)
 				choice = 3;
+			else if(controls.contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY()))&& stateUI->getClick() == 1)
+				choice = 4;
 		}
 		if(choice != 0)
 			exit(be);
 
 		SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 128, 128, 128));
 		titleScreen.draw(be->getScreen(), 87, 65);
+		controlText.printMessage(be->getScreen(), 20, 500);
 		SDL_Flip(be->getScreen());
 		SDL_Delay(SDLDELAY);
 		if(stateUI != NULL)
@@ -1001,6 +1053,9 @@ public:
 		case 3:
 			//be->changeState(networkStartState::instance());
 			be->changeState(creditScreenState::instance());
+			break;
+		case 4:
+			be->changeState(controlScreenState::instance());
 			break;
 		default:
 			break;
