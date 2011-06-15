@@ -69,6 +69,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	
 	be.setWorld(&world);
 	be.setPlayer(&eTest);
+	be.setRun(true);
 #ifdef WITH_NETWORKING
 	char send[1000], old[1000], *in;
 	bool changeInInfoSoSend = false;
@@ -82,7 +83,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 	hi.setFont(FONTSIZE);
 	fps.setFont(hi.getFont());
 	fps.setMessage("0");
-	while(running) //While loop, can be easily used for testing.
+	while(be.getRun()) //While loop, can be easily used for testing.
 	{
 		ifps++;
 		//update the time
@@ -111,7 +112,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 		{
 			switch(e.type) //If there's an event, then what type?
 			{
-				case SDL_QUIT: running = false; break; //If The event is SDL quit, get outta there.
+				case SDL_QUIT: be.setRun(false); break; //If The event is SDL quit, get outta there.
 				case SDL_MOUSEBUTTONDOWN:
 					ui.setMouse(e.motion.x, e.motion.y);
 					ui.setClick(e.motion.state);

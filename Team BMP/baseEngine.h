@@ -36,11 +36,14 @@ private:
 	//c in front of any variables usually means "client."
 	State* cState;
 	SDL_Surface * screen;
+	bool running;
 public:
 	World* getWorld() {return cWorld;}
 	Player* getPlayer() {return cPlayer;}
 	AudioHandler * getAH() {return &cah;}
 	void init();
+	void setRun(bool run) {running = run;}
+	bool getRun() {return running;}
 	void changeState(State* newState) {cState = newState; cState->enter(this);}
 	void goToTitleScreen();
 	SDL_Surface * getScreen() {return screen;}

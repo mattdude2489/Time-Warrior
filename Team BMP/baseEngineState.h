@@ -645,8 +645,7 @@ public:
 		//	exit(be);
 		//}
 		if(hi == NULL)
-			fopen_s(&hi, "playerSave.txt", "w+"); //OPEN THE DAMN FILE.
-		fpos_t newPos;
+		{			be->goToTitleScreen(); //OPEN THE DAMN FILE.			return;		}		fpos_t newPos;
 		fgetpos(hi, &newPos);
 		char c = fgetc(hi);
 		while(c != EOF) //Get the amount of save Files within the playerSave.
@@ -1036,7 +1035,7 @@ public:
 		SDL_Delay(SDLDELAY);
 		if(stateUI != NULL)
 			if(stateUI->getX())
-				exit(be);
+				be->setRun(false);
 	}//Title screen stuffs.
 	void exit(baseEngine* be) 
 	{
@@ -1063,7 +1062,7 @@ public:
 		//IT SHOULD NEVER MAKE IT TO HERE. IF IT DOES, THEN SOMETHING IS WRONG.
 		if(stateUI != NULL)
 			if(stateUI->getX())
-				SDL_Quit();
+				be->setRun(false);
 		enter(be);
 	}
 	static titleScreenState* instance() {static titleScreenState instance; return &instance;}

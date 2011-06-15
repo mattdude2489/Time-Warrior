@@ -8,6 +8,7 @@ void Player::initPlayer(World * newWorld)
 {
 	deleted = false;
 	m_eType = PLAYER;
+	//init();
 	for(int i = 0; i < NUM_SLOTS; ++i)
 		m_gauntlet[i] = NULL;
 	for(int s = 0; s < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++s)
@@ -236,13 +237,12 @@ void Player::save(int saveToSave)
 	int numCharsInFileFromSavePoint = 0; //NCIFFSP. Wow that's a long name.
 	if(loadedPlayer)
 	{
-		outfile = fopen("playerSave.txt", "r+");
-		if(outfile == NULL)
-			outfile = fopen("playerSave.txt", "w+");
-	}
+		outfile = fopen("playerSave.txt", "r+");	}
 	else
 		outfile = fopen("playerSave.txt", "a+");
 
+	if(outfile == NULL)
+		return; //Just...get out of here.
 	fpos_t pos = 0;
 	char newArray[10000]; //Please don't kill me.
 	int arrIndex = 0;
@@ -324,14 +324,15 @@ void Player::save(int saveToSave)
 			fprintf(outfile, "A %i %i %i %i %i %i %i %i / ", m_armorInventory[i]->getSubType(), m_armorInventory[i]->getSubSubType(), m_armorInventory[i]->getStatNumber(LEVEL), m_armorInventory[i]->getStatNumber(DEFENSE), m_armorInventory[i]->getStatNumber(RESISTANCE_FIRE), m_armorInventory[i]->getStatNumber(RESISTANCE_ICE), m_armorInventory[i]->getStatNumber(RESISTANCE_LIGHTNING), m_armorInventory[i]->isEquipped());
 	}
 	//The Chips/Attack Inventory.
-	fprintf(outfile, "C %i %i %i %i %i %i / ", m_gauntlet[SLOT_ATK1]->getType(), m_gauntlet[SLOT_ATK1]->getSubType(), m_gauntlet[SLOT_ATK1]->getSubSubType(), m_gauntlet[SLOT_ATK1]->getStatNumber(LEVEL), m_gauntlet[SLOT_ATK1]->getXP(), m_gauntlet[SLOT_ATK1]->isEquipped());
+	if(m_gauntlet[SLOT_ATK1] != NULL)
+		fprintf(outfile, "C %i %i %i %i %i %i / ", m_gauntlet[SLOT_ATK1]->getType(), m_gauntlet[SLOT_ATK1]->getSubType(), m_gauntlet[SLOT_ATK1]->getSubSubType(), m_gauntlet[SLOT_ATK1]->getStatNumber(LEVEL), m_gauntlet[SLOT_ATK1]->getXP(), m_gauntlet[SLOT_ATK1]->isEquipped());
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; i++)
 	{
 		for(int k = 0; k < NUM_CHIP_LEVELS; k++)
 		{
 			if(m_attackInventory[i][k])
 			{
-				if(m_attackInventory[i][k] != m_gauntlet[SLOT_ATK1])
+				if(m_attackInventory[i][k] != m_gauntlet[SLOT_ATK1] && m_attackInventory[i][k] != NULL)
 					fprintf(outfile, "C %i %i %i %i %i %i / ", m_attackInventory[i][k]->getType(), m_attackInventory[i][k]->getSubType(), m_attackInventory[i][k]->getSubSubType(), m_attackInventory[i][k]->getStatNumber(LEVEL), m_attackInventory[i][k]->getXP(), m_attackInventory[i][k]->isEquipped());
 			}
 		}
