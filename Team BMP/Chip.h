@@ -318,13 +318,14 @@ class Chip : public Entity
 			//let other entity know who it has been hit by
 			if(m_flags[FLAG_OWNER_PLAYER])
 				a_entity->hitFromPlayer();
-			else
-				a_entity->stopAttack();
 			//erase & gain experience from killed entities
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0 && m_owner)
 			{
 				if(a_entity->getType() != PLAYER)
+				{
 					a_entity->setDrawOff();
+					a_entity->stopAttack();
+				}
 				m_owner->gainExperience(a_entity->getExperienceFromDefeat(m_owner));
 				m_owner->unlockEarnedAttacks();
 				if(m_owner->getPots(POT_HEALTH) < MAX_POTS)
