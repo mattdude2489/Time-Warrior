@@ -103,9 +103,15 @@ public:
 			else
 				incInt();
 		}
+		if(m_eType == BOSS)
+		{
+			m_stats[HEALTH_MAX] = m_stats[HEALTH_CURRENT] += a_player->getStatNumber(HEALTH_MAX) * 2;
+		}
+		
 		//check to make sure dmg is always done
-		while(a_player->getTotalDamageTaken(this->getStatNumber(STRENGTH), BLUNT) < 1)
+		while(a_player->getTotalDamageTaken(this->getStatNumber(STRENGTH), BLUNT) < (a_player->getStatNumber(LEVEL)/2)+1)
 			incStr();
+		printf("Str: %i\n", a_player->getTotalDamageTaken(this->getStatNumber(STRENGTH), BLUNT));
 		resist = RESISTANCE_FIRE;
 		for(int i = RESISTANCE_FIRE+1; i < RESISTANCE_FIRE+3; ++i)
 		{

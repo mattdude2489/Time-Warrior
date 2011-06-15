@@ -236,12 +236,12 @@ void Player::save(int saveToSave)
 	int numCharsInFileFromSavePoint = 0; //NCIFFSP. Wow that's a long name.
 	if(loadedPlayer)
 	{
-		outfile = fopen("playerSave.txt", "r+");
+		outfile = fopen("Save/playerSave.txt", "r+");
 		if(outfile == NULL)
-			outfile = fopen("playerSave.txt", "w+");
+			outfile = fopen("Save/playerSave.txt", "w+");
 	}
 	else
-		outfile = fopen("playerSave.txt", "a+");
+		outfile = fopen("Save/playerSave.txt", "a+");
 
 	fpos_t pos = 0;
 	char newArray[10000]; //Please don't kill me.
@@ -377,7 +377,7 @@ bool Player::loadPlayer(int saveToLoad)
 	//							C#(Type)#(SubType)#(SubSubType)#(Level)#(Xp)#(isEquipped)#/
 	
 	FILE * infile;
-	infile = fopen("playerSave.txt", "r");
+	infile = fopen("Save/playerSave.txt", "r");
 	//check to see if playerSave.txt exists, if it doesn't, break out.
 	if(infile == NULL)
 		return false;
@@ -447,7 +447,7 @@ bool Player::loadPlayer(int saveToLoad)
 				hpenstrintexpsta = 0;
 			this->m_stats[STRENGTH] += hpenstrintexpsta;
 				//update related stats
-			this->m_stats[HEALTH_MAX] += this->m_stats[STRENGTH];
+			this->m_stats[HEALTH_MAX] += this->m_stats[STRENGTH] * EXTRA_STATS;
 			this->m_stats[DEFENSE] += this->m_stats[STRENGTH];
 
 			//Intelligence
@@ -459,7 +459,7 @@ bool Player::loadPlayer(int saveToLoad)
 			if(this->m_stats[INTELLECT] < 0)
 				this->m_stats[INTELLECT] = 0;
 				//update related stats
-			this->m_stats[ENERGY_MAX] += this->m_stats[INTELLECT];
+			this->m_stats[ENERGY_MAX] += this->m_stats[INTELLECT] * EXTRA_STATS;
 			m_stats[ENERGY_REGEN] = (int)(m_stats[ENERGY_MAX] * .05);
 			for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
 				m_stats[i] += this->m_stats[INTELLECT];

@@ -21,9 +21,10 @@ class UserInput
 		bool spaceBar;			//The spaceBar. When pressed, activate NPC dialogue.
 		bool shift;				//The shift key. When pressed, minus 32 to get the capital letter.
 		bool esc;				//The escape key. Will close the program if put in full-screen.
+		bool inventory;			//the i key to open inventory.
 
 	public:
-		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE), esc(false), spaceBar(false), shift(false){} //Basic constructor.
+		UserInput():mouseX(0), mouseY(0), mouseClick(CLICK_NONE), keyPressUpDown(KEY_NONE), keyPressLeftRight(KEY_NONE), initKey(KEY_NONE), esc(false), spaceBar(false), shift(false), inventory(false){} //Basic constructor.
 		void setMouse(int x, int y) {mouseX = x; mouseY = y;}
 		int getMouseX() {return mouseX;}
 		int getMouseY() {return mouseY;}
@@ -43,6 +44,7 @@ class UserInput
 		void setLastKey(char key) {lastKeyPressed = key;}
 		char getKey() {return initKey;}
 		bool getSpace() {return spaceBar;}
+
 		//Resetting the mouse. Used in order to prevent the mouse being held down.
 		void resetClick() {mouseClick = CLICK_NONE;}
 		bool getX() {bool cEsc = esc; esc = false; return cEsc;}
@@ -62,10 +64,12 @@ class UserInput
 		//If the initKey is a W, A, S, or D, then set it to keyPressUpDown or keyPressLeftRight.
 		void updateUI(bool upDown)
 		{
+
 			if(upDown) //If the value is 0, false, then the key is up. UNSET the values.
 			{
 				if(initKey != KEY_NONE)
 				{
+					
 					if(initKey == KEY_UP || initKey == KEY_DOWN)
 						keyPressUpDown = KEY_NONE;
 					if(initKey == KEY_LEFT || initKey == KEY_RIGHT)
@@ -80,6 +84,7 @@ class UserInput
 						shift = false;
 					if(!(initKey == 'm' || initKey == 'i'))
 						initKey = KEY_NONE; //Reset the initial Key.
+					
 				}
 			}
 			else
@@ -101,6 +106,7 @@ class UserInput
 						esc = true;
 					if(initKey == 47 || initKey == 48)
 						shift = true;
+
 					if(!(initKey == 'm' || initKey == 'i'))
 						initKey = KEY_NONE; //Reset the initial Key.
 				}

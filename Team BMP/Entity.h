@@ -10,6 +10,7 @@ struct Tile;
 enum e_chipType;
 enum e_chipSubType;
 enum e_obstacleType;
+#define EXTRA_STATS		5
 
 enum e_stats		{LEVEL, HEALTH_CURRENT, HEALTH_MAX, ENERGY_CURRENT, ENERGY_MAX, ENERGY_REGEN , STRENGTH, INTELLECT, DEFENSE, RESISTANCE_FIRE, RESISTANCE_ICE, RESISTANCE_LIGHTNING, NUM_STATS};
 enum e_entityType	{DUMMY, CHIP, PLAYER, NPC, MINION, BOSS, OBSTACLE};
@@ -414,7 +415,7 @@ public:
 	}
 	void incStr()
 	{
-		m_stats[HEALTH_MAX]++;
+		m_stats[HEALTH_MAX]+= EXTRA_STATS;
 		m_stats[HEALTH_CURRENT] = m_stats[HEALTH_MAX];
 		m_stats[STRENGTH]++;
 		m_stats[DEFENSE]++;
@@ -422,7 +423,7 @@ public:
 	}
 	void incInt()
 	{
-		m_stats[ENERGY_MAX]++;
+		m_stats[ENERGY_MAX]+= EXTRA_STATS;
 		m_stats[ENERGY_CURRENT] = m_stats[ENERGY_MAX];
 		m_stats[ENERGY_REGEN] = (int)(m_stats[ENERGY_MAX] * .05);
 		m_stats[INTELLECT]++;
