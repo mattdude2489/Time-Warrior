@@ -319,8 +319,7 @@ class Chip : public Entity
 			if(m_flags[FLAG_OWNER_PLAYER])
 				a_entity->hitFromPlayer();
 			else
-				a_entity->stopAttack();		break;
-			}
+				a_entity->stopAttack();
 			//erase & gain experience from killed entities
 			if(a_entity->getStatNumber(HEALTH_CURRENT) <= 0 && m_owner)
 			{
