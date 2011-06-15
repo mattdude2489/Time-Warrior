@@ -645,7 +645,11 @@ public:
 		//	exit(be);
 		//}
 		if(hi == NULL)
-		{			be->goToTitleScreen(); //OPEN THE DAMN FILE.			return;		}		fpos_t newPos;
+		{
+			be->goToTitleScreen(); //OPEN THE DAMN FILE.
+			return;				
+		}		
+		fpos_t newPos;
 		fgetpos(hi, &newPos);
 		char c = fgetc(hi);
 		while(c != EOF) //Get the amount of save Files within the playerSave.
