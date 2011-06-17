@@ -149,7 +149,7 @@ class Chip : public Entity
 					m_cost = 5 * (m_cSubSubType + 1) + m_stats[LEVEL]/2;
 				else
 				{
-					if((m_cType == WEAPON && m_cSubSubType!= BASIC) || m_cType == MAGIC)
+					if((m_cType == WEAPON && m_cSubSubType != BASIC) || m_cType == MAGIC)
 						m_cost = 5 * m_cSubSubType + m_stats[LEVEL]/2;
 				}
 				break;

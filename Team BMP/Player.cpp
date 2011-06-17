@@ -6,6 +6,7 @@
 
 void Player::initPlayer(World * newWorld)
 {
+	init(100, 100, 0, 0, 0, 0, 0, 0); //Reinitialize using Entity's initializer.
 	deleted = false;
 	m_eType = PLAYER;
 	//init();

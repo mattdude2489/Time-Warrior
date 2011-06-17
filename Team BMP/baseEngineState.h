@@ -622,6 +622,7 @@ public:
 class loadGameState: public State
 {
 private:
+	SDL_Sprite extraPlaySprite;	//The extraPlayerSprite that loads a single sprite so it WILL NOT CRASH.
 	UserInput * stateUI;	//The UserInput. We all know how this goes.
 //	SDL_Surface * screen;	//The SDL_Surface of which this State writes to.
 	int optionOfReturn;		//The erroring integer, or the saveFile that the user has selected.
@@ -648,7 +649,11 @@ public:
 		{
 			be->goToTitleScreen(); //OPEN THE DAMN FILE.
 			return;				
-		}		
+		}
+		if(!extraPlaySprite.isSprite())
+		{
+			extraPlaySprite.setSprite("Sprites/player0.bmp", P_WIDTH, P_HEIGHT, FRAME_RATE, NUM_ROWS); 
+		}
 		fpos_t newPos;
 		fgetpos(hi, &newPos);
 		char c = fgetc(hi);
@@ -742,6 +747,7 @@ public:
 			{
 				be->getWorld()->initWorld();
 				be->getPlayer()->initPlayer(be->getWorld());
+				be->getPlayer()->initSprite(&extraPlaySprite);
 				be->getWorld()->add(be->getPlayer());
 			}
 			be->getPlayer()->loadPlayer(checkClick);
@@ -891,6 +897,7 @@ public:
 				be->getPlayer()->initPlayer(be->getWorld());
 				be->getWorld()->add(be->getPlayer());
 			}
+			be->getPlayer()->initSprite(&playerSprites[0]);
 			be->getPlayer()->newGame();
 			be->getPlayer()->setName(playerName);
 			be->getPlayer()->initSprite(&playerSprites[p_num]);

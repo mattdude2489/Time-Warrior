@@ -27,7 +27,7 @@ int main(int argc, char ** argv)//must be the header for sdl application and yes
 
 	srand((unsigned int)time(NULL));
 	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_Surface * screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
+	SDL_Surface * screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_FULLSCREEN);
 	SDL_Event e;
 	UserInput ui; //This is the UserInput class.
 	//networking
