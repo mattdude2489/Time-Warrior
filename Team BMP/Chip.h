@@ -133,7 +133,6 @@ class Chip : public Entity
 				case ICE:		m_stats[LEVEL] = m_tracker.getAttackLevel(ICE_0);		break;
 				default:		m_stats[LEVEL] = m_tracker.getAttackLevel(MELEE);		break;
 				}
-				//printf("level: %d, xp: %d\n", m_stats[LEVEL], getXP());
 				setDamageWithLevel();
 				break;
 			}
@@ -149,7 +148,10 @@ class Chip : public Entity
 				if(m_cType == MAGIC)
 					m_cost = 5 * (m_cSubSubType + 1) + m_stats[LEVEL]/2;
 				else
-					m_cost = 5 * m_cSubSubType + m_stats[LEVEL]/2;
+				{
+					if((m_cType == WEAPON && m_cSubSubType!= BASIC) || m_cType == MAGIC)
+						m_cost = 5 * m_cSubSubType + m_stats[LEVEL]/2;
+				}
 				break;
 			}
 			switch(m_cSubType)

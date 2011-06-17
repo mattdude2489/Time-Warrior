@@ -47,7 +47,15 @@ private:
 public:
 	World();
 	~World();
-	void add(Entity * newEntity){m_mapOfEntities.get(getLocationGrid(newEntity)).setEntity(newEntity);if(newEntity->getType() == PLAYER) m_player = newEntity;}
+	void add(Entity * newEntity)
+	{
+		if(newEntity->getType() == PLAYER) {
+			m_player = NULL;
+			m_player = newEntity;
+		}
+		m_mapOfEntities.get(getLocationGrid(newEntity)).setEntity(newEntity);
+		
+	}
 	void setCamera(SPoint * a_camera);
 	void sortOnYPosition();
 	void setEntities();
