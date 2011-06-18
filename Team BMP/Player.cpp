@@ -518,10 +518,8 @@ bool Player::loadPlayer(int saveToLoad)
 			//Set the new armor.
 			Armor * gear = new Armor((e_chipSubType)hpenstrintexpsta, (e_chipSubSubType)chipAndArmorHelper);
 			gear->setNewed(true);
-			//level
+			//level (IGNORE) - sub-sub-type acts as its "level", so do not worry about its entity level
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
-			for(int k = 0; k < chipAndArmorHelper; k++)
-				gear->levelUp();
 			//Defense.
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			gear->setDefense(hpenstrintexpsta);

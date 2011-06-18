@@ -283,26 +283,6 @@ class Chip : public Entity
 		int centerAroundOwnerCenterX(){return m_owner->getCenter().x - m_sprite->getWidthOffsetCenter();}
 		//returns y location to center around owner
 		int centerAroundOwnerCenterY(){return m_owner->getCenter().y - m_sprite->getHeightOffsetCenter();}
-		//updates appropriate variables
-		void levelUpUnique()
-		{
-			switch(m_cType)
-			{
-			case MAGIC:
-			case WEAPON:
-				switch(m_cSubType)
-				{
-				case DIVINE:	m_tracker.levelUp(DIVINE_0);	break;
-				case LIGHTNING:	m_tracker.levelUp(STORM);		break;
-				case FIRE:		m_tracker.levelUp(FIRE_0);		break;
-				case ICE:		m_tracker.levelUp(ICE_0);		break;
-				default:		m_tracker.levelUp(MELEE);		break;
-				}
-				resetLevelWithBaseLeveler();
-				m_owner->unlockEarnedAttacks();
-				break;
-			}
-		}
 		//virtual func to specially activate inherited classes
 		virtual void activateUnique(){}
 		//virtual func to specially de-activate inherited classes
