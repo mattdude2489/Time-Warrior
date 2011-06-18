@@ -504,6 +504,17 @@ bool Player::loadPlayer(int saveToLoad)
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			//sub-sub-type
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
+				//check if the BASIC/ADVANCED/EXPERT armor status is valid for the player
+			switch(chipAndArmorHelper)
+			{
+			case BASIC:		break;
+			case ADVANCED:	if(m_stats[LEVEL] < 11)
+								chipAndArmorHelper = BASIC;
+							break;
+			case EXPERT:	if(m_stats[LEVEL] < 21)
+								chipAndArmorHelper = ADVANCED;
+							break;
+			}
 			//Set the new armor.
 			Armor * gear = new Armor((e_chipSubType)hpenstrintexpsta, (e_chipSubSubType)chipAndArmorHelper);
 			gear->setNewed(true);
@@ -511,8 +522,6 @@ bool Player::loadPlayer(int saveToLoad)
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
 			for(int k = 0; k < chipAndArmorHelper; k++)
 				gear->levelUp();
-			if(!this->addToArmorInventory(gear))
-				sellArmor(gear);
 			//Defense.
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			gear->setDefense(hpenstrintexpsta);
@@ -524,7 +533,9 @@ bool Player::loadPlayer(int saveToLoad)
 			}
 			//equip
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
-			if(hpenstrintexpsta)
+			if(!this->addToArmorInventory(gear))
+				sellArmor(gear);
+			else if(hpenstrintexpsta)
 				setGauntletArmor(gear);
 		}
 		//If it's reading the Chips...

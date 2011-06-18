@@ -149,7 +149,14 @@ public:
 	}
 	void pickUpArmor()
 	{
-		Armor * gear = new Armor(e_chipSubType(rand()%NUM_CHIP_SUBS_PER_TYPE), e_chipSubSubType(0));
+		e_chipSubSubType lv;
+		if(m_stats[LEVEL] <= 10)//1-10, only get BASIC armor
+			lv = BASIC;
+		else if(m_stats[LEVEL] <= 20)//11-20, get BASIC or ADVANCED armor
+			lv = e_chipSubSubType(rand()%EXPERT);
+		else//21+, get BASIC, ADVANCED, or EXPERT armor
+			lv = e_chipSubSubType(rand()%NUM_CHIP_LEVELS);
+		Armor * gear = new Armor(e_chipSubType(rand()%NUM_CHIP_SUBS_PER_TYPE), lv);
 		gear->setNewed(true);
 		if(!this->addToArmorInventory(gear))
 			sellArmor(gear);
