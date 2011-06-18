@@ -64,7 +64,6 @@ class Armor : public Chip
 		//resistType = specific resistance assuming 1st resistance @ 0
 		void setResist(int resistType, int resistAmount)
 		{
-			resistAmount = getValidStatBuff(resistAmount);
 			//set the correct resistance
 			resistType += RESISTANCE_FIRE;
 			//if the amt is not 0
@@ -75,6 +74,7 @@ class Armor : public Chip
 					m_stats[i] = 0;
 			}
 			//set the desired resistance
+			resistAmount = getValidStatBuff(resistAmount);
 			m_stats[resistType] = resistAmount;
 		}
 };

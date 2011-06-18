@@ -4,20 +4,23 @@
 #include "Magic.h"
 #include "Weapon.h"
 
+#define NUM_MAX_BOSS_ATKS	3
+
 class Boss : public Minion
 {
 private:
-	Chip * m_attack;
+	Chip * m_attack[NUM_MAX_BOSS_ATKS];
 	SPoint m_start;
-	int m_lastCast;
+	int m_lastCast, m_numAtks;
 public:
 	Boss(SDL_Sprite * a_sprite)
 		:Minion(a_sprite)
 	{
 		m_eType = BOSS;
 		m_state = GUARD;
-		m_lastCast = 0;
-		m_attack = NULL;
+		m_lastCast = m_numAtks = 0;
+		for(int i = 0; i < NUM_MAX_BOSS_ATKS; ++i)
+			m_attack[i] = NULL;
 	}
 	void setBossLoc(SPoint a_point)
 	{
@@ -26,39 +29,50 @@ public:
 	}
 	void setChip(e_chipSubType a_subType, e_chipSubSubType a_subSubType, World * a_world)
 	{
-		if(!m_attack)
+		if(m_numAtks < NUM_MAX_BOSS_ATKS)
 		{
-			switch(a_subType)
+			if(!m_attack[m_numAtks])
 			{
-			case DIVINE:	m_attack = new Divine(a_subSubType);	break;
-			case LIGHTNING:	m_attack = new Lightning(a_subSubType);	break;
-			case FIRE:		m_attack = new Fire(a_subSubType);		break;
-			case ICE:		m_attack = new Ice(a_subSubType);		break;
-			case BLUNT:		m_attack = new Blunt(a_subSubType);		break;
-			case RANGE:		m_attack = new Range(a_subSubType);		break;
-			case PIERCE:	m_attack = new Pierce(a_subSubType);	break;
-			default:		m_attack = new Slash(a_subSubType);		break;
+				switch(a_subType)
+				{
+				case DIVINE:	m_attack[m_numAtks] = new Divine(a_subSubType);		break;
+				case LIGHTNING:	m_attack[m_numAtks] = new Lightning(a_subSubType);	break;
+				case FIRE:		m_attack[m_numAtks] = new Fire(a_subSubType);		break;
+				case ICE:		m_attack[m_numAtks] = new Ice(a_subSubType);		break;
+				case BLUNT:		m_attack[m_numAtks] = new Blunt(a_subSubType);		break;
+				case RANGE:		m_attack[m_numAtks] = new Range(a_subSubType);		break;
+				case PIERCE:	m_attack[m_numAtks] = new Pierce(a_subSubType);		break;
+				default:		m_attack[m_numAtks] = new Slash(a_subSubType);		break;
+				}
+				m_attack[m_numAtks]->setNewed(true);
+				m_attack[m_numAtks]->setOwner(this);
+				m_attack[m_numAtks]->unlock();
+				a_world->add(m_attack[m_numAtks]);
+				m_numAtks++;
 			}
-			m_attack->setNewed(true);
-			m_attack->setOwner(this);
-			m_attack->unlock();
-			a_world->add(m_attack);
 		}
 	}
 	void isPlayerInRangeUnique(){m_location = m_start;}
 	void updateTargPlayerUnique(Entity * a_player, int a_time, AudioHandler * ah)
 	{
 		m_lastCast += a_time;
-		if(this->collideBoundingCircles(a_player, BOSS_ENGAGE) && m_lastCast > HIT_DELAY && m_attack)//if in cast range and time to cast cast
+		if(this->collideBoundingCircles(a_player, BOSS_ENGAGE) && m_lastCast > HIT_DELAY && m_numAtks > 0)//if in cast range and time to cast cast
 		{
-			m_attack->setTarget(a_player->getLocation());
-			m_attack->activate(ah);
-			m_lastCast = 0;
+			int atk = rand()%m_numAtks;
+			if(m_attack[atk])
+			{
+				m_attack[atk]->setTarget(a_player->getLocation());
+				m_attack[atk]->activate(ah);
+				m_lastCast = 0;
+			}
 		}
 	}
 	void stopAttack()
 	{
-		if(m_attack)
-			m_attack->deactivate();
+		for(int i = 0; i < NUM_MAX_BOSS_ATKS; ++i)
+		{
+			if(m_attack[i])
+				m_attack[i]->deactivate();
+		}
 	}
 };
