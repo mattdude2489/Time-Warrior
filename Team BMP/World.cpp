@@ -775,7 +775,7 @@ void World::setEntities()
 			case WORLD_CASTLE:
 				if(castleCount < 3){
 					sprite = &m_sprites[BOSS1];
-					t_type = MTRL_DARK;
+					t_type = MTRL_WATER;
 				}
 				else{
 					sprite = &m_sprites[DEMONKING];
@@ -793,10 +793,19 @@ void World::setEntities()
 			newBoss->scaleToPlayer(m_player);
 			newBoss->setBossLoc(m_mapOfWorld.get(i).pos);
 			this->add(newBoss);
+			//basic bosses withh get one attack fire or ice based on location, dungeon fire and castle ice
+			//dragons will get both basic lightning and advanced
+			//final boss will get basic Divine, advanced ice, and expert fire
 			switch(t_type)
 			{
-			case MTRL_AIR:		newBoss->setChip(LIGHTNING, ADVANCED, this);	break;
-			case MTRL_LIGHT:	newBoss->setChip(DIVINE, EXPERT, this);			break;
+			case MTRL_AIR:		newBoss->setChip(LIGHTNING, ADVANCED, this);
+								newBoss->setChip(LIGHTNING, BASIC, this);
+								break;
+			case MTRL_LIGHT:	newBoss->setChip(DIVINE, BASIC, this);			
+								newBoss->setChip(ICE, ADVANCED, this);
+								newBoss->setChip(FIRE, EXPERT, this);
+								break;
+			case MTRL_WATER:	newBoss->setChip(ICE, BASIC, this);				break;
 			case MTRL_DARK:
 			default:			newBoss->setChip(FIRE, BASIC, this);			break;
 			}
