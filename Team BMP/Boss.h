@@ -61,9 +61,12 @@ public:
 			int atk = rand()%m_numAtks;
 			if(m_attack[atk])
 			{
-				m_attack[atk]->setTarget(a_player->getLocation());
-				m_attack[atk]->activate(ah);
-				m_lastCast = 0;
+				if(m_stats[ENERGY_CURRENT] >= m_attack[atk]->getCost())
+				{
+					m_attack[atk]->setTarget(a_player->getLocation());
+					m_attack[atk]->activate(ah);
+					m_lastCast = 0;
+				}
 			}
 		}
 	}

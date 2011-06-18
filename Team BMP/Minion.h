@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "Chip.h"
 
-enum e_range	{ENGAGE_RANGE = 100, HIT_DELAY = 1000, BOSS_ENGAGE = 150, BOSS_ATK_RANGE = 50};
+enum e_range	{ENGAGE_RANGE = 100, HIT_DELAY = TIME_SECOND_MS, BOSS_ENGAGE = 150, BOSS_ATK_RANGE = 50};
 enum e_states	{WANDER, CHASE, GUARD};
 enum e_wander	{WANDER_DIST = 50, WANDER_MAX = WANDER_DIST*2,WANDER_DIRECTION_TIME = TIME_SECOND_MS*3};
 #define		SCALE_MIN		.75
