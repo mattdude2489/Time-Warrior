@@ -72,9 +72,9 @@ class Armor : public Chip
 				//clear any previous resistances
 				for(int i = RESISTANCE_FIRE; i < RESISTANCE_FIRE+3; ++i)
 					m_stats[i] = 0;
+				//set the desired resistance
+				resistAmount = getValidStatBuff(resistAmount);
+				m_stats[resistType] = resistAmount;
 			}
-			//set the desired resistance
-			resistAmount = getValidStatBuff(resistAmount);
-			m_stats[resistType] = resistAmount;
 		}
 };
