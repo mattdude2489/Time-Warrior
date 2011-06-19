@@ -12,7 +12,7 @@
 enum e_inventory		{INVENTORY_ATTACK, INVENTORY_ARMOR, INVENTORY_GAUNTLET, NUM_INVENTORY};
 enum e_gauntletSlots	{SLOT_ATK1, SLOT_ATK2, SLOT_ARMOR_HEAD, SLOT_ARMOR_TRUNK, SLOT_ARMOR_LIMB_UPPER, SLOT_ARMOR_LIMB_LOWER, NUM_SLOTS};
 enum e_hud				{HUD_WIDTH = SCREEN_WIDTH, HUD_HEIGHT = FRAME_SIZE, HUD_X = 0, HUD_Y = SCREEN_HEIGHT-HUD_HEIGHT};
-enum e_exp				{POINTS_GIVEN = 1};
+enum e_req				{REQ_PLYR_ACCESS_ADV = 2, REQ_PLYR_ACCESS_EXP = 3, REQ_CHIP_BAS_TO_ADV = 10, REQ_CHIP_BAS_TO_EXP = 20, REQ_CHIP_ADV_TO_EXP = 10};
 
 class Player : public Entity
 {
@@ -114,9 +114,9 @@ public:
 	{
 		for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 		{
-			if(m_stats[LEVEL] < 2 || m_attackInventory[i][BASIC]->getStatNumber(LEVEL) < 10)
+			if(m_stats[LEVEL] < REQ_PLYR_ACCESS_ADV || m_attackInventory[i][BASIC]->getStatNumber(LEVEL) < REQ_CHIP_BAS_TO_ADV)
 				m_attackInventory[i][ADVANCED]->resetAndLock();
-			if(m_stats[LEVEL] < 3 || (m_attackInventory[i][BASIC]->getStatNumber(LEVEL) < 20 && m_attackInventory[i][ADVANCED]->getStatNumber(LEVEL) < 10))
+			if(m_stats[LEVEL] < REQ_PLYR_ACCESS_EXP || (m_attackInventory[i][BASIC]->getStatNumber(LEVEL) < REQ_CHIP_BAS_TO_EXP && m_attackInventory[i][ADVANCED]->getStatNumber(LEVEL) < REQ_CHIP_ADV_TO_EXP))
 				m_attackInventory[i][EXPERT]->resetAndLock();
 		}
 	}
@@ -124,9 +124,9 @@ public:
 	{
 		for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 		{
-			if(m_stats[LEVEL] >= 2 && m_attackInventory[i][BASIC]->getStatNumber(LEVEL) >= 10)
+			if(m_stats[LEVEL] >= REQ_PLYR_ACCESS_ADV && m_attackInventory[i][BASIC]->getStatNumber(LEVEL) >= REQ_CHIP_BAS_TO_ADV)
 				m_attackInventory[i][ADVANCED]->unlock();
-			if(m_stats[LEVEL] >= 3 && (m_attackInventory[i][BASIC]->getStatNumber(LEVEL) >= 20 || m_attackInventory[i][ADVANCED]->getStatNumber(LEVEL) >= 10))
+			if(m_stats[LEVEL] >= REQ_PLYR_ACCESS_EXP && (m_attackInventory[i][BASIC]->getStatNumber(LEVEL) >= REQ_CHIP_BAS_TO_EXP || m_attackInventory[i][ADVANCED]->getStatNumber(LEVEL) >= REQ_CHIP_ADV_TO_EXP))
 				m_attackInventory[i][EXPERT]->unlock();
 		}
 	}
