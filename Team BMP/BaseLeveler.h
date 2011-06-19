@@ -97,6 +97,17 @@ public:
 		case MELEE:		meleeBlock.upgradeable = true;		break;
 		}
 	}
+	void lock(int type)
+	{
+		switch(type)
+		{
+		case DIVINE_0:	divineBlock.upgradeable = false;	break;
+		case STORM:		lightningBlock.upgradeable= false;	break;
+		case FIRE_0:	fireBlock.upgradeable = false;		break;
+		case ICE_0:		iceBlock.upgradeable= false;		break;
+		case MELEE:		meleeBlock.upgradeable = false;		break;
+		}
+	}
 	void levelUp(int type)
 	{
 		switch(type)

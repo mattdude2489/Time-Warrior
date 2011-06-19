@@ -571,18 +571,13 @@ bool Player::loadPlayer(int saveToLoad)
 				}
 			}
 			iHopeThisWorks->setNewed(true);
-			//level
-			fscanf_s(infile, "%i", &hpenstrintexpsta);
-			if(hpenstrintexpsta > 0)
-			{
-				iHopeThisWorks->unlock();
-				iHopeThisWorks->setLevelAndXP(hpenstrintexpsta, 0);
-			}
 			this->addToAttackInventory(iHopeThisWorks);
 			thisWorld->add(iHopeThisWorks);
+			//level
+			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			//Xp
 			fscanf_s(infile, "%i", &chipAndArmorHelper);
-			iHopeThisWorks->setLevelAndXP(iHopeThisWorks->getStatNumber(LEVEL), chipAndArmorHelper);
+			iHopeThisWorks->setLevelAndXP(hpenstrintexpsta, chipAndArmorHelper, hpenstrintexpsta > 0);
 			//equip
 			fscanf_s(infile, "%i", &hpenstrintexpsta);
 			if(hpenstrintexpsta)
@@ -596,6 +591,8 @@ bool Player::loadPlayer(int saveToLoad)
 		//To continue or discontinue with the while loop.
 		charget = fgetc(infile);
 	}
+	lockModdedAttacks();
+	unlockEarnedAttacks();
 	this->loadedPlayer = true;
 	return true;
 }

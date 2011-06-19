@@ -101,6 +101,24 @@ class Chip : public Entity
 				break;
 			}
 		}
+		void lock()
+		{
+			switch(m_cType)
+			{
+			case MAGIC:
+			case WEAPON:
+				switch(m_cSubType)
+				{
+				case DIVINE:	m_tracker.lock(DIVINE_0);	break;
+				case LIGHTNING:	m_tracker.lock(STORM);		break;
+				case FIRE:		m_tracker.lock(FIRE_0);		break;
+				case ICE:		m_tracker.lock(ICE_0);		break;
+				default:		m_tracker.lock(MELEE);		break;
+				}
+				resetLevelWithBaseLeveler();
+				break;
+			}
+		}
 		int getXP()
 		{
 			switch(m_cType)
@@ -159,6 +177,15 @@ class Chip : public Entity
 			case BLUNT:		m_dmg = (int)((double)m_dmg * .75);		break;//total % (w/knckbck)	: 75
 			default:												break;//total %				: 100
 			}
+		}
+		void resetAndLock(){setLevelAndXP(STARTING_LV, STARTING_XP, false);}
+		void setLevelAndXP(int level, int experience, bool a_unlock)
+		{
+			setLevelAndXP(level, experience);
+			if(a_unlock)
+				unlock();
+			else
+				lock();
 		}
 		void setLevelAndXP(int level, int experience)
 		{
