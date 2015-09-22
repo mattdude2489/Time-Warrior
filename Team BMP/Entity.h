@@ -32,7 +32,7 @@ enum e_classType	{HYBRID, CASTER, TANK};
 #define	SPEED_MINION	SPEED_PLAYER
 #define B_OFF			2//the off set for having the player start with stats
 
-struct v2D {double x, y;};//PLEASE DONT HATE ME
+struct v2D {double x, y;};//PLEASE DONT HATE ME. I don't hate you me from the past, but it might've been better had we gone with a "Global.h" for things like this, instead of putting this in Entity.
 struct effect {bool active; SPoint target; int timer, timeLimit, dmg;};
 
 class Entity

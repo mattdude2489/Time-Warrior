@@ -56,6 +56,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 				}
 				if(m_eType == PLAYER)
 				{
+					//Stair/Portal things. Part 1.
 					if(a_world->getTile(m_location.x, m_location.y)->door
 						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->door
 						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->door
@@ -71,6 +72,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 						a_world->incCastleCount();
 						a_world->setCamera(this->m_camera);
 					}
+
 					if(a_world->getTile(m_location.x, m_location.y)->fdoor
 						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->fdoor
 						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->fdoor
@@ -94,6 +96,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 						}
 						a_world->setCamera(this->m_camera);
 					}
+					//Multiple variables represent desert door (ddoor) and Forest door (fdoor). And stairs.
 					if(a_world->getTile(m_location.x, m_location.y)->ddoor
 						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->ddoor
 						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->ddoor
@@ -118,6 +121,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 						a_world->setCamera(this->m_camera);
 
 					}
+					//If it's a door to a building? Or is that FROM a building?
 					if(a_world->getTile(m_location.x, m_location.y)->buildDoor
 						|| a_world->getTile(m_location.x+m_sprite->getWidth(), m_location.y)->buildDoor
 						|| a_world->getTile(m_location.x, m_location.y+m_sprite->getHeight())->buildDoor
@@ -174,6 +178,7 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 							{
 								if(m_eType == PLAYER)
 								{
+									//Portal code for Dungeons is down here. Combine the portal code areas?
 									if(!a_world->isDClosed(tmp->getIndex())){//if the dungeon is not closed open it
 										int dungeon = rand()%3;//picks a random dungeon 
 
@@ -196,14 +201,14 @@ void Entity::update(int a_timePassed, World * a_world, AudioHandler * ah)
 										move(m_prevLoc.x - m_location.x, m_prevLoc.y - m_location.y);
 								}
 							}
-							else if(tmp->isObstacle(BUILDING))
+							else if(tmp->isObstacle(BUILDING)) //Hmm...Not fond of this kind of nesting.
 							{
 								if(m_eType == PLAYER)
 								{
 									if(tmp->colideWithDoor(this))
 									{
 										this->setLastW();
-										a_world->setWorld("Maps/Building2.txt");
+										a_world->setWorld("Maps/Building2.txt"); //This explains a lot.
 										a_world->setCamera(this->m_camera);
 									}
 									else
@@ -333,7 +338,7 @@ void Entity::reallocateResistancesAccordingToMaterial()
 	}
 }
 void Entity::setCurrentLocToLast(World * a_world){this->setLocation(m_lastWLoc);}
-void Entity::useEffects(int a_timePassed)
+void Entity::useEffects(int a_timePassed) //Can probably put more effects in here. Maybe a slow burn?
 {
 	if(m_effects[KNOCKBACK].active)
 	{

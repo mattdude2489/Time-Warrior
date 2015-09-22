@@ -69,6 +69,36 @@
     <ClCompile Include="winsockerrorhelp.cpp">
       <Filter>Resource headers\Networking shit</Filter>
     </ClCompile>
+    <ClCompile Include="baseEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseLeveler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineOwnedStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="function.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOwnedStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL_GameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL_GUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL_SplashScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL_Resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audioHandler.h">
@@ -156,6 +186,60 @@
       <Filter>Game Headers</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="baseEngine.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="baseEngineState.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseLeveler.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineOwnedStates.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="function.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOwnedStates.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu_Button.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL_GameEngine.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL_GUI.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL_Resource.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL_SplashScreen.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
       <Filter>Game Headers</Filter>
     </ClInclude>
   </ItemGroup>

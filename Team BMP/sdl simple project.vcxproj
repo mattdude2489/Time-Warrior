@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -20,10 +20,12 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -84,11 +86,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="baseEngine.cpp" />
+    <ClCompile Include="BaseLeveler.cpp" />
+    <ClCompile Include="EngineOwnedStates.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="function.cpp" />
+    <ClCompile Include="GameOwnedStates.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SDL_GameEngine.cpp" />
+    <ClCompile Include="SDL_GUI.cpp" />
+    <ClCompile Include="SDL_Resource.cpp" />
+    <ClCompile Include="SDL_SplashScreen.cpp" />
     <ClCompile Include="SDL_Sprite.cpp" />
     <ClCompile Include="spoint.cpp" />
     <ClCompile Include="surfaceFunctions.cpp" />
@@ -101,10 +113,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audioHandler.h" />
+    <ClInclude Include="baseEngine.h" />
+    <ClInclude Include="baseEngineState.h" />
+    <ClInclude Include="BaseLeveler.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="ButtonAndWindow.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="EngineOwnedStates.h" />
+    <ClInclude Include="function.h" />
+    <ClInclude Include="GameOwnedStates.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="graphics_constants.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Menu_Button.h" />
+    <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="SDL_GameEngine.h" />
+    <ClInclude Include="SDL_GUI.h" />
+    <ClInclude Include="SDL_Resource.h" />
+    <ClInclude Include="SDL_SplashScreen.h" />
+    <ClInclude Include="Server.h" />
     <ClInclude Include="spoint.h" />
     <ClInclude Include="srect.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="surfaceFunctions.h" />
     <ClInclude Include="templateVector.h" />
     <ClInclude Include="trueTextPrinter.h" />
