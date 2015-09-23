@@ -35,6 +35,15 @@ enum e_classType	{HYBRID, CASTER, TANK};
 struct v2D {double x, y;};//PLEASE DONT HATE ME. I don't hate you me from the past, but it might've been better had we gone with a "Global.h" for things like this, instead of putting this in Entity.
 struct effect {bool active; SPoint target; int timer, timeLimit, dmg;};
 
+/*
+	Idea for better class hierarchy:
+
+	Tile (new base class): anything that needs a sprite
+		Obstacle (inherits Tile): non-living thing the player can collide/interact with (i.e. portal, door, tree, etc)
+		Entity (inherits Tile): living thing that can be killed
+			...multiple classes inherit from Entity (i.e. player, enemy, etc.)
+
+*/
 class Entity
 {
 protected:
