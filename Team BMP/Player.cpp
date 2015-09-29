@@ -784,6 +784,8 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 	static SPoint mouse;
 	static SRect hud(HUD_X, HUD_Y, HUD_WIDTH, HUD_HEIGHT);
 	static SRect window(WINDOWXY.x, WINDOWXY.y, WINDOWWIDTH, WINDOWHEIGHT);
+	bool spaceChange = false;
+	bool spaceChangeChanged = false;
 	//This is where the UI goes to get handled by the Player class. Well...it would've been world class, but we dun have one of them yet.
 	if(ui->getKeyUD() == KEY_UP)
 	{
@@ -839,8 +841,24 @@ void Player::handleInput(UserInput * ui, World * a_world, AudioHandler *ah)
 			activateGauntletAttack(SLOT_ATK1, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
 	if(ui->getClick() == CLICK_RIGHT && validClick)
 			activateGauntletAttack(SLOT_ATK2, m_cameraP.x + ui->getMouseX(), m_cameraP.y + ui->getMouseY(), lastKey, ah);
-	if(ui->getSpace())
-		m_flags[FLAG_ACTIVE] = true;
+	m_flags[FLAG_ACTIVE] = false;
+	if (ui->getSpace()) //Good attempt so far.
+	{
+		if (spaceChange == false)
+		{
+			spaceChange = true;
+			m_flags[FLAG_ACTIVE] = true;
+		}
+
+	}
+	/*else if(!ui->getSpace())
+	{
+		if (spaceChange == true)
+		{
+			spaceChange = false;
+			m_flags[FLAG_ACTIVE] = false;
+		}
+	}*/
 	switch(ui->getLastKey())
 	{
 	case 'h':

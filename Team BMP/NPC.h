@@ -13,6 +13,7 @@ private:
 	TTtext m_Text[3]; //The text variable.
 	MyFont m_arialFont;
 	bool drawText;
+	int timed;
 public:
 	NonPlayerChar(SDL_Sprite * a_sprite)
 		:Entity(a_sprite){initNPC();}
@@ -28,6 +29,7 @@ public:
 	void initNPC(char * talk)
 	{
 		m_eType = NPC;
+		timed = 0;
 		whatTheyHaveToSay = talk;
 		drawText = false;
 		m_arialFont.changeSizeTo(20);
@@ -75,7 +77,7 @@ public:
 		{
 			SRect rect;
 			rect.x = 0; rect.y = 400; rect.w = 800; rect.h = 168;
-			SDL_FillRect(a_screen, &rect, 0x0000ff);
+			SDL_FillRect(a_screen, &rect, 0x0000ff); //Maybe we can make a new sprite for the dialogue?
 			for(int i = 0; i < 3; i++)
 			{
 				if(m_Text[i].messageAvailable())
@@ -87,11 +89,28 @@ public:
 	{
 		//Search for a PLAYER in its grid, if they're colliding, check to see if spacebar is pressed. If so, activate its dialogue.
 		Entity * emptyPointer;
+		timed += a_timePassed;
 		if((emptyPointer = a_world->getPlayer()))
 		{
-			//Player in the grid. I now have access to the player's location, AND ACTIVATION sequence.
-			if(this->collideBoundingCircles(emptyPointer) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
-				activateDialogue();
+			if (timed > 1000)
+			{
+				//Player in the grid. I now have access to the player's location, AND ACTIVATION sequence.
+				if (this->collideBoundingCircles(emptyPointer) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == false)
+				{
+					activateDialogue();
+					timed = 0;
+				}
+				else if (this->collideBoundingCircles(emptyPointer) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == true)
+				{
+					deactivateDialogue();
+					timed = 0;
+				}
+				//else if (this->collideBoundingCircles(emptyPointer) && emptyPointer->getFlag(FLAG_ACTIVE) && drawText == true)
+				//{
+				//	deactivateDialogue();
+				////	emptyPointer->setFlag(FLAG_ACTIVE, false);
+				//}
+			}
 			if(!(this->collideBoundingCircles(emptyPointer)))
 				deactivateDialogue();
 		}

@@ -113,6 +113,7 @@ public:
 	void setNewed(bool newed){m_flags[FLAG_NUDE] = newed;}
 	//flags, type, material
 	bool getFlag(e_flags a_flag){return m_flags[a_flag];}
+	void setFlag(e_flags a_flag, bool set) {m_flags[a_flag] = set;}
 	e_entityType getType(){return m_eType;}
 	void setMaterial(e_material a_mtrl){m_mtrl = a_mtrl;}
 	void reallocateResistancesAccordingToMaterial();

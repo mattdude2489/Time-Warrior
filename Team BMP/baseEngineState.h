@@ -9,6 +9,7 @@
 #define CHAT_CHARACTER_CAP	41
 #define CENTERSTUFFX		+87
 #define CENTERSTUFFY		+65
+#define FONTSIZE_LOADING	20
 #include "sdl/sdl.h"
 #include <stdio.h>
 #include <conio.h>
@@ -65,7 +66,7 @@ public:
 		stateUI = NULL;
 		then = SDL_GetTicks();
 		now = passed = second = 0;
-		myfps.setFont(FONTSIZE);
+		myfps.setFont(FONTSIZE_LOADING);
 		fps.setFont(myfps.getFont());
 		ifps = 0;
 		fps.setMessage("0");
@@ -164,7 +165,7 @@ public:
 		stateUI = NULL;
 		then = SDL_GetTicks();
 		now = passed = second = 0;
-		myfps.setFont(FONTSIZE);
+		myfps.setFont(FONTSIZE_LOADING);
 		for(int i = 0; i < CHAT_MESSAGE_CAP; i++)
 		{
 			chatLog[i].setFont(myfps.getFont());
@@ -342,7 +343,7 @@ public:
 		stateUI = NULL;
 		then = SDL_GetTicks();
 		now = passed = second = 0;
-		myfps.setFont(FONTSIZE);
+		myfps.setFont(FONTSIZE_LOADING);
 
 		//Ending FPS. Starting Chat.
 		for(int k = 0; k < CHAT_CHARACTER_CAP; k++)
@@ -668,14 +669,14 @@ public:
 		//I'm going to hell for this, aren't I?
 		loadRects = new SRect[saveFiles];
 		loadMessages = new TTtext[saveFiles];
-		MyFont whoo;
-		whoo.setFont(FONTSIZE); //My god, I feel like a retard.
+		MyFont whoo; //You can tell Matt wrote this file when he was 18.
+		whoo.setFont(FONTSIZE_LOADING); //My god, I feel like a retard.
 		//For the save Files to be recognized, we need a Name, and a Level.
 		for(int i = 0; i < saveFiles; i++)
 		{
 			//Start at the beginning, then move on to the next one.
-			loadRects[i].setDimension(SPoint(200, 15));
-			loadRects[i].setPosition(SPoint(100, (i*15)+100));
+			loadRects[i].setDimension(SPoint(200, 25));
+			loadRects[i].setPosition(SPoint(100, (i*25)+100));
 			//Save Files will be reconstructed: Name, Level, and then character P.
 			char point[CHAT_CHARACTER_CAP];
 			for(int lol = 0; lol < 40; lol++)
@@ -763,6 +764,7 @@ class newGameState : public State
 private:
 	char playerName[21];
 	char * enterNameMessage;
+	char * chooseYourChar;
 	UserInput * stateUI;
 	SDL_Sprite newGameScreen, playerSprites[P_SPRITES];
 	//SDL_Surface * screen;
@@ -783,7 +785,8 @@ public:
 			playerName[i] = ' ';
 		}
 		playerName[20] = 0; //Null terminator.
-		enterNameMessage = "Enter new name below: ";
+		chooseYourChar = "Choose Your Character";
+		enterNameMessage = "And Enter Your Name: ";
 		drawBoarder = false;
 		stateUI = NULL;
 	//	screen = SDL_SCREEN_STARTUP;
@@ -796,21 +799,21 @@ public:
 			playerSprites[i].setTransparency(COLOR_TRANSPARENT);
 			
 			playerSprites[i].stretch(200, 200);
-			playerArea[i].set(P_X, P_Y, playerSprites[i].getWidth(), playerSprites[i].getHeight());
+			playerArea[i].set(P_X CENTERSTUFFX, P_Y CENTERSTUFFY, playerSprites[i].getWidth(), playerSprites[i].getHeight());
 		}
 		boarder.h = playerSprites[0].getHeight() + P_OFFSETS;
 		boarder.w = playerSprites[0].getWidth() + P_OFFSETS;
 		//force the other 2 at different locations
-		playerArea[1].setPosition(SPoint(P_X - P_OFFX, P_Y + P_OFFY));
-		playerArea[2].setPosition(SPoint(P_X + P_OFFX, P_Y + P_OFFY));
+		playerArea[1].setPosition(SPoint(P_X - P_OFFX CENTERSTUFFX, P_Y + P_OFFY CENTERSTUFFY));
+		playerArea[2].setPosition(SPoint(P_X + P_OFFX CENTERSTUFFX, P_Y + P_OFFY CENTERSTUFFY));
 
 		typing = finished = exitToTitle = shift = false;
-		type.x = newType.x = 219;
-		type.y = newType.y = 224;
+		type.x = newType.x = 219 CENTERSTUFFX;
+		type.y = newType.y = 224 CENTERSTUFFY;
 		type.h = newType.h = 43;
 		type.w = newType.w = 204;
 		num = 1;
-		hi.setFont(FONTSIZE);
+		hi.setFont(FONTSIZE_LOADING); //Just testing something...
 		playerNewName.setFont(hi.getFont());
 		enterNewMessage.setFont(hi.getFont());
 	}
@@ -867,8 +870,12 @@ public:
 		enterNewMessage.setMessage(enterNameMessage);
 		//Draw
 		SDL_FillRect(be->getScreen(), 0, SDL_MapRGB(be->getScreen()->format, 128, 128, 128)); //Reset the screen.
-		newGameScreen.draw(be->getScreen(), 0, 0);
+		newGameScreen.draw(be->getScreen(), 87, 65);
 		enterNewMessage.printMessage(be->getScreen(), 100, 100);
+
+		enterNewMessage.setMessage(chooseYourChar);
+		enterNewMessage.printMessage(be->getScreen(), 100, 80);
+
 		SDL_FillRect(be->getScreen(), &newType , 0xff0000);
 		playerNewName.printMessage(be->getScreen(), type.x, type.y+15);
 		if(drawBoarder)
