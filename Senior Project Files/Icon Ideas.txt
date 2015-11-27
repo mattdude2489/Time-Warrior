@@ -1,0 +1,49 @@
+e_classType {HYBRID, CASTER, TANK}; //defined in Entity.h
+-ninja hood & shuriken (someone proficient with weapons and mysterious enough to know the secret arts of magic, like a ninja)
+-wizard hat & wand (someone classically known as a magic user, like a wizard)
+-knight helmet & sword (someone classically known as a weapons expert, like a knight)
+
+e_chipType {ARMOR, MAGIC, WEAPON, NUM_CHIP_TYPES}; //defined in Chip.h
+-shield
+-wand
+-sword
+
+e_chipSubType {HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE, NUM_TOTAL_CHIP_SUBS, NUM_CHIP_SUBS_PER_TYPE = NUM_TOTAL_CHIP_SUBS/NUM_CHIP_TYPES}; //defined in Chip.h
+-highlighted head of humanoid
+-highlighted torso of humanoid
+-highlighted arms of humanoid
+-highlighted legs of humanoid
+-halo & cloud
+-lightning bolt
+-burning flame
+-snow flake
+-club
+-bow & arrow
+-sword
+-spear
+
+head armor (hybrid, magic, weapon)
+-leather hood
+-wizard hat
+-knight helmet
+torse armor (hybrid, magic, weapon)
+-leather armor
+-cloth robes w/amulet
+-metal chestplate
+arm armor (hybrid, magic, weapon)
+-leather glove
+-cloth glove w/ring
+-metal gauntlet
+leg armor (hybrid, magic, weapon)
+-leather boot
+-cloth/elven w/tiny wings
+-metal boot
+
+divine magic attacks (basic, adv, expert)
+thunder magic attacks (basic, adv, expert)
+fire magic attacks (basic, adv, expert)
+ice magic attacks (basic, adv, expert)
+blunt weapon attacks (basic, adv, expert)
+range weapon attacks (basic, adv, expert)
+slash weapon attacks (basic, adv, expert)
+pierce weapon attacks (basic, adv, expert)
