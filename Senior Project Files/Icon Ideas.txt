@@ -1,49 +1,70 @@
-e_classType {HYBRID, CASTER, TANK}; //defined in Entity.h
--ninja hood & shuriken (someone proficient with weapons and mysterious enough to know the secret arts of magic, like a ninja)
--wizard hat & wand (someone classically known as a magic user, like a wizard)
--knight helmet & sword (someone classically known as a weapons expert, like a knight)
+Icon Layers
+-Background: off-black color with border
+-Highlight: square border
 
-e_chipType {ARMOR, MAGIC, WEAPON, NUM_CHIP_TYPES}; //defined in Chip.h
--shield
--wand
--sword
+Gender
+-Female: female player... female/venus symbol
+-Male: male player... male/mars symbol
 
-e_chipSubType {HEAD, TRUNK, LIMB_UPPER, LIMB_LOWER, DIVINE, LIGHTNING, FIRE, ICE, BLUNT, RANGE, SLASH, PIERCE, NUM_TOTAL_CHIP_SUBS, NUM_CHIP_SUBS_PER_TYPE = NUM_TOTAL_CHIP_SUBS/NUM_CHIP_TYPES}; //defined in Chip.h
--highlighted head of humanoid
--highlighted torso of humanoid
--highlighted arms of humanoid
--highlighted legs of humanoid
--halo & cloud
--lightning bolt
--burning flame
--snow flake
--club
--bow & arrow
--sword
--spear
+Class Type//defined in Entity.h
+-Hybrid: weapons user with magical knowledge... ninja mask
+-Caster: classic magic user... wizard hat
+-Tank: classic weapons expert... knight helmet
+*Death: player dies... skull
+	*Maybe move into row for statuses (frozen, paralyzed, burned, etc.)
 
-head armor (hybrid, magic, weapon)
+Chip Type//defined in Chip.h
+-Armor: defense... armor
+-Magic: magic attack... wand
+-Weapon: weapon attack... sword
+
+Default Attack (for empty gauntlet attack slots)
+-Left: hand combat... left fist
+-Right: hand combat... right fist
+
+Chip Sub Type//defined in Chip.h
+-Head: head (also for empty gauntlet armor slot)
+-Trunk: torso (also for empty gauntlet armor slot)
+-Limb Upper: arms (also for empty gauntlet armor slot)
+-Limp Lower: legs (also for empty gauntlet armor slot)
+-Divine: holy/angelic/heavenly... cloud
+-Lightning: electricity... thunderbolt
+-Fire: heat... flame
+-Ice: cold... snow flake
+-Blunt: rounded-edge... club
+-Range: projectile... bow/arrow
+-Slash: bladed-edge... sword
+-Pierce: pointed-tip... spear
+
+Head armor (hybrid, magic, weapon)
 -leather hood
 -wizard hat
 -knight helmet
-torse armor (hybrid, magic, weapon)
+Torse armor (hybrid, magic, weapon)
 -leather armor
--cloth robes w/amulet
+-cloth robes
 -metal chestplate
-arm armor (hybrid, magic, weapon)
+Arm armor (hybrid, magic, weapon)
 -leather glove
--cloth glove w/ring
+-cloth glove
 -metal gauntlet
-leg armor (hybrid, magic, weapon)
+Leg armor (hybrid, magic, weapon)
 -leather boot
--cloth/elven w/tiny wings
+-cloth w/tiny wings
 -metal boot
 
-divine magic attacks (basic, adv, expert)
-thunder magic attacks (basic, adv, expert)
-fire magic attacks (basic, adv, expert)
-ice magic attacks (basic, adv, expert)
-blunt weapon attacks (basic, adv, expert)
-range weapon attacks (basic, adv, expert)
-slash weapon attacks (basic, adv, expert)
-pierce weapon attacks (basic, adv, expert)
+Skills
+-Locked: prerequisites not met, unlearned attack (Lv 0)... closed lock
+-Unlocked: prerequisites met, unlearned attack (Lv 0)... opened lock
+-Level: level up stat or any unlocked attack (Lv >= 0)... up arrow
+
+Divine magic attacks (basic, adv, expert)
+Thunder magic attacks (basic, adv, expert)
+Fire magic attacks (basic, adv, expert)
+Ice magic attacks (basic, adv, expert)
+Blunt weapon attacks (basic, adv, expert)
+Range weapon attacks (basic, adv, expert)
+Slash weapon attacks (basic, adv, expert)
+Pierce weapon attacks (basic, adv, expert)
+
+Potions (Health, Energy)... includes row of alternate icon designs
