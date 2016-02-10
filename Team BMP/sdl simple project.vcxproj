@@ -90,6 +90,7 @@
     <ClCompile Include="BaseLeveler.cpp" />
     <ClCompile Include="EngineOwnedStates.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="function.cpp" />
     <ClCompile Include="GameOwnedStates.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="ButtonAndWindow.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="EngineOwnedStates.h" />
+    <ClInclude Include="EventHandler.h" />
     <ClInclude Include="function.h" />
     <ClInclude Include="GameOwnedStates.h" />
     <ClInclude Include="Global.h" />

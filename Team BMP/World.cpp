@@ -16,7 +16,7 @@ World::World()
 
 void World::initWorld()
 {
-	clientPlayerIndex = 0; 
+	clientPlayerIndex = 0;
 	maxWorldX = m_cCamera.w = SCREEN_WIDTH;
 	maxWorldY = m_cCamera.h = SCREEN_HEIGHT;
 	//Setting up the 16 grids. The number can easily be changed.

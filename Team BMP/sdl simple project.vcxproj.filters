@@ -99,6 +99,9 @@
     <ClCompile Include="SDL_Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audioHandler.h">
@@ -240,6 +243,9 @@
       <Filter>Game Headers</Filter>
     </ClInclude>
     <ClInclude Include="Server.h">
+      <Filter>Game Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EventHandler.h">
       <Filter>Game Headers</Filter>
     </ClInclude>
   </ItemGroup>
