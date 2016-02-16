@@ -552,7 +552,7 @@ class Chip : public Entity
 			case MAGIC:
 				switch(m_cSubSubType)
 				{
-				case BASIC:		m_sprite->stretch(fullSize/2,fullSize/2);	break;
+				case BASIC:		m_sprite->stretch(fullSize/3,fullSize/3);	break;
 				case ADVANCED:	m_sprite->stretch(fullSize*2,fullSize*2);	break;
 				case EXPERT:	m_sprite->stretch(fullSize*3,fullSize*3);	break;
 				}

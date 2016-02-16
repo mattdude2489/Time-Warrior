@@ -7,7 +7,7 @@
 #include <time.h>
 
 enum e_sprites			{SLIME, SKELETON, GHOST, BOSS0, BOSS1, DRAGON, NPC0, NPC1, NPC2, NPC3, KNIGHT0, KNIGHT1, KNIGHT2, SHADOWDEMON, DEMONKING, NUM_SPRITES};
-enum e_player_sprites	{P_WIDTH = 17, P_HEIGHT = 27}; //Previous: Width = 17, Height = 27
+enum e_player_sprites	{P_WIDTH = 22, P_HEIGHT = 35}; //Previous: Width = 26, Height = 41, Original Width = 17 Height = 27
 enum e_worldsprites		{SINGLE, ANIMATION, TREE_SPRITE, ROCK_SHRUB, BUILDINGS, NUM_SPRITES_WORLD};
 enum e_rockshrub		{ROCK_BIG, ROCK_SMALL, BUSH, CACTUS, NUM_ROCK_SHRUB};
 enum e_buildings		{BUILDING_WOOD_DOWN, BUILDING_STONNE_DOWN, BUILDING_WOOD_RIGHT, BUILDING_STONE_RIGHT}; 

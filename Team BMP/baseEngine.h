@@ -23,7 +23,6 @@ struct State
 	virtual void execute(baseEngine* be){}
 	virtual void exit(baseEngine* be) {}
 	virtual void handleInput(UserInput * obj) {}
-	//virtual static State* instance()=0; //I DEAR GOD TO HOPE THIS WORKS.
 };
 
 class baseEngine
