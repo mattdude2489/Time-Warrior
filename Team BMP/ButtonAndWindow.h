@@ -39,13 +39,22 @@ public:
 		m_buttonShape.setY(a_y);
 	}
 	void setUpButton(int a_width, int a_height){m_buttonShape.setWidth(a_width);m_buttonShape.setHeight(a_height);}
-	void setImage(char * a_fileName)
+	void setImage(char * a_fileName, int a_numRows)
 	{
-		m_image = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 1);
+		m_image = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, a_numRows);
 		m_image->setTransparency(COLOR_TRANSPARENT);
 		m_image->setLoopToBegin(true);
 		m_buttonShape.setHeight(m_image->getHeight());
 		m_buttonShape.setWidth(m_image->getWidth());
+	}
+	void setImage(char * a_fileName)
+	{
+		setImage(a_fileName,1);
+	}
+	void setImageColRow(int a_cIndex, int a_rIndex)
+	{
+		m_image->setCIndex(a_cIndex);
+		m_image->setRIndex(a_rIndex);
 	}
 	void setPos(int a_x, int a_y){m_buttonShape.setX(a_x);m_buttonShape.setY(a_y);}
 	void update(int a_time){m_image->start();m_image->update(a_time);}
@@ -80,7 +89,7 @@ public:
 		for(int i = 0; i < STATINC; i++)
 		{
 			m_addStat[i].setPos(WINDOWXY.x + (m_window->w/2), WINDOWXY.y + ((i+STATOFF)*TEXTYOFF));
-			m_addStat[i].setImage("Sprites/button1.bmp");
+			m_addStat[i].setImage("Sprites/Icons.bmp",NUM_ICON_ROWS);
 		}
 		m_yStartInvAttack = m_yStartInvArmor = 0;
 		m_drawInfo = false;
@@ -229,7 +238,12 @@ public:
 		if(m_player->getPoints() > 0)
 		{
 			for(int i = 0; i < STATINC; i++)
+			{
+				m_addStat[i].setImageColRow(ICON_BG_BORDER,ICON_ROW_BACKGROUND);
 				m_addStat[i].draw(a_screen);
+				m_addStat[i].setImageColRow(SKILL_LV_INC,ICON_ROW_UNLOCK);
+				m_addStat[i].draw(a_screen);
+			}
 		}
 		for(int i = 0; i < NUM_INVENTORY; ++i)
 		{

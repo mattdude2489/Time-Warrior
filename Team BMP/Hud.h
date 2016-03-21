@@ -73,7 +73,7 @@ public:
 		m_text[2].setMessage("Experience");
 		m_potText[POT_HEALTH].setMessage("0");
 		m_potText[POT_ENERGY].setMessage("0");
-		pots.setSprite("Sprites/Pots.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ROWS-2);
+		pots.setSprite("Sprites/Icons.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ICON_ROWS);
 		pots.setTransparency(COLOR_TRANSPARENT);
 	}
 	void handleInput(UserInput * ui)
@@ -113,9 +113,10 @@ public:
 		m_statWin.getPlayer()->drawInventory(screen, x, HUD_Y, INVENTORY_GAUNTLET, 0, (m_statButton.getX()-x)/FRAME_SIZE, SLOT_ATK1);
 		m_statButton.draw(screen);
 		//drawing the pots on screen
-		pots.setRIndex(0);
+		pots.setRIndex(ICON_ROW_POTS);
+		pots.setCIndex(POT_HEALTH);
 		pots.draw(screen, (SCREEN_WIDTH/2)-FRAME_SIZE, SCREEN_HEIGHT-FRAME_SIZE);
-		pots.setRIndex(1);
+		pots.setCIndex(POT_ENERGY);
 		pots.draw(screen, (SCREEN_WIDTH/2), SCREEN_HEIGHT-FRAME_SIZE);
 		for(int i = 0; i < NUM_POTS; i ++)
 		{//will print the text at 1/2 screen then minus frame width for firest then exactly at mid

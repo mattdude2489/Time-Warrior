@@ -30,7 +30,7 @@ void Player::initPlayer(World * newWorld)
 	gamePlayed = false;
 	m_flags[FLAG_DRAW] = true;
 	m_isStatWindowActive = false;
-	m_blankInventory = new SDL_Sprite("Sprites/button1.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, 2);
+	m_blankInventory = new SDL_Sprite("Sprites/Icons.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ICON_ROWS);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
 	barrierKey = 0;
 }
@@ -73,24 +73,44 @@ int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory 
 			valid = test->getStatNumber(LEVEL) > 0;
 		if(test && valid)
 		{
-			int offset = 0;
-			if(test->getSubType() == PIERCE)
+			if(test->isEquipped())
 			{
-				offset = (FRAME_SIZE/2) - test->getWidthOffsetCenterHUD();
-				x += offset;
+				//if(a_type == INVENTORY_GAUNTLET && (amt - a_startIndex) > a_maxNum && a_maxNum > 0)
+				if(a_type == INVENTORY_GAUNTLET)
+					test->drawHUD(a_screen, x, y, ICON_BG_NONE);
+				else
+					test->drawHUD(a_screen, x, y, ICON_BG_FILLED);
 			}
-			test->drawHUD(a_screen, x, y);
-			if(test->getSubType() == PIERCE)
-				x -= offset;
-			if(test->isEquipped() && a_type != INVENTORY_GAUNTLET)
-			{
-				m_blankInventory->setRIndex(1);
-				m_blankInventory->draw(a_screen, x, y);
-			}
+			else
+				test->drawHUD(a_screen, x, y, ICON_BG_BORDER);
 		}
 		else
 		{
-			m_blankInventory->setRIndex(0);
+			m_blankInventory->setRIndex(ICON_ROW_BACKGROUND);
+			m_blankInventory->setCIndex(ICON_BG_BORDER);
+			//m_blankInventory->draw(a_screen, x, y);
+			switch(a_type)
+			{
+				case INVENTORY_ATTACK:
+					m_blankInventory->setRIndex(ICON_ROW_UNLOCK);
+					m_blankInventory->setCIndex(SKILL_LOCKED);
+					break;
+				case INVENTORY_ARMOR:
+					m_blankInventory->setRIndex(ICON_ROW_CHIP);
+					m_blankInventory->setCIndex(ARMOR);
+					break;
+				default:
+					switch(i)
+					{
+						case SLOT_ATK1:
+						case SLOT_ATK2:
+							m_blankInventory->setRIndex(ICON_ROW_ATK);
+							m_blankInventory->setCIndex(SLOT_ATK1 + i);
+						default:
+							m_blankInventory->setRIndex(ICON_ROW_ARMOR);
+							m_blankInventory->setCIndex(i - SLOT_ARMOR_HEAD);
+					}
+			}
 			m_blankInventory->draw(a_screen, x, y);
 		}
 		//calc # of rows it took to draw the inventory with the given format

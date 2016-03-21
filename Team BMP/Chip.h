@@ -529,7 +529,7 @@ class Chip : public Entity
 			case PIERCE:	rows--;	break;
 			}
 			m_sprite = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, rows);
-			m_spriteHUD = new SDL_Sprite(a_fileName, FRAME_SIZE, FRAME_SIZE, FRAME_RATE, rows);
+			m_spriteHUD = new SDL_Sprite("Sprites/Icons.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ICON_ROWS);
 			m_sprite->setTransparency(COLOR_TRANSPARENT);
 			m_spriteHUD->setTransparency(COLOR_TRANSPARENT);
 			//adjust size to be appropriate to owner
@@ -569,14 +569,14 @@ class Chip : public Entity
 					case BASIC:
 					case ADVANCED:
 						m_sprite->setFrame(FRAME_SIZE*m_stretchFactor, (FRAME_SIZE/2)*m_stretchFactor);
-						m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
+						//m_spriteHUD->setFrame(FRAME_SIZE, FRAME_SIZE/2);
 						break;
 					}
 					break;
 				case RANGE:		m_sprite->stretch(fullSize/2,fullSize/2);	break;
 				case PIERCE:
 					m_sprite->setFrame((FRAME_SIZE/2)*m_stretchFactor, FRAME_SIZE*m_stretchFactor);
-					m_spriteHUD->setFrame(FRAME_SIZE/2, FRAME_SIZE);
+					//m_spriteHUD->setFrame(FRAME_SIZE/2, FRAME_SIZE);
 					break;
 				}
 				break;
@@ -586,7 +586,6 @@ class Chip : public Entity
 			{
 			case ARMOR:
 				m_sprite->setRIndex(m_cSubType);
-				m_spriteHUD->setRIndex(m_cSubType);
 				m_spriteRectHUD.setDimension(SPoint(FRAME_SIZE,FRAME_SIZE));
 				break;
 			case MAGIC:
@@ -594,15 +593,11 @@ class Chip : public Entity
 				if(!(m_cType == WEAPON && m_cSubSubType == EXPERT) || m_cSubType == RANGE || m_cSubType == PIERCE)
 				{
 					m_sprite->setRIndex(m_cSubSubType);
-					m_spriteHUD->setRIndex(m_cSubSubType);
 				}
 				else
 				{
 					m_sprite->setRIndex(m_cSubSubType-1);
-					m_spriteHUD->setRIndex(m_cSubSubType-1);
 				}
-				//dispaly last available frame as "symbol" for HUD sprite
-				m_spriteHUD->setCIndex(m_spriteHUD->getMaxFrames()-1);
 				//set up input rect for HUD sprite
 				m_spriteRectHUD.setDimension(SPoint(FRAME_SIZE,FRAME_SIZE));
 				break;
@@ -613,7 +608,38 @@ class Chip : public Entity
 			return m_spriteRectHUD.contains(a_point);
 		}
 		//draws HUD sprite @ specified location
-		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y){m_spriteHUD->draw(a_screen, a_x, a_y);}
+		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y, e_iconBG a_iconBG)
+		{
+			//draw background
+			if(a_iconBG != ICON_BG_NONE)
+			{
+				m_spriteHUD->setRIndex(ICON_ROW_BACKGROUND);
+				m_spriteHUD->setCIndex(a_iconBG);
+				m_spriteHUD->draw(a_screen, a_x, a_y);
+			}
+
+			//draw icon
+			switch(m_cType)
+			{
+			case ARMOR:
+				m_spriteHUD->setRIndex(ICON_ROW_HEAD + (m_cSubType - HEAD));
+				m_spriteHUD->setCIndex(m_owner->getSpriteNum());
+				break;
+			case MAGIC:
+				m_spriteHUD->setRIndex(ICON_ROW_DIVINE + (m_cSubType - DIVINE));
+				m_spriteHUD->setCIndex(m_cSubSubType);
+				break;
+			case WEAPON:
+				m_spriteHUD->setRIndex(ICON_ROW_BLUNT + (m_cSubType - BLUNT));
+				m_spriteHUD->setCIndex(m_cSubSubType);
+				break;
+			}
+			m_spriteHUD->draw(a_screen, a_x, a_y);
+		}
+		void drawHUD(SDL_Surface * a_screen, int a_x, int a_y)
+		{
+			drawHUD(a_screen,a_x,a_y,ICON_BG_NONE);
+		}
 		int getWidthOffsetCenterHUD(){return m_spriteHUD->getWidthOffsetCenter();}
 		int getHeightOffsetCenterHUD(){return m_spriteHUD->getHeightOffsetCenter();}
 		void sell()
