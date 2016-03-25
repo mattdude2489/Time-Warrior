@@ -110,7 +110,7 @@ public:
 		for(int i = 0; i < NUM_STAT_BARS; i++)
 			m_text[i].printMessage(screen, bars[BAR_BACK].getWidth(), bars[BAR_BACK].getY()+(i*BAR_HEIGHT)-1);
 		int x = m_statButton.getX()-(FRAME_SIZE*SLOT_ARMOR_HEAD);
-		m_statWin.getPlayer()->drawInventory(screen, x, HUD_Y, INVENTORY_GAUNTLET, 0, (m_statButton.getX()-x)/FRAME_SIZE, SLOT_ATK1);
+		m_statWin.getPlayer()->drawInventory(screen, x, HUD_Y, INVENTORY_GAUNTLET, 0, (m_statButton.getX()-x)/FRAME_SIZE, SLOT_ATK1, true);
 		m_statButton.draw(screen);
 		//drawing the pots on screen
 		pots.setRIndex(ICON_ROW_POTS);

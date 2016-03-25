@@ -18,9 +18,20 @@
 #define CHARSIZE			30
 #define TEXTSTART			FRAME_SIZE
 #define TEXTYOFF			FRAME_SIZE
-#define	STATOFF				4
+#define	STATOFF				3
 #define	STATINC				2
-
+#define	GAUNTLETHEIGHT		100
+#define	GAUNTLETWIDTH		400
+#define	GCHIPOFFX			10
+#define	GCHIPOFFY			14
+#define	SECTIONSPACING		8
+#define	GSCRHEIGHT			210
+#define	GSCRWIDTH			400
+#define	TEXT2CENTER			6
+#define	GSCROFFY			8
+#define	GSCROFFX			(GSCROFFY+TEXT2CENTER)
+#define	CURSORWIDTH			10
+#define	GSCRMINIOFFX		GCHIPOFFX
 
 class Button
 {
@@ -76,9 +87,10 @@ public:
 class StatWindow
 {
 private:
-	TTtext m_text[NUM_STATS],  m_lvlPts, m_inventory[NUM_INVENTORY], m_playerName, m_chipInfo;
+	TTtext m_text[NUM_STATS], m_lvlPts, m_inventory[NUM_INVENTORY], m_playerName, m_chipInfo, m_miniScreenText;
 	Player * m_player;
 	SDL_Surface * m_window;
+	SDL_Sprite *m_gauntlet, *m_screen;
 	Button m_addStat[STATINC];
 	int m_yStartInvAttack, m_yStartInvArmor;
 	bool m_drawInfo;
@@ -86,9 +98,16 @@ public:
 	StatWindow()
 	{
 		m_window = load_image("Sprites/SideBar.bmp");
+		m_gauntlet = new SDL_Sprite("Sprites/Gauntlet.bmp", GAUNTLETWIDTH, GAUNTLETHEIGHT, FRAME_RATE, 1);
+		m_screen = new SDL_Sprite("Sprites/GauntletScreen.bmp", GSCRWIDTH, GSCRHEIGHT, FRAME_RATE, 1);
+		m_gauntlet->setTransparency(COLOR_TRANSPARENT);
+		m_screen->setTransparency(COLOR_TRANSPARENT);
 		for(int i = 0; i < STATINC; i++)
 		{
-			m_addStat[i].setPos(WINDOWXY.x + (m_window->w/2), WINDOWXY.y + ((i+STATOFF)*TEXTYOFF));
+			int t_statX = (WINDOWXY.x + (m_window->w/2)) - (FRAME_SIZE + GSCROFFX);
+			if(i == 1)
+				t_statX += (m_window->w/2);
+			m_addStat[i].setPos(t_statX, WINDOWXY.y + (TEXTYOFF + GAUNTLETHEIGHT + SECTIONSPACING + GSCROFFY) + ((STATOFF)*TEXTYOFF));
 			m_addStat[i].setImage("Sprites/Icons.bmp",NUM_ICON_ROWS);
 		}
 		m_yStartInvAttack = m_yStartInvArmor = 0;
@@ -103,6 +122,7 @@ public:
 		for(int i = 0; i < NUM_INVENTORY; i++)
 			m_inventory[i].setFont(a_font);
 		m_chipInfo.setFont(a_font);
+		m_miniScreenText.setFont(a_font);
 	}
 	Player * getPlayer(){return m_player;}
 	void setPlayer(Player * a_player)
@@ -128,6 +148,8 @@ public:
 		m_inventory[INVENTORY_GAUNTLET].setMessage(c_temp);
 		sprintf_s(c_temp, "Name: %s", m_player->getName(), 21);
 		m_playerName.setMessage(c_temp);
+		sprintf_s(c_temp, "Stats");
+		m_miniScreenText.setMessage(c_temp);
 	}
 	void handleInput(UserInput * ui)
 	{
@@ -144,9 +166,9 @@ public:
 		}
 		SPoint t_tempPoint(ui->getMouseX(),ui->getMouseY()); 
 		bool cl = ui->getClick() == CLICK_LEFT, cr = ui->getClick() == CLICK_RIGHT;
-		Chip * clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
+		Chip * clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x + (m_window->w - ((m_window->w/FRAME_SIZE)*FRAME_SIZE))/2, m_yStartInvAttack, INVENTORY_ATTACK, m_window->w/FRAME_SIZE, 0, 0);
 		if(!clicked)
-			clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
+			clicked = m_player->getHUDClickedChip(t_tempPoint, WINDOWXY.x + (m_window->w - ((m_window->w/FRAME_SIZE)*FRAME_SIZE))/2, m_yStartInvArmor, INVENTORY_ARMOR, m_window->w/FRAME_SIZE, 0, 0);
 		if(cl || cr)
 		{
 			if(clicked)
@@ -182,34 +204,15 @@ public:
 			switch(clicked->getType()) 
 			{
 			case ARMOR:
-				switch(clicked->getResistType())
-				{
-				case RESISTANCE_FIRE:		sprintf_s(temp, "Armor: %2i def (Fire, Res: %2i)", clicked->getStatNumber(DEFENSE), clicked->getStatNumber(clicked->getResistType()));		break;
-				case RESISTANCE_ICE:		sprintf_s(temp, "Armor: %2i def (Ice, Res: %2i)", clicked->getStatNumber(DEFENSE), clicked->getStatNumber(clicked->getResistType()));			break;
-				case RESISTANCE_LIGHTNING:	sprintf_s(temp, "Armor: %2i def (Lightning, Res: %2i)", clicked->getStatNumber(DEFENSE), clicked->getStatNumber(clicked->getResistType()));	break;
-				}
+				sprintf_s(temp, "%s %s: %2i Def (%s Res: %2i)", clicked->getSubTypeName(), clicked->getTypeName(), clicked->getStatNumber(DEFENSE), clicked->getResistTypeName(), clicked->getStatNumber(clicked->getResistType()));		break;
 				break;
 			case MAGIC:
-				switch(clicked->getSubType())
-				{
-				case DIVINE:	sprintf_s(temp, "Magic: %2i dmg (Lv: %2i, Divine, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());		break;
-				case LIGHTNING:	sprintf_s(temp, "Magic: %2i dmg (Lv: %2i, Lightning, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
-				case FIRE:		sprintf_s(temp, "Magic: %2i dmg (Lv: %2i, Fire, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());		break;
-				case ICE:		sprintf_s(temp, "Magic: %2i dmg (Lv: %2i, Ice, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());			break;
-				}
-				break;
 			case WEAPON:
-				switch(clicked->getSubType())
-				{
-				case BLUNT:		sprintf_s(temp, "Weapon: %2i dmg (Lv: %2i, Blunt, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
-				case RANGE:		sprintf_s(temp, "Weapon: %2i dmg (Lv: %2i, Range, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
-				case SLASH:		sprintf_s(temp, "Weapon: %2i dmg (Lv: %2i, Slash, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
-				case PIERCE:	sprintf_s(temp, "Weapon: %2i dmg (Lv: %2i, Pierce, EP: %2i)", clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());	break;
-				}
+				sprintf_s(temp, "%s %s: %2i Dmg (Lv: %2i, EP: %2i)", clicked->getSubTypeName(), clicked->getTypeName(), clicked->getDamage(), clicked->getStatNumber(LEVEL), clicked->getCost());
 				break;
 			}
 			m_chipInfo.setMessageBackground(temp);
-			m_chipInfo.setLoc(ui->getMouseX(), ui->getMouseY());
+			m_chipInfo.setLoc(ui->getMouseX() + CURSORWIDTH, ui->getMouseY());
 			m_drawInfo = true;
 			
 		}
@@ -220,46 +223,75 @@ public:
 	{
 		int t_x = WINDOWXY.x, t_y = WINDOWXY.y;
 		apply_surface(t_x,t_y,m_window, a_screen);
-		t_x += TEXTSTART;
+		m_inventory[INVENTORY_GAUNTLET].printMessage(a_screen, WINDOWXY.x + m_window->w/4, t_y + TEXT2CENTER);
+		t_y += TEXTYOFF;
+		m_gauntlet->draw(a_screen,t_x,t_y);
+		m_player->drawInventory(a_screen, t_x + GCHIPOFFX, t_y + GCHIPOFFY, INVENTORY_GAUNTLET, m_window->w/FRAME_SIZE, SLOT_ATK2+1, 0, false);
+		m_player->drawInventory(a_screen, t_x + GCHIPOFFX, t_y + GCHIPOFFY + FRAME_SIZE, INVENTORY_GAUNTLET, m_window->w/FRAME_SIZE, NUM_SLOTS-(SLOT_ATK2+1), SLOT_ATK2+1, false);
+		m_miniScreenText.printMessage(a_screen, t_x + GCHIPOFFX + ((SLOT_ATK2+1) * FRAME_SIZE) + GSCRMINIOFFX, t_y + GCHIPOFFY + TEXT2CENTER);
+		t_y += GAUNTLETHEIGHT + SECTIONSPACING;
+		m_screen->draw(a_screen,t_x,t_y);
+		t_x += GSCROFFX;
+		t_y += GSCROFFY;
+		m_playerName.printMessage(a_screen, t_x, t_y + TEXT2CENTER);
 		for(int i = 0; i < NUM_STATS; i++)
 		{
-			m_text[i].printMessage(a_screen, t_x, t_y);
-			if(i == HEALTH_CURRENT || i == ENERGY_CURRENT)
-				t_x += m_text[i].getMesageWidth();
-			else
+			bool t_goToNextLine = false;
+			t_x = WINDOWXY.x;
+			switch(i)
 			{
-				t_x = WINDOWXY.x + TEXTSTART;
-				t_y += TEXTYOFF;
+			case LEVEL:
+			case ENERGY_REGEN:
+			case INTELLECT:
+			case RESISTANCE_FIRE:
+			case RESISTANCE_LIGHTNING:
+				t_x += m_window->w/2;
+				t_goToNextLine = true;
+				break;
+			case HEALTH_MAX: t_x += m_text[HEALTH_CURRENT].getMesageWidth(); break;
+			case ENERGY_MAX: t_x += m_text[ENERGY_CURRENT].getMesageWidth(); break;
 			}
+			t_x += GSCROFFX;
+			m_text[i].printMessage(a_screen, t_x, t_y + TEXT2CENTER);
+			if(i == HEALTH_MAX)
+			{
+				t_x = WINDOWXY.x + m_window->w/2 + GSCROFFX;
+				m_lvlPts.printMessage(a_screen, t_x, t_y + TEXT2CENTER);
+				t_goToNextLine = true;
+			}
+			if(t_goToNextLine)
+				t_y += TEXTYOFF;
 		}
-		t_x = WINDOWXY.x + m_window->w/4;
-		m_lvlPts.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y);
-		m_playerName.printMessage(a_screen, WINDOWXY.x + m_window->w/2, WINDOWXY.y + TEXTYOFF);
 		if(m_player->getPoints() > 0)
 		{
 			for(int i = 0; i < STATINC; i++)
 			{
-				m_addStat[i].setImageColRow(ICON_BG_BORDER,ICON_ROW_BACKGROUND);
+				m_addStat[i].setImageColRow(ICON_BG_FILLED,ICON_ROW_BACKGROUND);
 				m_addStat[i].draw(a_screen);
 				m_addStat[i].setImageColRow(SKILL_LV_INC,ICON_ROW_UNLOCK);
 				m_addStat[i].draw(a_screen);
 			}
 		}
+		t_y += SECTIONSPACING;
 		for(int i = 0; i < NUM_INVENTORY; ++i)
 		{
-			m_inventory[i].printMessage(a_screen, t_x, t_y);
-			t_y += TEXTYOFF;
-			switch((e_inventory)i)
+			if(i != INVENTORY_GAUNTLET)
 			{
-			case INVENTORY_ATTACK:	m_yStartInvAttack = t_y;	break;
-			case INVENTORY_ARMOR:	m_yStartInvArmor = t_y;		break;
+				m_inventory[i].printMessage(a_screen, WINDOWXY.x + m_window->w/4, t_y + TEXT2CENTER);
+				t_y += TEXTYOFF;
+
+				switch((e_inventory)i)
+				{
+				case INVENTORY_ATTACK:	m_yStartInvAttack = t_y;	break;
+				case INVENTORY_ARMOR:	m_yStartInvArmor = t_y;		break;
+				}
+				t_y += m_player->drawInventory(a_screen, WINDOWXY.x + (m_window->w - ((m_window->w/FRAME_SIZE)*FRAME_SIZE))/2, t_y, (e_inventory)i, m_window->w/FRAME_SIZE, 0, 0, false) * FRAME_SIZE;
 			}
-			t_y += m_player->drawInventory(a_screen, WINDOWXY.x, t_y, (e_inventory)i, m_window->w/FRAME_SIZE, 0, 0) * FRAME_SIZE;
 		}
 		if(m_drawInfo)
 		{
 			m_chipInfo.printMessage(a_screen);
 		}
 	}
-	~StatWindow(){}
+	~StatWindow(){delete m_gauntlet; delete m_screen;}
 };

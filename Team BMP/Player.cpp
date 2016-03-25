@@ -42,7 +42,7 @@ void Player::initPlayer(World * newWorld)
 //	int a_maxNum		: formats # of Chips to draw (0 to draw all)
 //	int a_startIndex	: specifies index of which Chip to start drawing process (which to draw 1st)
 //returns # of rows it took to draw formatted collection
-int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex)
+int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex, bool a_isMiniUI)
 {
 	bool valid = false;
 	int amt = 0, x = a_x, y = a_y, rows = 0;
@@ -75,9 +75,13 @@ int Player::drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory 
 		{
 			if(test->isEquipped())
 			{
-				//if(a_type == INVENTORY_GAUNTLET && (amt - a_startIndex) > a_maxNum && a_maxNum > 0)
 				if(a_type == INVENTORY_GAUNTLET)
-					test->drawHUD(a_screen, x, y, ICON_BG_NONE);
+				{
+					//if(a_isMiniUI)
+						test->drawHUD(a_screen, x, y, ICON_BG_NONE);
+					//else
+					//	test->drawHUD(a_screen, x, y, ICON_BG_BORDER);
+				}
 				else
 					test->drawHUD(a_screen, x, y, ICON_BG_FILLED);
 			}

@@ -36,6 +36,16 @@ class Armor : public Chip
 			}
 			return DEFENSE;
 		}
+		char * getResistTypeName()
+		{
+			switch(getResistType())
+			{
+				case RESISTANCE_FIRE:		return getSubTypeName(FIRE);		break;
+				case RESISTANCE_ICE:		return getSubTypeName(ICE);			break;
+				case RESISTANCE_LIGHTNING:	return getSubTypeName(LIGHTNING);	break;
+				default:					return "Unknown";
+			}
+		}
 		int getValidStatBuff(int a_statBuff)
 		{
 			while(a_statBuff > (m_interval*(m_cSubSubType+1)))

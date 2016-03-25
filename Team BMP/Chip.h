@@ -83,6 +83,7 @@ class Chip : public Entity
 				return false;
 		}
 		virtual e_stats getResistType(){return DEFENSE;}
+		virtual char * getResistTypeName(){return "Unknown";}
 		void unlock()
 		{
 			switch(m_cType)
@@ -209,6 +210,37 @@ class Chip : public Entity
 		e_chipType getType(){return m_cType;}
 		e_chipSubType getSubType(){return m_cSubType;}
 		e_chipSubSubType getSubSubType(){return m_cSubSubType;}
+		char * getTypeName(e_chipType a_cType)
+		{
+			switch(a_cType)
+			{
+			case ARMOR:		return "Armor";		break;
+			case MAGIC:		return "Magic";		break;
+			case WEAPON:	return "Weapon";	break;
+			default:		return "Unknown";
+			}
+		}
+		char * getTypeName(){return getTypeName(m_cType);}
+		char * getSubTypeName(e_chipSubType a_cSubType)
+		{
+			switch(a_cSubType)
+			{
+			case HEAD:			return "Head";		break;
+			case TRUNK:			return "Torso";		break;
+			case LIMB_UPPER:	return "Arm";		break;
+			case LIMB_LOWER:	return "Leg";		break;
+			case DIVINE:		return "Divine";	break;
+			case LIGHTNING:		return "Electric";	break;
+			case FIRE:			return "Fire";		break;
+			case ICE:			return "Ice";		break;
+			case BLUNT:			return "Blunt";		break;
+			case RANGE:			return "Range";		break;
+			case SLASH:			return "Slash";		break;
+			case PIERCE:		return "Pierce";	break;
+			default:			return "Unknown";
+			}
+		}
+		char * getSubTypeName(){return getSubTypeName(m_cSubType);}
 		//returns cost to activate
 		int getCost(){return m_cost;}
 		//returns amt of dmg it can cause

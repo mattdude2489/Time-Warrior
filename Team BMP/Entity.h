@@ -215,9 +215,9 @@ public:
 			case STRENGTH:				return "Strength: %i";			break;
 			case INTELLECT:				return "Intellect: %i";			break;
 			case DEFENSE:				return "Defense: %i";			break;
-			case RESISTANCE_FIRE:		return "Resist Fire: %i";		break;
-			case RESISTANCE_ICE:		return "Resist Ice: %i";		break;
-			case RESISTANCE_LIGHTNING:	return "Resist Lightning: %i";	break;
+			case RESISTANCE_FIRE:		return "Fire Res: %i";			break;
+			case RESISTANCE_ICE:		return "Ice Res: %i";			break;
+			case RESISTANCE_LIGHTNING:	return "Electric Res: %i";		break;
 			default:					return "Invalid";
 		}
 	}

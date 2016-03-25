@@ -38,7 +38,7 @@ public:
 	char * getName() {return playerName;}
 	int getExpReq(){return m_expLvReq;}
 	int getKeyLevel(){return barrierKey;}
-	int drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex);
+	int drawInventory(SDL_Surface * a_screen, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex, bool a_isMiniUI);
 	double getCurExp(){return m_experience;}
 	SPoint * getCamera(){return &m_cameraP;}
 	Chip * getHUDClickedChip(SPoint a_click, int a_x, int a_y, e_inventory a_type, int a_maxColumns, int a_maxNum, int a_startIndex);
