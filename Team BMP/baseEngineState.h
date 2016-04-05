@@ -727,7 +727,14 @@ public:
 		{
 			newRect.x = loadRects[i].x; newRect.y = loadRects[i].y; newRect.h = loadRects[i].h; newRect.w = loadRects[i].w;
 			//cause of red flash @ load game
-			SDL_FillRect(be->getScreen(), &newRect, 0xff0000);
+			if (loadRects[i].contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())))
+			{
+				SDL_FillRect(be->getScreen(), &newRect, 0xffffff);
+			}
+			else
+			{
+				SDL_FillRect(be->getScreen(), &newRect, 0xff0000);
+			}
 			loadMessages[i].printMessage(be->getScreen(), loadRects[i].x, loadRects[i].y);
 		}
 
@@ -770,6 +777,7 @@ private:
 	//SDL_Surface * screen;
 	bool typing, finished, shift, drawBoarder;
 	int num;
+	bool characterChosen = false;
 	e_classType p_num;
 	SRect type , boarder, playerArea[P_SPRITES];
 	SDL_Rect newType;
@@ -828,10 +836,10 @@ public:
 				if(c > 0)
 				{
 					if(c == 8 || c == 7) //Backspace, bell, tab, and newline.
-						{
-							num--;
-							playerName[num] = ' ';
-						}
+					{
+						num--;
+						playerName[num] = ' ';
+					}
 					else if(c == 10 || c == 32 || c == 14 || c == 15 || c == 47 || c == 45)
 					{
 						//Do nothing.
@@ -851,14 +859,18 @@ public:
 			{
 				typing = true;
 			}
-			if(stateUI->getX())
+
+			if (stateUI->getX())
+			{
 				exitToTitle = true;
+			}
 			if(stateUI->getClick())
 			{
 				for(int i = 0; i < P_SPRITES; i++)
 				{
 					if(playerArea[i].contains(SPoint(stateUI->getMouseX(), stateUI->getMouseY())))
 					{
+						characterChosen = true;
 						drawBoarder = true;
 						boarder.setPosition(SPoint(playerArea[i].getX() - (P_OFFSETS/2), playerArea[i].getY() - (P_OFFSETS/2)));
 						p_num = (e_classType)i;
@@ -888,7 +900,7 @@ public:
 			playerSprites[i].draw(be->getScreen(), playerArea[i].getX(),playerArea[i].getY()); 
 		}
 		SDL_Flip(be->getScreen());
-		if(exitToTitle == true && drawBoarder)
+		if(exitToTitle == true)
 			exit(be);
 	}
 	void exit(baseEngine *be) 
@@ -896,7 +908,7 @@ public:
 	//	SDL_FreeSurface(screen);
 		for(int i = 0;  i < P_SPRITES; i++)
 			playerSprites[i].stretch(50, 50);
-		if(exitToTitle == false)
+		if(exitToTitle == false && characterChosen == true)
 		{
 			if(be->getPlayer()->getDeleted())
 			{
@@ -912,7 +924,10 @@ public:
 			be->changeState(actualGameState::instance());
 		}
 		else
+		{
+			characterChosen = false;
 			be->goToTitleScreen();
+		}
 	}
 	void handleInput(UserInput * obj) {stateUI = obj;}
 	static newGameState* instance() {static newGameState instance; return &instance;}
