@@ -23,6 +23,7 @@ private:
 	double m_experience;
 	//If it's loaded from a file, then the Armor and all the chips are set by using New. Thus...get VID OF THEM.
 	bool loadedPlayer, m_isStatWindowActive, gamePlayed, deleted;
+	bool * eventsSeen;
 	World * thisWorld;
 	SDL_Sprite * m_blankInventory;
 	char playerName[21];
@@ -53,6 +54,7 @@ public:
 	//Set the gamePlayed variable, which tracks if the game has been played.
 	void setGamePlayed(bool game) {gamePlayed = game;}
 	void newGame();
+	bool getLoaded() { return loadedPlayer; }
 	void setName(char newName[21]) {for(int i = 0; i < 21; i++) {playerName[i] = newName[i];}}
 	void setGauntletArmor(Chip * a_chip)
 	{
@@ -170,5 +172,12 @@ public:
 		gear->setNewed(true);
 		if(!this->addToArmorInventory(gear))
 			sellArmor(gear);
+	}
+	bool eventSeen(int currentWorld, int currentEvent)
+	{
+		if (eventsSeen[currentEvent])
+			return true;
+		else
+			return false;
 	}
 };

@@ -810,7 +810,7 @@ void World::setEntities()
 			default:			newBoss->setChip(FIRE, BASIC, this);			break;
 			}
 		}
-		if(m_mapOfWorld.get(i).playerSpawn)
+		if(m_mapOfWorld.get(i).playerSpawn && !m_player->getLoaded())
 		{
 			if(m_player->isLastWSet()&&currentWorld == WORLD_ENGLAND)
 			{

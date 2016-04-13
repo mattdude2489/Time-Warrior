@@ -46,7 +46,7 @@ void EventHandler::changeWorldEvents(int currentWorld)
 /*
 The main Event item. It takes in the eventNum, taken when a player collides with the entity of the Event.
 
-eventNum; the number, 1-0 (ten numbers total), of the event. This can be changed later on.
+eventNum; the number, 1-0 (ten numbers total), of the event. This can be changed later on. //Can be used with an array of booleans to determine if it's already been seen.
 currentWorld; this will be needed to be able to alter the player, NPC's, or anything else.
 
 Event trappings: The events will play out from a text file, labeled Event(currentWorld int).txt.
@@ -57,14 +57,19 @@ Event trappings: The events will play out from a text file, labeled Event(curren
 	Add(int chip): Adds a chip into the player's gauntlet.
 	ChangeWorld(int world, int X, int Y): changes the World, and relocates player to X and Y.
 	Remove(int chip): Removes a chip from the player's gauntlet. (We can do that, right?)
+	Spawn(int monster, int X, int Y, int key): Spawns a monster at a location. The key is for things that run on OnDefeated, if we ever make it.
 
 	All commands will be separated by a ;, all scripts will end with #. The first integer will be which event it is.
-	Spaces are to be ignored.
+	Spaces are to be ignored, as are return characters.
 */
 void EventHandler::playEvent(int eventNum, World * currentWorld)
 {
 	//Pseudo coding this for now.
+	//If you have seen it, don't see it. If you haven't, then you do.
+	if (!(currentWorld->getPlayer()->eventSeen(currentWorld->getCurrentWorld(), eventNum)))
+	{
 
+	}
 	//Check to see if the event has been completed already
 
 	//If yes, skip and do nothing.

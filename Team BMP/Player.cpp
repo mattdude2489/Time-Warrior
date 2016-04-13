@@ -33,6 +33,11 @@ void Player::initPlayer(World * newWorld)
 	m_blankInventory = new SDL_Sprite("Sprites/Icons.bmp", FRAME_SIZE, FRAME_SIZE, FRAME_RATE, NUM_ICON_ROWS);
 	m_blankInventory->setTransparency(COLOR_TRANSPARENT);
 	barrierKey = 0;
+	eventsSeen = new bool[10];
+	for (int i = 0; i < 10; i++)
+	{
+		eventsSeen[i] = false;
+	}
 }
 //draws & formats the display of specified Chip collection
 //param:
@@ -249,7 +254,7 @@ void Player::setGauntletSlot(e_gauntletSlots a_slot, e_chipSubSubType a_level)
 }
 //Saves the current Player to a .txt file.
 //Saves the current experience, experience required for next level, stat points, max Hp, max Energy, str and int.
-//SAVES CURRENT INVENTORY, INCLUDING ARMOR AND CHIPS.
+//SAVES CURRENT INVENTORY, INCLUDING ARMOR AND CHIPS. Also saves event boolean array, as well as the current world, and current X and Y.
 void Player::save(int saveToSave)
 {
 	//File will go like this: PlayerName#(Level)#P#(HP)#(Energy)#(Str)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
@@ -340,8 +345,8 @@ void Player::save(int saveToSave)
 		m_stats[STRENGTH]--;
 	for(int i = 0; i < getClassBonus(m_pSpriteNum, INTELLECT); ++i)
 		m_stats[INTELLECT]--;
-	//In order: Name, Level, SpriteNum, Health Potions, Energy Potions, Strength, Intelligence, Experience, Experience Required, Stat Points.
-	fprintf(outfile, " P %s %i %i %i %i %i %i %f %i %i / ", playerName , m_stats[LEVEL], m_pSpriteNum, m_pots[POT_HEALTH], m_pots[POT_ENERGY], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints);
+	//In order: Name, Level, SpriteNum, Health Potions, Energy Potions, Strength, Intelligence, Experience, Experience Required, Stat Points, CurrentWorld, LastWorld, X, and Y, and currentKey
+	fprintf(outfile, " P %s %i %i %i %i %i %i %f %i %i %i %i %i %i %i / ", playerName , m_stats[LEVEL], m_pSpriteNum, m_pots[POT_HEALTH], m_pots[POT_ENERGY], m_stats[STRENGTH], m_stats[INTELLECT], m_experience, m_expLvReq, m_statPoints, thisWorld->getCurrentWorld(), thisWorld->getCurrentWorld(), m_location.getX(), m_location.getY(), this->barrierKey);
 	//The Armor
 	for(int i = 0; i < WEAPON*NUM_CHIP_SUBS_PER_TYPE; ++i)
 	{
@@ -398,7 +403,7 @@ void Player::save(int saveToSave)
 }
 bool Player::loadPlayer(int saveToLoad)
 {
-	//File will go like this: P#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#/
+	//File will go like this: P#(HP)#(Energy)#(STR)#(Int)#(currentExp)#(ExpRequired)#(StatPoints)#(CurrentWorld)#(PreviousWorld)#(X)#(Y)/
 	//							A#(SubType)#(SubSubType)#(Level)#(Def)#(ResistFire)#(ResistIce)#(ResistLigtning)#(isEquipped)#/
 	//							C#(Type)#(SubType)#(SubSubType)#(Level)#(Xp)#(isEquipped)#/
 	
@@ -414,6 +419,9 @@ bool Player::loadPlayer(int saveToLoad)
 	float exp;
 	e_gauntletSlots gauntletSlotSetter = SLOT_ATK1;
 	char charget;
+	loadedPlayer = true;
+	//Current Error: It's making the last world -1, which isn't possible, so it's messing with the tiles and collidable and things happen when they shouldn't
+	//Fix that, and then make sure it's skipping the EXACT SAME AMOUNT in save and load to fix the other error.
 	char name[21];
 	while(saveToLoad != 0) //Why can't save be this simple?
 	{
@@ -519,6 +527,42 @@ bool Player::loadPlayer(int saveToLoad)
 				int expToScaleDown = (int)this->m_experience;
 				this->m_experience -= expToScaleDown;
 				this->m_experience += expToScaleDown % this->m_expLvReq;
+			}
+
+			//Current World and last World.
+			int curWorld = 0;
+			int lastWorld = 0;
+			int cX, cY = 0;
+			fscanf_s(infile, "%i", &curWorld);
+			
+			fscanf_s(infile, "%i", &lastWorld); //Ignore for now, for now just try to get this working.
+			fscanf_s(infile, "%i", &cX);
+			fscanf_s(infile, "%i", &cY);
+			setLocation(cX, cY); //Let's hope that works...
+			
+			int curKey = 0;
+			fscanf_s(infile, "%i", &curKey); //Should be the current key.
+			barrierKey = curKey; //Should allow passage into other places from straight load.
+
+			switch (curWorld)
+			{
+			case WORLD_HUB:
+				thisWorld->setWorld("Maps/HubWorldMap.txt");
+				break;
+			case WORLD_ENGLAND:
+				thisWorld->setWorld("Maps/MedEngMap.txt");
+				break;
+			case WORLD_D1:
+				thisWorld->setWorld("Maps/MedEngMap.txt"); //Gonna need a special case for the dungeons and castles.
+				break;
+			case WORLD_FOREST:
+				thisWorld->setWorld("Maps/Forest.txt");
+				break;
+			case WORLD_DESERT:
+				thisWorld->setWorld("Maps/Desert.txt");
+				break;
+			default:
+				thisWorld->setWorld("Maps/HubWorldMap.txt");
 			}
 		}
 		//If it's reading the Armor...

@@ -488,4 +488,6 @@ public:
 	virtual void setKeyLevel(int a_level){}
 	virtual void pickUpArmor(){}
 	virtual void stopAttack(){}
+	virtual bool eventSeen(int currentWorld, int currentEvent) { return false; }
+	virtual bool getLoaded() { return false; }
 };
